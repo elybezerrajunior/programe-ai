@@ -61,6 +61,7 @@ interface ChatBoxProps {
   setDesignScheme?: (scheme: DesignScheme) => void;
   selectedElement?: ElementInfo | null;
   setSelectedElement?: ((element: ElementInfo | null) => void) | undefined;
+  envConfigured?: boolean;
 }
 
 export const ChatBox: React.FC<ChatBoxProps> = (props) => {
@@ -106,28 +107,33 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
         <ClientOnly>
           {() => (
             <div className={props.isModelSettingsCollapsed ? 'hidden' : ''}>
-              <ModelSelector
-                key={props.provider?.name + ':' + props.modelList.length}
-                model={props.model}
-                setModel={props.setModel}
-                modelList={props.modelList}
-                provider={props.provider}
-                setProvider={props.setProvider}
-                providerList={props.providerList || (PROVIDER_LIST as ProviderInfo[])}
-                apiKeys={props.apiKeys}
-                modelLoading={props.isModelLoading}
-              />
-              {(props.providerList || []).length > 0 &&
-                props.provider &&
-                !LOCAL_PROVIDERS.includes(props.provider.name) && (
-                  <APIKeyManager
+              {/* Não renderizar ModelSelector se configurado via env vars */}
+              {!props.envConfigured && (
+                <>
+                  <ModelSelector
+                    key={props.provider?.name + ':' + props.modelList.length}
+                    model={props.model}
+                    setModel={props.setModel}
+                    modelList={props.modelList}
                     provider={props.provider}
-                    apiKey={props.apiKeys[props.provider.name] || ''}
-                    setApiKey={(key) => {
-                      props.onApiKeysChange(props.provider.name, key);
-                    }}
+                    setProvider={props.setProvider}
+                    providerList={props.providerList || (PROVIDER_LIST as ProviderInfo[])}
+                    apiKeys={props.apiKeys}
+                    modelLoading={props.isModelLoading}
                   />
-                )}
+                  {(props.providerList || []).length > 0 &&
+                    props.provider &&
+                    !LOCAL_PROVIDERS.includes(props.provider.name) && (
+                      <APIKeyManager
+                        provider={props.provider}
+                        apiKey={props.apiKeys[props.provider.name] || ''}
+                        setApiKey={(key) => {
+                          props.onApiKeysChange(props.provider.name, key);
+                        }}
+                      />
+                    )}
+                </>
+              )}
             </div>
           )}
         </ClientOnly>
@@ -236,7 +242,9 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             minHeight: props.TEXTAREA_MIN_HEIGHT,
             maxHeight: props.TEXTAREA_MAX_HEIGHT,
           }}
-          placeholder={props.chatMode === 'build' ? 'Como o Bolt pode ajudá-lo hoje?' : 'Sobre o que você gostaria de conversar?'}
+          placeholder={
+            props.chatMode === 'build' ? 'Como o Bolt pode ajudá-lo hoje?' : 'Sobre o que você gostaria de conversar?'
+          }
           translate="no"
         />
         <ClientOnly>
