@@ -289,6 +289,44 @@ OLLAMA_BASE_URL=http://127.0.0.1:11434
 LMSTUDIO_BASE_URL=http://127.0.0.1:1234
 ```
 
+#### Forcing Provider and Model via Environment Variables
+
+You can configure the LLM provider and model exclusively via environment variables, which will disable manual selection in the UI:
+
+```bash
+# LLM Provider (provider name, e.g., "OpenAI", "Anthropic", "Ollama")
+BOLT_LLM_PROVIDER=Anthropic
+
+# LLM Model (model name, e.g., "claude-3-5-sonnet-latest", "gpt-4", "llama2")
+BOLT_LLM_MODEL=claude-3-5-sonnet-latest
+```
+
+**When configured:**
+- ✅ The provider/model selector is **hidden** in the UI
+- ✅ Provider and model are automatically read from environment variables
+- ✅ A discrete visual indicator shows "Configured via environment variables"
+- ✅ Settings cannot be changed through the UI
+
+**When not configured:**
+- ✅ Default behavior is maintained (manual selection available)
+- ✅ Users can choose provider and model through the interface
+- ✅ Selections are persisted in cookies
+
+**Examples:**
+```bash
+# Anthropic (Claude)
+BOLT_LLM_PROVIDER=Anthropic
+BOLT_LLM_MODEL=claude-3-5-sonnet-latest
+
+# OpenAI (GPT)
+BOLT_LLM_PROVIDER=OpenAI
+BOLT_LLM_MODEL=gpt-4
+
+# Ollama (Local)
+BOLT_LLM_PROVIDER=Ollama
+BOLT_LLM_MODEL=llama2
+```
+
 #### UI-Based Configuration
 - **Real-time Updates**: Changes take effect immediately
 - **Secure Storage**: API keys are stored securely in browser cookies
