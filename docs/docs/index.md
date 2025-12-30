@@ -1,646 +1,894 @@
-# Welcome to bolt diy
+# bolt.diy - Documentação
 
-bolt.diy allows you to choose the LLM that you use for each prompt! Currently, you can use models from 19 providers including OpenAI, Anthropic, Ollama, OpenRouter, Google/Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, Groq, Cohere, Together AI, Perplexity AI, Hyperbolic, Moonshot AI (Kimi), Amazon Bedrock, GitHub Models, and more - with easy extensibility to add any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
+## Índice
 
-## Table of Contents
-
-- [Join the community!](#join-the-community)
-- [Features](#features)
-- [Setup](#setup)
-  - [Prerequisites](#prerequisites)
-  - [Clone the Repository](#clone-the-repository)
-  - [Entering API Keys](#entering-api-keys)
-    - [1. Set API Keys in the `.env.local` File](#1-set-api-keys-in-the-envlocal-file)
-    - [2. Configure API Keys Directly in the Application](#2-configure-api-keys-directly-in-the-application)
-- [Run the Application](#run-the-application)
-  - [Option 1: Without Docker](#option-1-without-docker)
-  - [Option 2: With Docker](#option-2-with-docker)
-- [Update Your Local Version to the Latest](#update-your-local-version-to-the-latest)
-- [Adding New LLMs](#adding-new-llms)
-- [MCP (Model Context Protocol) Integration](#mcp-model-context-protocol-integration)
-- [Git Integration and Version Control](#git-integration-and-version-control)
-- [Deployment Options](#deployment-options)
-- [Supabase Integration](#supabase-integration)
-- [WebContainer and Live Preview](#webcontainer-and-live-preview)
-- [Project Templates](#project-templates)
-- [Available Scripts](#available-scripts)
-- [Development](#development)
-- [Tips and Tricks](#tips-and-tricks)
+- [Visão Geral](#visão-geral)
+- [Funcionalidades Principais](#funcionalidades-principais)
+- [Especificações Técnicas](#especificações-técnicas)
+- [Setup e Instalação](#setup-e-instalação)
+- [Build e Deploy](#build-e-deploy)
+- [Casos de Uso Principais](#casos-de-uso-principais)
+- [Fluxo de Funcionamento](#fluxo-de-funcionamento)
+- [Interface do Usuário](#interface-do-usuário)
+- [Configuração de Provedores de IA](#configuração-de-provedores-de-ia)
+- [Templates de Projetos](#templates-de-projetos)
+- [Recursos e Ajuda](#recursos-e-ajuda)
 
 ---
 
-## Join the community!
+## Visão Geral
 
-[Join the community!](https://thinktank.ottomator.ai)
+**bolt.diy** é uma plataforma open-source de desenvolvimento web full-stack alimentada por IA que permite criar e desenvolver aplicações web diretamente no navegador. O projeto é a versão open-source oficial do Bolt.new, oferecendo a flexibilidade de escolher qual modelo de linguagem (LLM) usar para cada prompt.
 
-Also [this pinned post in our community](https://thinktank.ottomator.ai/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying bolt.diy yourself!
+A aplicação utiliza o **WebContainer API** da StackBlitz para fornecer um ambiente de desenvolvimento Node.js completo no navegador, permitindo executar projetos, instalar dependências, executar servidores de desenvolvimento e visualizar aplicações em tempo real, tudo sem sair do navegador.
 
----
-
-## Features
-
-- **AI-powered full-stack web development** directly in your browser with live preview
-- **Support for 19 LLM providers** with an extensible architecture to integrate additional models
-- **Attach images and files to prompts** for better contextual understanding
-- **Integrated terminal** with WebContainer sandbox for running commands and testing
-- **Version control with Git** - import/export projects, connect to GitHub repositories
-- **MCP (Model Context Protocol)** integration for enhanced AI capabilities and tool calling
-- **Database integration** with Supabase for backend development
-- **One-click deployments** to Vercel, Netlify, and GitHub Pages
-- **Project templates** for popular frameworks (React, Vue, Angular, Next.js, Astro, etc.)
-- **Real-time collaboration** and project sharing
-- **Code diff visualization** and version history
-- **Download projects as ZIP** or push directly to GitHub
-- **Docker support** for containerized development environments
-- **Electron app** for native desktop experience
-- **Theme customization** and accessibility features
-- **Help icon** in sidebar linking to comprehensive documentation
+O projeto é construído com **React**, **TypeScript**, **Remix** e **Vite**, seguindo princípios de Clean Architecture adaptados para desenvolvimento web. A aplicação suporta múltiplos provedores de IA (19+), integração com serviços como GitHub, GitLab, Netlify, Vercel e Supabase, além de oferecer uma experiência desktop através do Electron.
 
 ---
 
-## Setup
+## Funcionalidades Principais
 
-If you're new to installing software from GitHub, don't worry! If you encounter any issues, feel free to submit an "issue" using the provided links or improve this documentation by forking the repository, editing the instructions, and submitting a pull request. The following instruction will help you get the stable branch up and running on your local machine in no time.
+### 🤖 Integração com Múltiplos Provedores de IA
 
-### Prerequisites
+- **19+ Provedores Suportados**: OpenAI, Anthropic, Google (Gemini), Groq, xAI, DeepSeek, Mistral, Cohere, Together, Perplexity, HuggingFace, Ollama, LM Studio, OpenRouter, Moonshot (Kimi), Hyperbolic, GitHub Models, Amazon Bedrock, e provedores OpenAI-compatíveis
+- **Seleção Dinâmica de Modelos**: Escolha o modelo ideal para cada tarefa
+- **Configuração Intuitiva**: Interface moderna para gerenciar chaves de API e configurações de provedores
 
-1. **Install Git**: [Download Git](https://git-scm.com/downloads)
-2. **Install Node.js**: [Download Node.js](https://nodejs.org/en/download/)
+### 💻 Ambiente de Desenvolvimento Integrado
 
-   - After installation, the Node.js path is usually added to your system automatically. To verify:
-     - **Windows**: Search for "Edit the system environment variables," click "Environment Variables," and check if `Node.js` is in the `Path` variable.
-     - **Mac/Linux**: Open a terminal and run:
-       ```bash
-       echo $PATH
-       ```
-       Look for `/usr/local/bin` in the output.
+- **WebContainer API**: Execução de código Node.js diretamente no navegador
+- **Editor de Código**: Editor integrado com suporte a múltiplas linguagens via CodeMirror
+- **Terminal Integrado**: Terminal funcional para executar comandos e ver saídas
+- **Preview em Tempo Real**: Visualização instantânea das aplicações desenvolvidas
 
-### Clone the Repository
+### 📁 Gerenciamento de Projetos
 
-Alternatively, you can download the latest version of the project directly from the [Releases Page](https://github.com/stackblitz-labs/bolt.diy/releases/latest). Simply download the .zip file, extract it, and proceed with the setup instructions below. If you are comfertiable using git then run the command below.
+- **Criação de Projetos**: Crie projetos do zero ou a partir de templates
+- **Importação de Código**: Importe projetos existentes via Git (GitHub, GitLab)
+- **Download de Projetos**: Exporte projetos completos como arquivos ZIP
+- **Sistema de Snapshots**: Restauração automática de projetos ao recarregar
 
-Clone the repository using Git:
+### 🎨 Editor e Interface
+
+- **Editor com Syntax Highlighting**: Suporte a múltiplas linguagens de programação
+- **Diff View**: Visualização de diferenças entre versões de código
+- **File Locking**: Sistema para evitar conflitos durante geração de código pela IA
+- **Interface Responsiva**: Design moderno e adaptável para diferentes tamanhos de tela
+
+### 🚀 Deploy e Integrações
+
+- **Deploy para Netlify**: Publicação direta de projetos
+- **Deploy para Vercel**: Integração com Vercel para deployment
+- **Deploy para GitHub Pages**: Publicação em GitHub Pages
+- **Integração Supabase**: Gerenciamento de bancos de dados e queries
+- **Integração Git**: Clone, import e sincronização com repositórios Git
+
+### 📊 Funcionalidades Avançadas
+
+- **MCP (Model Context Protocol)**: Suporte para ferramentas e integrações avançadas de IA
+- **Visualização de Dados**: Gráficos e análises de dados integrados
+- **Chat com Histórico**: Sistema de chat persistente com histórico de conversações
+- **Modo Discussão vs Construção**: Dois modos distintos de interação com a IA
+- **Reconhecimento de Voz**: Entrada de comandos via voz (Speech Recognition)
+
+### 🖥️ Desktop App (Electron)
+
+- **Aplicação Desktop Nativa**: Versão desktop completa via Electron
+- **Funcionalidade Completa**: Todas as features da versão web disponíveis no desktop
+- **Multi-plataforma**: Suporte para Windows, macOS e Linux
+
+---
+
+## Especificações Técnicas
+
+### Stack Tecnológico Principal
+
+- **Framework Frontend**: React 18.3.1
+- **Framework Web**: Remix 2.15.2 (Cloudflare Pages)
+- **Linguagem**: TypeScript 5.7.2
+- **Build Tool**: Vite 5.4.11
+- **Gerenciamento de Estado**: 
+  - Zustand 5.0.3 (estado global)
+  - Nanostores 0.10.3 (estado reativo)
+  - Context API (comunicação de componentes)
+- **Estilização**: 
+  - UnoCSS 0.61.9 (utility-first CSS)
+  - SCSS (estilos customizados)
+  - CSS Variables (tema dinâmico)
+- **Validação**: Zod 3.24.1
+
+### Arquitetura
+
+A aplicação segue uma **Clean Architecture adaptada para Remix**, organizando o código em camadas:
+
+- **Domain Layer**: Lógica de negócio, entidades e casos de uso
+- **Data Layer**: Implementações de repositórios, APIs e serviços externos
+- **Presentation Layer**: Componentes React, páginas Remix e hooks customizados
+
+### Principais Bibliotecas e Ferramentas
+
+- **WebContainer API**: Ambiente Node.js no navegador
+- **CodeMirror**: Editor de código avançado
+- **Radix UI**: Componentes de UI acessíveis
+- **Vercel AI SDK**: Integração com múltiplos provedores de IA
+- **Electron**: Aplicação desktop
+- **xterm.js**: Terminal no navegador
+- **React Markdown**: Renderização de markdown
+- **Framer Motion**: Animações e transições
+
+### Ambiente de Execução
+
+- **Runtime**: Cloudflare Workers/Pages (produção)
+- **Desenvolvimento**: Vite Dev Server com HMR
+- **Container**: Docker support com Docker Compose
+- **Desktop**: Electron (Windows, macOS, Linux)
+
+---
+
+## Setup e Instalação
+
+### Requisitos Prévios
+
+1. **Node.js**: Versão 18.18.0 ou superior ([Download Node.js](https://nodejs.org/en/download/))
+   - Recomendado: Versão LTS (Long Term Support)
+   - Após instalação, verifique se está no PATH:
+     - **Windows**: `sysdm.cpl` → Advanced → Environment Variables → Verificar Path
+     - **Mac/Linux**: `echo $PATH` deve mostrar `/usr/local/bin`
+
+2. **pnpm**: Gerenciador de pacotes (será instalado se necessário)
+   ```bash
+   npm install -g pnpm
+   ```
+
+3. **Git** (Opcional, para desenvolvimento): [Download Git](https://git-scm.com/downloads)
+
+4. **Docker** (Opcional, para uso com containers): [Download Docker](https://www.docker.com/)
+
+---
+
+### Opção 1: Instalação Rápida (Desktop App)
+
+A forma mais simples de começar é baixar a aplicação desktop pré-compilada:
+
+[![Download Latest Release](https://img.shields.io/github/v/release/stackblitz-labs/bolt.diy?label=Download%20Bolt&sort=semver)](https://github.com/stackblitz-labs/bolt.diy/releases/latest)
+
+1. **Download**: Acesse a [página de releases](https://github.com/stackblitz-labs/bolt.diy/releases/latest)
+2. **Instalação**:
+   - **macOS**: Extraia o `.dmg` e arraste para Applications
+     - Se aparecer "app is damaged", execute: `xattr -cr /path/to/Bolt.app`
+   - **Windows**: Execute o `.exe` installer
+   - **Linux**: Extraia e execute o AppImage ou instale o `.deb`
+
+A aplicação desktop oferece todas as funcionalidades da versão web com recursos nativos adicionais.
+
+---
+
+### Opção 2: Instalação Manual (Desenvolvimento Local)
+
+#### Passo 1: Clonar o Repositório
 
 ```bash
-git clone https://github.com/stackblitz-labs/bolt.diy
+# Versão estável (recomendado)
+git clone -b stable https://github.com/stackblitz-labs/bolt.diy.git
+
+# OU versão main (últimas features, pode ter bugs)
+git clone https://github.com/stackblitz-labs/bolt.diy.git
+
 cd bolt.diy
 ```
 
----
-
-### Entering API Keys
-
-There are two ways to configure your API keys in bolt.diy:
-
-#### 1. Set API Keys in the `.env.local` File
-
-When setting up the application, you will need to add your API keys for the LLMs you wish to use. You can do this by renaming the `.env.example` file to `.env.local` and adding your API keys there.
-
-- On **Mac**, you can find the file at `[your name]/bolt.diy/.env.example`.
-- On **Windows/Linux**, the path will be similar.
-
-If you can't see the file, it's likely because hidden files are not being shown. On **Mac**, open a Terminal window and enter the following command to show hidden files:
-
-```bash
-defaults write com.apple.finder AppleShowAllFiles YES
-```
-
-Make sure to add your API keys for each provider you want to use, for example:
-
-```
-GROQ_API_KEY=XXX
-OPENAI_API_KEY=XXX
-ANTHROPIC_API_KEY=XXX
-```
-
-Once you've set your keys, you can proceed with running the app. You will set these keys up during the initial setup, and you can revisit and update them later after the app is running.
-
-**Important for Docker users**: Docker Compose needs a `.env` file for variable substitution. After creating `.env.local`:
-- Run `./scripts/setup-env.sh` to automatically sync the files, or  
-- Manually copy: `cp .env.local .env`
-
-**Note**: Never commit your `.env.local` or `.env` files to version control. They're already included in the `.gitignore`.
-
-#### 2. Configure API Keys Directly in the Application
-
-Alternatively, you can configure your API keys directly in the application using the modern settings interface:
-
-1. **Open Settings**: Click the settings icon (⚙️) in the sidebar to access the settings panel
-2. **Navigate to Providers**: Select the "Providers" tab from the settings menu
-3. **Choose Provider Type**: Switch between "Cloud Providers" and "Local Providers" tabs
-4. **Select Provider**: Browse the grid of available providers and click on the provider card you want to configure
-5. **Configure API Key**: Click on the "API Key" field to enter edit mode, then paste your API key and press Enter
-6. **Verify Configuration**: Look for the green checkmark indicator showing the provider is properly configured
-
-The interface provides:
-- **Real-time validation** with visual status indicators
-- **Bulk operations** to enable/disable multiple providers at once
-- **Secure storage** of API keys in browser cookies
-- **Environment variable auto-detection** for server-side configurations
-
-Once you've configured your keys, the application will be ready to use the selected LLMs.
-
----
-
-## Run the Application
-
-### Option 1: Without Docker
-
-1. **Install Dependencies**:
-
-   ```bash
-   pnpm install
-   ```
-
-   If `pnpm` is not installed, install it using:
-
-   ```bash
-   sudo npm install -g pnpm
-   ```
-
-2. **Start the Application**:
-   ```bash
-   pnpm run dev
-   ```
-   This will start the Remix Vite development server. You will need Google Chrome Canary to run this locally if you use Chrome! It's an easy install and a good browser for web development anyway.
-
-### Option 2: With Docker
-
-#### Prerequisites
-
-- Ensure Git, Node.js, and Docker are installed: [Download Docker](https://www.docker.com/)
-
-#### Steps
-
-1. **Build the Docker Image**:
-
-   Use the provided NPM scripts:
-
-   ```bash
-   npm run dockerbuild
-   ```
-
-   Alternatively, use Docker commands directly:
-
-   ```bash
-   docker build . --target bolt-ai-development
-   ```
-
-2. **Run the Container**:  
-   Use Docker Compose profiles to manage environments:
-
-   ```bash
-   docker compose --profile development up
-   ```
-
-   - With the development profile, changes to your code will automatically reflect in the running container (hot reloading).
-
----
-
-### Update Your Local Version to the Latest
-
-To keep your local version of bolt.diy up to date with the latest changes, follow these steps for your operating system:
-
-#### 1. **Navigate to your project folder**
-
-Navigate to the directory where you cloned the repository and open a terminal:
-
-#### 2. **Fetch the Latest Changes**
-
-Use Git to pull the latest changes from the main repository:
-
-```bash
-git pull origin main
-```
-
-#### 3. **Update Dependencies**
-
-After pulling the latest changes, update the project dependencies by running the following command:
+#### Passo 2: Instalar Dependências
 
 ```bash
 pnpm install
 ```
 
-#### 4. **Rebuild and Start the Application**
+#### Passo 3: Configurar Variáveis de Ambiente
 
-- **If using Docker**, ensure you rebuild the Docker image to avoid using a cached version:
+Crie os arquivos de ambiente a partir do exemplo:
 
-  ```bash
-  docker compose --profile development up --build
-  ```
-
-- **If not using Docker**, you can start the application as usual with:
-  ```bash
-  pnpm run dev
-  ```
-
-This ensures that you're running the latest version of bolt.diy and can take advantage of all the newest features and bug fixes.
-
----
-
-## Adding New LLMs
-
-bolt.diy supports a modular architecture for adding new LLM providers and models. The system is designed to be easily extensible while maintaining consistency across all providers.
-
-### Understanding the Provider Architecture
-
-Each LLM provider is implemented as a separate class that extends the `BaseProvider` class. The provider system includes:
-
-- **Static Models**: Pre-defined models that are always available
-- **Dynamic Models**: Models that can be loaded from the provider's API at runtime
-- **Configuration**: API key management and provider-specific settings
-
-### Adding a New Provider
-
-To add a new LLM provider, you need to create multiple files:
-
-#### 1. Create the Provider Class
-
-Create a new file in `app/lib/modules/llm/providers/your-provider.ts`:
-
-```typescript
-import { BaseProvider } from '~/lib/modules/llm/base-provider';
-import type { ModelInfo } from '~/lib/modules/llm/types';
-import type { LanguageModelV1 } from 'ai';
-import type { IProviderSetting } from '~/types/model';
-import { createYourProvider } from '@ai-sdk/your-provider';
-
-export default class YourProvider extends BaseProvider {
-  name = 'YourProvider';
-  getApiKeyLink = 'https://your-provider.com/api-keys';
-
-  config = {
-    apiTokenKey: 'YOUR_PROVIDER_API_KEY',
-  };
-
-  staticModels: ModelInfo[] = [
-    {
-      name: 'your-model-name',
-      label: 'Your Model Label',
-      provider: 'YourProvider',
-      maxTokenAllowed: 100000,
-      maxCompletionTokens: 4000,
-    },
-  ];
-
-  async getDynamicModels(
-    apiKeys?: Record<string, string>,
-    settings?: IProviderSetting,
-    serverEnv?: Record<string, string>,
-  ): Promise<ModelInfo[]> {
-    // Implement dynamic model loading if supported
-    return [];
-  }
-
-  getModelInstance(options: {
-    model: string;
-    serverEnv: Record<string, string>;
-    apiKeys?: Record<string, string>;
-    providerSettings?: Record<string, IProviderSetting>;
-  }): LanguageModelV1 {
-    const { apiKeys, model } = options;
-    const apiKey = apiKeys?.[this.config.apiTokenKey] || '';
-
-    return createYourProvider({
-      apiKey,
-      // other configuration options
-    })(model);
-  }
-}
+```bash
+cp .env.example .env
+cp .env.example .env.local
 ```
 
-#### 2. Register the Provider
+Edite `.env.local` e adicione suas chaves de API:
 
-Add your provider to `app/lib/modules/llm/registry.ts`:
+```bash
+# API Keys (adicione suas chaves aqui)
+OPENAI_API_KEY=sua_chave_aqui
+ANTHROPIC_API_KEY=sua_chave_aqui
+GROQ_API_KEY=sua_chave_aqui
 
-```typescript
-import YourProvider from './providers/your-provider';
-
-// ... existing imports ...
-
-export {
-  // ... existing exports ...
-  YourProvider,
-};
+# URLs de provedores locais (opcional)
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+LMSTUDIO_BASE_URL=http://127.0.0.1:1234
 ```
 
-#### 3. Update the Manager (if needed)
-
-The provider will be automatically registered by the `LLMManager` through the registry. The manager scans for all classes that extend `BaseProvider` and registers them automatically.
-
-### Adding Models to Existing Providers
-
-To add new models to an existing provider:
-
-1. **Edit the provider file** (e.g., `app/lib/modules/llm/providers/openai.ts`)
-2. **Add to the `staticModels` array**:
-
-```typescript
-staticModels: ModelInfo[] = [
-  // ... existing models ...
-  {
-    name: 'gpt-4o-mini-new',
-    label: 'GPT-4o Mini (New)',
-    provider: 'OpenAI',
-    maxTokenAllowed: 128000,
-    maxCompletionTokens: 16000,
-  },
-];
-```
-
-### Provider-Specific Configuration
-
-Each provider can have its own configuration options:
-
-- **API Key Environment Variables**: Define in the `config` object
-- **Base URL Support**: Add `baseUrlKey` for custom endpoints
-- **Provider Settings**: Custom settings in the UI
-- **Dynamic Model Loading**: Implement `getDynamicModels()` for API-based model discovery
-
-### Testing Your New Provider
-
-1. **Restart the development server** after making changes
-2. **Check the provider appears** in the Settings → Providers section
-3. **Configure API keys** in the provider settings
-4. **Test the models** in a chat session
-
-### Best Practices
-
-- **Follow the naming conventions** used by existing providers
-- **Include proper error handling** for API failures
-- **Add comprehensive documentation** for your provider
-- **Test with both static and dynamic models**
-- **Ensure proper API key validation**
-
-The modular architecture makes it easy to add new providers while maintaining consistency and reliability across the entire system.
-
----
-
-## MCP (Model Context Protocol) Integration
-
-bolt.diy supports MCP (Model Context Protocol) servers to extend AI capabilities with external tools and services. MCP allows you to connect various tools and services that the AI can use during conversations.
-
-### Setting up MCP Servers
-
-1. Navigate to Settings → MCP tab
-2. Add MCP server configurations
-3. Configure server endpoints and authentication
-4. Enable/disable servers as needed
-
-MCP servers can provide:
-- Database connections and queries
-- File system operations
-- API integrations
-- Custom business logic tools
-- And much more...
-
-The MCP integration enhances the AI's ability to perform complex tasks by giving it access to external tools and data sources.
-
----
-
-## Git Integration and Version Control
-
-bolt.diy provides comprehensive Git integration for version control, collaboration, and project management.
-
-### GitHub Integration
-
-1. **Connect your GitHub account** in Settings → Connections → GitHub
-2. **Import existing repositories** by URL or from your connected account
-3. **Push projects directly to GitHub** with automatic repository creation
-4. **Sync changes** between local development and remote repositories
-
-### Version Control Features
-
-- **Automatic commits** for major changes
-- **Diff visualization** to see code changes
-- **Branch management** and merge conflict resolution
-- **Revert to previous versions** for debugging
-- **Collaborative development** with team members
-
-### Export Options
-
-- **Download as ZIP** for easy sharing
-- **Push to GitHub** for version control and collaboration
-- **Import from GitHub** to continue working on existing projects
-
----
-
-## Deployment Options
-
-bolt.diy provides one-click deployment to popular hosting platforms, making it easy to share your projects with the world.
-
-### Supported Platforms
-
-#### Vercel Deployment
-1. Connect your Vercel account in Settings → Connections → Vercel
-2. Click the deploy button in your project
-3. bolt.diy automatically builds and deploys your project
-4. Get a live URL instantly with Vercel's global CDN
-
-#### Netlify Deployment
-1. Connect your Netlify account in Settings → Connections → Netlify
-2. Deploy with a single click
-3. Automatic build configuration and optimization
-4. Preview deployments for every change
-
-#### GitHub Pages
-1. Connect your GitHub account
-2. Push your project to a GitHub repository
-3. Enable GitHub Pages in repository settings
-4. Automatic deployment from your repository
-
-### Deployment Features
-
-- **Automatic build configuration** for popular frameworks
-- **Environment variable management** for production
-- **Custom domain support** through platform settings
-- **Deployment previews** for testing changes
-- **Rollback capabilities** for quick issue resolution
-
----
-
-## Supabase Integration
-
-bolt.diy integrates with Supabase to provide backend database functionality, authentication, and real-time features for your applications.
-
-### Setting up Supabase
-
-1. Create a Supabase project at [supabase.com](https://supabase.com)
-2. Get your project URL and API keys from the Supabase dashboard
-3. Configure the connection in your bolt.diy project
-4. Use the Supabase tools to interact with your database
-
-### Database Features
-
-- **Real-time subscriptions** for live data updates
-- **Authentication** with built-in user management
-- **Row Level Security (RLS)** policies for data protection
-- **Built-in API** for CRUD operations
-- **Database migrations** and schema management
-
-### Integration with AI Development
-
-The AI can help you:
-- **Design database schemas** for your applications
-- **Write SQL queries** and database functions
-- **Implement authentication flows**
-- **Create API endpoints** for your frontend
-- **Set up real-time features** for collaborative apps
-
-Supabase integration makes it easy to build full-stack applications with a robust backend infrastructure.
-
----
-
-## WebContainer and Live Preview
-
-bolt.diy uses WebContainer technology to provide a secure, isolated development environment with live preview capabilities.
-
-### WebContainer Features
-
-- **Secure sandbox environment** - Run code in isolated containers
-- **Live preview** - See your changes instantly without leaving the editor
-- **Full Node.js environment** - Run npm scripts, build tools, and development servers
-- **File system access** - Direct manipulation of project files
-- **Terminal integration** - Execute commands and see real-time output
-
-### Development Workflow
-
-1. **Write code** in the integrated editor
-2. **Run development servers** directly in WebContainer
-3. **Preview your application** in real-time
-4. **Test functionality** with the integrated terminal
-5. **Debug issues** with live error reporting
-
-### Supported Technologies
-
-WebContainer supports all major JavaScript frameworks and tools:
-- React, Vue, Angular, Svelte
-- Next.js, Nuxt, Astro, Remix
-- Vite, Webpack, Parcel
-- Node.js, npm, pnpm, yarn
-- And many more...
-
-The WebContainer integration provides a seamless development experience without the need for local setup.
-
----
-
-## Project Templates
-
-bolt.diy comes with a comprehensive collection of starter templates to help you quickly bootstrap your projects. Choose from popular frameworks and technologies:
-
-### Frontend Frameworks
-- **React + Vite** - Modern React setup with TypeScript
-- **Vue.js** - Progressive JavaScript framework
-- **Angular** - Enterprise-ready framework
-- **Svelte** - Compiler-based framework for fast apps
-- **SolidJS** - Reactive framework with fine-grained updates
-
-### Full-Stack Frameworks
-- **Next.js with shadcn/ui** - React framework with UI components
-- **Astro** - Static site generator for content-focused sites
-- **Qwik** - Resumable framework for instant loading
-- **Remix** - Full-stack React framework
-- **Nuxt** - Vue.js meta-framework
-
-### Mobile & Cross-Platform
-- **Expo App** - React Native with Expo
-- **React Native** - Cross-platform mobile development
-
-### Presentation & Content
-- **Slidev** - Developer-friendly presentations
-- **Astro Basic** - Lightweight static sites
-
-### Vanilla JavaScript
-- **Vanilla Vite** - Minimal JavaScript setup
-- **Vite TypeScript** - TypeScript without framework
-
-### Getting Started with Templates
-
-1. Start a new project in bolt.diy
-2. Browse available templates in the starter selection
-3. Select your preferred technology stack
-4. The AI will scaffold your project with best practices
-5. Begin development immediately with live preview
-
-All templates are pre-configured with modern tooling, linting, and build processes for immediate productivity.
-
----
-
-## Available Scripts
-
-### Development Scripts
-- `pnpm run dev`: Starts the development server with hot reloading
-- `pnpm run build`: Builds the project for production
-- `pnpm run start`: Runs the built application locally using Wrangler Pages
-- `pnpm run preview`: Builds and starts locally for production testing
-- `pnpm test`: Runs the test suite using Vitest
-- `pnpm run test:watch`: Runs tests in watch mode
-- `pnpm run lint`: Runs ESLint with auto-fix
-- `pnpm run typecheck`: Runs TypeScript type checking
-- `pnpm run typegen`: Generates TypeScript types using Wrangler
-
-### Docker Scripts
-- `pnpm run dockerbuild`: Builds Docker image for development
-- `pnpm run dockerbuild:prod`: Builds Docker image for production
-- `pnpm run dockerrun`: Runs the Docker container
-- `docker compose --profile development up`: Runs with Docker Compose (development)
-
-### Electron Scripts
-- `pnpm electron:build:mac`: Builds for macOS
-- `pnpm electron:build:win`: Builds for Windows
-- `pnpm electron:build:linux`: Builds for Linux
-- `pnpm electron:build:dist`: Builds for all platforms (Mac, Windows, Linux)
-- `pnpm electron:build:unpack`: Creates unpacked build for testing
-
-### Deployment Scripts
-- `pnpm run deploy`: Builds and deploys to Cloudflare Pages
-- `npm run dockerbuild`: Alternative Docker build command
-
-### Utility Scripts
-- `pnpm run clean`: Cleans build artifacts
-- `pnpm run prepare`: Sets up Husky for git hooks
-
----
-
-## Development
-
-To start the development server:
+**Importante**: 
+- Nunca commite arquivos `.env` ou `.env.local` no Git
+- Estes arquivos já estão no `.gitignore`
+
+#### Passo 4: Iniciar o Servidor de Desenvolvimento
 
 ```bash
 pnpm run dev
 ```
 
-This will start the Remix Vite development server. You will need Google Chrome Canary to run this locally if you use Chrome! It's an easy install and a good browser for web development anyway.
+O servidor estará disponível em `http://localhost:5173`
+
+> **Nota**: Para desenvolvimento local, recomenda-se usar **Google Chrome Canary** para melhor compatibilidade com WebContainer.
 
 ---
 
-## Getting Help & Resources
+### Opção 3: Instalação com Docker
 
-### Help Icon in Sidebar
-bolt.diy includes a convenient help icon (?) in the sidebar that provides quick access to comprehensive documentation. Simply click the help icon to open the full documentation in a new tab.
+Docker é ideal para ambientes isolados ou para espelhar a imagem de produção.
 
-The documentation includes:
-- **Complete setup guides** for all supported providers
-- **Feature explanations** for advanced capabilities
-- **Troubleshooting guides** for common issues
-- **Best practices** for optimal usage
-- **FAQ section** with detailed answers
+#### Passo 1: Preparar Variáveis de Ambiente
 
-### Community Support
-- **GitHub Issues**: Report bugs and request features
-- **Community Forum**: Join discussions at [thinktank.ottomator.ai](https://thinktank.ottomator.ai)
-- **Contributing Guide**: Learn how to contribute to the project
+```bash
+cp .env.example .env
+cp .env.example .env.local
 
-## Tips and Tricks
+# Adicione suas chaves de API nos arquivos .env e .env.local
+```
 
-Here are some tips to get the most out of bolt.diy:
+#### Passo 2: Build da Imagem Docker
 
-- **Be specific about your stack**: If you want to use specific frameworks or libraries (like Astro, Tailwind, ShadCN, or any other popular JavaScript framework), mention them in your initial prompt to ensure Bolt scaffolds the project accordingly.
+**Desenvolvimento** (com hot reload):
+```bash
+pnpm run dockerbuild
+# Ou diretamente:
+docker build -t bolt-ai:development -t bolt-ai:latest --target development .
+```
 
-- **Use the enhance prompt icon**: Before sending your prompt, try clicking the 'enhance' icon to have the AI model help you refine your prompt, then edit the results before submitting.
+**Produção** (otimizada):
+```bash
+pnpm run dockerbuild:prod
+# Ou diretamente:
+docker build -t bolt-ai:production -t bolt-ai:latest --target bolt-ai-production .
+```
 
-- **Scaffold the basics first, then add features**: Make sure the basic structure of your application is in place before diving into more advanced functionality. This helps Bolt understand the foundation of your project and ensure everything is wired up right before building out more advanced functionality.
+#### Passo 3: Executar Container
 
-- **Batch simple instructions**: Save time by combining simple instructions into one message. For example, you can ask Bolt to change the color scheme, add mobile responsiveness, and restart the dev server, all in one go saving you time and reducing API credit consumption significantly.
+**Desenvolvimento** (com bind-mount para hot reload):
+```bash
+docker compose --profile development up
+```
 
-- **Access documentation quickly**: Use the help icon (?) in the sidebar for instant access to guides, troubleshooting, and best practices.
+**Produção**:
+```bash
+docker compose --profile production up
+
+# Ou container one-off:
+docker run --rm -p 5173:5173 --env-file .env.local bolt-ai:latest
+```
+
+O container de desenvolvimento monta o código local, permitindo hot reload. O container de produção executa a versão otimizada.
+
+---
+
+### Opção 4: Build da Aplicação Desktop (Electron)
+
+Para criar a aplicação desktop a partir do código fonte:
+
+```bash
+# Instalar dependências
+pnpm install
+
+# Build para todas as plataformas
+pnpm electron:build:dist
+
+# OU build específico por plataforma:
+pnpm electron:build:mac   # macOS
+pnpm electron:build:win   # Windows
+pnpm electron:build:linux # Linux
+```
+
+Os binários serão gerados em `dist/`.
+
+---
+
+### Atualizando a Versão Local
+
+Para manter sua instalação atualizada com as últimas mudanças:
+
+```bash
+# 1. Salvar mudanças locais (se houver)
+git stash
+
+# 2. Buscar atualizações
+git pull origin stable  # ou 'main' se usar branch main
+
+# 3. Atualizar dependências
+pnpm install
+
+# 4. Restaurar mudanças locais (se necessário)
+git stash pop
+
+# 5. Rebuild (se usando Docker)
+docker compose --profile development up --build
+```
+
+---
+
+### Troubleshooting do Setup
+
+#### Problemas Comuns
+
+**Node.js não encontrado**:
+- Verifique instalação: `node --version`
+- Adicione ao PATH do sistema
+
+**Erros de permissão (pnpm)**:
+- Linux/Mac: Use `sudo npm install -g pnpm`
+- Windows: Execute como Administrador
+
+**Dependências não instalam**:
+```bash
+# Limpar cache e reinstalar
+rm -rf node_modules pnpm-lock.yaml
+pnpm store prune
+pnpm install
+```
+
+**Erros com Docker**:
+- Verifique se Docker está rodando: `docker ps`
+- Verifique se portas não estão em uso: `lsof -i :5173`
+
+**Chrome Canary necessário**:
+- Para desenvolvimento local, WebContainer funciona melhor com Chrome Canary
+- Download: [Chrome Canary](https://www.google.com/chrome/canary/)
+
+---
+
+## Build e Deploy
+
+### Build do Projeto
+
+#### Build para Produção
+
+```bash
+# Build completo (client + server)
+pnpm run build
+```
+
+Este comando:
+- Compila TypeScript
+- Processa estilos (UnoCSS, SCSS)
+- Otimiza e minifica código
+- Gera bundle do Remix
+- Output em `build/client` e `build/server`
+
+#### Build e Preview Local
+
+Testar build de produção localmente:
+
+```bash
+pnpm run preview
+# Ou manualmente:
+pnpm run build
+pnpm run start
+```
+
+O servidor de produção local estará em `http://localhost:5173`.
+
+---
+
+### Deploy para Cloudflare Pages
+
+#### Método 1: Deploy via CLI
+
+```bash
+# Build e deploy direto
+pnpm run deploy
+```
+
+Este comando:
+1. Executa `pnpm run build`
+2. Faz deploy via `wrangler pages deploy`
+
+#### Pré-requisitos
+
+1. **Instalar Wrangler CLI**:
+   ```bash
+   npm install -g wrangler
+   ```
+
+2. **Autenticar**:
+   ```bash
+   wrangler login
+   ```
+
+3. **Configurar projeto**:
+   - O arquivo `wrangler.toml` já está configurado
+   - Ajuste `name` e outras configurações se necessário
+
+#### Método 2: Deploy via GitHub Actions
+
+O projeto inclui workflows GitHub Actions para deploy automático:
+- `.github/workflows/preview.yaml`: Deploy de preview
+- `.github/workflows/ci.yaml`: CI/CD pipeline
+
+Configure secrets no GitHub:
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
+
+---
+
+### Build Docker para Produção
+
+#### Build da Imagem de Produção
+
+```bash
+pnpm run dockerbuild:prod
+```
+
+Ou manualmente:
+
+```bash
+docker build \
+  -t bolt-ai:production \
+  -t bolt-ai:latest \
+  --target bolt-ai-production \
+  .
+```
+
+#### Executar Container de Produção
+
+```bash
+docker run -d \
+  --name bolt-ai \
+  -p 5173:5173 \
+  --env-file .env.local \
+  bolt-ai:production
+```
+
+#### Docker Compose (Produção)
+
+```bash
+docker compose --profile production up -d
+```
+
+---
+
+### Deploy de Projetos Criados no bolt.diy
+
+O bolt.diy permite fazer deploy dos projetos criados para várias plataformas:
+
+#### Deploy para Netlify
+
+1. **Conectar conta Netlify**:
+   - Settings → Connections → Netlify
+   - Autenticar via OAuth
+
+2. **Fazer Deploy**:
+   - Clique no botão "Deploy to Netlify" no projeto
+   - O sistema automaticamente:
+     - Executa `npm run build`
+     - Detecta diretório de output (`dist`, `build`, `out`, etc.)
+     - Faz upload para Netlify
+     - Retorna URL do deploy
+
+#### Deploy para Vercel
+
+1. **Conectar conta Vercel**:
+   - Settings → Connections → Vercel
+   - Autenticar via OAuth
+
+2. **Fazer Deploy**:
+   - Clique no botão "Deploy to Vercel"
+   - Similar ao Netlify, com suporte a configuração via `vercel.json`
+
+#### Deploy para GitHub Pages
+
+1. **Conectar conta GitHub**:
+   - Settings → Connections → GitHub
+   - Autenticar via OAuth
+
+2. **Push do Projeto**:
+   - O sistema cria um repositório GitHub
+   - Faz push do código completo
+   - Configura GitHub Pages no repositório
+
+#### Deploy para GitLab
+
+Similar ao GitHub, com suporte a repositórios GitLab.
+
+---
+
+### Scripts Disponíveis
+
+#### Scripts de Desenvolvimento
+
+```bash
+pnpm run dev              # Inicia servidor de desenvolvimento
+pnpm run build            # Build para produção
+pnpm run start            # Roda build localmente
+pnpm run preview          # Build + start (teste produção)
+pnpm test                 # Roda testes
+pnpm run test:watch       # Testes em modo watch
+pnpm run lint             # Verifica código com ESLint
+pnpm run lint:fix         # Corrige problemas de lint automaticamente
+pnpm run typecheck        # Verifica tipos TypeScript
+pnpm run typegen          # Gera tipos Wrangler
+pnpm run clean            # Limpa artifacts de build
+```
+
+#### Scripts Docker
+
+```bash
+pnpm run dockerbuild         # Build imagem desenvolvimento
+pnpm run dockerbuild:prod    # Build imagem produção
+pnpm run dockerstart         # Inicia container com bindings
+pnpm run dockerrun           # Executa container one-off
+```
+
+#### Scripts Electron
+
+```bash
+pnpm electron:dev            # Desenvolvimento Electron
+pnpm electron:build:main     # Build main process
+pnpm electron:build:preload  # Build preload scripts
+pnpm electron:build:renderer # Build renderer
+pnpm electron:build:deps     # Build todas dependências Electron
+pnpm electron:build:mac      # Build macOS
+pnpm electron:build:win      # Build Windows
+pnpm electron:build:linux    # Build Linux
+pnpm electron:build:dist     # Build todas plataformas
+pnpm electron:build:unpack   # Build unpacked (teste)
+```
+
+#### Scripts de Deploy
+
+```bash
+pnpm run deploy             # Deploy para Cloudflare Pages
+```
+
+---
+
+### Otimizações de Build
+
+O projeto utiliza várias otimizações:
+
+- **Code Splitting**: Separação automática de chunks
+- **Tree Shaking**: Remoção de código não utilizado
+- **Minificação**: Uso de esbuild para minificação rápida
+- **Asset Optimization**: Imagens e fonts otimizadas
+- **CSS Optimization**: UnoCSS purga classes não utilizadas
+
+---
+
+## Casos de Uso Principais
+
+### 1. Desenvolvimento de Aplicação Web do Zero
+
+Um desenvolvedor quer criar uma nova aplicação web React do zero. Ele:
+
+1. Acessa bolt.diy e inicia uma nova conversa
+2. Descreve a aplicação desejada (ex: "Crie uma aplicação de lista de tarefas com React e TypeScript")
+3. A IA gera o código completo, criando arquivos, configurando dependências
+4. O projeto é executado automaticamente no WebContainer
+5. O preview é exibido em tempo real no painel lateral
+6. O desenvolvedor pode fazer ajustes através de comandos de texto
+7. Pode exportar o projeto como ZIP ou fazer deploy diretamente
+
+### 2. Melhoria de Projeto Existente
+
+Um desenvolvedor tem um projeto existente e precisa melhorá-lo:
+
+1. Importa o projeto via Git (GitHub/GitLab) ou faz upload de arquivos
+2. Descreve as melhorias desejadas (ex: "Adicione autenticação de usuários")
+3. A IA analisa o código existente e implementa as mudanças
+4. O diff view mostra exatamente o que foi alterado
+5. O desenvolvedor pode revisar e aceitar/rejeitar mudanças
+6. Testa as alterações no preview em tempo real
+
+### 3. Consulta Técnica e Discussão
+
+Um desenvolvedor precisa de ajuda técnica:
+
+1. Alterna para o modo "Discuss" na interface
+2. Faz perguntas técnicas sobre arquitetura, padrões, ou soluções
+3. Recebe orientações detalhadas sem implementação automática
+4. Pode pedir planos de implementação quando necessário
+5. Mantém histórico da conversa para referência futura
+
+---
+
+## Fluxo de Funcionamento
+
+### Fluxo Principal de Criação de Projeto
+
+1. **Inicialização**
+   - Usuário acessa a aplicação (web ou desktop)
+   - Interface de chat é carregada
+   - Sistema verifica provedores de IA configurados
+
+2. **Interação com IA**
+   - Usuário descreve o que deseja criar/melhorar
+   - Sistema valida e processa o prompt
+   - Opcionalmente, melhora o prompt (prompt enhancement)
+   - Envia requisição para o provedor de IA selecionado
+
+3. **Processamento e Geração**
+   - IA gera resposta estruturada com artifacts (arquivos, comandos)
+   - Sistema processa artifacts e cria/modifica arquivos no WebContainer
+   - Executa comandos necessários (npm install, npm run dev, etc.)
+   - Atualiza a interface do editor com os novos arquivos
+
+4. **Visualização e Feedback**
+   - Preview é atualizado automaticamente
+   - Usuário vê resultados em tempo real
+   - Pode continuar a conversa para refinamentos
+   - Histórico é salvo automaticamente
+
+5. **Exportação/Deploy**
+   - Usuário pode baixar projeto como ZIP
+   - Pode fazer deploy para Netlify, Vercel ou GitHub Pages
+   - Pode exportar chat com histórico completo
+
+### Fluxo de Persistência
+
+- **Chat History**: Salvo em IndexedDB do navegador
+- **Projetos**: Mantidos em memória no WebContainer durante a sessão
+- **Configurações**: API keys e preferências salvas em cookies/localStorage
+- **Snapshots**: Estado do projeto salvo para restauração ao recarregar
+
+---
+
+## Interface do Usuário
+
+### Páginas Principais
+
+#### 1. Página Principal (Index Route)
+
+- **Rota**: `/`
+- **Componente**: `_index.tsx`
+- **Conteúdo**:
+  - Header com ações (novo chat, histórico, configurações)
+  - Área de chat central
+  - Sidebar com histórico de conversas
+  - Workbench lateral (editor, preview, terminal)
+
+#### 2. Página de Chat Específico
+
+- **Rota**: `/chat/:id`
+- **Componente**: `chat.$id.tsx`
+- **Conteúdo**:
+  - Carrega chat específico pelo ID
+  - Exibe histórico completo da conversa
+  - Permite continuar conversa existente
+
+#### 3. Página de Importação Git
+
+- **Rota**: `/git`
+- **Componente**: `git.tsx`
+- **Conteúdo**:
+  - Interface para importar repositórios Git
+  - Suporte para GitHub e GitLab
+  - Seleção de branch e importação de arquivos
+
+### Componentes Principais
+
+#### Workbench
+Painel lateral que contém:
+- **Editor de Código**: Visualização e edição de arquivos
+- **Preview**: Visualização da aplicação em desenvolvimento
+- **Terminal**: Execução de comandos e visualização de saídas
+- **Diff View**: Comparação de versões de arquivos
+
+#### Chat Interface
+- **Messages**: Exibição de mensagens do usuário e da IA
+- **ChatBox**: Área de input com suporte a texto, imagens e arquivos
+- **Model Selector**: Seletor de modelo e provedor de IA
+- **Action Alerts**: Alertas para ações sugeridas (Supabase, deploy, etc.)
+
+#### Settings Panel
+- **Provider Configuration**: Configuração de provedores de IA e API keys
+- **Theme Settings**: Configuração de tema (dark/light)
+- **Advanced Settings**: Configurações avançadas e preferências
+
+#### Sidebar
+- **Chat History**: Lista de conversas anteriores
+- **Menu Navigation**: Navegação entre diferentes seções
+- **Quick Actions**: Ações rápidas (novo chat, exportar, etc.)
+
+### Tema e Personalização
+
+- **Dark/Light Mode**: Alternância entre temas
+- **CSS Variables**: Sistema de cores dinâmico baseado em variáveis CSS
+- **Responsive Design**: Adaptação para mobile, tablet e desktop
+- **Acessibilidade**: Suporte a ARIA labels, navegação por teclado, leitores de tela
+
+---
+
+## Configuração de Provedores de IA
+
+Bolt.diy oferece uma interface moderna e intuitiva para gerenciar provedores de IA e chaves de API.
+
+### Acessando Configurações de Provedores
+
+1. **Abrir Settings**: Clique no ícone de configurações (⚙️) na sidebar
+2. **Navegar para Providers**: Selecione a aba "Providers" no menu
+3. **Escolher Tipo**: Alterne entre "Cloud Providers" e "Local Providers"
+
+### Provedores Cloud
+
+A aba Cloud Providers exibe todos os serviços de IA baseados em nuvem:
+
+#### Adicionando API Keys
+
+1. **Selecionar Provedor**: Navegue pela grade de provedores disponíveis
+2. **Habilitar Provedor**: Use o switch para habilitar/desabilitar
+3. **Configurar API Key**:
+   - Clique no card do provedor para expandir
+   - Clique no campo "API Key" para entrar em modo edição
+   - Cole sua chave e pressione Enter para salvar
+   - Interface mostra validação em tempo real com checkmarks verdes
+
+#### Funcionalidades Avançadas
+
+- **Bulk Toggle**: Use "Enable All Cloud" para habilitar/desabilitar todos de uma vez
+- **Status Visual**: Checkmarks verdes indicam provedores configurados corretamente
+- **Ícones de Provedores**: Cada provedor tem ícone distintivo
+- **Descrições**: Descrições úteis explicam capacidades de cada provedor
+
+### Provedores Locais
+
+A aba Local Providers gerencia instalações locais de IA:
+
+#### Configuração Ollama
+
+1. **Habilitar Ollama**: Use o switch do provedor Ollama
+2. **Configurar Endpoint**: Defina o endpoint da API (padrão: `http://127.0.0.1:11434`)
+3. **Gerenciar Modelos**:
+   - Visualizar todos os modelos instalados com tamanho e parâmetros
+   - Atualizar modelos para versões mais recentes
+   - Deletar modelos não utilizados
+   - Instalar novos modelos inserindo nomes
+
+#### Outros Provedores Locais
+
+- **LM Studio**: Configure URLs base customizadas
+- **OpenAI-like**: Conecte a qualquer endpoint compatível com OpenAI
+- **Auto-detecção**: Sistema detecta automaticamente variáveis de ambiente
+
+### Variáveis de Ambiente vs UI
+
+Bolt.diy suporta ambos os métodos:
+
+#### Variáveis de Ambiente (Recomendado para Produção)
+
+Configure no arquivo `.env.local`:
+```bash
+OPENAI_API_KEY=sua_chave_aqui
+ANTHROPIC_API_KEY=sua_chave_aqui
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+```
+
+#### Configuração via UI
+
+- **Atualizações em Tempo Real**: Mudanças têm efeito imediato
+- **Armazenamento Seguro**: API keys armazenadas em cookies criptografados
+- **Feedback Visual**: Indicadores claros de status de configuração
+
+### Features Especiais por Provedor
+
+#### OpenRouter
+- **Filtro de Modelos Gratuitos**: Mostra apenas modelos gratuitos
+- **Informações de Preço**: Exibe custos de input/output
+- **Busca de Modelos**: Busca fuzzy através de todos os modelos
+
+#### Ollama
+- **Instalador de Modelos**: Interface para instalar novos modelos
+- **Rastreamento de Progresso**: Progresso de download em tempo real
+- **Detalhes de Modelos**: Tamanho, parâmetros e níveis de quantização
+- **Auto-refresh**: Detecta automaticamente modelos recém-instalados
+
+### Troubleshooting
+
+#### Problemas Comuns
+
+- **API Key Não Reconhecida**: Verifique formato correto para cada provedor
+- **Problemas com Base URL**: Verifique se URL está correta e acessível
+- **Modelo Não Carrega**: Verifique se provedor está habilitado e configurado
+- **Variáveis de Ambiente Não Funcionam**: Reinicie aplicação após adicionar variáveis
+
+#### Indicadores de Status
+
+- 🟢 **Checkmark Verde**: Provedor configurado e pronto
+- 🔴 **X Vermelho**: Configuração faltando ou inválida
+- 🟡 **Indicador Amarelo**: Provedor habilitado mas pode precisar setup adicional
+- 🔵 **Lápis Azul**: Clique para editar configuração
+
+---
+
+## Templates de Projetos
+
+Bolt.diy vem com uma coleção abrangente de templates para iniciar projetos rapidamente:
+
+### Frameworks Frontend
+
+- **React + Vite**: Setup moderno React com TypeScript
+- **Vue.js**: Framework JavaScript progressivo
+- **Angular**: Framework enterprise-ready
+- **Svelte**: Framework baseado em compiler
+- **SolidJS**: Framework reativo com atualizações granulares
+
+### Frameworks Full-Stack
+
+- **Next.js com shadcn/ui**: Framework React com componentes UI
+- **Astro**: Gerador de sites estáticos
+- **Qwik**: Framework resumable para carregamento instantâneo
+- **Remix**: Framework React full-stack
+- **Nuxt**: Meta-framework Vue.js
+
+### Mobile & Cross-Platform
+
+- **Expo App**: React Native com Expo
+- **React Native**: Desenvolvimento mobile cross-platform
+
+### Apresentação & Conteúdo
+
+- **Slidev**: Apresentações amigáveis para desenvolvedores
+- **Astro Basic**: Sites estáticos leves
+
+### JavaScript Vanilla
+
+- **Vanilla Vite**: Setup JavaScript minimal
+- **Vite TypeScript**: TypeScript sem framework
+
+### Usando Templates
+
+1. Inicie novo projeto no bolt.diy
+2. Navegue pelos templates disponíveis
+3. Selecione sua stack preferida
+4. A IA fará scaffold do projeto com melhores práticas
+5. Comece desenvolvimento imediatamente com preview ao vivo
+
+Todos os templates vêm pré-configurados com tooling moderno, linting e processos de build.
+
+---
+
+## Recursos e Ajuda
+
+### Ícone de Ajuda na Sidebar
+
+Bolt.diy inclui um ícone de ajuda (?) na sidebar que fornece acesso rápido à documentação completa. Clique no ícone para abrir a documentação em nova aba.
+
+A documentação inclui:
+- **Guias de setup completos** para todos os provedores
+- **Explicações de features** para capacidades avançadas
+- **Guias de troubleshooting** para problemas comuns
+- **Melhores práticas** para uso otimizado
+- **Seção FAQ** com respostas detalhadas
+
+### Comunidade
+
+- **GitHub Issues**: Reporte bugs e solicite features
+- **Fórum da Comunidade**: Junte-se às discussões em [thinktank.ottomator.ai](https://thinktank.ottomator.ai)
+- **Guia de Contribuição**: Aprenda como contribuir para o projeto
+
+### Dicas e Truques
+
+- **Seja específico sobre sua stack**: Mencione frameworks específicos (Astro, Tailwind, ShadCN, etc.) no prompt inicial
+- **Use o ícone de enhance prompt**: Clique no ícone 'enhance' para refinar seu prompt antes de enviar
+- **Scaffold o básico primeiro**: Certifique-se de ter estrutura básica antes de adicionar features avançadas
+- **Agrupe instruções simples**: Combine múltiplas instruções simples em uma mensagem
+- **Acesse documentação rapidamente**: Use o ícone de ajuda (?) na sidebar
+
+---
+
+## Links Rápidos
+
+- 📚 [Documentação de Features](./features.md) - Especificações funcionais detalhadas
+- 🏗️ [Arquitetura Técnica](./ARCHITECTURE.md) - Padrões e decisões arquiteturais
+- 📁 [Estrutura do Projeto](./STRUCTURE.md) - Organização de pastas e arquivos
+- 🚀 [README Principal](../README.md) - Instruções de instalação e setup
+- 📋 [Guia de Contribuição](../CONTRIBUTING.md) - Como contribuir para o projeto
+
+---
+
+*Última atualização: Baseado na versão atual do projeto*
