@@ -87,10 +87,10 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             gradientUnits="userSpaceOnUse"
             gradientTransform="rotate(-45)"
           >
-            <stop offset="0%" stopColor="#b44aff" stopOpacity="0%"></stop>
-            <stop offset="40%" stopColor="#b44aff" stopOpacity="80%"></stop>
-            <stop offset="50%" stopColor="#b44aff" stopOpacity="80%"></stop>
-            <stop offset="100%" stopColor="#b44aff" stopOpacity="0%"></stop>
+            <stop offset="0%" stopColor="#22F4C6" stopOpacity="0%"></stop>
+            <stop offset="40%" stopColor="#22F4C6" stopOpacity="80%"></stop>
+            <stop offset="50%" stopColor="#22F4C6" stopOpacity="80%"></stop>
+            <stop offset="100%" stopColor="#22F4C6" stopOpacity="0%"></stop>
           </linearGradient>
           <linearGradient id="shine-gradient">
             <stop offset="0%" stopColor="white" stopOpacity="0%"></stop>
@@ -156,13 +156,13 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             <code className="bg-accent-500 rounded-4px px-1.5 py-1 mr-0.5 text-white">
               {props?.selectedElement?.tagName}
             </code>
-            selected for inspection
+            selecionado para inspeção
           </div>
           <button
             className="bg-transparent text-accent-500 pointer-auto"
             onClick={() => props.setSelectedElement?.(null)}
           >
-            Clear
+            Limpar
           </button>
         </div>
       )}
@@ -236,7 +236,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             minHeight: props.TEXTAREA_MIN_HEIGHT,
             maxHeight: props.TEXTAREA_MAX_HEIGHT,
           }}
-          placeholder={props.chatMode === 'build' ? 'How can Bolt help you today?' : 'What would you like to discuss?'}
+          placeholder={props.chatMode === 'build' ? 'Como o Bolt pode ajudá-lo hoje?' : 'Sobre o que você gostaria de conversar?'}
           translate="no"
         />
         <ClientOnly>
@@ -262,16 +262,16 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           <div className="flex gap-1 items-center">
             <ColorSchemeDialog designScheme={props.designScheme} setDesignScheme={props.setDesignScheme} />
             <McpTools />
-            <IconButton title="Upload file" className="transition-all" onClick={() => props.handleFileUpload()}>
+            <IconButton title="Enviar arquivo" className="transition-all" onClick={() => props.handleFileUpload()}>
               <div className="i-ph:paperclip text-xl"></div>
             </IconButton>
             <IconButton
-              title="Enhance prompt"
+              title="Melhorar prompt"
               disabled={props.input.length === 0 || props.enhancingPrompt}
               className={classNames('transition-all', props.enhancingPrompt ? 'opacity-100' : '')}
               onClick={() => {
                 props.enhancePrompt?.();
-                toast.success('Prompt enhanced!');
+                toast.success('Prompt melhorado!');
               }}
             >
               {props.enhancingPrompt ? (
@@ -289,7 +289,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             />
             {props.chatStarted && (
               <IconButton
-                title="Discuss"
+                title="Discutir"
                 className={classNames(
                   'transition-all flex items-center gap-1 px-1.5',
                   props.chatMode === 'discuss'
@@ -301,11 +301,11 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
                 }}
               >
                 <div className={`i-ph:chats text-xl`} />
-                {props.chatMode === 'discuss' ? <span>Discuss</span> : <span />}
+                {props.chatMode === 'discuss' ? <span>Discutir</span> : <span />}
               </IconButton>
             )}
             <IconButton
-              title="Model Settings"
+              title="Configurações do Modelo"
               className={classNames('transition-all flex items-center gap-1', {
                 'bg-bolt-elements-item-backgroundAccent text-bolt-elements-item-contentAccent':
                   props.isModelSettingsCollapsed,
@@ -322,7 +322,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           {props.input.length > 3 ? (
             <div className="text-xs text-bolt-elements-textTertiary">
               Use <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Shift</kbd> +{' '}
-              <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Return</kbd> a new line
+              <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Enter</kbd> para nova linha
             </div>
           ) : null}
           <SupabaseConnection />

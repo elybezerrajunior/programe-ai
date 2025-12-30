@@ -111,14 +111,14 @@ export const AssistantMessage = memo(
                 {chatSummary && (
                   <div className="max-w-chat">
                     <div className="summary max-h-96 flex flex-col">
-                      <h2 className="border border-bolt-elements-borderColor rounded-md p4">Summary</h2>
+                      <h2 className="border border-bolt-elements-borderColor rounded-md p4">Resumo</h2>
                       <div style={{ zoom: 0.7 }} className="overflow-y-auto m4">
                         <Markdown>{chatSummary}</Markdown>
                       </div>
                     </div>
                     {codeContext && (
                       <div className="code-context flex flex-col p4 border border-bolt-elements-borderColor rounded-md">
-                        <h2>Context</h2>
+                        <h2>Contexto</h2>
                         <div className="flex gap-4 mt-4 bolt" style={{ zoom: 0.6 }}>
                           {codeContext.map((x) => {
                             const normalized = normalizedFilePath(x);
@@ -148,13 +148,13 @@ export const AssistantMessage = memo(
             <div className="flex w-full items-center justify-between">
               {usage && (
                 <div>
-                  Tokens: {usage.totalTokens} (prompt: {usage.promptTokens}, completion: {usage.completionTokens})
+                  Tokens: {usage.totalTokens} (prompt: {usage.promptTokens}, conclusão: {usage.completionTokens})
                 </div>
               )}
               {(onRewind || onFork) && messageId && (
                 <div className="flex gap-2 flex-col lg:flex-row ml-auto">
                   {onRewind && (
-                    <WithTooltip tooltip="Revert to this message">
+                    <WithTooltip tooltip="Reverter para esta mensagem">
                       <button
                         onClick={() => onRewind(messageId)}
                         key="i-ph:arrow-u-up-left"
@@ -163,7 +163,7 @@ export const AssistantMessage = memo(
                     </WithTooltip>
                   )}
                   {onFork && (
-                    <WithTooltip tooltip="Fork chat from this message">
+                    <WithTooltip tooltip="Bifurcar chat a partir desta mensagem">
                       <button
                         onClick={() => onFork(messageId)}
                         key="i-ph:git-fork"

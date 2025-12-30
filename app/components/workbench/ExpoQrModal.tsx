@@ -22,10 +22,10 @@ export const ExpoQrModal: React.FC<ExpoQrModalProps> = ({ open, onClose }) => {
         <div className="border !border-bolt-elements-borderColor flex flex-col gap-5 justify-center items-center p-6 bg-bolt-elements-background-depth-2 rounded-md">
           <div className="i-bolt:expo-brand h-10 w-full invert dark:invert-none"></div>
           <DialogTitle className="text-bolt-elements-textTertiary text-lg font-semibold leading-6">
-            Preview on your own mobile device
+            Visualizar no seu dispositivo móvel
           </DialogTitle>
           <DialogDescription className="bg-bolt-elements-background-depth-3 max-w-sm rounded-md p-1 border border-bolt-elements-borderColor">
-            Scan this QR code with the Expo Go app on your mobile device to open your project.
+            Escaneie este código QR com o aplicativo Expo Go no seu dispositivo móvel para abrir seu projeto.
           </DialogDescription>
           <div className="my-6 flex flex-col items-center">
             {expoUrl ? (
@@ -39,13 +39,13 @@ export const ExpoQrModal: React.FC<ExpoQrModalProps> = ({ open, onClose }) => {
                 style={{
                   borderRadius: 16,
                   padding: 2,
-                  backgroundColor: '#8a5fff',
+                  backgroundColor: '#22F4C6', // Verde menta neon
                 }}
                 value={expoUrl}
                 size={200}
               />
             ) : (
-              <div className="text-gray-500 text-center">No Expo URL detected.</div>
+              <div className="text-gray-500 text-center">Nenhuma URL do Expo detectada.</div>
             )}
           </div>
         </div>

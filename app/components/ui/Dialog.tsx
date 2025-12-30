@@ -24,7 +24,7 @@ export const DialogButton = memo(({ type, children, onClick, disabled }: DialogB
       className={classNames(
         'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors',
         type === 'primary'
-          ? 'bg-purple-500 text-white hover:bg-purple-600 dark:bg-purple-500 dark:hover:bg-purple-600'
+          ? 'bg-accent-500 text-white hover:bg-accent-600 dark:bg-accent-500 dark:hover:bg-accent-600'
           : type === 'secondary'
             ? 'bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
             : 'bg-transparent text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10',
@@ -199,8 +199,8 @@ export function ConfirmationDialog({
   onClose,
   title,
   description,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
+  confirmLabel = 'Confirmar',
+  cancelLabel = 'Cancelar',
   variant = 'default',
   isLoading = false,
   onConfirm,
@@ -385,14 +385,14 @@ export function SelectionDialog({
         <div className="p-6 bg-white dark:bg-gray-950 relative z-10">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="mt-2 mb-4">
-            Select the items you want to include and click{' '}
+            Selecione os itens que deseja incluir e clique em{' '}
             <span className="text-bolt-elements-item-contentAccent font-medium">{confirmLabel}</span>.
           </DialogDescription>
 
           <div className="py-4">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-medium text-bolt-elements-textSecondary">
-                {selectedItems.length} of {items.length} selected
+                {selectedItems.length} de {items.length} selecionado{selectedItems.length !== 1 ? 's' : ''}
               </span>
               <Button
                 variant="ghost"
@@ -400,7 +400,7 @@ export function SelectionDialog({
                 onClick={handleSelectAll}
                 className="text-xs h-8 px-2 text-bolt-elements-textPrimary hover:text-bolt-elements-item-contentAccent hover:bg-bolt-elements-item-backgroundAccent bg-bolt-elements-bg-depth-2 dark:bg-transparent"
               >
-                {selectAll ? 'Deselect All' : 'Select All'}
+                {selectAll ? 'Desmarcar Todos' : 'Selecionar Todos'}
               </Button>
             </div>
 
@@ -421,7 +421,7 @@ export function SelectionDialog({
                   {ItemRenderer}
                 </FixedSizeList>
               ) : (
-                <div className="text-center py-4 text-sm text-bolt-elements-textTertiary">No items to display</div>
+                <div className="text-center py-4 text-sm text-bolt-elements-textTertiary">Nenhum item para exibir</div>
               )}
             </div>
           </div>
@@ -432,7 +432,7 @@ export function SelectionDialog({
               onClick={onClose}
               className="border-bolt-elements-borderColor text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive"
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               onClick={handleConfirm}
