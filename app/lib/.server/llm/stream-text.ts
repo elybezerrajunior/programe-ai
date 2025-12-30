@@ -10,6 +10,7 @@ import { createScopedLogger } from '~/utils/logger';
 import { createFilesContext, extractPropertiesFromMessage } from './utils';
 import { discussPrompt } from '~/lib/common/prompts/discuss-prompt';
 import type { DesignScheme } from '~/types/design-scheme';
+import { getLLMConfigFromEnv } from '~/utils/envConfig';
 
 export type Messages = Message[];
 
@@ -80,16 +81,36 @@ export async function streamText(props: {
     chatMode,
     designScheme,
   } = props;
+
+  // Priorizar env vars sobre valores extraídos de mensagens
+  const envConfig = getLLMConfigFromEnv(serverEnv as any);
+  const useEnvConfig = !!envConfig;
+
   let currentModel = DEFAULT_MODEL;
   let currentProvider = DEFAULT_PROVIDER.name;
+
+  // Se env vars estão configuradas, usar essas em vez de extrair das mensagens
+  if (useEnvConfig && envConfig) {
+    currentModel = envConfig.model;
+    currentProvider = envConfig.provider;
+  }
+
   let processedMessages = messages.map((message) => {
     const newMessage = { ...message };
 
     if (message.role === 'user') {
-      const { model, provider, content } = extractPropertiesFromMessage(message);
-      currentModel = model;
-      currentProvider = provider;
-      newMessage.content = sanitizeText(content);
+      // Se env vars estão configuradas, ignorar [Model: ...] e [Provider: ...] nas mensagens
+      if (useEnvConfig) {
+        // Ainda limpar o conteúdo, mas não extrair model/provider
+        const { content } = extractPropertiesFromMessage(message);
+        newMessage.content = sanitizeText(content);
+      } else {
+        // Comportamento original: extrair model/provider das mensagens
+        const { model, provider, content } = extractPropertiesFromMessage(message);
+        currentModel = model;
+        currentProvider = provider;
+        newMessage.content = sanitizeText(content);
+      }
     } else if (message.role == 'assistant') {
       newMessage.content = sanitizeText(message.content);
     }
