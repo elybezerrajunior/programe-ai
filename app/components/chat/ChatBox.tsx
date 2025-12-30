@@ -105,44 +105,39 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
       </svg>
       <div>
         <ClientOnly>
-          {() => (
-            <div className={props.isModelSettingsCollapsed ? 'hidden' : ''}>
-              {/* Indicador visual quando configurado via env vars */}
-              {props.envConfigured && (
-                <div className="mb-2 px-3 py-2 rounded-md bg-bolt-elements-background-depth-3 border border-bolt-elements-borderColor text-xs text-bolt-elements-textSecondary flex items-center gap-2">
-                  <div className="i-ph:check-circle text-bolt-elements-button-success-text"></div>
-                  <span>Configurado via variáveis de ambiente</span>
-                </div>
-              )}
-              {/* Não renderizar ModelSelector se configurado via env vars */}
-              {!props.envConfigured && (
-                <>
-                  <ModelSelector
-                    key={props.provider?.name + ':' + props.modelList.length}
-                    model={props.model}
-                    setModel={props.setModel}
-                    modelList={props.modelList}
-                    provider={props.provider}
-                    setProvider={props.setProvider}
-                    providerList={props.providerList || (PROVIDER_LIST as ProviderInfo[])}
-                    apiKeys={props.apiKeys}
-                    modelLoading={props.isModelLoading}
-                  />
-                  {(props.providerList || []).length > 0 &&
-                    props.provider &&
-                    !LOCAL_PROVIDERS.includes(props.provider.name) && (
-                      <APIKeyManager
-                        provider={props.provider}
-                        apiKey={props.apiKeys[props.provider.name] || ''}
-                        setApiKey={(key) => {
-                          props.onApiKeysChange(props.provider.name, key);
-                        }}
-                      />
-                    )}
-                </>
-              )}
-            </div>
-          )}
+          {() => {
+            // Ocultar completamente quando configurado via env vars
+            if (props.envConfigured) {
+              return null;
+            }
+
+            return (
+              <div className={props.isModelSettingsCollapsed ? 'hidden' : ''}>
+                <ModelSelector
+                  key={props.provider?.name + ':' + props.modelList.length}
+                  model={props.model}
+                  setModel={props.setModel}
+                  modelList={props.modelList}
+                  provider={props.provider}
+                  setProvider={props.setProvider}
+                  providerList={props.providerList || (PROVIDER_LIST as ProviderInfo[])}
+                  apiKeys={props.apiKeys}
+                  modelLoading={props.isModelLoading}
+                />
+                {(props.providerList || []).length > 0 &&
+                  props.provider &&
+                  !LOCAL_PROVIDERS.includes(props.provider.name) && (
+                    <APIKeyManager
+                      provider={props.provider}
+                      apiKey={props.apiKeys[props.provider.name] || ''}
+                      setApiKey={(key) => {
+                        props.onApiKeysChange(props.provider.name, key);
+                      }}
+                    />
+                  )}
+              </div>
+            );
+          }}
         </ClientOnly>
       </div>
       <FilePreview
@@ -319,20 +314,23 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
                 {props.chatMode === 'discuss' ? <span>Discutir</span> : <span />}
               </IconButton>
             )}
-            <IconButton
-              title="Configurações do Modelo"
-              className={classNames('transition-all flex items-center gap-1', {
-                'bg-bolt-elements-item-backgroundAccent text-bolt-elements-item-contentAccent':
-                  props.isModelSettingsCollapsed,
-                'bg-bolt-elements-item-backgroundDefault text-bolt-elements-item-contentDefault':
-                  !props.isModelSettingsCollapsed,
-              })}
-              onClick={() => props.setIsModelSettingsCollapsed(!props.isModelSettingsCollapsed)}
-              disabled={!props.providerList || props.providerList.length === 0}
-            >
-              <div className={`i-ph:caret-${props.isModelSettingsCollapsed ? 'right' : 'down'} text-lg`} />
-              {props.isModelSettingsCollapsed ? <span className="text-xs">{props.model}</span> : <span />}
-            </IconButton>
+            {/* Ocultar botão de configurações quando configurado via env vars */}
+            {!props.envConfigured && (
+              <IconButton
+                title="Configurações do Modelo"
+                className={classNames('transition-all flex items-center gap-1', {
+                  'bg-bolt-elements-item-backgroundAccent text-bolt-elements-item-contentAccent':
+                    props.isModelSettingsCollapsed,
+                  'bg-bolt-elements-item-backgroundDefault text-bolt-elements-item-contentDefault':
+                    !props.isModelSettingsCollapsed,
+                })}
+                onClick={() => props.setIsModelSettingsCollapsed(!props.isModelSettingsCollapsed)}
+                disabled={!props.providerList || props.providerList.length === 0}
+              >
+                <div className={`i-ph:caret-${props.isModelSettingsCollapsed ? 'right' : 'down'} text-lg`} />
+                {props.isModelSettingsCollapsed ? <span className="text-xs">{props.model}</span> : <span />}
+              </IconButton>
+            )}
           </div>
           {props.input.length > 3 ? (
             <div className="text-xs text-bolt-elements-textTertiary">
