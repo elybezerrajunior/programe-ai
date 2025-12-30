@@ -245,7 +245,9 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             maxHeight: props.TEXTAREA_MAX_HEIGHT,
           }}
           placeholder={
-            props.chatMode === 'build' ? 'Como o Bolt pode ajudá-lo hoje?' : 'Sobre o que você gostaria de conversar?'
+            props.chatMode === 'build'
+              ? 'Como o Programe.ia pode ajudá-lo hoje?'
+              : 'Sobre o que você gostaria de conversar?'
           }
           translate="no"
         />
