@@ -335,7 +335,7 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
           label: 'response',
           status: 'in-progress',
           order: progressCounter++,
-          message: 'Generating Response',
+          message: 'Gerando Resposta',
         } satisfies ProgressAnnotation);
 
         const result = await streamText({

@@ -6,7 +6,10 @@ import { Header } from '~/components/header/Header';
 import BackgroundRays from '~/components/ui/BackgroundRays';
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Programe.IA' }, { name: 'description', content: 'Programe.IA é um assistente de IA para programação e desenvolvimento' }];
+  return [
+    { title: 'Programe.IA' },
+    { name: 'description', content: 'Programe.IA é um assistente de IA para programação e desenvolvimento' },
+  ];
 };
 
 export const loader = () => json({});
