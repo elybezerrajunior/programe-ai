@@ -1,0 +1,2496 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>bolt.diy Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#boltdiy-documentacao" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="bolt.diy Docs" class="md-header__button md-logo" aria-label="bolt.diy Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            bolt.diy Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              bolt.diy - Documentação
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/stackblitz-labs/bolt.diy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bolt.diy
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+  
+    
+  
+  bolt.diy - Documentação
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="bolt.diy Docs" class="md-nav__button md-logo" aria-label="bolt.diy Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    bolt.diy Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/stackblitz-labs/bolt.diy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bolt.diy
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bolt.diy - Documentação
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bolt.diy - Documentação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#indice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#visao-geral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visão Geral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#funcionalidades-principais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Funcionalidades Principais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Funcionalidades Principais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#integracao-com-multiplos-provedores-de-ia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🤖 Integração com Múltiplos Provedores de IA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ambiente-de-desenvolvimento-integrado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💻 Ambiente de Desenvolvimento Integrado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gerenciamento-de-projetos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📁 Gerenciamento de Projetos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editor-e-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎨 Editor e Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-e-integracoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Deploy e Integrações
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#funcionalidades-avancadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Funcionalidades Avançadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desktop-app-electron" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🖥️ Desktop App (Electron)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#especificacoes-tecnicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Especificações Técnicas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Especificações Técnicas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stack-tecnologico-principal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stack Tecnológico Principal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arquitetura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arquitetura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#principais-bibliotecas-e-ferramentas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Principais Bibliotecas e Ferramentas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ambiente-de-execucao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ambiente de Execução
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-e-instalacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup e Instalação
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup e Instalação">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requisitos-previos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Requisitos Prévios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcao-1-instalacao-rapida-desktop-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opção 1: Instalação Rápida (Desktop App)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcao-2-instalacao-manual-desenvolvimento-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opção 2: Instalação Manual (Desenvolvimento Local)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Opção 2: Instalação Manual (Desenvolvimento Local)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passo-1-clonar-o-repositorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 1: Clonar o Repositório
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-2-instalar-dependencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 2: Instalar Dependências
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-3-configurar-variaveis-de-ambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 3: Configurar Variáveis de Ambiente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-4-iniciar-o-servidor-de-desenvolvimento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 4: Iniciar o Servidor de Desenvolvimento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcao-3-instalacao-com-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opção 3: Instalação com Docker
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Opção 3: Instalação com Docker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#passo-1-preparar-variaveis-de-ambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 1: Preparar Variáveis de Ambiente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-2-build-da-imagem-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 2: Build da Imagem Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passo-3-executar-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passo 3: Executar Container
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcao-4-build-da-aplicacao-desktop-electron" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opção 4: Build da Aplicação Desktop (Electron)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#atualizando-a-versao-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atualizando a Versão Local
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting-do-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting do Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting do Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problemas-comuns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas Comuns
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-e-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build e Deploy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build e Deploy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-do-projeto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build do Projeto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build do Projeto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-para-producao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build para Produção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-e-preview-local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build e Preview Local
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-para-cloudflare-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploy para Cloudflare Pages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploy para Cloudflare Pages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metodo-1-deploy-via-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Método 1: Deploy via CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-requisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pré-requisitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metodo-2-deploy-via-github-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Método 2: Deploy via GitHub Actions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-docker-para-producao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build Docker para Produção
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Docker para Produção">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-da-imagem-de-producao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build da Imagem de Produção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executar-container-de-producao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executar Container de Produção
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker-compose-producao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker Compose (Produção)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-de-projetos-criados-no-boltdiy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploy de Projetos Criados no bolt.diy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploy de Projetos Criados no bolt.diy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deploy-para-netlify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploy para Netlify
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-para-vercel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploy para Vercel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-para-github-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploy para GitHub Pages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deploy-para-gitlab" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deploy para GitLab
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scripts-disponiveis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts Disponíveis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Scripts Disponíveis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scripts-de-desenvolvimento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts de Desenvolvimento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scripts-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scripts-electron" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts Electron
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scripts-de-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scripts de Deploy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otimizacoes-de-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Otimizações de Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-de-uso-principais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casos de Uso Principais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Casos de Uso Principais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-desenvolvimento-de-aplicacao-web-do-zero" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Desenvolvimento de Aplicação Web do Zero
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-melhoria-de-projeto-existente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Melhoria de Projeto Existente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-consulta-tecnica-e-discussao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Consulta Técnica e Discussão
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-funcionamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fluxo de Funcionamento
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fluxo de Funcionamento">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fluxo-principal-de-criacao-de-projeto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fluxo Principal de Criação de Projeto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fluxo-de-persistencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fluxo de Persistência
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interface-do-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interface do Usuário
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interface do Usuário">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paginas-principais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Páginas Principais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Páginas Principais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-pagina-principal-index-route" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Página Principal (Index Route)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-pagina-de-chat-especifico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Página de Chat Específico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-pagina-de-importacao-git" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Página de Importação Git
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#componentes-principais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Componentes Principais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Componentes Principais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workbench" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workbench
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chat-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chat Interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#settings-panel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Settings Panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sidebar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sidebar
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tema-e-personalizacao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tema e Personalização
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuracao-de-provedores-de-ia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuração de Provedores de IA
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuração de Provedores de IA">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acessando-configuracoes-de-provedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acessando Configurações de Provedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provedores-cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provedores Cloud
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Provedores Cloud">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adicionando-api-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adicionando API Keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#funcionalidades-avancadas_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Funcionalidades Avançadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#provedores-locais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provedores Locais
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Provedores Locais">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuracao-ollama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuração Ollama
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#outros-provedores-locais" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outros Provedores Locais
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-de-ambiente-vs-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis de Ambiente vs UI
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Variáveis de Ambiente vs UI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variaveis-de-ambiente-recomendado-para-producao" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variáveis de Ambiente (Recomendado para Produção)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuracao-via-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuração via UI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features-especiais-por-provedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features Especiais por Provedor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Features Especiais por Provedor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#openrouter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OpenRouter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ollama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ollama
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problemas-comuns_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problemas Comuns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indicadores-de-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indicadores de Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates-de-projetos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates de Projetos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Templates de Projetos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frameworks-frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frameworks Frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frameworks-full-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frameworks Full-Stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mobile-cross-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mobile &amp; Cross-Platform
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apresentacao-conteudo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Apresentação &amp; Conteúdo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript-vanilla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JavaScript Vanilla
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usando-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usando Templates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recursos-e-ajuda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recursos e Ajuda
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recursos e Ajuda">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#icone-de-ajuda-na-sidebar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ícone de Ajuda na Sidebar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comunidade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comunidade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dicas-e-truques" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dicas e Truques
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#links-rapidos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Links Rápidos
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="boltdiy-documentacao">bolt.diy - Documentação<a class="headerlink" href="#boltdiy-documentacao" title="Permanent link">&para;</a></h1>
+<h2 id="indice">Índice<a class="headerlink" href="#indice" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#visão-geral">Visão Geral</a></li>
+<li><a href="#funcionalidades-principais">Funcionalidades Principais</a></li>
+<li><a href="#especificações-técnicas">Especificações Técnicas</a></li>
+<li><a href="#setup-e-instalação">Setup e Instalação</a></li>
+<li><a href="#build-e-deploy">Build e Deploy</a></li>
+<li><a href="#casos-de-uso-principais">Casos de Uso Principais</a></li>
+<li><a href="#fluxo-de-funcionamento">Fluxo de Funcionamento</a></li>
+<li><a href="#interface-do-usuário">Interface do Usuário</a></li>
+<li><a href="#configuração-de-provedores-de-ia">Configuração de Provedores de IA</a></li>
+<li><a href="#templates-de-projetos">Templates de Projetos</a></li>
+<li><a href="#recursos-e-ajuda">Recursos e Ajuda</a></li>
+</ul>
+<hr />
+<h2 id="visao-geral">Visão Geral<a class="headerlink" href="#visao-geral" title="Permanent link">&para;</a></h2>
+<p><strong>bolt.diy</strong> é uma plataforma open-source de desenvolvimento web full-stack alimentada por IA que permite criar e desenvolver aplicações web diretamente no navegador. O projeto é a versão open-source oficial do Bolt.new, oferecendo a flexibilidade de escolher qual modelo de linguagem (LLM) usar para cada prompt.</p>
+<p>A aplicação utiliza o <strong>WebContainer API</strong> da StackBlitz para fornecer um ambiente de desenvolvimento Node.js completo no navegador, permitindo executar projetos, instalar dependências, executar servidores de desenvolvimento e visualizar aplicações em tempo real, tudo sem sair do navegador.</p>
+<p>O projeto é construído com <strong>React</strong>, <strong>TypeScript</strong>, <strong>Remix</strong> e <strong>Vite</strong>, seguindo princípios de Clean Architecture adaptados para desenvolvimento web. A aplicação suporta múltiplos provedores de IA (19+), integração com serviços como GitHub, GitLab, Netlify, Vercel e Supabase, além de oferecer uma experiência desktop através do Electron.</p>
+<hr />
+<h2 id="funcionalidades-principais">Funcionalidades Principais<a class="headerlink" href="#funcionalidades-principais" title="Permanent link">&para;</a></h2>
+<h3 id="integracao-com-multiplos-provedores-de-ia">🤖 Integração com Múltiplos Provedores de IA<a class="headerlink" href="#integracao-com-multiplos-provedores-de-ia" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>19+ Provedores Suportados</strong>: OpenAI, Anthropic, Google (Gemini), Groq, xAI, DeepSeek, Mistral, Cohere, Together, Perplexity, HuggingFace, Ollama, LM Studio, OpenRouter, Moonshot (Kimi), Hyperbolic, GitHub Models, Amazon Bedrock, e provedores OpenAI-compatíveis</li>
+<li><strong>Seleção Dinâmica de Modelos</strong>: Escolha o modelo ideal para cada tarefa</li>
+<li><strong>Configuração Intuitiva</strong>: Interface moderna para gerenciar chaves de API e configurações de provedores</li>
+</ul>
+<h3 id="ambiente-de-desenvolvimento-integrado">💻 Ambiente de Desenvolvimento Integrado<a class="headerlink" href="#ambiente-de-desenvolvimento-integrado" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>WebContainer API</strong>: Execução de código Node.js diretamente no navegador</li>
+<li><strong>Editor de Código</strong>: Editor integrado com suporte a múltiplas linguagens via CodeMirror</li>
+<li><strong>Terminal Integrado</strong>: Terminal funcional para executar comandos e ver saídas</li>
+<li><strong>Preview em Tempo Real</strong>: Visualização instantânea das aplicações desenvolvidas</li>
+</ul>
+<h3 id="gerenciamento-de-projetos">📁 Gerenciamento de Projetos<a class="headerlink" href="#gerenciamento-de-projetos" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Criação de Projetos</strong>: Crie projetos do zero ou a partir de templates</li>
+<li><strong>Importação de Código</strong>: Importe projetos existentes via Git (GitHub, GitLab)</li>
+<li><strong>Download de Projetos</strong>: Exporte projetos completos como arquivos ZIP</li>
+<li><strong>Sistema de Snapshots</strong>: Restauração automática de projetos ao recarregar</li>
+</ul>
+<h3 id="editor-e-interface">🎨 Editor e Interface<a class="headerlink" href="#editor-e-interface" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Editor com Syntax Highlighting</strong>: Suporte a múltiplas linguagens de programação</li>
+<li><strong>Diff View</strong>: Visualização de diferenças entre versões de código</li>
+<li><strong>File Locking</strong>: Sistema para evitar conflitos durante geração de código pela IA</li>
+<li><strong>Interface Responsiva</strong>: Design moderno e adaptável para diferentes tamanhos de tela</li>
+</ul>
+<h3 id="deploy-e-integracoes">🚀 Deploy e Integrações<a class="headerlink" href="#deploy-e-integracoes" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Deploy para Netlify</strong>: Publicação direta de projetos</li>
+<li><strong>Deploy para Vercel</strong>: Integração com Vercel para deployment</li>
+<li><strong>Deploy para GitHub Pages</strong>: Publicação em GitHub Pages</li>
+<li><strong>Integração Supabase</strong>: Gerenciamento de bancos de dados e queries</li>
+<li><strong>Integração Git</strong>: Clone, import e sincronização com repositórios Git</li>
+</ul>
+<h3 id="funcionalidades-avancadas">📊 Funcionalidades Avançadas<a class="headerlink" href="#funcionalidades-avancadas" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>MCP (Model Context Protocol)</strong>: Suporte para ferramentas e integrações avançadas de IA</li>
+<li><strong>Visualização de Dados</strong>: Gráficos e análises de dados integrados</li>
+<li><strong>Chat com Histórico</strong>: Sistema de chat persistente com histórico de conversações</li>
+<li><strong>Modo Discussão vs Construção</strong>: Dois modos distintos de interação com a IA</li>
+<li><strong>Reconhecimento de Voz</strong>: Entrada de comandos via voz (Speech Recognition)</li>
+</ul>
+<h3 id="desktop-app-electron">🖥️ Desktop App (Electron)<a class="headerlink" href="#desktop-app-electron" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Aplicação Desktop Nativa</strong>: Versão desktop completa via Electron</li>
+<li><strong>Funcionalidade Completa</strong>: Todas as features da versão web disponíveis no desktop</li>
+<li><strong>Multi-plataforma</strong>: Suporte para Windows, macOS e Linux</li>
+</ul>
+<hr />
+<h2 id="especificacoes-tecnicas">Especificações Técnicas<a class="headerlink" href="#especificacoes-tecnicas" title="Permanent link">&para;</a></h2>
+<h3 id="stack-tecnologico-principal">Stack Tecnológico Principal<a class="headerlink" href="#stack-tecnologico-principal" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Framework Frontend</strong>: React 18.3.1</li>
+<li><strong>Framework Web</strong>: Remix 2.15.2 (Cloudflare Pages)</li>
+<li><strong>Linguagem</strong>: TypeScript 5.7.2</li>
+<li><strong>Build Tool</strong>: Vite 5.4.11</li>
+<li><strong>Gerenciamento de Estado</strong>: </li>
+<li>Zustand 5.0.3 (estado global)</li>
+<li>Nanostores 0.10.3 (estado reativo)</li>
+<li>Context API (comunicação de componentes)</li>
+<li><strong>Estilização</strong>: </li>
+<li>UnoCSS 0.61.9 (utility-first CSS)</li>
+<li>SCSS (estilos customizados)</li>
+<li>CSS Variables (tema dinâmico)</li>
+<li><strong>Validação</strong>: Zod 3.24.1</li>
+</ul>
+<h3 id="arquitetura">Arquitetura<a class="headerlink" href="#arquitetura" title="Permanent link">&para;</a></h3>
+<p>A aplicação segue uma <strong>Clean Architecture adaptada para Remix</strong>, organizando o código em camadas:</p>
+<ul>
+<li><strong>Domain Layer</strong>: Lógica de negócio, entidades e casos de uso</li>
+<li><strong>Data Layer</strong>: Implementações de repositórios, APIs e serviços externos</li>
+<li><strong>Presentation Layer</strong>: Componentes React, páginas Remix e hooks customizados</li>
+</ul>
+<h3 id="principais-bibliotecas-e-ferramentas">Principais Bibliotecas e Ferramentas<a class="headerlink" href="#principais-bibliotecas-e-ferramentas" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>WebContainer API</strong>: Ambiente Node.js no navegador</li>
+<li><strong>CodeMirror</strong>: Editor de código avançado</li>
+<li><strong>Radix UI</strong>: Componentes de UI acessíveis</li>
+<li><strong>Vercel AI SDK</strong>: Integração com múltiplos provedores de IA</li>
+<li><strong>Electron</strong>: Aplicação desktop</li>
+<li><strong>xterm.js</strong>: Terminal no navegador</li>
+<li><strong>React Markdown</strong>: Renderização de markdown</li>
+<li><strong>Framer Motion</strong>: Animações e transições</li>
+</ul>
+<h3 id="ambiente-de-execucao">Ambiente de Execução<a class="headerlink" href="#ambiente-de-execucao" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Runtime</strong>: Cloudflare Workers/Pages (produção)</li>
+<li><strong>Desenvolvimento</strong>: Vite Dev Server com HMR</li>
+<li><strong>Container</strong>: Docker support com Docker Compose</li>
+<li><strong>Desktop</strong>: Electron (Windows, macOS, Linux)</li>
+</ul>
+<hr />
+<h2 id="setup-e-instalacao">Setup e Instalação<a class="headerlink" href="#setup-e-instalacao" title="Permanent link">&para;</a></h2>
+<h3 id="requisitos-previos">Requisitos Prévios<a class="headerlink" href="#requisitos-previos" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Node.js</strong>: Versão 18.18.0 ou superior (<a href="https://nodejs.org/en/download/">Download Node.js</a>)</li>
+<li>Recomendado: Versão LTS (Long Term Support)</li>
+<li>
+<p>Após instalação, verifique se está no PATH:</p>
+<ul>
+<li><strong>Windows</strong>: <code>sysdm.cpl</code> → Advanced → Environment Variables → Verificar Path</li>
+<li><strong>Mac/Linux</strong>: <code>echo $PATH</code> deve mostrar <code>/usr/local/bin</code></li>
+</ul>
+</li>
+<li>
+<p><strong>pnpm</strong>: Gerenciador de pacotes (será instalado se necessário)
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>pnpm
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Git</strong> (Opcional, para desenvolvimento): <a href="https://git-scm.com/downloads">Download Git</a></p>
+</li>
+<li>
+<p><strong>Docker</strong> (Opcional, para uso com containers): <a href="https://www.docker.com/">Download Docker</a></p>
+</li>
+</ol>
+<hr />
+<h3 id="opcao-1-instalacao-rapida-desktop-app">Opção 1: Instalação Rápida (Desktop App)<a class="headerlink" href="#opcao-1-instalacao-rapida-desktop-app" title="Permanent link">&para;</a></h3>
+<p>A forma mais simples de começar é baixar a aplicação desktop pré-compilada:</p>
+<p><a href="https://github.com/stackblitz-labs/bolt.diy/releases/latest"><img alt="Download Latest Release" src="https://img.shields.io/github/v/release/stackblitz-labs/bolt.diy?label=Download%20Bolt&amp;sort=semver" /></a></p>
+<ol>
+<li><strong>Download</strong>: Acesse a <a href="https://github.com/stackblitz-labs/bolt.diy/releases/latest">página de releases</a></li>
+<li><strong>Instalação</strong>:</li>
+<li><strong>macOS</strong>: Extraia o <code>.dmg</code> e arraste para Applications<ul>
+<li>Se aparecer "app is damaged", execute: <code>xattr -cr /path/to/Bolt.app</code></li>
+</ul>
+</li>
+<li><strong>Windows</strong>: Execute o <code>.exe</code> installer</li>
+<li><strong>Linux</strong>: Extraia e execute o AppImage ou instale o <code>.deb</code></li>
+</ol>
+<p>A aplicação desktop oferece todas as funcionalidades da versão web com recursos nativos adicionais.</p>
+<hr />
+<h3 id="opcao-2-instalacao-manual-desenvolvimento-local">Opção 2: Instalação Manual (Desenvolvimento Local)<a class="headerlink" href="#opcao-2-instalacao-manual-desenvolvimento-local" title="Permanent link">&para;</a></h3>
+<h4 id="passo-1-clonar-o-repositorio">Passo 1: Clonar o Repositório<a class="headerlink" href="#passo-1-clonar-o-repositorio" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Versão estável (recomendado)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>stable<span class="w"> </span>https://github.com/stackblitz-labs/bolt.diy.git
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># OU versão main (últimas features, pode ter bugs)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/stackblitz-labs/bolt.diy.git
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nb">cd</span><span class="w"> </span>bolt.diy
+</code></pre></div>
+<h4 id="passo-2-instalar-dependencias">Passo 2: Instalar Dependências<a class="headerlink" href="#passo-2-instalar-dependencias" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pnpm<span class="w"> </span>install
+</code></pre></div>
+<h4 id="passo-3-configurar-variaveis-de-ambiente">Passo 3: Configurar Variáveis de Ambiente<a class="headerlink" href="#passo-3-configurar-variaveis-de-ambiente" title="Permanent link">&para;</a></h4>
+<p>Crie os arquivos de ambiente a partir do exemplo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env.local
+</code></pre></div>
+<p>Edite <code>.env.local</code> e adicione suas chaves de API:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># API Keys (adicione suas chaves aqui)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sua_chave_aqui
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nv">ANTHROPIC_API_KEY</span><span class="o">=</span>sua_chave_aqui
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nv">GROQ_API_KEY</span><span class="o">=</span>sua_chave_aqui
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># URLs de provedores locais (opcional)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://127.0.0.1:11434
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="nv">LMSTUDIO_BASE_URL</span><span class="o">=</span>http://127.0.0.1:1234
+</code></pre></div>
+<p><strong>Importante</strong>: 
+- Nunca commite arquivos <code>.env</code> ou <code>.env.local</code> no Git
+- Estes arquivos já estão no <code>.gitignore</code></p>
+<h4 id="passo-4-iniciar-o-servidor-de-desenvolvimento">Passo 4: Iniciar o Servidor de Desenvolvimento<a class="headerlink" href="#passo-4-iniciar-o-servidor-de-desenvolvimento" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dev
+</code></pre></div>
+<p>O servidor estará disponível em <code>http://localhost:5173</code></p>
+<blockquote>
+<p><strong>Nota</strong>: Para desenvolvimento local, recomenda-se usar <strong>Google Chrome Canary</strong> para melhor compatibilidade com WebContainer.</p>
+</blockquote>
+<hr />
+<h3 id="opcao-3-instalacao-com-docker">Opção 3: Instalação com Docker<a class="headerlink" href="#opcao-3-instalacao-com-docker" title="Permanent link">&para;</a></h3>
+<p>Docker é ideal para ambientes isolados ou para espelhar a imagem de produção.</p>
+<h4 id="passo-1-preparar-variaveis-de-ambiente">Passo 1: Preparar Variáveis de Ambiente<a class="headerlink" href="#passo-1-preparar-variaveis-de-ambiente" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env.local
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Adicione suas chaves de API nos arquivos .env e .env.local</span>
+</code></pre></div>
+<h4 id="passo-2-build-da-imagem-docker">Passo 2: Build da Imagem Docker<a class="headerlink" href="#passo-2-build-da-imagem-docker" title="Permanent link">&para;</a></h4>
+<p><strong>Desenvolvimento</strong> (com hot reload):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dockerbuild
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Ou diretamente:</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>bolt-ai:development<span class="w"> </span>-t<span class="w"> </span>bolt-ai:latest<span class="w"> </span>--target<span class="w"> </span>development<span class="w"> </span>.
+</code></pre></div></p>
+<p><strong>Produção</strong> (otimizada):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dockerbuild:prod
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># Ou diretamente:</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>bolt-ai:production<span class="w"> </span>-t<span class="w"> </span>bolt-ai:latest<span class="w"> </span>--target<span class="w"> </span>bolt-ai-production<span class="w"> </span>.
+</code></pre></div></p>
+<h4 id="passo-3-executar-container">Passo 3: Executar Container<a class="headerlink" href="#passo-3-executar-container" title="Permanent link">&para;</a></h4>
+<p><strong>Desenvolvimento</strong> (com bind-mount para hot reload):
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>development<span class="w"> </span>up
+</code></pre></div></p>
+<p><strong>Produção</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>production<span class="w"> </span>up
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Ou container one-off:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-p<span class="w"> </span><span class="m">5173</span>:5173<span class="w"> </span>--env-file<span class="w"> </span>.env.local<span class="w"> </span>bolt-ai:latest
+</code></pre></div></p>
+<p>O container de desenvolvimento monta o código local, permitindo hot reload. O container de produção executa a versão otimizada.</p>
+<hr />
+<h3 id="opcao-4-build-da-aplicacao-desktop-electron">Opção 4: Build da Aplicação Desktop (Electron)<a class="headerlink" href="#opcao-4-build-da-aplicacao-desktop-electron" title="Permanent link">&para;</a></h3>
+<p>Para criar a aplicação desktop a partir do código fonte:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Instalar dependências</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>pnpm<span class="w"> </span>install
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Build para todas as plataformas</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>pnpm<span class="w"> </span>electron:build:dist
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># OU build específico por plataforma:</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>pnpm<span class="w"> </span>electron:build:mac<span class="w">   </span><span class="c1"># macOS</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>pnpm<span class="w"> </span>electron:build:win<span class="w">   </span><span class="c1"># Windows</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>pnpm<span class="w"> </span>electron:build:linux<span class="w"> </span><span class="c1"># Linux</span>
+</code></pre></div>
+<p>Os binários serão gerados em <code>dist/</code>.</p>
+<hr />
+<h3 id="atualizando-a-versao-local">Atualizando a Versão Local<a class="headerlink" href="#atualizando-a-versao-local" title="Permanent link">&para;</a></h3>
+<p>Para manter sua instalação atualizada com as últimas mudanças:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># 1. Salvar mudanças locais (se houver)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>git<span class="w"> </span>stash
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># 2. Buscar atualizações</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>stable<span class="w">  </span><span class="c1"># ou &#39;main&#39; se usar branch main</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c1"># 3. Atualizar dependências</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>pnpm<span class="w"> </span>install
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="c1"># 4. Restaurar mudanças locais (se necessário)</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>git<span class="w"> </span>stash<span class="w"> </span>pop
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="c1"># 5. Rebuild (se usando Docker)</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>development<span class="w"> </span>up<span class="w"> </span>--build
+</code></pre></div>
+<hr />
+<h3 id="troubleshooting-do-setup">Troubleshooting do Setup<a class="headerlink" href="#troubleshooting-do-setup" title="Permanent link">&para;</a></h3>
+<h4 id="problemas-comuns">Problemas Comuns<a class="headerlink" href="#problemas-comuns" title="Permanent link">&para;</a></h4>
+<p><strong>Node.js não encontrado</strong>:
+- Verifique instalação: <code>node --version</code>
+- Adicione ao PATH do sistema</p>
+<p><strong>Erros de permissão (pnpm)</strong>:
+- Linux/Mac: Use <code>sudo npm install -g pnpm</code>
+- Windows: Execute como Administrador</p>
+<p><strong>Dependências não instalam</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Limpar cache e reinstalar</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>rm<span class="w"> </span>-rf<span class="w"> </span>node_modules<span class="w"> </span>pnpm-lock.yaml
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>pnpm<span class="w"> </span>store<span class="w"> </span>prune
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>pnpm<span class="w"> </span>install
+</code></pre></div></p>
+<p><strong>Erros com Docker</strong>:
+- Verifique se Docker está rodando: <code>docker ps</code>
+- Verifique se portas não estão em uso: <code>lsof -i :5173</code></p>
+<p><strong>Chrome Canary necessário</strong>:
+- Para desenvolvimento local, WebContainer funciona melhor com Chrome Canary
+- Download: <a href="https://www.google.com/chrome/canary/">Chrome Canary</a></p>
+<hr />
+<h2 id="build-e-deploy">Build e Deploy<a class="headerlink" href="#build-e-deploy" title="Permanent link">&para;</a></h2>
+<h3 id="build-do-projeto">Build do Projeto<a class="headerlink" href="#build-do-projeto" title="Permanent link">&para;</a></h3>
+<h4 id="build-para-producao">Build para Produção<a class="headerlink" href="#build-para-producao" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Build completo (client + server)</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>pnpm<span class="w"> </span>run<span class="w"> </span>build
+</code></pre></div>
+<p>Este comando:
+- Compila TypeScript
+- Processa estilos (UnoCSS, SCSS)
+- Otimiza e minifica código
+- Gera bundle do Remix
+- Output em <code>build/client</code> e <code>build/server</code></p>
+<h4 id="build-e-preview-local">Build e Preview Local<a class="headerlink" href="#build-e-preview-local" title="Permanent link">&para;</a></h4>
+<p>Testar build de produção localmente:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>preview
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="c1"># Ou manualmente:</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>pnpm<span class="w"> </span>run<span class="w"> </span>build
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>pnpm<span class="w"> </span>run<span class="w"> </span>start
+</code></pre></div>
+<p>O servidor de produção local estará em <code>http://localhost:5173</code>.</p>
+<hr />
+<h3 id="deploy-para-cloudflare-pages">Deploy para Cloudflare Pages<a class="headerlink" href="#deploy-para-cloudflare-pages" title="Permanent link">&para;</a></h3>
+<h4 id="metodo-1-deploy-via-cli">Método 1: Deploy via CLI<a class="headerlink" href="#metodo-1-deploy-via-cli" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Build e deploy direto</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>pnpm<span class="w"> </span>run<span class="w"> </span>deploy
+</code></pre></div>
+<p>Este comando:
+1. Executa <code>pnpm run build</code>
+2. Faz deploy via <code>wrangler pages deploy</code></p>
+<h4 id="pre-requisitos">Pré-requisitos<a class="headerlink" href="#pre-requisitos" title="Permanent link">&para;</a></h4>
+<ol>
+<li>
+<p><strong>Instalar Wrangler CLI</strong>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>wrangler
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Autenticar</strong>:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>wrangler<span class="w"> </span>login
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Configurar projeto</strong>:</p>
+</li>
+<li>O arquivo <code>wrangler.toml</code> já está configurado</li>
+<li>Ajuste <code>name</code> e outras configurações se necessário</li>
+</ol>
+<h4 id="metodo-2-deploy-via-github-actions">Método 2: Deploy via GitHub Actions<a class="headerlink" href="#metodo-2-deploy-via-github-actions" title="Permanent link">&para;</a></h4>
+<p>O projeto inclui workflows GitHub Actions para deploy automático:
+- <code>.github/workflows/preview.yaml</code>: Deploy de preview
+- <code>.github/workflows/ci.yaml</code>: CI/CD pipeline</p>
+<p>Configure secrets no GitHub:
+- <code>CLOUDFLARE_API_TOKEN</code>
+- <code>CLOUDFLARE_ACCOUNT_ID</code></p>
+<hr />
+<h3 id="build-docker-para-producao">Build Docker para Produção<a class="headerlink" href="#build-docker-para-producao" title="Permanent link">&para;</a></h3>
+<h4 id="build-da-imagem-de-producao">Build da Imagem de Produção<a class="headerlink" href="#build-da-imagem-de-producao" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dockerbuild:prod
+</code></pre></div>
+<p>Ou manualmente:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>docker<span class="w"> </span>build<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span>-t<span class="w"> </span>bolt-ai:production<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span>-t<span class="w"> </span>bolt-ai:latest<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span>--target<span class="w"> </span>bolt-ai-production<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">  </span>.
+</code></pre></div>
+<h4 id="executar-container-de-producao">Executar Container de Produção<a class="headerlink" href="#executar-container-de-producao" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span>--name<span class="w"> </span>bolt-ai<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">  </span>-p<span class="w"> </span><span class="m">5173</span>:5173<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span>--env-file<span class="w"> </span>.env.local<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">  </span>bolt-ai:production
+</code></pre></div>
+<h4 id="docker-compose-producao">Docker Compose (Produção)<a class="headerlink" href="#docker-compose-producao" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>production<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+<hr />
+<h3 id="deploy-de-projetos-criados-no-boltdiy">Deploy de Projetos Criados no bolt.diy<a class="headerlink" href="#deploy-de-projetos-criados-no-boltdiy" title="Permanent link">&para;</a></h3>
+<p>O bolt.diy permite fazer deploy dos projetos criados para várias plataformas:</p>
+<h4 id="deploy-para-netlify">Deploy para Netlify<a class="headerlink" href="#deploy-para-netlify" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Conectar conta Netlify</strong>:</li>
+<li>Settings → Connections → Netlify</li>
+<li>
+<p>Autenticar via OAuth</p>
+</li>
+<li>
+<p><strong>Fazer Deploy</strong>:</p>
+</li>
+<li>Clique no botão "Deploy to Netlify" no projeto</li>
+<li>O sistema automaticamente:<ul>
+<li>Executa <code>npm run build</code></li>
+<li>Detecta diretório de output (<code>dist</code>, <code>build</code>, <code>out</code>, etc.)</li>
+<li>Faz upload para Netlify</li>
+<li>Retorna URL do deploy</li>
+</ul>
+</li>
+</ol>
+<h4 id="deploy-para-vercel">Deploy para Vercel<a class="headerlink" href="#deploy-para-vercel" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Conectar conta Vercel</strong>:</li>
+<li>Settings → Connections → Vercel</li>
+<li>
+<p>Autenticar via OAuth</p>
+</li>
+<li>
+<p><strong>Fazer Deploy</strong>:</p>
+</li>
+<li>Clique no botão "Deploy to Vercel"</li>
+<li>Similar ao Netlify, com suporte a configuração via <code>vercel.json</code></li>
+</ol>
+<h4 id="deploy-para-github-pages">Deploy para GitHub Pages<a class="headerlink" href="#deploy-para-github-pages" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Conectar conta GitHub</strong>:</li>
+<li>Settings → Connections → GitHub</li>
+<li>
+<p>Autenticar via OAuth</p>
+</li>
+<li>
+<p><strong>Push do Projeto</strong>:</p>
+</li>
+<li>O sistema cria um repositório GitHub</li>
+<li>Faz push do código completo</li>
+<li>Configura GitHub Pages no repositório</li>
+</ol>
+<h4 id="deploy-para-gitlab">Deploy para GitLab<a class="headerlink" href="#deploy-para-gitlab" title="Permanent link">&para;</a></h4>
+<p>Similar ao GitHub, com suporte a repositórios GitLab.</p>
+<hr />
+<h3 id="scripts-disponiveis">Scripts Disponíveis<a class="headerlink" href="#scripts-disponiveis" title="Permanent link">&para;</a></h3>
+<h4 id="scripts-de-desenvolvimento">Scripts de Desenvolvimento<a class="headerlink" href="#scripts-de-desenvolvimento" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dev<span class="w">              </span><span class="c1"># Inicia servidor de desenvolvimento</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>pnpm<span class="w"> </span>run<span class="w"> </span>build<span class="w">            </span><span class="c1"># Build para produção</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>pnpm<span class="w"> </span>run<span class="w"> </span>start<span class="w">            </span><span class="c1"># Roda build localmente</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>pnpm<span class="w"> </span>run<span class="w"> </span>preview<span class="w">          </span><span class="c1"># Build + start (teste produção)</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>pnpm<span class="w"> </span><span class="nb">test</span><span class="w">                 </span><span class="c1"># Roda testes</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>pnpm<span class="w"> </span>run<span class="w"> </span>test:watch<span class="w">       </span><span class="c1"># Testes em modo watch</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>pnpm<span class="w"> </span>run<span class="w"> </span>lint<span class="w">             </span><span class="c1"># Verifica código com ESLint</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>pnpm<span class="w"> </span>run<span class="w"> </span>lint:fix<span class="w">         </span><span class="c1"># Corrige problemas de lint automaticamente</span>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>pnpm<span class="w"> </span>run<span class="w"> </span>typecheck<span class="w">        </span><span class="c1"># Verifica tipos TypeScript</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>pnpm<span class="w"> </span>run<span class="w"> </span>typegen<span class="w">          </span><span class="c1"># Gera tipos Wrangler</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>pnpm<span class="w"> </span>run<span class="w"> </span>clean<span class="w">            </span><span class="c1"># Limpa artifacts de build</span>
+</code></pre></div>
+<h4 id="scripts-docker">Scripts Docker<a class="headerlink" href="#scripts-docker" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dockerbuild<span class="w">         </span><span class="c1"># Build imagem desenvolvimento</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dockerbuild:prod<span class="w">    </span><span class="c1"># Build imagem produção</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dockerstart<span class="w">         </span><span class="c1"># Inicia container com bindings</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>pnpm<span class="w"> </span>run<span class="w"> </span>dockerrun<span class="w">           </span><span class="c1"># Executa container one-off</span>
+</code></pre></div>
+<h4 id="scripts-electron">Scripts Electron<a class="headerlink" href="#scripts-electron" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>pnpm<span class="w"> </span>electron:dev<span class="w">            </span><span class="c1"># Desenvolvimento Electron</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>pnpm<span class="w"> </span>electron:build:main<span class="w">     </span><span class="c1"># Build main process</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>pnpm<span class="w"> </span>electron:build:preload<span class="w">  </span><span class="c1"># Build preload scripts</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>pnpm<span class="w"> </span>electron:build:renderer<span class="w"> </span><span class="c1"># Build renderer</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>pnpm<span class="w"> </span>electron:build:deps<span class="w">     </span><span class="c1"># Build todas dependências Electron</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a>pnpm<span class="w"> </span>electron:build:mac<span class="w">      </span><span class="c1"># Build macOS</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>pnpm<span class="w"> </span>electron:build:win<span class="w">      </span><span class="c1"># Build Windows</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>pnpm<span class="w"> </span>electron:build:linux<span class="w">    </span><span class="c1"># Build Linux</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a>pnpm<span class="w"> </span>electron:build:dist<span class="w">     </span><span class="c1"># Build todas plataformas</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a>pnpm<span class="w"> </span>electron:build:unpack<span class="w">   </span><span class="c1"># Build unpacked (teste)</span>
+</code></pre></div>
+<h4 id="scripts-de-deploy">Scripts de Deploy<a class="headerlink" href="#scripts-de-deploy" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>pnpm<span class="w"> </span>run<span class="w"> </span>deploy<span class="w">             </span><span class="c1"># Deploy para Cloudflare Pages</span>
+</code></pre></div>
+<hr />
+<h3 id="otimizacoes-de-build">Otimizações de Build<a class="headerlink" href="#otimizacoes-de-build" title="Permanent link">&para;</a></h3>
+<p>O projeto utiliza várias otimizações:</p>
+<ul>
+<li><strong>Code Splitting</strong>: Separação automática de chunks</li>
+<li><strong>Tree Shaking</strong>: Remoção de código não utilizado</li>
+<li><strong>Minificação</strong>: Uso de esbuild para minificação rápida</li>
+<li><strong>Asset Optimization</strong>: Imagens e fonts otimizadas</li>
+<li><strong>CSS Optimization</strong>: UnoCSS purga classes não utilizadas</li>
+</ul>
+<hr />
+<h2 id="casos-de-uso-principais">Casos de Uso Principais<a class="headerlink" href="#casos-de-uso-principais" title="Permanent link">&para;</a></h2>
+<h3 id="1-desenvolvimento-de-aplicacao-web-do-zero">1. Desenvolvimento de Aplicação Web do Zero<a class="headerlink" href="#1-desenvolvimento-de-aplicacao-web-do-zero" title="Permanent link">&para;</a></h3>
+<p>Um desenvolvedor quer criar uma nova aplicação web React do zero. Ele:</p>
+<ol>
+<li>Acessa bolt.diy e inicia uma nova conversa</li>
+<li>Descreve a aplicação desejada (ex: "Crie uma aplicação de lista de tarefas com React e TypeScript")</li>
+<li>A IA gera o código completo, criando arquivos, configurando dependências</li>
+<li>O projeto é executado automaticamente no WebContainer</li>
+<li>O preview é exibido em tempo real no painel lateral</li>
+<li>O desenvolvedor pode fazer ajustes através de comandos de texto</li>
+<li>Pode exportar o projeto como ZIP ou fazer deploy diretamente</li>
+</ol>
+<h3 id="2-melhoria-de-projeto-existente">2. Melhoria de Projeto Existente<a class="headerlink" href="#2-melhoria-de-projeto-existente" title="Permanent link">&para;</a></h3>
+<p>Um desenvolvedor tem um projeto existente e precisa melhorá-lo:</p>
+<ol>
+<li>Importa o projeto via Git (GitHub/GitLab) ou faz upload de arquivos</li>
+<li>Descreve as melhorias desejadas (ex: "Adicione autenticação de usuários")</li>
+<li>A IA analisa o código existente e implementa as mudanças</li>
+<li>O diff view mostra exatamente o que foi alterado</li>
+<li>O desenvolvedor pode revisar e aceitar/rejeitar mudanças</li>
+<li>Testa as alterações no preview em tempo real</li>
+</ol>
+<h3 id="3-consulta-tecnica-e-discussao">3. Consulta Técnica e Discussão<a class="headerlink" href="#3-consulta-tecnica-e-discussao" title="Permanent link">&para;</a></h3>
+<p>Um desenvolvedor precisa de ajuda técnica:</p>
+<ol>
+<li>Alterna para o modo "Discuss" na interface</li>
+<li>Faz perguntas técnicas sobre arquitetura, padrões, ou soluções</li>
+<li>Recebe orientações detalhadas sem implementação automática</li>
+<li>Pode pedir planos de implementação quando necessário</li>
+<li>Mantém histórico da conversa para referência futura</li>
+</ol>
+<hr />
+<h2 id="fluxo-de-funcionamento">Fluxo de Funcionamento<a class="headerlink" href="#fluxo-de-funcionamento" title="Permanent link">&para;</a></h2>
+<h3 id="fluxo-principal-de-criacao-de-projeto">Fluxo Principal de Criação de Projeto<a class="headerlink" href="#fluxo-principal-de-criacao-de-projeto" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Inicialização</strong></li>
+<li>Usuário acessa a aplicação (web ou desktop)</li>
+<li>Interface de chat é carregada</li>
+<li>
+<p>Sistema verifica provedores de IA configurados</p>
+</li>
+<li>
+<p><strong>Interação com IA</strong></p>
+</li>
+<li>Usuário descreve o que deseja criar/melhorar</li>
+<li>Sistema valida e processa o prompt</li>
+<li>Opcionalmente, melhora o prompt (prompt enhancement)</li>
+<li>
+<p>Envia requisição para o provedor de IA selecionado</p>
+</li>
+<li>
+<p><strong>Processamento e Geração</strong></p>
+</li>
+<li>IA gera resposta estruturada com artifacts (arquivos, comandos)</li>
+<li>Sistema processa artifacts e cria/modifica arquivos no WebContainer</li>
+<li>Executa comandos necessários (npm install, npm run dev, etc.)</li>
+<li>
+<p>Atualiza a interface do editor com os novos arquivos</p>
+</li>
+<li>
+<p><strong>Visualização e Feedback</strong></p>
+</li>
+<li>Preview é atualizado automaticamente</li>
+<li>Usuário vê resultados em tempo real</li>
+<li>Pode continuar a conversa para refinamentos</li>
+<li>
+<p>Histórico é salvo automaticamente</p>
+</li>
+<li>
+<p><strong>Exportação/Deploy</strong></p>
+</li>
+<li>Usuário pode baixar projeto como ZIP</li>
+<li>Pode fazer deploy para Netlify, Vercel ou GitHub Pages</li>
+<li>Pode exportar chat com histórico completo</li>
+</ol>
+<h3 id="fluxo-de-persistencia">Fluxo de Persistência<a class="headerlink" href="#fluxo-de-persistencia" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Chat History</strong>: Salvo em IndexedDB do navegador</li>
+<li><strong>Projetos</strong>: Mantidos em memória no WebContainer durante a sessão</li>
+<li><strong>Configurações</strong>: API keys e preferências salvas em cookies/localStorage</li>
+<li><strong>Snapshots</strong>: Estado do projeto salvo para restauração ao recarregar</li>
+</ul>
+<hr />
+<h2 id="interface-do-usuario">Interface do Usuário<a class="headerlink" href="#interface-do-usuario" title="Permanent link">&para;</a></h2>
+<h3 id="paginas-principais">Páginas Principais<a class="headerlink" href="#paginas-principais" title="Permanent link">&para;</a></h3>
+<h4 id="1-pagina-principal-index-route">1. Página Principal (Index Route)<a class="headerlink" href="#1-pagina-principal-index-route" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Rota</strong>: <code>/</code></li>
+<li><strong>Componente</strong>: <code>_index.tsx</code></li>
+<li><strong>Conteúdo</strong>:</li>
+<li>Header com ações (novo chat, histórico, configurações)</li>
+<li>Área de chat central</li>
+<li>Sidebar com histórico de conversas</li>
+<li>Workbench lateral (editor, preview, terminal)</li>
+</ul>
+<h4 id="2-pagina-de-chat-especifico">2. Página de Chat Específico<a class="headerlink" href="#2-pagina-de-chat-especifico" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Rota</strong>: <code>/chat/:id</code></li>
+<li><strong>Componente</strong>: <code>chat.$id.tsx</code></li>
+<li><strong>Conteúdo</strong>:</li>
+<li>Carrega chat específico pelo ID</li>
+<li>Exibe histórico completo da conversa</li>
+<li>Permite continuar conversa existente</li>
+</ul>
+<h4 id="3-pagina-de-importacao-git">3. Página de Importação Git<a class="headerlink" href="#3-pagina-de-importacao-git" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Rota</strong>: <code>/git</code></li>
+<li><strong>Componente</strong>: <code>git.tsx</code></li>
+<li><strong>Conteúdo</strong>:</li>
+<li>Interface para importar repositórios Git</li>
+<li>Suporte para GitHub e GitLab</li>
+<li>Seleção de branch e importação de arquivos</li>
+</ul>
+<h3 id="componentes-principais">Componentes Principais<a class="headerlink" href="#componentes-principais" title="Permanent link">&para;</a></h3>
+<h4 id="workbench">Workbench<a class="headerlink" href="#workbench" title="Permanent link">&para;</a></h4>
+<p>Painel lateral que contém:
+- <strong>Editor de Código</strong>: Visualização e edição de arquivos
+- <strong>Preview</strong>: Visualização da aplicação em desenvolvimento
+- <strong>Terminal</strong>: Execução de comandos e visualização de saídas
+- <strong>Diff View</strong>: Comparação de versões de arquivos</p>
+<h4 id="chat-interface">Chat Interface<a class="headerlink" href="#chat-interface" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Messages</strong>: Exibição de mensagens do usuário e da IA</li>
+<li><strong>ChatBox</strong>: Área de input com suporte a texto, imagens e arquivos</li>
+<li><strong>Model Selector</strong>: Seletor de modelo e provedor de IA</li>
+<li><strong>Action Alerts</strong>: Alertas para ações sugeridas (Supabase, deploy, etc.)</li>
+</ul>
+<h4 id="settings-panel">Settings Panel<a class="headerlink" href="#settings-panel" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Provider Configuration</strong>: Configuração de provedores de IA e API keys</li>
+<li><strong>Theme Settings</strong>: Configuração de tema (dark/light)</li>
+<li><strong>Advanced Settings</strong>: Configurações avançadas e preferências</li>
+</ul>
+<h4 id="sidebar">Sidebar<a class="headerlink" href="#sidebar" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Chat History</strong>: Lista de conversas anteriores</li>
+<li><strong>Menu Navigation</strong>: Navegação entre diferentes seções</li>
+<li><strong>Quick Actions</strong>: Ações rápidas (novo chat, exportar, etc.)</li>
+</ul>
+<h3 id="tema-e-personalizacao">Tema e Personalização<a class="headerlink" href="#tema-e-personalizacao" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Dark/Light Mode</strong>: Alternância entre temas</li>
+<li><strong>CSS Variables</strong>: Sistema de cores dinâmico baseado em variáveis CSS</li>
+<li><strong>Responsive Design</strong>: Adaptação para mobile, tablet e desktop</li>
+<li><strong>Acessibilidade</strong>: Suporte a ARIA labels, navegação por teclado, leitores de tela</li>
+</ul>
+<hr />
+<h2 id="configuracao-de-provedores-de-ia">Configuração de Provedores de IA<a class="headerlink" href="#configuracao-de-provedores-de-ia" title="Permanent link">&para;</a></h2>
+<p>Bolt.diy oferece uma interface moderna e intuitiva para gerenciar provedores de IA e chaves de API.</p>
+<h3 id="acessando-configuracoes-de-provedores">Acessando Configurações de Provedores<a class="headerlink" href="#acessando-configuracoes-de-provedores" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Abrir Settings</strong>: Clique no ícone de configurações (⚙️) na sidebar</li>
+<li><strong>Navegar para Providers</strong>: Selecione a aba "Providers" no menu</li>
+<li><strong>Escolher Tipo</strong>: Alterne entre "Cloud Providers" e "Local Providers"</li>
+</ol>
+<h3 id="provedores-cloud">Provedores Cloud<a class="headerlink" href="#provedores-cloud" title="Permanent link">&para;</a></h3>
+<p>A aba Cloud Providers exibe todos os serviços de IA baseados em nuvem:</p>
+<h4 id="adicionando-api-keys">Adicionando API Keys<a class="headerlink" href="#adicionando-api-keys" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Selecionar Provedor</strong>: Navegue pela grade de provedores disponíveis</li>
+<li><strong>Habilitar Provedor</strong>: Use o switch para habilitar/desabilitar</li>
+<li><strong>Configurar API Key</strong>:</li>
+<li>Clique no card do provedor para expandir</li>
+<li>Clique no campo "API Key" para entrar em modo edição</li>
+<li>Cole sua chave e pressione Enter para salvar</li>
+<li>Interface mostra validação em tempo real com checkmarks verdes</li>
+</ol>
+<h4 id="funcionalidades-avancadas_1">Funcionalidades Avançadas<a class="headerlink" href="#funcionalidades-avancadas_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Bulk Toggle</strong>: Use "Enable All Cloud" para habilitar/desabilitar todos de uma vez</li>
+<li><strong>Status Visual</strong>: Checkmarks verdes indicam provedores configurados corretamente</li>
+<li><strong>Ícones de Provedores</strong>: Cada provedor tem ícone distintivo</li>
+<li><strong>Descrições</strong>: Descrições úteis explicam capacidades de cada provedor</li>
+</ul>
+<h3 id="provedores-locais">Provedores Locais<a class="headerlink" href="#provedores-locais" title="Permanent link">&para;</a></h3>
+<p>A aba Local Providers gerencia instalações locais de IA:</p>
+<h4 id="configuracao-ollama">Configuração Ollama<a class="headerlink" href="#configuracao-ollama" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Habilitar Ollama</strong>: Use o switch do provedor Ollama</li>
+<li><strong>Configurar Endpoint</strong>: Defina o endpoint da API (padrão: <code>http://127.0.0.1:11434</code>)</li>
+<li><strong>Gerenciar Modelos</strong>:</li>
+<li>Visualizar todos os modelos instalados com tamanho e parâmetros</li>
+<li>Atualizar modelos para versões mais recentes</li>
+<li>Deletar modelos não utilizados</li>
+<li>Instalar novos modelos inserindo nomes</li>
+</ol>
+<h4 id="outros-provedores-locais">Outros Provedores Locais<a class="headerlink" href="#outros-provedores-locais" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>LM Studio</strong>: Configure URLs base customizadas</li>
+<li><strong>OpenAI-like</strong>: Conecte a qualquer endpoint compatível com OpenAI</li>
+<li><strong>Auto-detecção</strong>: Sistema detecta automaticamente variáveis de ambiente</li>
+</ul>
+<h3 id="variaveis-de-ambiente-vs-ui">Variáveis de Ambiente vs UI<a class="headerlink" href="#variaveis-de-ambiente-vs-ui" title="Permanent link">&para;</a></h3>
+<p>Bolt.diy suporta ambos os métodos:</p>
+<h4 id="variaveis-de-ambiente-recomendado-para-producao">Variáveis de Ambiente (Recomendado para Produção)<a class="headerlink" href="#variaveis-de-ambiente-recomendado-para-producao" title="Permanent link">&para;</a></h4>
+<p>Configure no arquivo <code>.env.local</code>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sua_chave_aqui
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="nv">ANTHROPIC_API_KEY</span><span class="o">=</span>sua_chave_aqui
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="nv">OLLAMA_BASE_URL</span><span class="o">=</span>http://127.0.0.1:11434
+</code></pre></div></p>
+<h4 id="configuracao-via-ui">Configuração via UI<a class="headerlink" href="#configuracao-via-ui" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Atualizações em Tempo Real</strong>: Mudanças têm efeito imediato</li>
+<li><strong>Armazenamento Seguro</strong>: API keys armazenadas em cookies criptografados</li>
+<li><strong>Feedback Visual</strong>: Indicadores claros de status de configuração</li>
+</ul>
+<h3 id="features-especiais-por-provedor">Features Especiais por Provedor<a class="headerlink" href="#features-especiais-por-provedor" title="Permanent link">&para;</a></h3>
+<h4 id="openrouter">OpenRouter<a class="headerlink" href="#openrouter" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Filtro de Modelos Gratuitos</strong>: Mostra apenas modelos gratuitos</li>
+<li><strong>Informações de Preço</strong>: Exibe custos de input/output</li>
+<li><strong>Busca de Modelos</strong>: Busca fuzzy através de todos os modelos</li>
+</ul>
+<h4 id="ollama">Ollama<a class="headerlink" href="#ollama" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Instalador de Modelos</strong>: Interface para instalar novos modelos</li>
+<li><strong>Rastreamento de Progresso</strong>: Progresso de download em tempo real</li>
+<li><strong>Detalhes de Modelos</strong>: Tamanho, parâmetros e níveis de quantização</li>
+<li><strong>Auto-refresh</strong>: Detecta automaticamente modelos recém-instalados</li>
+</ul>
+<h3 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h3>
+<h4 id="problemas-comuns_1">Problemas Comuns<a class="headerlink" href="#problemas-comuns_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>API Key Não Reconhecida</strong>: Verifique formato correto para cada provedor</li>
+<li><strong>Problemas com Base URL</strong>: Verifique se URL está correta e acessível</li>
+<li><strong>Modelo Não Carrega</strong>: Verifique se provedor está habilitado e configurado</li>
+<li><strong>Variáveis de Ambiente Não Funcionam</strong>: Reinicie aplicação após adicionar variáveis</li>
+</ul>
+<h4 id="indicadores-de-status">Indicadores de Status<a class="headerlink" href="#indicadores-de-status" title="Permanent link">&para;</a></h4>
+<ul>
+<li>🟢 <strong>Checkmark Verde</strong>: Provedor configurado e pronto</li>
+<li>🔴 <strong>X Vermelho</strong>: Configuração faltando ou inválida</li>
+<li>🟡 <strong>Indicador Amarelo</strong>: Provedor habilitado mas pode precisar setup adicional</li>
+<li>🔵 <strong>Lápis Azul</strong>: Clique para editar configuração</li>
+</ul>
+<hr />
+<h2 id="templates-de-projetos">Templates de Projetos<a class="headerlink" href="#templates-de-projetos" title="Permanent link">&para;</a></h2>
+<p>Bolt.diy vem com uma coleção abrangente de templates para iniciar projetos rapidamente:</p>
+<h3 id="frameworks-frontend">Frameworks Frontend<a class="headerlink" href="#frameworks-frontend" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>React + Vite</strong>: Setup moderno React com TypeScript</li>
+<li><strong>Vue.js</strong>: Framework JavaScript progressivo</li>
+<li><strong>Angular</strong>: Framework enterprise-ready</li>
+<li><strong>Svelte</strong>: Framework baseado em compiler</li>
+<li><strong>SolidJS</strong>: Framework reativo com atualizações granulares</li>
+</ul>
+<h3 id="frameworks-full-stack">Frameworks Full-Stack<a class="headerlink" href="#frameworks-full-stack" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Next.js com shadcn/ui</strong>: Framework React com componentes UI</li>
+<li><strong>Astro</strong>: Gerador de sites estáticos</li>
+<li><strong>Qwik</strong>: Framework resumable para carregamento instantâneo</li>
+<li><strong>Remix</strong>: Framework React full-stack</li>
+<li><strong>Nuxt</strong>: Meta-framework Vue.js</li>
+</ul>
+<h3 id="mobile-cross-platform">Mobile &amp; Cross-Platform<a class="headerlink" href="#mobile-cross-platform" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Expo App</strong>: React Native com Expo</li>
+<li><strong>React Native</strong>: Desenvolvimento mobile cross-platform</li>
+</ul>
+<h3 id="apresentacao-conteudo">Apresentação &amp; Conteúdo<a class="headerlink" href="#apresentacao-conteudo" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Slidev</strong>: Apresentações amigáveis para desenvolvedores</li>
+<li><strong>Astro Basic</strong>: Sites estáticos leves</li>
+</ul>
+<h3 id="javascript-vanilla">JavaScript Vanilla<a class="headerlink" href="#javascript-vanilla" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Vanilla Vite</strong>: Setup JavaScript minimal</li>
+<li><strong>Vite TypeScript</strong>: TypeScript sem framework</li>
+</ul>
+<h3 id="usando-templates">Usando Templates<a class="headerlink" href="#usando-templates" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Inicie novo projeto no bolt.diy</li>
+<li>Navegue pelos templates disponíveis</li>
+<li>Selecione sua stack preferida</li>
+<li>A IA fará scaffold do projeto com melhores práticas</li>
+<li>Comece desenvolvimento imediatamente com preview ao vivo</li>
+</ol>
+<p>Todos os templates vêm pré-configurados com tooling moderno, linting e processos de build.</p>
+<hr />
+<h2 id="recursos-e-ajuda">Recursos e Ajuda<a class="headerlink" href="#recursos-e-ajuda" title="Permanent link">&para;</a></h2>
+<h3 id="icone-de-ajuda-na-sidebar">Ícone de Ajuda na Sidebar<a class="headerlink" href="#icone-de-ajuda-na-sidebar" title="Permanent link">&para;</a></h3>
+<p>Bolt.diy inclui um ícone de ajuda (?) na sidebar que fornece acesso rápido à documentação completa. Clique no ícone para abrir a documentação em nova aba.</p>
+<p>A documentação inclui:
+- <strong>Guias de setup completos</strong> para todos os provedores
+- <strong>Explicações de features</strong> para capacidades avançadas
+- <strong>Guias de troubleshooting</strong> para problemas comuns
+- <strong>Melhores práticas</strong> para uso otimizado
+- <strong>Seção FAQ</strong> com respostas detalhadas</p>
+<h3 id="comunidade">Comunidade<a class="headerlink" href="#comunidade" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>GitHub Issues</strong>: Reporte bugs e solicite features</li>
+<li><strong>Fórum da Comunidade</strong>: Junte-se às discussões em <a href="https://thinktank.ottomator.ai">thinktank.ottomator.ai</a></li>
+<li><strong>Guia de Contribuição</strong>: Aprenda como contribuir para o projeto</li>
+</ul>
+<h3 id="dicas-e-truques">Dicas e Truques<a class="headerlink" href="#dicas-e-truques" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Seja específico sobre sua stack</strong>: Mencione frameworks específicos (Astro, Tailwind, ShadCN, etc.) no prompt inicial</li>
+<li><strong>Use o ícone de enhance prompt</strong>: Clique no ícone 'enhance' para refinar seu prompt antes de enviar</li>
+<li><strong>Scaffold o básico primeiro</strong>: Certifique-se de ter estrutura básica antes de adicionar features avançadas</li>
+<li><strong>Agrupe instruções simples</strong>: Combine múltiplas instruções simples em uma mensagem</li>
+<li><strong>Acesse documentação rapidamente</strong>: Use o ícone de ajuda (?) na sidebar</li>
+</ul>
+<hr />
+<h2 id="links-rapidos">Links Rápidos<a class="headerlink" href="#links-rapidos" title="Permanent link">&para;</a></h2>
+<ul>
+<li>📚 <a href="./features.md">Documentação de Features</a> - Especificações funcionais detalhadas</li>
+<li>🏗️ <a href="./ARCHITECTURE.md">Arquitetura Técnica</a> - Padrões e decisões arquiteturais</li>
+<li>📁 <a href="./STRUCTURE.md">Estrutura do Projeto</a> - Organização de pastas e arquivos</li>
+<li>🚀 <a href="../README.md">README Principal</a> - Instruções de instalação e setup</li>
+<li>📋 <a href="../CONTRIBUTING.md">Guia de Contribuição</a> - Como contribuir para o projeto</li>
+</ul>
+<hr />
+<p><em>Última atualização: Baseado na versão atual do projeto</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/stackblitz-labs/bolt.diy" target="_blank" rel="noopener" title="bolt.diy" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://thinktank.ottomator.ai/" target="_blank" rel="noopener" title="bolt.diy Discourse" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M225.9 32C103.3 32 0 130.5 0 252.1 0 256 .1 480 .1 480l225.8-.2c122.7 0 222.1-102.3 222.1-223.9S348.6 32 225.9 32M224 384c-19.4 0-37.9-4.3-54.4-12.1L88.5 392l22.9-75c-9.8-18.1-15.4-38.9-15.4-61 0-70.7 57.3-128 128-128s128 57.3 128 128-57.3 128-128 128"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://x.com/bolt_diy" target="_blank" rel="noopener" title="bolt.diy on X" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M357.2 48h70.6L273.6 224.2 455 464H313L201.7 318.6 74.5 464H3.8l164.9-188.5L-5.2 48h145.6l100.5 132.9zm-24.8 373.8h39.1L119.1 88h-42z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://bsky.app/profile/bolt.diy" target="_blank" rel="noopener" title="bolt.diy on Bluesky" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M407.8 294.7c-3.3-.4-6.7-.8-10-1.3 3.4.4 6.7.9 10 1.3M288 227.1c-26.1-50.7-97.1-145.2-163.1-191.8C61.6-9.4 37.5-1.7 21.6 5.5 3.3 13.8 0 41.9 0 58.4S9.1 194 15 213.9c19.5 65.7 89.1 87.9 153.2 80.7 3.3-.5 6.6-.9 10-1.4-3.3.5-6.6 1-10 1.4-93.9 14-177.3 48.2-67.9 169.9C220.6 589.1 265.1 437.8 288 361.1c22.9 76.7 49.2 222.5 185.6 103.4 102.4-103.4 28.1-156-65.8-169.9-3.3-.4-6.7-.8-10-1.3 3.4.4 6.7.9 10 1.3 64.1 7.1 133.6-15.1 153.2-80.7C566.9 194 576 75 576 58.4s-3.3-44.7-21.6-52.9c-15.8-7.1-40-14.9-103.2 29.8C385.1 81.9 314.1 176.4 288 227.1"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.sections", "toc.follow", "toc.integrate", "navigation.top", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
