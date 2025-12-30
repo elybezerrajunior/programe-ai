@@ -102,7 +102,7 @@ export const ChatImpl = memo(
     const supabaseAlert = useStore(workbenchStore.supabaseAlert);
     const { activeProviders, promptId, autoSelectTemplate, contextOptimizationEnabled } = useSettings();
     const [llmErrorAlert, setLlmErrorAlert] = useState<LlmErrorAlertType | undefined>(undefined);
-    const { config: llmConfig } = useLLMConfig();
+    const { config: llmConfig, error: llmConfigError } = useLLMConfig();
     const [model, setModel] = useState(() => {
       // Se configurado via env, usar valor do hook (será atualizado no useEffect)
       if (llmConfig?.configured && llmConfig.model) {
@@ -704,6 +704,7 @@ export const ChatImpl = memo(
         setSelectedElement={setSelectedElement}
         addToolResult={addToolResult}
         envConfigured={llmConfig?.configured || false}
+        envConfigError={llmConfigError || null}
       />
     );
   },

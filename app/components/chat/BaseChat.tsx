@@ -82,6 +82,7 @@ interface BaseChatProps {
   setSelectedElement?: (element: ElementInfo | null) => void;
   addToolResult?: ({ toolCallId, result }: { toolCallId: string; result: any }) => void;
   envConfigured?: boolean;
+  envConfigError?: string | null;
 }
 
 export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
@@ -132,6 +133,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         throw new Error('addToolResult not implemented');
       },
       envConfigured = false,
+      envConfigError = null,
     },
     ref,
   ) => {
@@ -393,6 +395,27 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 })}
               >
                 <div className="flex flex-col gap-2">
+                  {envConfigError && (
+                    <div className="rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 p-4 mb-2">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0">
+                          <div className="i-ph:warning-duotone text-xl text-bolt-elements-button-danger-text"></div>
+                        </div>
+                        <div className="ml-3 flex-1">
+                          <h3 className="text-sm font-medium text-bolt-elements-textPrimary">
+                            Configuração de LLM Inválida
+                          </h3>
+                          <div className="mt-2 text-sm text-bolt-elements-textSecondary">
+                            <p>{envConfigError}</p>
+                            <p className="mt-2 text-xs">
+                              Configure as variáveis de ambiente <code>BOLT_LLM_PROVIDER</code> e{' '}
+                              <code>BOLT_LLM_MODEL</code> para usar esta funcionalidade.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   {deployAlert && (
                     <DeployChatAlert
                       alert={deployAlert}

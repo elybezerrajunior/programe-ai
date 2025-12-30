@@ -107,6 +107,13 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
         <ClientOnly>
           {() => (
             <div className={props.isModelSettingsCollapsed ? 'hidden' : ''}>
+              {/* Indicador visual quando configurado via env vars */}
+              {props.envConfigured && (
+                <div className="mb-2 px-3 py-2 rounded-md bg-bolt-elements-background-depth-3 border border-bolt-elements-borderColor text-xs text-bolt-elements-textSecondary flex items-center gap-2">
+                  <div className="i-ph:check-circle text-bolt-elements-button-success-text"></div>
+                  <span>Configurado via variáveis de ambiente</span>
+                </div>
+              )}
               {/* Não renderizar ModelSelector se configurado via env vars */}
               {!props.envConfigured && (
                 <>
