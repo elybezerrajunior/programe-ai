@@ -112,6 +112,13 @@ export const ChatImpl = memo(
       // Fallback para comportamento atual
       const savedModel = Cookies.get('selectedModel');
 
+      // Migrar automaticamente do modelo antigo para o novo
+      if (savedModel === 'claude-3-5-sonnet-20241022') {
+        Cookies.set('selectedModel', DEFAULT_MODEL, { expires: 30 });
+
+        return DEFAULT_MODEL;
+      }
+
       return savedModel || DEFAULT_MODEL;
     });
     const [provider, setProvider] = useState(() => {
