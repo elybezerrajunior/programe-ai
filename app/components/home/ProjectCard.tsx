@@ -10,6 +10,7 @@ export interface Project {
   lastUpdated: string;
   icon?: string;
   iconColor?: string;
+  urlId?: string;
 }
 
 interface ProjectCardProps {

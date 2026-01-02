@@ -28,6 +28,7 @@ import type { ElementInfo } from '~/components/workbench/Inspector';
 import type { TextUIPart, FileUIPart, Attachment } from '@ai-sdk/ui-utils';
 import { useMCPStore } from '~/lib/stores/mcp';
 import type { LlmErrorAlertType } from '~/types/actions';
+import { homeHeroFilesStore } from '~/lib/stores/homeFiles';
 
 const logger = createScopedLogger('Chat');
 
@@ -146,7 +147,8 @@ export const ChatImpl = memo(
       }
     }, [llmConfig]);
 
-    const { showChat } = useStore(chatStore);
+    const chatStoreValue = useStore(chatStore);
+    const { showChat } = chatStoreValue;
     const [animationScope, animate] = useAnimate();
     const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
     const [chatMode, setChatMode] = useState<'discuss' | 'build'>('build');
@@ -591,6 +593,48 @@ export const ChatImpl = memo(
 
       textareaRef.current?.blur();
     };
+
+    // Auto-send message when chat is started from home page with cookie prompt
+    const hasAutoSentRef = useRef(false);
+    
+    useEffect(() => {
+      const cookiePrompt = Cookies.get(PROMPT_COOKIE_KEY);
+      
+      // If chat was just started (not already started) and there's a cookie prompt
+      // This happens when user clicks "Gerar projeto" in HomeHero
+      if (
+        chatStoreValue.started && 
+        !chatStarted && 
+        !hasAutoSentRef.current &&
+        cookiePrompt && 
+        cookiePrompt.trim() && 
+        messages.length === 0 && 
+        !isLoading &&
+        initialMessages.length === 0 // Only auto-send if there are no initial messages
+      ) {
+        hasAutoSentRef.current = true;
+        
+        // Get files from HomeHero store if available
+        const homeFiles = homeHeroFilesStore.get();
+        if (homeFiles.length > 0) {
+          setUploadedFiles(homeFiles);
+          // Clear the store after reading
+          homeHeroFilesStore.set([]);
+        }
+        
+        // Small delay to ensure component is ready
+        // The sendMessage function will call runAnimation which sets chatStarted
+        setTimeout(() => {
+          const syntheticEvent = {} as React.UIEvent;
+          sendMessage(syntheticEvent, cookiePrompt);
+        }, 150);
+      }
+      
+      // Reset flag when chat is reset
+      if (!chatStoreValue.started && chatStarted) {
+        hasAutoSentRef.current = false;
+      }
+    }, [chatStoreValue.started, chatStarted, messages.length, isLoading, initialMessages.length, sendMessage, setUploadedFiles]);
 
     /**
      * Handles the change event for the textarea and updates the input state.
