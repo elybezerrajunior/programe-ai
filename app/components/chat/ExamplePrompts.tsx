@@ -1,33 +1,71 @@
 import React from 'react';
+import { classNames } from '~/utils/classNames';
 
-const EXAMPLE_PROMPTS = [
-  { text: 'Criar um aplicativo mobile sobre bolt.diy' },
-  { text: 'Criar um app de tarefas em React usando Tailwind' },
-  { text: 'Criar um blog simples usando Astro' },
-  { text: 'Criar um formulário de consentimento de cookies usando Material UI' },
-  { text: 'Fazer um jogo de space invaders' },
-  { text: 'Fazer um jogo da velha em html, css e js apenas' },
+const PROJECT_TYPES = [
+  { 
+    id: 'agenda', 
+    label: 'Agenda',
+    suggestion: 'Criar um aplicativo de agenda e calendário com funcionalidades de agendamento de eventos, lembretes e sincronização'
+  },
+  { 
+    id: 'crm', 
+    label: 'CRM',
+    suggestion: 'Criar um sistema CRM (Customer Relationship Management) para gerenciar clientes, contatos e vendas'
+  },
+  { 
+    id: 'ecommerce', 
+    label: 'E-commerce',
+    suggestion: 'Criar uma loja virtual e-commerce completa com carrinho de compras, checkout e integração de pagamentos'
+  },
+  { 
+    id: 'landing', 
+    label: 'Landing Page',
+    suggestion: 'Criar uma landing page moderna e responsiva para captação de leads e apresentação de produto'
+  },
+  { 
+    id: 'dashboard', 
+    label: 'Dashboard',
+    suggestion: 'Criar um dashboard administrativo com gráficos, métricas e visualização de dados'
+  },
+  { 
+    id: 'study', 
+    label: 'App de Estudo',
+    suggestion: 'Criar um aplicativo de estudos com flashcards, quizzes e organização de materiais de aprendizado'
+  },
+  { 
+    id: 'chatbot', 
+    label: 'Chatbot',
+    suggestion: 'Criar um chatbot inteligente para atendimento ao cliente ou assistente virtual'
+  },
 ];
 
-export function ExamplePrompts(sendMessage?: { (event: React.UIEvent, messageInput?: string): void | undefined }) {
+interface ExamplePromptsProps {
+  onSelectPrompt?: (suggestion: string) => void;
+}
+
+export function ExamplePrompts({ onSelectPrompt }: ExamplePromptsProps) {
   return (
     <div id="examples" className="relative flex flex-col gap-9 w-full max-w-3xl mx-auto flex justify-center mt-6">
       <div
-        className="flex flex-wrap justify-center gap-2"
+        className="flex flex-wrap items-center gap-2 justify-center px-6"
         style={{
           animation: '.25s ease-out 0s 1 _fade-and-move-in_g2ptj_1 forwards',
         }}
       >
-        {EXAMPLE_PROMPTS.map((examplePrompt, index: number) => {
+        {PROJECT_TYPES.map((type) => {
           return (
             <button
-              key={index}
-              onClick={(event) => {
-                sendMessage?.(event, examplePrompt.text);
+              key={type.id}
+              onClick={() => {
+                onSelectPrompt?.(type.suggestion);
               }}
-              className="border border-bolt-elements-borderColor rounded-full bg-gray-50 hover:bg-gray-100 dark:bg-gray-950 dark:hover:bg-gray-900 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary px-3 py-1 text-xs transition-theme"
+              className={classNames(
+                'px-4 py-2 rounded-full text-sm font-medium transition-all',
+                'border border-bolt-elements-borderColor',
+                'bg-bolt-elements-background-depth-1 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:border-bolt-elements-borderColorActive'
+              )}
             >
-              {examplePrompt.text}
+              {type.label}
             </button>
           );
         })}
