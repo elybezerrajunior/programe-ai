@@ -312,8 +312,12 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
                 'border border-accent-500 bg-bolt-elements-background-depth-1',
                 'text-bolt-elements-textPrimary placeholder:text-bolt-elements-textTertiary',
                 'focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent-500',
-                'resize-none transition-all'
+                'resize-none transition-all',
+                '[&::-webkit-scrollbar]:hidden'
               )}
+              style={{
+                scrollbarWidth: 'none',
+              }}
             />
           </div>
 

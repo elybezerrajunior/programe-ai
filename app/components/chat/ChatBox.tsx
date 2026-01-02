@@ -183,6 +183,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             'w-full pl-4 pt-4 pr-16 outline-none resize-none text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary bg-transparent text-sm',
             'transition-all duration-200',
             'hover:border-bolt-elements-focus',
+            '[&::-webkit-scrollbar]:hidden',
           )}
           onDragEnter={(e) => {
             e.preventDefault();
@@ -243,6 +244,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           style={{
             minHeight: props.TEXTAREA_MIN_HEIGHT,
             maxHeight: props.TEXTAREA_MAX_HEIGHT,
+            scrollbarWidth: 'none',
           }}
           placeholder={
             props.chatMode === 'build'
