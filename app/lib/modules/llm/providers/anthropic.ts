@@ -15,8 +15,17 @@ export default class AnthropicProvider extends BaseProvider {
   staticModels: ModelInfo[] = [
     /*
      * Essential fallback models - only the most stable/reliable ones
-     * Claude 3.5 Sonnet: 200k context, excellent for complex reasoning and coding
+     * Claude Sonnet 4.5: 200k context, 64k output limit (latest model)
      */
+    {
+      name: 'claude-sonnet-4-5-20250929',
+      label: 'Claude Sonnet 4.5',
+      provider: 'Anthropic',
+      maxTokenAllowed: 200000,
+      maxCompletionTokens: 64000,
+    },
+
+    // Claude 3.5 Sonnet: 200k context, excellent for complex reasoning and coding
     {
       name: 'claude-3-5-sonnet-20241022',
       label: 'Claude 3.5 Sonnet',
@@ -80,6 +89,8 @@ export default class AnthropicProvider extends BaseProvider {
       // Anthropic provides max_tokens in their API response
       if (m.max_tokens) {
         contextWindow = m.max_tokens;
+      } else if (m.id?.includes('claude-sonnet-4')) {
+        contextWindow = 200000; // Claude Sonnet 4 has 200k context
       } else if (m.id?.includes('claude-3-5-sonnet')) {
         contextWindow = 200000; // Claude 3.5 Sonnet has 200k context
       } else if (m.id?.includes('claude-3-haiku')) {

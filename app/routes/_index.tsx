@@ -3,10 +3,16 @@ import { ClientOnly } from 'remix-utils/client-only';
 import { BaseChat } from '~/components/chat/BaseChat';
 import { Chat } from '~/components/chat/Chat.client';
 import { Header } from '~/components/header/Header';
+import { ProjectTypeTags } from '~/components/home/ProjectTypeTags';
+import { ProjectsSection } from '~/components/home/ProjectsSection';
 import BackgroundRays from '~/components/ui/BackgroundRays';
+import { HomePageContent } from '~/components/home/HomePageContent.client';
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Programe.IA' }, { name: 'description', content: 'Programe.IA é um assistente de IA para programação e desenvolvimento' }];
+  return [
+    { title: 'Programe Studio' },
+    { name: 'description', content: 'Transforme texto em software. A Programe Studio estrutura, codifica e guia você.' },
+  ];
 };
 
 export const loader = () => json({});
@@ -19,10 +25,16 @@ export const loader = () => json({});
  */
 export default function Index() {
   return (
-    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1">
+    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1 overflow-auto">
       <BackgroundRays />
       <Header />
-      <ClientOnly fallback={<BaseChat />}>{() => <Chat />}</ClientOnly>
+      <ClientOnly fallback={<BaseChat />}>
+        {() => (
+          <HomePageContent>
+            <Chat />
+          </HomePageContent>
+        )}
+      </ClientOnly>
     </div>
   );
 }

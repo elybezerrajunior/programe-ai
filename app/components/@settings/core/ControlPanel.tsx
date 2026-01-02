@@ -261,7 +261,11 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                       </button>
                     )}
                     <DialogTitle className="text-xl font-semibold text-gray-900 dark:text-white">
-                      {showTabManagement ? 'Gerenciamento de Abas' : activeTab ? TAB_LABELS[activeTab] : 'Painel de Controle'}
+                      {showTabManagement
+                        ? 'Gerenciamento de Abas'
+                        : activeTab
+                          ? TAB_LABELS[activeTab]
+                          : 'Painel de Controle'}
                     </DialogTitle>
                   </div>
 

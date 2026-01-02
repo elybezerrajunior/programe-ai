@@ -13,3 +13,4 @@ export { useGitLabConnection } from './useGitLabConnection';
 export { useGitLabAPI } from './useGitLabAPI';
 export { useSupabaseConnection } from './useSupabaseConnection';
 export { useConnectionTest } from './useConnectionTest';
+export { useLLMConfig } from './useLLMConfig';

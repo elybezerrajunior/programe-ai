@@ -189,7 +189,9 @@ export const DeployButton = ({
                 src="https://cdn.simpleicons.org/vercel/white"
                 alt="vercel"
               />
-              <span className="mx-auto">{!vercelConn.user ? 'Nenhuma Conta Vercel Conectada' : 'Implantar no Vercel'}</span>
+              <span className="mx-auto">
+                {!vercelConn.user ? 'Nenhuma Conta Vercel Conectada' : 'Implantar no Vercel'}
+              </span>
               {vercelConn.user && <VercelDeploymentLink />}
             </DropdownMenu.Item>
 
@@ -232,7 +234,9 @@ export const DeployButton = ({
                 src="https://cdn.simpleicons.org/gitlab"
                 alt="gitlab"
               />
-              <span className="mx-auto">{!gitlabIsConnected ? 'Nenhuma Conta GitLab Conectada' : 'Implantar no GitLab'}</span>
+              <span className="mx-auto">
+                {!gitlabIsConnected ? 'Nenhuma Conta GitLab Conectada' : 'Implantar no GitLab'}
+              </span>
             </DropdownMenu.Item>
 
             <DropdownMenu.Item

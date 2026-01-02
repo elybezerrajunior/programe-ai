@@ -14,6 +14,8 @@ import { extractPropertiesFromMessage } from '~/lib/.server/llm/utils';
 import type { DesignScheme } from '~/types/design-scheme';
 import { MCPService } from '~/lib/services/mcpService';
 import { StreamRecoveryManager } from '~/lib/.server/llm/stream-recovery';
+import { getLLMConfigFromEnv, validateLLMConfig } from '~/utils/envConfig';
+import { LLMManager } from '~/lib/modules/llm/manager';
 
 export async function action(args: ActionFunctionArgs) {
   return chatAction(args);
@@ -47,6 +49,35 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
       logger.warn('Stream timeout - attempting recovery');
     },
   });
+
+  // Validar env vars no início (modo híbrido: se configuradas, usar; se não, manter comportamento atual)
+  const env = (context?.cloudflare?.env as Record<string, any>) || {};
+  const envConfig = getLLMConfigFromEnv(env);
+
+  if (envConfig) {
+    // Validar se provider existe
+    const llmManager = LLMManager.getInstance(env);
+    const providers = llmManager.getAllProviders();
+    const validation = validateLLMConfig(envConfig.provider, envConfig.model, providers);
+
+    if (!validation.valid) {
+      logger.error(`Invalid LLM config from env vars: ${validation.error}`);
+
+      return new Response(
+        JSON.stringify({
+          error: true,
+          message: `Configuração de LLM inválida: ${validation.error}`,
+          statusCode: 400,
+          isRetryable: false,
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+          statusText: 'Bad Request',
+        },
+      );
+    }
+  }
 
   const { messages, files, promptId, contextOptimization, supabase, chatMode, designScheme, maxLLMSteps } =
     await request.json<{
@@ -304,7 +335,7 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
           label: 'response',
           status: 'in-progress',
           order: progressCounter++,
-          message: 'Generating Response',
+          message: 'Gerando Resposta',
         } satisfies ProgressAnnotation);
 
         const result = await streamText({

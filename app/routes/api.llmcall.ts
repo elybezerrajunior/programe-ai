@@ -8,6 +8,7 @@ import { LLMManager } from '~/lib/modules/llm/manager';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 import { getApiKeysFromCookie, getProviderSettingsFromCookie } from '~/lib/api/cookies';
 import { createScopedLogger } from '~/utils/logger';
+import { getLLMConfigFromEnv, validateLLMConfig } from '~/utils/envConfig';
 
 export async function action(args: ActionFunctionArgs) {
   return llmCallAction(args);
@@ -65,6 +66,26 @@ function validateTokenLimits(modelDetails: ModelInfo, requestedTokens: number): 
 }
 
 async function llmCallAction({ context, request }: ActionFunctionArgs) {
+  // Validar env vars quando disponíveis (modo híbrido)
+  const env = (context?.cloudflare?.env as Record<string, any>) || {};
+  const envConfig = getLLMConfigFromEnv(env);
+
+  if (envConfig) {
+    // Validar se provider existe
+    const llmManager = LLMManager.getInstance(env);
+    const providers = llmManager.getAllProviders();
+    const validation = validateLLMConfig(envConfig.provider, envConfig.model, providers);
+
+    if (!validation.valid) {
+      logger.error(`Invalid LLM config from env vars: ${validation.error}`);
+
+      throw new Response(`Configuração de LLM inválida: ${validation.error}`, {
+        status: 400,
+        statusText: 'Bad Request',
+      });
+    }
+  }
+
   const { system, message, model, provider, streamOutput } = await request.json<{
     system: string;
     message: string;

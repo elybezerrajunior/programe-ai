@@ -179,11 +179,16 @@ export const Menu = () => {
 
       // Show appropriate toast message
       if (errors.length === 0) {
-        toast.success(`${deletedCount} chat${deletedCount === 1 ? '' : 's'} excluído${deletedCount === 1 ? '' : 's'} com sucesso`);
+        toast.success(
+          `${deletedCount} chat${deletedCount === 1 ? '' : 's'} excluído${deletedCount === 1 ? '' : 's'} com sucesso`,
+        );
       } else {
-        toast.warning(`Excluído${deletedCount === 1 ? '' : 's'} ${deletedCount} de ${itemsToDeleteIds.length} chat${itemsToDeleteIds.length === 1 ? '' : 's'}. ${errors.length} falhou${errors.length === 1 ? '' : 'ram'}.`, {
-          autoClose: 5000,
-        });
+        toast.warning(
+          `Excluído${deletedCount === 1 ? '' : 's'} ${deletedCount} de ${itemsToDeleteIds.length} chat${itemsToDeleteIds.length === 1 ? '' : 's'}. ${errors.length} falhou${errors.length === 1 ? '' : 'ram'}.`,
+          {
+            autoClose: 5000,
+          },
+        );
       }
 
       // Reload the list after all deletions

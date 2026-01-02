@@ -1,0 +1,35 @@
+.PromptEffectContainer {
+  --prompt-container-offset: 50px;
+  --prompt-line-stroke-width: 1px;
+  position: absolute;
+  pointer-events: none;
+  inset: calc(var(--prompt-container-offset) / -2);
+  width: calc(100% + var(--prompt-container-offset));
+  height: calc(100% + var(--prompt-container-offset));
+  z-index: 1;
+}
+
+.PromptEffectLine {
+  width: calc(100% - var(--prompt-container-offset) + var(--prompt-line-stroke-width));
+  height: calc(100% - var(--prompt-container-offset) + var(--prompt-line-stroke-width));
+  x: calc(var(--prompt-container-offset) / 2 - var(--prompt-line-stroke-width) / 2);
+  y: calc(var(--prompt-container-offset) / 2 - var(--prompt-line-stroke-width) / 2);
+  rx: calc(2rem - var(--prompt-container-offset) / 2 - var(--prompt-line-stroke-width) / 2);
+  ry: calc(2rem - var(--prompt-container-offset) / 2 - var(--prompt-line-stroke-width) / 2);
+  fill: transparent;
+  stroke-width: var(--prompt-line-stroke-width);
+  stroke: url(#home-line-gradient);
+  stroke-dasharray: 50px 50px;
+  stroke-dashoffset: 0;
+  animation: borderRotate 4s linear infinite;
+}
+
+@keyframes borderRotate {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -100px;
+  }
+}
+

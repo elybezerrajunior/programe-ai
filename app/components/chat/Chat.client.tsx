@@ -4,7 +4,7 @@ import { useChat } from '@ai-sdk/react';
 import { useAnimate } from 'framer-motion';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useMessageParser, usePromptEnhancer, useShortcuts } from '~/lib/hooks';
+import { useMessageParser, usePromptEnhancer, useShortcuts, useLLMConfig } from '~/lib/hooks';
 import { description, useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
@@ -102,14 +102,50 @@ export const ChatImpl = memo(
     const supabaseAlert = useStore(workbenchStore.supabaseAlert);
     const { activeProviders, promptId, autoSelectTemplate, contextOptimizationEnabled } = useSettings();
     const [llmErrorAlert, setLlmErrorAlert] = useState<LlmErrorAlertType | undefined>(undefined);
+    const { config: llmConfig, error: llmConfigError } = useLLMConfig();
     const [model, setModel] = useState(() => {
+      // Se configurado via env, usar valor do hook (será atualizado no useEffect)
+      if (llmConfig?.configured && llmConfig.model) {
+        return llmConfig.model;
+      }
+
+      // Fallback para comportamento atual
       const savedModel = Cookies.get('selectedModel');
+
+      // Migrar automaticamente do modelo antigo para o novo
+      if (savedModel === 'claude-3-5-sonnet-20241022') {
+        Cookies.set('selectedModel', DEFAULT_MODEL, { expires: 30 });
+
+        return DEFAULT_MODEL;
+      }
+
       return savedModel || DEFAULT_MODEL;
     });
     const [provider, setProvider] = useState(() => {
+      // Se configurado via env, usar valor do hook (será atualizado no useEffect)
+      if (llmConfig?.configured && llmConfig.provider) {
+        return llmConfig.provider;
+      }
+
+      // Fallback para comportamento atual
       const savedProvider = Cookies.get('selectedProvider');
+
       return (PROVIDER_LIST.find((p) => p.name === savedProvider) || DEFAULT_PROVIDER) as ProviderInfo;
     });
+
+    // Atualizar quando llmConfig mudar
+    useEffect(() => {
+      if (llmConfig?.configured) {
+        if (llmConfig.model) {
+          setModel(llmConfig.model);
+        }
+
+        if (llmConfig.provider) {
+          setProvider(llmConfig.provider);
+        }
+      }
+    }, [llmConfig]);
+
     const { showChat } = useStore(chatStore);
     const [animationScope, animate] = useAnimate();
     const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
@@ -585,11 +621,21 @@ export const ChatImpl = memo(
     }, []);
 
     const handleModelChange = (newModel: string) => {
+      // Não permitir mudança se configurado via env
+      if (llmConfig?.configured) {
+        return;
+      }
+
       setModel(newModel);
       Cookies.set('selectedModel', newModel, { expires: 30 });
     };
 
     const handleProviderChange = (newProvider: ProviderInfo) => {
+      // Não permitir mudança se configurado via env
+      if (llmConfig?.configured) {
+        return;
+      }
+
       setProvider(newProvider);
       Cookies.set('selectedProvider', newProvider.name, { expires: 30 });
     };
@@ -664,6 +710,8 @@ export const ChatImpl = memo(
         selectedElement={selectedElement}
         setSelectedElement={setSelectedElement}
         addToolResult={addToolResult}
+        envConfigured={llmConfig?.configured || false}
+        envConfigError={llmConfigError || null}
       />
     );
   },
