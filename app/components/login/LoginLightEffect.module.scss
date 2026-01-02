@@ -1,0 +1,98 @@
+.lightContainer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lightOrb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  mix-blend-mode: screen;
+}
+
+.light1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(34, 244, 198, 0.6) 0%, rgba(34, 244, 198, 0) 70%);
+  top: -100px;
+  left: -100px;
+  animation: moveLight1 20s infinite ease-in-out;
+}
+
+.light2 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(25, 216, 174, 0.5) 0%, rgba(25, 216, 174, 0) 70%);
+  bottom: -80px;
+  right: -80px;
+  animation: moveLight2 25s infinite ease-in-out;
+}
+
+.light3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(79, 255, 225, 0.4) 0%, rgba(79, 255, 225, 0) 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: moveLight3 18s infinite ease-in-out;
+}
+
+@keyframes moveLight1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translate(80px, 60px) scale(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(40px, 120px) scale(0.9);
+    opacity: 0.35;
+  }
+  75% {
+    transform: translate(-40px, 80px) scale(1.05);
+    opacity: 0.45;
+  }
+}
+
+@keyframes moveLight2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+  33% {
+    transform: translate(-60px, -80px) scale(1.15);
+    opacity: 0.5;
+  }
+  66% {
+    transform: translate(-100px, -40px) scale(0.85);
+    opacity: 0.3;
+  }
+}
+
+@keyframes moveLight3 {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translate(-40%, -60%) scale(1.2);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-60%, -40%) scale(0.8);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translate(-45%, -55%) scale(1.1);
+    opacity: 0.45;
+  }
+}
+
