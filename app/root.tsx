@@ -51,13 +51,11 @@ const inlineThemeCode = stripIndents`
   setTutorialKitTheme();
 
   function setTutorialKitTheme() {
-    let theme = localStorage.getItem('bolt_theme');
-
-    if (!theme) {
-      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
-
+    // Always force dark theme, ignoring system preferences
+    const theme = 'dark';
     document.querySelector('html')?.setAttribute('data-theme', theme);
+    // Override localStorage to ensure dark theme persists
+    localStorage.setItem('bolt_theme', theme);
   }
 `;
 
@@ -75,7 +73,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const theme = useStore(themeStore);
 
   useEffect(() => {
-    document.querySelector('html')?.setAttribute('data-theme', theme);
+    // Always force dark theme
+    document.querySelector('html')?.setAttribute('data-theme', 'dark');
   }, [theme]);
 
   return (

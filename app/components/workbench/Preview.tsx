@@ -592,31 +592,18 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
   // Function to get the frame color based on dark mode
   const getFrameColor = useCallback(() => {
     // Check if the document has a dark class or data-theme="dark"
-    const isDarkMode =
-      document.documentElement.classList.contains('dark') ||
-      document.documentElement.getAttribute('data-theme') === 'dark' ||
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // Always use dark mode
+    const isDarkMode = true;
 
     // Return a darker color for light mode, lighter color for dark mode
     return isDarkMode ? '#555' : '#111';
   }, []);
 
   // Effect to handle color scheme changes
+  // Note: Theme is locked to dark mode, so this effect is simplified
   useEffect(() => {
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    const handleColorSchemeChange = () => {
-      // Force a re-render when color scheme changes
-      if (showDeviceFrameInPreview) {
-        setShowDeviceFrameInPreview(true);
-      }
-    };
-
-    darkModeMediaQuery.addEventListener('change', handleColorSchemeChange);
-
-    return () => {
-      darkModeMediaQuery.removeEventListener('change', handleColorSchemeChange);
-    };
+    // Theme is always dark, so we don't need to listen to system preferences
+    // This effect is kept for compatibility but doesn't listen to system changes
   }, [showDeviceFrameInPreview]);
 
   useEffect(() => {
