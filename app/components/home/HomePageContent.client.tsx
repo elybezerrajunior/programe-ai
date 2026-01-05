@@ -5,10 +5,6 @@ import { HomeHero } from './HomeHero.client';
 import { ProjectsSection } from './ProjectsSection';
 import { Chat } from '~/components/chat/Chat.client';
 import { classNames } from '~/utils/classNames';
-import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
-import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
-import GitCloneButton from '~/components/chat/GitCloneButton';
-import { useChatHistory } from '~/lib/persistence/useChatHistory';
 import Cookies from 'js-cookie';
 import { PROMPT_COOKIE_KEY } from '~/utils/constants';
 
@@ -20,26 +16,9 @@ export function HomePageContent({ children }: HomePageContentProps) {
   const chat = useStore(chatStore);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [projectDescription, setProjectDescription] = useState('');
-  const { importChat } = useChatHistory();
 
   // Show chat interface when chat has started, otherwise show home page
   const showChat = chat.started;
-
-  const handleSelectPrompt = (suggestion: string) => {
-    // Fill the input in HomeHero with the selected prompt
-    setProjectDescription(suggestion);
-    // Scroll to top to show the hero section with filled input
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Focus on the textarea after a small delay
-    setTimeout(() => {
-      const textarea = document.querySelector('#project-description') as HTMLTextAreaElement;
-      if (textarea) {
-        textarea.focus();
-        // Scroll textarea into view if needed
-        textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }, 300);
-  };
 
   const handleProjectClick = (project: any) => {
     // Navigate to project or open project
@@ -77,21 +56,16 @@ export function HomePageContent({ children }: HomePageContentProps) {
                   uploadedFiles={uploadedFiles}
                   initialDescription={projectDescription}
                 />
-                
-                {/* Example Prompts */}
-                <div className="mt-8">
-                  <ExamplePrompts onSelectPrompt={handleSelectPrompt} />
-                </div>
               </div>
             </section>
 
             {/* Import Buttons and Git Clone */}
-            <section className="pt-4 pb-6 flex justify-center">
+            {/* <section className="pt-4 pb-6 flex justify-center">
               <div className="flex items-center gap-2">
                 {ImportButtons(importChat)}
                 <GitCloneButton importChat={importChat} />
               </div>
-            </section>
+            </section> */}
 
             {/* Projects Section */}
             <section className="py-8 border-t border-bolt-elements-borderColor">

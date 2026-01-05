@@ -6,8 +6,6 @@ import { chatStore } from '~/lib/stores/chat';
 import Cookies from 'js-cookie';
 import { PROMPT_COOKIE_KEY, DEFAULT_MODEL, DEFAULT_PROVIDER, PROVIDER_LIST } from '~/utils/constants';
 import styles from './PromptBorderEffect.module.scss';
-import { ColorSchemeDialog } from '~/components/ui/ColorSchemeDialog';
-import { McpTools } from '~/components/chat/MCPTools';
 import { toast } from 'react-toastify';
 import type { DesignScheme } from '~/types/design-scheme';
 import { defaultDesignScheme } from '~/types/design-scheme';
@@ -189,11 +187,6 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
     }
   };
 
-  const handlePromptTips = () => {
-    // Open prompt tips documentation
-    window.open('https://support.bolt.new/docs/prompting-effectively', '_blank', 'noopener,noreferrer');
-  };
-
   const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const items = e.clipboardData?.items;
 
@@ -293,11 +286,19 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
               </div>
               <button
                 type="button"
-                onClick={handlePromptTips}
-                className="flex items-center gap-1 text-sm text-accent-500 hover:text-accent-400 transition-colors bg-transparent"
+                onClick={handleEnhancePrompt}
+                disabled={!projectDescription.trim() || enhancingPrompt}
+                className={classNames(
+                  'flex items-center gap-1 text-sm text-accent-500 hover:text-accent-400 transition-colors bg-transparent',
+                  (!projectDescription.trim() || enhancingPrompt) && 'opacity-50 cursor-not-allowed'
+                )}
               >
-                <div className="i-ph:question text-base text-accent-500" />
-                <span>Dicas de prompt</span>
+                {enhancingPrompt ? (
+                  <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-base animate-spin" />
+                ) : (
+                  <div className="i-ph:question text-base text-accent-500" />
+                )}
+                <span>Melhore sua ideia</span>
               </button>
             </div>
             <textarea
@@ -324,8 +325,8 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
           {/* Actions */}
           <div className="flex items-center justify-between text-sm pt-2">
             <div className="flex gap-1 items-center">
-              <ColorSchemeDialog designScheme={designScheme || defaultDesignScheme} setDesignScheme={setDesignScheme} />
-              <McpTools />
+              {/* <ColorSchemeDialog designScheme={designScheme || defaultDesignScheme} setDesignScheme={setDesignScheme} /> */}
+              {/* <McpTools /> */}
               <Tooltip content="Enviar arquivo" side="top">
                 <button
                   type="button"
@@ -333,23 +334,6 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
                   className="flex items-center text-bolt-elements-item-contentDefault bg-transparent hover:text-bolt-elements-item-contentActive rounded-md p-1 hover:bg-bolt-elements-item-backgroundActive focus:outline-none transition-all"
                 >
                   <div className="i-ph:folder-plus text-xl" />
-                </button>
-              </Tooltip>
-              <Tooltip content="Melhorar prompt" side="top">
-                <button
-                  type="button"
-                  onClick={handleEnhancePrompt}
-                  disabled={!projectDescription.trim() || enhancingPrompt}
-                  className={classNames(
-                    'flex items-center text-bolt-elements-item-contentDefault bg-transparent hover:text-bolt-elements-item-contentActive rounded-md p-1 hover:bg-bolt-elements-item-backgroundActive focus:outline-none transition-all',
-                    (!projectDescription.trim() || enhancingPrompt) && 'opacity-50 cursor-not-allowed'
-                  )}
-                >
-                  {enhancingPrompt ? (
-                    <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-xl animate-spin" />
-                  ) : (
-                    <div className="i-ph:magic-wand text-xl" />
-                  )}
                 </button>
               </Tooltip>
               <Tooltip content={isListening ? 'Parar reconhecimento de voz' : 'Reconhecimento de voz'} side="top">
@@ -374,18 +358,14 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
               </Tooltip>
             </div>
             <div className="flex items-center gap-2">
-              <div className="text-xs text-bolt-elements-textTertiary">
-                Use <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Shift</kbd> + <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Enter</kbd> para nova linha
-              </div>
               <button
                 type="submit"
                 disabled={!projectDescription.trim()}
                 className={classNames(
                   'px-6 py-2.5 flex items-center gap-2 rounded-2xl font-medium transition-colors',
-                  {
-                    'bg-accent-500 hover:bg-accent-400 text-black': projectDescription.trim(),
-                    'bg-bolt-elements-background-depth-2 text-bolt-elements-textSecondary cursor-not-allowed': !projectDescription.trim(),
-                  }
+                  projectDescription.trim()
+                    ? 'bg-accent-500 hover:bg-accent-400 text-black'
+                    : 'bg-bolt-elements-background-depth-2 text-bolt-elements-textSecondary cursor-not-allowed'
                 )}
               >
                 <div className="i-bolt:stars text-lg" />
