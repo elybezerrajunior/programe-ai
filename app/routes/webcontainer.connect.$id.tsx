@@ -1,6 +1,9 @@
 import { type LoaderFunction } from '@remix-run/cloudflare';
+import { requireAuth } from '~/lib/auth/session';
 
 export const loader: LoaderFunction = async ({ request }) => {
+  // Proteger rota - requer autenticação
+  await requireAuth(request);
   const url = new URL(request.url);
   const editorOrigin = url.searchParams.get('editorOrigin') || 'https://stackblitz.com';
   console.log('editorOrigin', editorOrigin);

@@ -4,7 +4,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 const PREVIEW_CHANNEL = 'preview-updates';
 
-export async function loader({ params }: LoaderFunctionArgs) {
+import { requireAuth } from '~/lib/auth/session';
+
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  // Proteger rota - requer autenticação
+  await requireAuth(request);
+
   const previewId = params.id;
 
   if (!previewId) {

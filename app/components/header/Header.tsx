@@ -6,6 +6,7 @@ import { profileStore } from '~/lib/stores/profile';
 import { classNames } from '~/utils/classNames';
 import { HeaderActionButtons } from './HeaderActionButtons.client';
 import { ChatDescription } from '~/lib/persistence/ChatDescription.client';
+import { UserMenu } from './UserMenu.client';
 
 export function Header() {
   const chat = useStore(chatStore);
@@ -65,21 +66,15 @@ export function Header() {
             <div className="i-ph:bell text-xl" />
             <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
           </button>
-          <ClientOnly>
-            {() => (
-              <button
-                className="w-10 h-10 rounded-full overflow-hidden bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor"
-                aria-label="Perfil"
-              >
-                {profile?.avatar ? (
-                  <img src={profile.avatar} alt={profile?.username || 'User'} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-bolt-elements-textSecondary">
-                    <div className="i-ph:user text-lg" />
-                  </div>
-                )}
-              </button>
-            )}
+          <ClientOnly fallback={
+            <button
+              className="p-2 text-bolt-elements-textSecondary transition-colors bg-transparent"
+              aria-label="Perfil"
+            >
+              <div className="i-ph:user text-xl" />
+            </button>
+          }>
+            {() => <UserMenu />}
           </ClientOnly>
         </div>
       </header>
@@ -108,8 +103,17 @@ export function Header() {
           </span>
           <ClientOnly>
             {() => (
-              <div className="">
+              <div className="flex items-center gap-4">
                 <HeaderActionButtons chatStarted={chat.started} />
+                {/* Notifications and Profile icons */}
+                <button
+                  className="relative p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors bg-transparent"
+                  aria-label="Notificações"
+                >
+                  <div className="i-ph:bell text-xl" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                </button>
+                <UserMenu />
               </div>
             )}
           </ClientOnly>

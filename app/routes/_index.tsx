@@ -1,4 +1,4 @@
-import { json, type MetaFunction } from '@remix-run/cloudflare';
+import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import { ClientOnly } from 'remix-utils/client-only';
 import { BaseChat } from '~/components/chat/BaseChat';
 import { Chat } from '~/components/chat/Chat.client';
@@ -7,6 +7,7 @@ import { ProjectTypeTags } from '~/components/home/ProjectTypeTags';
 import { ProjectsSection } from '~/components/home/ProjectsSection';
 import BackgroundRays from '~/components/ui/BackgroundRays';
 import { HomePageContent } from '~/components/home/HomePageContent.client';
+import { requireAuth } from '~/lib/auth/session';
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,7 +16,12 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = () => json({});
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  // Proteger rota - requer autenticação
+  await requireAuth(request);
+
+  return json({});
+};
 
 /**
  * Landing page component for Bolt

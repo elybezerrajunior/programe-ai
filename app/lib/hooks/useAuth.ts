@@ -1,32 +1,75 @@
-import { useLoaderData } from '@remix-run/react';
-
-export interface AuthData {
-  user: {
-    id: string;
-    email: string;
-    name?: string;
-  } | null;
-  isAuthenticated: boolean;
-}
+import { useStore } from '@nanostores/react';
+import { useEffect } from 'react';
+import { authStore, setAuthSession, setAuthLoading } from '~/lib/stores/auth';
+import { getSession } from '~/lib/auth/supabase-auth';
+import { supabase } from '~/lib/auth/supabase-client';
+import { syncAuthFromCookies } from '~/lib/auth/sync-auth';
 
 /**
- * Hook para acessar dados de autenticação do loader
- * 
- * Exemplo de uso no loader:
- * ```ts
- * export const loader = async ({ request }: LoaderFunctionArgs) => {
- *   const session = getSessionFromRequest(request);
- *   return json({ 
- *     auth: { 
- *       user: session?.user || null, 
- *       isAuthenticated: !!session 
- *     } 
- *   });
- * };
- * ```
+ * Hook para acessar o estado de autenticação
+ * Sincroniza estado do Supabase com a store
  */
-export function useAuth(): AuthData {
-  const data = useLoaderData<{ auth?: AuthData }>();
-  return data.auth || { user: null, isAuthenticated: false };
-}
+export function useAuth() {
+  const auth = useStore(authStore);
 
+  // Sincronizar sessão do Supabase com a store
+  useEffect(() => {
+    let mounted = true;
+
+    async function syncSession() {
+      setAuthLoading(true);
+
+      try {
+        // Primeiro, tentar obter a sessão do Supabase (pode estar no localStorage)
+        let session = await getSession();
+
+        // Se não houver sessão no Supabase, tentar sincronizar dos cookies
+        if (!session && typeof window !== 'undefined') {
+          const synced = await syncAuthFromCookies();
+          if (synced) {
+            // Tentar obter a sessão novamente após sincronização
+            session = await getSession();
+          }
+        }
+
+        if (mounted) {
+          setAuthSession(session);
+        }
+      } catch (error) {
+        console.error('[useAuth] Error syncing session:', error);
+        if (mounted) {
+          setAuthSession(null);
+        }
+      } finally {
+        if (mounted) {
+          setAuthLoading(false);
+        }
+      }
+    }
+
+    // Verificar sessão inicial
+    syncSession();
+
+    // Escutar mudanças de autenticação do Supabase
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (mounted) {
+        setAuthSession(session);
+        setAuthLoading(false);
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  return {
+    user: auth.user,
+    session: auth.session,
+    isLoading: auth.isLoading,
+    isAuthenticated: auth.isAuthenticated,
+  };
+}
