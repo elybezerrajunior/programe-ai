@@ -25,11 +25,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return redirect(redirectTo);
   }
 
-  // Verificar se há erro na query string (pode vir do callback OAuth)
   const url = new URL(request.url);
   const error = url.searchParams.get('error');
+  const signupSuccess = url.searchParams.get('signupSuccess');
 
-  return json({ error: error || null });
+  return json({ error: error || null, signupSuccess: signupSuccess === 'true' });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -146,7 +146,7 @@ export default function Login() {
                   <span className="text-sm text-bolt-elements-textSecondary">
                     Novo por aqui?{' '}
                     <a
-                      href="#"
+                      href="/signup"
                       className="text-accent-500 hover:underline font-medium"
                     >
                       Criar conta grátis

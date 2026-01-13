@@ -147,6 +147,13 @@ export function validatePassword(password: string): boolean {
 }
 
 /**
+ * Helper para validar confirmação de senha
+ */
+export function validatePasswordConfirmation(password: string, confirmation: string): boolean {
+  return password === confirmation && password.length >= 6;
+}
+
+/**
  * Helper para proteger rotas (requer autenticação)
  * Redireciona para /login se não autenticado
  */

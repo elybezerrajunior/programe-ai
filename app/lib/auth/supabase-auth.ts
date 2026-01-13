@@ -42,11 +42,26 @@ function mapAuthError(error: AuthError): string {
     return 'Cadastro de novos usuários está desabilitado';
   }
 
+  if (errorMessage.includes('user already registered') || errorMessage.includes('already registered')) {
+    return 'Este e-mail já está cadastrado';
+  }
+
+  if (errorMessage.includes('password') && errorMessage.includes('weak')) {
+    return 'Senha muito fraca. Use pelo menos 6 caracteres';
+  }
+
+  if (errorMessage.includes('email address already exists')) {
+    return 'Este e-mail já está cadastrado';
+  }
+
+  if (errorMessage.includes('signup') && errorMessage.includes('failed')) {
+    return 'Falha ao criar conta. Verifique seus dados e tente novamente';
+  }
+
   if (errorMessage.includes('email_address_not_authorized')) {
     return 'Este endereço de e-mail não está autorizado';
   }
 
-  // Erros OAuth
   if (errorMessage.includes('access_denied') || errorMessage.includes('user cancelled')) {
     return 'Login cancelado pelo usuário';
   }
@@ -61,7 +76,6 @@ function mapAuthError(error: AuthError): string {
     return 'Erro ao fazer login com OAuth. Tente novamente';
   }
 
-  // Erro genérico
   return error.message || 'Erro ao fazer login. Tente novamente';
 }
 
@@ -94,6 +108,63 @@ export async function signInWithPassword(email: string, password: string) {
 
     throw new AuthenticationError(
       'Erro inesperado ao fazer login. Tente novamente',
+      error as AuthError
+    );
+  }
+}
+
+/**
+ * Realiza cadastro com email e senha
+ */
+export async function signUpWithPassword(
+  email: string,
+  password: string,
+  options?: {
+    name?: string;
+    metadata?: Record<string, unknown>;
+  }
+) {
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: email.trim().toLowerCase(),
+      password,
+      options: {
+        data: {
+          name: options?.name,
+          full_name: options?.name,
+          ...options?.metadata,
+        },
+      },
+    });
+
+    if (error) {
+      throw new AuthenticationError(mapAuthError(error), error, error.status?.toString());
+    }
+
+    if (!data.session && data.user) {
+      return {
+        user: data.user,
+        session: null,
+        requiresEmailConfirmation: true,
+      };
+    }
+
+    if (!data.user) {
+      throw new AuthenticationError('Não foi possível criar o usuário');
+    }
+
+    return {
+      user: data.user,
+      session: data.session,
+      requiresEmailConfirmation: false,
+    };
+  } catch (error) {
+    if (error instanceof AuthenticationError) {
+      throw error;
+    }
+
+    throw new AuthenticationError(
+      'Erro inesperado ao criar conta. Tente novamente',
       error as AuthError
     );
   }
@@ -156,8 +227,6 @@ export async function getSessionFromCookies(cookieHeader: string | null) {
   }
 
   try {
-    // O Supabase armazena tokens em cookies específicos
-    // Precisamos reconstruir a sessão a partir dos cookies
     const cookies = parseCookies(cookieHeader);
     
     const accessToken = cookies['sb-access-token'] || cookies[`sb-${extractProjectRef(supabase.supabaseUrl)}-auth-token`];
@@ -167,14 +236,12 @@ export async function getSessionFromCookies(cookieHeader: string | null) {
       return null;
     }
 
-    // Verificar token com Supabase
     const { data, error } = await supabase.auth.getUser(accessToken);
 
     if (error || !data.user) {
       return null;
     }
 
-    // Retornar dados do usuário (não a sessão completa por questões de segurança no server)
     return {
       user: data.user,
       accessToken,

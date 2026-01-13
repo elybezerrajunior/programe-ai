@@ -17,11 +17,11 @@ export function LoginForm() {
   const [searchParams] = useSearchParams();
   const isSubmitting = navigation.state === 'submitting';
 
-  // Verificar se há erro (pode vir de actionData ou loaderData)
   const errorMessage = actionData?.error || loaderData?.error || null;
   const hasError = !!errorMessage;
   const emailError = hasError && (actionData?.fields?.email || false);
   const passwordError = hasError && (actionData?.fields?.password || false);
+  const signupSuccess = loaderData?.signupSuccess || false;
 
   // Handler para login OAuth
   const handleOAuthLogin = async (provider: OAuthProvider) => {
@@ -57,7 +57,20 @@ export function LoginForm() {
         </p>
       </div>
 
-      {/* Exibir erros */}
+      {signupSuccess && (
+        <div className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/20 animate-in fade-in slide-in-from-top-2">
+          <div className="flex items-start gap-3">
+            <div className="i-ph:check-circle text-xl text-green-500 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-green-500 mb-1">Conta criada com sucesso!</p>
+              <p className="text-sm text-green-400">
+                Verifique seu e-mail para confirmar sua conta antes de fazer login.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {errorMessage && (
         <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 animate-in fade-in slide-in-from-top-2">
           <div className="flex items-start gap-3">
