@@ -25,15 +25,27 @@ export default async function handleRequest(
 
   const body = new ReadableStream({
     start(controller) {
-      const head = renderHeadToString({ request, remixContext, Head });
-
-      controller.enqueue(
-        new Uint8Array(
-          new TextEncoder().encode(
-            `<!DOCTYPE html><html lang="en" data-theme="${themeStore.value}"><head>${head}</head><body><div id="root" class="w-full h-full">`,
+      try {
+        const head = renderHeadToString({ request, remixContext, Head });
+        const theme = themeStore.get() || 'dark';
+        controller.enqueue(
+          new Uint8Array(
+            new TextEncoder().encode(
+              `<!DOCTYPE html><html lang="en" data-theme="${theme}"><head>${head}</head><body><div id="root" class="w-full h-full">`,
+            ),
           ),
-        ),
-      );
+        );
+      } catch (error) {
+        console.error('Error rendering head:', error);
+        const theme = 'dark';
+        controller.enqueue(
+          new Uint8Array(
+            new TextEncoder().encode(
+              `<!DOCTYPE html><html lang="en" data-theme="${theme}"><head></head><body><div id="root" class="w-full h-full">`,
+            ),
+          ),
+        );
+      }
 
       const reader = readable.getReader();
 
