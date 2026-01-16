@@ -118,10 +118,13 @@ export default function App() {
   const theme = useStore(themeStore);
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
     logStore.logSystem('Application initialized', {
       theme,
-      platform: navigator.platform,
-      userAgent: navigator.userAgent,
+      platform: typeof navigator !== 'undefined' ? navigator.platform : 'unknown',
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
       timestamp: new Date().toISOString(),
     });
 

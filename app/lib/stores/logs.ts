@@ -67,6 +67,11 @@ class LogStore {
   }
 
   private _loadLogs() {
+    // Only load logs from cookies on client side
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const savedLogs = Cookies.get('eventLogs');
 
     if (savedLogs) {
@@ -97,6 +102,11 @@ class LogStore {
   }
 
   private _saveLogs() {
+    // Only save logs to cookies on client side
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const currentLogs = this._logs.get();
     Cookies.set('eventLogs', JSON.stringify(currentLogs));
   }
