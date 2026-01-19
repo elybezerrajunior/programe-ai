@@ -17,7 +17,14 @@ try {
 }
 
 // For development environments, we'll always provide mock data if real data isn't available
-const isDevelopment = process.env.NODE_ENV === 'development';
+// No Cloudflare, process.env pode não estar disponível, então usar verificação segura
+const isDevelopment = (() => {
+  try {
+    return typeof process !== 'undefined' && process.env?.NODE_ENV === 'development';
+  } catch {
+    return false;
+  }
+})();
 
 interface DiskInfo {
   filesystem: string;

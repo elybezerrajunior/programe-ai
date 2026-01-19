@@ -1,15 +1,47 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Variáveis de ambiente
-const supabaseUrl = typeof window !== 'undefined' 
-  ? import.meta.env.VITE_SUPABASE_URL 
-  : process.env.VITE_SUPABASE_URL;
+// Função helper para obter variáveis de ambiente de forma segura
+function getEnvVar(key: string): string | undefined {
+  // No cliente (browser)
+  if (typeof window !== 'undefined') {
+    return import.meta.env[key];
+  }
+  
+  // No servidor - tentar process.env (Node.js) ou retornar undefined (Cloudflare)
+  // No Cloudflare, process.env pode não estar disponível ou não ter as variáveis
+  // Nesse caso, as variáveis devem vir do context.cloudflare.env
+  try {
+    if (typeof process !== 'undefined' && process.env) {
+      return process.env[key];
+    }
+  } catch {
+    // Ignorar erro se process não estiver disponível (Cloudflare)
+  }
+  
+  return undefined;
+}
 
-const supabaseAnonKey = typeof window !== 'undefined'
-  ? import.meta.env.VITE_SUPABASE_ANON_KEY
-  : process.env.VITE_SUPABASE_ANON_KEY;
+// Variáveis de ambiente - não lançar erro se não estiverem disponíveis no servidor
+// Isso permite que o código funcione no Cloudflare onde as variáveis vêm do context
+const supabaseUrl = getEnvVar('VITE_SUPABASE_URL');
+const supabaseAnonKey = getEnvVar('VITE_SUPABASE_ANON_KEY');
 
-if (!supabaseUrl || !supabaseAnonKey) {
+// Só criar o cliente se as variáveis estiverem disponíveis
+// No Cloudflare, o cliente pode ser criado dinamicamente com variáveis do context
+let supabase: ReturnType<typeof createClient> | null = null;
+
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false, // Remix gerencia os redirecionamentos
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+      storageKey: 'sb-auth',
+    },
+  });
+} else if (typeof window !== 'undefined') {
+  // No cliente, sempre exigir as variáveis
   throw new Error(
     'Missing Supabase environment variables. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY'
   );
@@ -18,14 +50,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 /**
  * Cliente Supabase singleton
  * Funciona tanto no browser quanto no servidor (SSR)
+ * No Cloudflare, pode ser null se as variáveis não estiverem disponíveis no módulo
  */
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false, // Remix gerencia os redirecionamentos
-    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
-    storageKey: 'sb-auth',
-  },
-});
+export { supabase };
 

@@ -1,8 +1,15 @@
 import type { PathWatcherEvent, WebContainer } from '@webcontainer/api';
 import { getEncoding } from 'istextorbinary';
 import { map, type MapStore } from 'nanostores';
-import { Buffer } from 'node:buffer';
 import { path } from '~/utils/path';
+
+// Buffer está disponível globalmente no Cloudflare com nodejs_compat
+// No Node.js, também está disponível globalmente ou pode ser importado
+// Este arquivo é usado principalmente no cliente, então o Buffer global deve funcionar
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const Buffer = (typeof globalThis !== 'undefined' && (globalThis as any).Buffer) 
+  || (typeof global !== 'undefined' && (global as any).Buffer)
+  || require('node:buffer').Buffer;
 import { bufferWatchEvents } from '~/utils/buffer';
 import { WORK_DIR } from '~/utils/constants';
 import { computeFileModifications } from '~/utils/diff';
