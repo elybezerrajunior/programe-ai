@@ -4,7 +4,6 @@ import { isbot } from 'isbot';
 import { renderToReadableStream } from 'react-dom/server';
 import { renderHeadToString } from 'remix-island';
 import { Head } from './root';
-import { themeStore } from '~/lib/stores/theme';
 
 // Helper para log detalhado de erros
 function logError(context: string, error: unknown, request?: Request) {
@@ -71,7 +70,9 @@ export default async function handleRequest(
             head = '';
           }
           
-          const theme = themeStore.get() || 'dark';
+          // Usar tema 'dark' diretamente no servidor (sem depender do themeStore)
+          // O themeStore pode causar problemas no ambiente Cloudflare Pages
+          const theme = 'dark';
           console.log('[ENTRY_SERVER] Theme:', theme);
           
           const htmlStart = `<!DOCTYPE html><html lang="en" data-theme="${theme}"><head>${head}</head><body><div id="root" class="w-full h-full">`;
