@@ -58,6 +58,7 @@ interface ChatBoxProps {
   selectedElement?: ElementInfo | null;
   setSelectedElement?: ((element: ElementInfo | null) => void) | undefined;
   envConfigured?: boolean;
+  isPreviewMode?: boolean;
 }
 
 export const ChatBox: React.FC<ChatBoxProps> = (props) => {
@@ -72,7 +73,8 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
   return (
     <div
       className={classNames(
-        'relative bg-bolt-elements-background-depth-2 backdrop-blur p-3 rounded-lg border border-bolt-elements-borderColor relative w-full max-w-chat mx-auto z-prompt',
+        'relative bg-bolt-elements-background-depth-2 backdrop-blur p-3 rounded-lg border border-bolt-elements-borderColor relative w-full mx-auto z-prompt',
+        props.isPreviewMode ? 'max-w-6xl' : 'max-w-chat',
 
         /*
          * {

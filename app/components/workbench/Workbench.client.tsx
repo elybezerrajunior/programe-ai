@@ -554,7 +554,7 @@ export const Workbench = memo(
                           <Preview setSelectedElement={setSelectedElement} />
                         </div>
                         <div className="border-t border-bolt-elements-borderColor p-4 bg-bolt-elements-background-depth-2 shrink-0">
-                          <div className="flex flex-col gap-2 max-w-4xl mx-auto">
+                          <div className="flex flex-col gap-2 max-w-6xl mx-auto">
                             {envConfigError && (
                               <div className="rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 p-4 mb-2">
                                 <div className="flex items-start">
@@ -614,7 +614,7 @@ export const Workbench = memo(
                             )}
                             {llmErrorAlert && <LlmErrorAlert alert={llmErrorAlert} clearAlert={() => clearLlmErrorAlert?.()} />}
                             {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
-                            <ChatBox {...chatBoxProps} />
+                            <ChatBox {...chatBoxProps} isPreviewMode={true} />
                           </div>
                         </div>
                       </div>
