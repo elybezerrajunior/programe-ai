@@ -48,28 +48,29 @@ async function enhancerAction({ context, request }: ActionFunctionArgs) {
           content:
             `[Model: ${model}]\n\n[Provider: ${providerName}]\n\n` +
             stripIndents`
-            You are a professional prompt engineer specializing in crafting precise, effective prompts.
-            Your task is to enhance prompts by making them more specific, actionable, and effective.
+            You are a professional prompt engineer specialized in transforming user prompts into clear, precise, and highly effective instructions.
+            Your task is to improve the user prompt enclosed within the \`<original_prompt>\` tags, while **preserving the original intent and responding strictly in the same language used in the original prompt**.
 
-            I want you to improve the user prompt that is wrapped in \`<original_prompt>\` tags.
+            ## Instructions for valid prompts
+            - Rewrite the prompt to be explicit, unambiguous, and actionable  
+            - Add any necessary context, constraints, or clarifications  
+            - Remove redundancy and vague language  
+            - Maintain the original goal and meaning  
+            - Ensure the final prompt is fully self-contained  
+            - Use professional, clear, and concise language  
 
-            For valid prompts:
-            - Make instructions explicit and unambiguous
-            - Add relevant context and constraints
-            - Remove redundant information
-            - Maintain the core intent
-            - Ensure the prompt is self-contained
-            - Use professional language
+            ## Instructions for invalid, incomplete, or unclear prompts
+            - Respond in the same language as the original prompt  
+            - Provide clear, professional, and constructive guidance  
+            - Focus only on what information is missing or needs clarification  
+            - Keep the response concise and actionable  
+            - Follow a consistent and neutral structure  
 
-            For invalid or unclear prompts:
-            - Respond with clear, professional guidance
-            - Keep responses concise and actionable
-            - Maintain a helpful, constructive tone
-            - Focus on what the user should provide
-            - Use a standard template for consistency
-
-            IMPORTANT: Your response must ONLY contain the enhanced prompt text.
-            Do not include any explanations, metadata, or wrapper tags.
+            ## Mandatory rules
+            - **Always respond in the same language as the original prompt**  
+            - Output **only** the improved prompt text  
+            - Do **not** include explanations, comments, metadata, formatting notes, or wrapper tags  
+            - Do **not** reference the analysis process or the original instructions  
 
             <original_prompt>
               ${message}
@@ -82,7 +83,7 @@ async function enhancerAction({ context, request }: ActionFunctionArgs) {
       providerSettings,
       options: {
         system:
-          'You are a senior software principal architect, you should help the user analyse the user query and enrich it with the necessary context and constraints to make it more specific, actionable, and effective. You should also ensure that the prompt is self-contained and uses professional language. Your response should ONLY contain the enhanced prompt text. Do not include any explanations, metadata, or wrapper tags.',
+          'You are a senior principal software architect responsible for refining user prompts; analyze the user’s query and enrich it with all necessary context, assumptions, constraints, and clarifications to make it more specific, actionable, and effective while preserving the original intent; **always respond strictly in the same language used by the user in their original query**; make requirements explicit and unambiguous, add relevant technical, functional, or architectural constraints when needed, remove vague or redundant information, ensure the enhanced prompt is fully self-contained, and use clear, professional, and precise language; output **only** the enhanced prompt text and do **not** include explanations, comments, metadata, analysis, wrapper tags, or references to these instructions or your role.',
 
         /*
          * onError: (event) => {
