@@ -29,6 +29,15 @@ import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportCh
 import { useChatHistory } from '~/lib/persistence';
 import { streamingState } from '~/lib/stores/streaming';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { ChatBox } from '~/components/chat/ChatBox';
+import type { ChatBoxProps } from '~/components/chat/ChatBox';
+import type { ProgressAnnotation } from '~/types/context';
+import type { ActionAlert, SupabaseAlert, DeployAlert, LlmErrorAlertType } from '~/types/actions';
+import DeployChatAlert from '~/components/deploy/DeployAlert';
+import ChatAlert from '~/components/chat/ChatAlert';
+import { SupabaseChatAlert } from '~/components/chat/SupabaseAlert';
+import LlmErrorAlert from '~/components/chat/LLMApiAlert';
+import ProgressCompilation from '~/components/chat/ProgressCompilation';
 
 interface WorkspaceProps {
   chatStarted?: boolean;
@@ -38,6 +47,20 @@ interface WorkspaceProps {
   };
   updateChatMestaData?: (metadata: any) => void;
   setSelectedElement?: (element: ElementInfo | null) => void;
+  chatBoxProps?: Omit<ChatBoxProps, 'isModelSettingsCollapsed' | 'setIsModelSettingsCollapsed'> & {
+    isModelSettingsCollapsed: boolean;
+    setIsModelSettingsCollapsed: (collapsed: boolean) => void;
+  };
+  progressAnnotations?: ProgressAnnotation[];
+  envConfigError?: string | null;
+  deployAlert?: DeployAlert;
+  clearDeployAlert?: () => void;
+  supabaseAlert?: SupabaseAlert;
+  clearSupabaseAlert?: () => void;
+  actionAlert?: ActionAlert;
+  clearAlert?: () => void;
+  llmErrorAlert?: LlmErrorAlertType;
+  clearLlmErrorAlert?: () => void;
 }
 
 const viewTransition = { ease: cubicEasingFn };
@@ -287,6 +310,17 @@ export const Workbench = memo(
     metadata: _metadata,
     updateChatMestaData: _updateChatMestaData,
     setSelectedElement,
+    chatBoxProps,
+    progressAnnotations,
+    envConfigError,
+    deployAlert,
+    clearDeployAlert,
+    supabaseAlert,
+    clearSupabaseAlert,
+    actionAlert,
+    clearAlert,
+    llmErrorAlert,
+    clearLlmErrorAlert,
   }: WorkspaceProps) => {
     renderLogger.trace('Workbench');
 
@@ -308,6 +342,7 @@ export const Workbench = memo(
     const streaming = useStore(streamingState);
     const { exportChat } = useChatHistory();
     const [isSyncing, setIsSyncing] = useState(false);
+    const isPreviewMode = selectedView === 'preview';
 
     const setSelectedView = (view: WorkbenchViewType) => {
       workbenchStore.currentView.set(view);
@@ -382,17 +417,25 @@ export const Workbench = memo(
         >
           <div
             className={classNames(
-              'fixed top-[calc(var(--header-height)+1.2rem)] bottom-6 w-[var(--workbench-inner-width)] z-0 transition-[left,width] duration-200 bolt-ease-cubic-bezier',
+              'fixed top-[calc(var(--header-height)+1.2rem)] bottom-6 z-0 transition-[left,width] duration-200 bolt-ease-cubic-bezier',
               {
-                'w-full': isSmallViewport,
-                'left-0': showWorkbench && isSmallViewport,
-                'left-[var(--workbench-left)]': showWorkbench,
+                'w-full': isSmallViewport || (isPreviewMode && showWorkbench),
+                'w-[var(--workbench-inner-width)]': !isSmallViewport && (!isPreviewMode || !showWorkbench),
+                'left-0': (showWorkbench && isSmallViewport) || (isPreviewMode && showWorkbench),
+                'left-[var(--workbench-left)]': showWorkbench && !isSmallViewport && !isPreviewMode,
                 'left-[calc(-1*var(--workbench-width))]': !showWorkbench,
               },
             )}
           >
             <div className="absolute inset-0 px-2 lg:px-4">
-              <div className="h-full flex flex-col bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor shadow-sm rounded-lg overflow-hidden">
+              <div
+                className={classNames(
+                  'h-full flex flex-col bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor shadow-sm rounded-lg',
+                  {
+                    'overflow-hidden': !isPreviewMode || !chatBoxProps,
+                  },
+                )}
+              >
                 <div className="flex items-center px-3 py-2 border-b border-bolt-elements-borderColor gap-1.5">
                   <button
                     className={`${showChat ? 'i-ph:sidebar-simple-fill' : 'i-ph:sidebar-simple'} text-lg text-bolt-elements-textSecondary mr-1`}
@@ -479,7 +522,7 @@ export const Workbench = memo(
                     }}
                   />
                 </div>
-                <div className="relative flex-1 overflow-hidden">
+                <div className={classNames('relative flex-1', isPreviewMode && chatBoxProps ? 'flex flex-col overflow-hidden' : 'overflow-hidden')}>
                   <View initial={{ x: '0%' }} animate={{ x: selectedView === 'code' ? '0%' : '-100%' }}>
                     <EditorPanel
                       editorDocument={currentDocument}
@@ -501,8 +544,85 @@ export const Workbench = memo(
                   >
                     <DiffView fileHistory={fileHistory} setFileHistory={setFileHistory} />
                   </View>
-                  <View initial={{ x: '100%' }} animate={{ x: selectedView === 'preview' ? '0%' : '100%' }}>
-                    <Preview setSelectedElement={setSelectedElement} />
+                  <View 
+                    initial={{ x: '100%' }} 
+                    animate={{ x: selectedView === 'preview' ? '0%' : '100%' }}
+                  >
+                    {isPreviewMode && chatBoxProps ? (
+                      <div className="h-full w-full flex flex-col">
+                        <div className="flex-1 min-h-0 overflow-hidden">
+                          <Preview setSelectedElement={setSelectedElement} />
+                        </div>
+                        <div className="border-t border-bolt-elements-borderColor p-4 bg-bolt-elements-background-depth-2 shrink-0">
+                          <div className="flex flex-col gap-2 max-w-4xl mx-auto">
+                            {envConfigError && (
+                              <div className="rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 p-4 mb-2">
+                                <div className="flex items-start">
+                                  <div className="flex-shrink-0">
+                                    <div className="i-ph:warning-duotone text-xl text-bolt-elements-button-danger-text"></div>
+                                  </div>
+                                  <div className="ml-3 flex-1">
+                                    <h3 className="text-sm font-medium text-bolt-elements-textPrimary">
+                                      Configuração de LLM Inválida
+                                    </h3>
+                                    <div className="mt-2 text-sm text-bolt-elements-textSecondary">
+                                      <p>{envConfigError}</p>
+                                      <p className="mt-2 text-xs">
+                                        Configure as variáveis de ambiente <code>BOLT_LLM_PROVIDER</code> e{' '}
+                                        <code>BOLT_LLM_MODEL</code> para usar esta funcionalidade.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            {deployAlert && (
+                              <DeployChatAlert
+                                alert={deployAlert}
+                                clearAlert={() => clearDeployAlert?.()}
+                                postMessage={(message: string | undefined) => {
+                                  if (message && chatBoxProps?.handleSendMessage) {
+                                    chatBoxProps.handleSendMessage({} as React.UIEvent, message);
+                                    clearSupabaseAlert?.();
+                                  }
+                                }}
+                              />
+                            )}
+                            {supabaseAlert && (
+                              <SupabaseChatAlert
+                                alert={supabaseAlert}
+                                clearAlert={() => clearSupabaseAlert?.()}
+                                postMessage={(message) => {
+                                  if (message && chatBoxProps?.handleSendMessage) {
+                                    chatBoxProps.handleSendMessage({} as React.UIEvent, message);
+                                    clearSupabaseAlert?.();
+                                  }
+                                }}
+                              />
+                            )}
+                            {actionAlert && (
+                              <ChatAlert
+                                alert={actionAlert}
+                                clearAlert={() => clearAlert?.()}
+                                postMessage={(message) => {
+                                  if (message && chatBoxProps?.handleSendMessage) {
+                                    chatBoxProps.handleSendMessage({} as React.UIEvent, message);
+                                    clearAlert?.();
+                                  }
+                                }}
+                              />
+                            )}
+                            {llmErrorAlert && <LlmErrorAlert alert={llmErrorAlert} clearAlert={() => clearLlmErrorAlert?.()} />}
+                            {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
+                            <ChatBox {...chatBoxProps} />
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="h-full w-full">
+                        <Preview setSelectedElement={setSelectedElement} />
+                      </div>
+                    )}
                   </View>
                 </div>
               </div>
