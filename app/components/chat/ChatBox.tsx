@@ -73,20 +73,25 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
   return (
     <div
       className={classNames(
-        'relative bg-bolt-elements-background-depth-2 backdrop-blur p-3 rounded-lg border border-bolt-elements-borderColor relative w-full mx-auto z-prompt',
-        props.isPreviewMode ? 'max-w-6xl' : 'max-w-chat',
-
-        /*
-         * {
-         *   'sticky bottom-2': chatStarted,
-         * },
-         */
+        'relative backdrop-blur p-3 rounded-lg border border-bolt-elements-borderColor relative w-full mx-auto z-prompt',
+        props.isPreviewMode 
+          ? 'max-w-6xl shadow-2xl bg-bolt-elements-background-depth-2/80' 
+          : 'max-w-chat bg-bolt-elements-background-depth-2',
       )}
     >
-      <svg className={classNames(styles.PromptEffectContainer)}>
+      {props.isPreviewMode && (
+        <div 
+          className="absolute -inset-4 rounded-2xl opacity-30 blur-3xl pointer-events-none z-0"
+          style={{
+            background: 'radial-gradient(circle, rgba(34, 244, 198, 0.4) 0%, rgba(34, 244, 198, 0) 70%)',
+          }}
+        />
+      )}
+      <div className="relative z-10">
+        <svg className={classNames(styles.PromptEffectContainer)}>
         <defs>
           <linearGradient
-            id="line-gradient"
+            id={props.isPreviewMode ? 'preview-line-gradient' : 'line-gradient'}
             x1="20%"
             y1="0%"
             x2="-14%"
@@ -99,15 +104,27 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             <stop offset="50%" stopColor="#22F4C6" stopOpacity="80%"></stop>
             <stop offset="100%" stopColor="#22F4C6" stopOpacity="0%"></stop>
           </linearGradient>
-          <linearGradient id="shine-gradient">
+          <linearGradient id={props.isPreviewMode ? 'preview-shine-gradient' : 'shine-gradient'}>
             <stop offset="0%" stopColor="white" stopOpacity="0%"></stop>
             <stop offset="40%" stopColor="#ffffff" stopOpacity="80%"></stop>
             <stop offset="50%" stopColor="#ffffff" stopOpacity="80%"></stop>
             <stop offset="100%" stopColor="white" stopOpacity="0%"></stop>
           </linearGradient>
         </defs>
-        <rect className={classNames(styles.PromptEffectLine)} pathLength="100" strokeLinecap="round"></rect>
-        <rect className={classNames(styles.PromptShine)} x="48" y="24" width="70" height="1"></rect>
+        <rect 
+          className={classNames(props.isPreviewMode ? styles.PromptEffectLineAnimated : styles.PromptEffectLine)} 
+          pathLength="100" 
+          strokeLinecap="round"
+          stroke={props.isPreviewMode ? `url(#preview-line-gradient)` : `url(#line-gradient)`}
+        ></rect>
+        <rect 
+          className={classNames(styles.PromptShine)} 
+          x="48" 
+          y="24" 
+          width="70" 
+          height="1"
+          fill={props.isPreviewMode ? `url(#preview-shine-gradient)` : `url(#shine-gradient)`}
+        ></rect>
       </svg>
       <div>
         <ClientOnly>
@@ -319,6 +336,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           <SupabaseConnection />
           <ExpoQrModal open={props.qrModalOpen} onClose={() => props.setQrModalOpen(false)} />
         </div>
+      </div>
       </div>
     </div>
   );

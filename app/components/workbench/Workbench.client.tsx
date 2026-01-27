@@ -549,14 +549,18 @@ export const Workbench = memo(
                     animate={{ x: selectedView === 'preview' ? '0%' : '100%' }}
                   >
                     {isPreviewMode && chatBoxProps ? (
-                      <div className="h-full w-full flex flex-col">
-                        <div className="flex-1 min-h-0 overflow-hidden">
-                          <Preview setSelectedElement={setSelectedElement} />
+                      <div className="h-full w-full relative flex flex-col">
+                        {/* Preview container - ocupa toda altura */}
+                        <div className="absolute inset-0 z-10 px-4 pt-4">
+                          <div className="h-full w-full bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden">
+                            <Preview setSelectedElement={setSelectedElement} />
+                          </div>
                         </div>
-                        <div className="border-t border-bolt-elements-borderColor p-4 bg-bolt-elements-background-depth-2 shrink-0">
+                        {/* ChatBox container - flutuando por cima da preview na parte inferior */}
+                        <div className="absolute bottom-6 left-0 right-0 z-50 px-4">
                           <div className="flex flex-col gap-2 max-w-6xl mx-auto">
                             {envConfigError && (
-                              <div className="rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 p-4 mb-2">
+                              <div className="rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 p-4 mb-2 shadow-lg">
                                 <div className="flex items-start">
                                   <div className="flex-shrink-0">
                                     <div className="i-ph:warning-duotone text-xl text-bolt-elements-button-danger-text"></div>

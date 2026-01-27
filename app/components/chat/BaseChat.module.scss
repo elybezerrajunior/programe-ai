@@ -41,7 +41,31 @@
   stroke-dashoffset: 10;
 }
 
+.PromptEffectLineAnimated {
+  width: calc(100% - var(--prompt-container-offset) + var(--prompt-line-stroke-width));
+  height: calc(100% - var(--prompt-container-offset) + var(--prompt-line-stroke-width));
+  x: calc(var(--prompt-container-offset) / 2 - var(--prompt-line-stroke-width) / 2);
+  y: calc(var(--prompt-container-offset) / 2 - var(--prompt-line-stroke-width) / 2);
+  rx: calc(2rem - var(--prompt-container-offset) / 2 - var(--prompt-line-stroke-width) / 2);
+  ry: calc(2rem - var(--prompt-container-offset) / 2 - var(--prompt-line-stroke-width) / 2);
+  fill: transparent;
+  stroke-width: var(--prompt-line-stroke-width);
+  stroke-linecap: round;
+  stroke-dasharray: 50px 50px;
+  stroke-dashoffset: 0;
+  animation: borderRotate 4s linear infinite;
+}
+
 .PromptShine {
   fill: url(#shine-gradient);
   mix-blend-mode: overlay;
+}
+
+@keyframes borderRotate {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -100px;
+  }
 }
