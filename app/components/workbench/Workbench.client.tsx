@@ -387,7 +387,7 @@ export const Workbench = memo(
                 'w-full': isSmallViewport,
                 'left-0': showWorkbench && isSmallViewport,
                 'left-[var(--workbench-left)]': showWorkbench,
-                'left-[100%]': !showWorkbench,
+                'left-[calc(-1*var(--workbench-width))]': !showWorkbench,
               },
             )}
           >

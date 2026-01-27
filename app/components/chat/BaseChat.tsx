@@ -353,6 +353,11 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       >
         <ClientOnly>{() => <Menu />}</ClientOnly>
         <div className="flex flex-col lg:flex-row overflow-y-auto w-full h-full">
+          <ClientOnly>
+            {() => (
+              <Workbench chatStarted={chatStarted} isStreaming={isStreaming} setSelectedElement={setSelectedElement} />
+            )}
+          </ClientOnly>
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
               <div id="intro" className="mt-[16vh] max-w-2xl mx-auto text-center px-4 lg:px-0">
@@ -517,11 +522,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
               </div>
             </div>
           </div>
-          <ClientOnly>
-            {() => (
-              <Workbench chatStarted={chatStarted} isStreaming={isStreaming} setSelectedElement={setSelectedElement} />
-            )}
-          </ClientOnly>
         </div>
       </div>
     );
