@@ -385,6 +385,12 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
           return 'Custom error: Invalid model selected. Please check that the model name is correct and available.';
         }
 
+        // Provider returns "model: <id>" when model is invalid (e.g. Anthropic: "model: claude-4-5-sonnet-latest")
+        const trimmed = errorMessage.trim();
+        if (trimmed.startsWith('model: ') || /^model:\s*\S+$/i.test(trimmed)) {
+          return 'Custom error: Invalid model selected. The model name is incorrect or unavailable. Use a valid ID (e.g. "claude-sonnet-4-5-20250929" or "claude-3-5-sonnet-20241022" for Anthropic). Check provider docs and select a valid model.';
+        }
+
         if (errorMessage.includes('Invalid JSON response')) {
           return 'Custom error: The AI service returned an invalid response. This may be due to an invalid model name, API rate limiting, or server issues. Try selecting a different model or check your API key.';
         }
@@ -407,6 +413,10 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
 
         if (errorMessage.includes('network') || errorMessage.includes('timeout')) {
           return 'Custom error: Network error. Please check your internet connection and try again.';
+        }
+
+        if (errorMessage.includes('all messages must have non-empty content')) {
+          return 'Custom error: A message with empty content was sent. This can happen if the chat was saved while streaming. Try starting a new message or reloading the chat.';
         }
 
         return `Custom error: ${errorMessage}`;

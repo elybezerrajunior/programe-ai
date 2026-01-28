@@ -718,8 +718,8 @@ Para configurar o provedor e modelo via variáveis de ambiente, defina as seguin
 # Provedor de LLM (nome do provedor, ex: "OpenAI", "Anthropic", "Ollama")
 BOLT_LLM_PROVIDER=Anthropic
 
-# Modelo de LLM (nome do modelo, ex: "claude-3-5-sonnet-latest", "gpt-4", "llama2")
-BOLT_LLM_MODEL=claude-3-5-sonnet-latest
+# Modelo de LLM (use IDs válidos do provedor; ex. Anthropic: "claude-sonnet-4-5-20250929", "claude-3-5-sonnet-20241022"; OpenAI: "gpt-4"; Ollama: "llama2")
+BOLT_LLM_MODEL=claude-sonnet-4-5-20250929
 ```
 
 #### Comportamento
@@ -750,7 +750,8 @@ O sistema valida automaticamente:
 **Anthropic (Claude)**:
 ```bash
 BOLT_LLM_PROVIDER=Anthropic
-BOLT_LLM_MODEL=claude-3-5-sonnet-latest
+# IDs válidos: claude-sonnet-4-5-20250929, claude-3-5-sonnet-20241022, claude-3-opus-20240229, etc.
+BOLT_LLM_MODEL=claude-sonnet-4-5-20250929
 ```
 
 **OpenAI (GPT)**:
@@ -774,6 +775,11 @@ BOLT_LLM_MODEL=llama2
 **Erro: "BOLT_LLM_PROVIDER e BOLT_LLM_MODEL devem ser configuradas"**
 - Certifique-se de que ambas as variáveis estão definidas
 - Verifique se as variáveis estão disponíveis no contexto de execução (Cloudflare Workers, process.env, etc.)
+
+**Erro: "Invalid model selected" / "model: &lt;id&gt;"**
+- Use um **ID de modelo válido** do provedor. Ex.: `claude-4-5-sonnet-latest` é inválido na Anthropic.
+- Anthropic: `claude-sonnet-4-5-20250929`, `claude-3-5-sonnet-20241022`, `claude-3-opus-20240229`, etc.
+- Consulte a documentação do provedor para a lista de modelos suportados.
 
 **O seletor ainda aparece mesmo com variáveis configuradas**
 - Verifique se as variáveis estão sendo lidas corretamente no ambiente de execução

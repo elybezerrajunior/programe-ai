@@ -45,11 +45,61 @@ function getCompletionTokenLimit(modelDetails: any): number {
 }
 
 function sanitizeText(text: string): string {
+  if (typeof text !== 'string') return '';
   let sanitized = text.replace(/<div class=\\"__boltThought__\\">.*?<\/div>/s, '');
   sanitized = sanitized.replace(/<think>.*?<\/think>/s, '');
   sanitized = sanitized.replace(/<boltAction type="file" filePath="package-lock\.json">[\s\S]*?<\/boltAction>/g, '');
 
   return sanitized.trim();
+}
+
+function getContentAsString(c: string | any[] | null | undefined): string {
+  if (c == null) return '';
+  if (typeof c === 'string') return c;
+  if (Array.isArray(c)) {
+    const texts = c.map((p: any) => (p?.type === 'text' && typeof p?.text === 'string' ? p.text : '')).filter(Boolean);
+    return texts.join('\n');
+  }
+  return '';
+}
+
+/**
+ * Ensures no message has empty content (except the optional final assistant message).
+ * Also ensures parts have at least one non-empty text part when present.
+ * Avoids "messages.N: all messages must have non-empty content" from the AI SDK.
+ */
+function ensureNonEmptyContent(messages: { role: string; content: any; parts?: any[] }[]): void {
+  if (!messages.length) return;
+  const last = messages.length - 1;
+  for (let i = 0; i < messages.length; i++) {
+    const m = messages[i] as any;
+    const isLastAssistant = i === last && m.role === 'assistant';
+    const c = m.content;
+
+    const ensureNonEmpty = () => {
+      m.content = ' ';
+      const parts = m.parts;
+      if (Array.isArray(parts)) {
+        const hasText = parts.some((p: any) => p?.type === 'text' && typeof p?.text === 'string' && p.text.trim());
+        if (!hasText) parts.push({ type: 'text', text: ' ' });
+      }
+    };
+
+    if (isLastAssistant) continue;
+
+    if (c == null || c === undefined) {
+      ensureNonEmpty();
+      continue;
+    }
+    if (typeof c === 'string') {
+      if (!c.trim()) ensureNonEmpty();
+      continue;
+    }
+    if (Array.isArray(c)) {
+      const hasText = c.some((p: any) => p?.type === 'text' && typeof p?.text === 'string' && p.text.trim());
+      if (!hasText) ensureNonEmpty();
+    }
+  }
 }
 
 export async function streamText(props: {
@@ -99,26 +149,23 @@ export async function streamText(props: {
     const newMessage = { ...message };
 
     if (message.role === 'user') {
-      // Se env vars estão configuradas, ignorar [Model: ...] e [Provider: ...] nas mensagens
       if (useEnvConfig) {
-        // Ainda limpar o conteúdo, mas não extrair model/provider
         const { content } = extractPropertiesFromMessage(message);
-        newMessage.content = sanitizeText(content);
+        newMessage.content = sanitizeText(getContentAsString(content)) || ' ';
       } else {
-        // Comportamento original: extrair model/provider das mensagens
         const { model, provider, content } = extractPropertiesFromMessage(message);
         currentModel = model;
         currentProvider = provider;
-        newMessage.content = sanitizeText(content);
+        newMessage.content = sanitizeText(getContentAsString(content)) || ' ';
       }
     } else if (message.role == 'assistant') {
-      newMessage.content = sanitizeText(message.content);
+      const raw = getContentAsString(message.content);
+      newMessage.content = (raw && sanitizeText(raw)) || ' ';
     }
 
-    // Sanitize all text parts in parts array, if present
     if (Array.isArray(message.parts)) {
       newMessage.parts = message.parts.map((part) =>
-        part.type === 'text' ? { ...part, text: sanitizeText(part.text) } : part,
+        part.type === 'text' ? { ...part, text: sanitizeText(part.text ?? '') || ' ' } : part,
       );
     }
 
@@ -276,6 +323,8 @@ export async function streamText(props: {
           ),
         )
       : options || {};
+
+  ensureNonEmptyContent(processedMessages);
 
   // DEBUG: Log filtered options
   logger.info(

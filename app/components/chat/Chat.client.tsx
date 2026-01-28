@@ -67,7 +67,10 @@ const processSampledMessages = createSampler(
     const { messages, initialMessages, isLoading, parseMessages, storeMessageHistory } = options;
     parseMessages(messages, isLoading);
 
-    if (messages.length > initialMessages.length) {
+    // Only persist when stream is complete. Persisting during isLoading can store the
+    // in-progress assistant message with empty content, causing "messages.N: all messages
+    // must have non-empty content" when the chat is reloaded and sent to the API.
+    if (messages.length > initialMessages.length && !isLoading) {
       storeMessageHistory(messages).catch((error) => toast.error(error.message));
     }
   },
@@ -246,7 +249,7 @@ export const ChatImpl = memo(
         parseMessages,
         storeMessageHistory,
       });
-    }, [messages, isLoading, parseMessages]);
+    }, [messages, initialMessages, isLoading, parseMessages, storeMessageHistory]);
 
     const scrollTextArea = () => {
       const textarea = textareaRef.current;
@@ -314,6 +317,8 @@ export const ChatImpl = memo(
         } else if (errorInfo.statusCode >= 500) {
           errorType = 'network';
           title = 'Server Error';
+        } else if (errorInfo.message.toLowerCase().includes('invalid model selected')) {
+          title = 'Invalid Model';
         }
 
         logStore.logError(`${context} request failed`, error, {

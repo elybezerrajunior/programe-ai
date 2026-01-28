@@ -297,8 +297,8 @@ You can configure the LLM provider and model exclusively via environment variabl
 # LLM Provider (provider name, e.g., "OpenAI", "Anthropic", "Ollama")
 BOLT_LLM_PROVIDER=Anthropic
 
-# LLM Model (model name, e.g., "claude-3-5-sonnet-latest", "gpt-4", "llama2")
-BOLT_LLM_MODEL=claude-3-5-sonnet-latest
+# LLM Model (use valid provider model IDs; e.g. Anthropic: "claude-sonnet-4-5-20250929", "claude-3-5-sonnet-20241022"; OpenAI: "gpt-4"; Ollama: "llama2")
+BOLT_LLM_MODEL=claude-sonnet-4-5-20250929
 ```
 
 **When configured:**
@@ -314,9 +314,9 @@ BOLT_LLM_MODEL=claude-3-5-sonnet-latest
 
 **Examples:**
 ```bash
-# Anthropic (Claude)
+# Anthropic (Claude) – valid IDs: claude-sonnet-4-5-20250929, claude-3-5-sonnet-20241022, etc.
 BOLT_LLM_PROVIDER=Anthropic
-BOLT_LLM_MODEL=claude-3-5-sonnet-latest
+BOLT_LLM_MODEL=claude-sonnet-4-5-20250929
 
 # OpenAI (GPT)
 BOLT_LLM_PROVIDER=OpenAI
@@ -357,6 +357,7 @@ BOLT_LLM_MODEL=llama2
 - **API Key Not Recognized**: Ensure you're using the correct API key format for each provider
 - **Base URL Issues**: Verify the endpoint URL is correct and accessible
 - **Model Not Loading**: Check that the provider is enabled and properly configured
+- **Invalid model selected / "model: &lt;id&gt;"**: Use a **valid model ID** for the provider. For Anthropic, use e.g. `claude-sonnet-4-5-20250929` or `claude-3-5-sonnet-20241022` (not `claude-4-5-sonnet-latest`). Check provider docs for supported models.
 - **Environment Variables Not Working**: Restart the application after adding new environment variables
 
 #### Status Indicators
