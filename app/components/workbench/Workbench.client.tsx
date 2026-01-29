@@ -437,15 +437,6 @@ export const Workbench = memo(
                 )}
               >
                 <div className="flex items-center px-3 py-2 border-b border-bolt-elements-borderColor gap-1.5">
-                  <button
-                    className={`${showChat ? 'i-ph:sidebar-simple-fill' : 'i-ph:sidebar-simple'} text-lg text-bolt-elements-textSecondary mr-1`}
-                    disabled={!canHideChat || isSmallViewport}
-                    onClick={() => {
-                      if (canHideChat) {
-                        chatStore.setKey('showChat', !showChat);
-                      }
-                    }}
-                  />
                   <Slider selected={selectedView} options={sliderOptions} setSelected={setSelectedView} />
                   <div className="ml-auto" />
                   {selectedView === 'code' && (
@@ -512,6 +503,17 @@ export const Workbench = memo(
 
                   {selectedView === 'diff' && (
                     <FileModifiedDropdown fileHistory={fileHistory} onSelectFile={handleSelectFile} />
+                  )}
+                  {!isPreviewMode && (
+                    <button
+                      className={`${showChat ? 'i-ph:sidebar-simple-fill' : 'i-ph:sidebar-simple'} scale-x-[-1] text-lg text-bolt-elements-textSecondary ml-1`}
+                      disabled={!canHideChat || isSmallViewport}
+                      onClick={() => {
+                        if (canHideChat) {
+                          chatStore.setKey('showChat', !showChat);
+                        }
+                      }}
+                    />
                   )}
                   <IconButton
                     icon="i-ph:x-circle"
