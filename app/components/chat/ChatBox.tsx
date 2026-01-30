@@ -8,17 +8,13 @@ import { LOCAL_PROVIDERS } from '~/lib/stores/settings';
 import FilePreview from './FilePreview';
 import { ScreenshotStateManager } from './ScreenshotStateManager';
 import { SendButton } from './SendButton.client';
-import { IconButton } from '~/components/ui/IconButton';
-import { toast } from 'react-toastify';
-import { SpeechRecognitionButton } from '~/components/chat/SpeechRecognition';
 import { SupabaseConnection } from './SupabaseConnection';
 import { ExpoQrModal } from '~/components/workbench/ExpoQrModal';
 import styles from './BaseChat.module.scss';
 import type { ProviderInfo } from '~/types/model';
-import { ColorSchemeDialog } from '~/components/ui/ColorSchemeDialog';
 import type { DesignScheme } from '~/types/design-scheme';
 import type { ElementInfo } from '~/components/workbench/Inspector';
-import { McpTools } from './MCPTools';
+import { Tooltip } from '~/components/ui/Tooltip';
 
 interface ChatBoxProps {
   isModelSettingsCollapsed: boolean;
@@ -62,25 +58,40 @@ interface ChatBoxProps {
   selectedElement?: ElementInfo | null;
   setSelectedElement?: ((element: ElementInfo | null) => void) | undefined;
   envConfigured?: boolean;
+  isPreviewMode?: boolean;
 }
 
 export const ChatBox: React.FC<ChatBoxProps> = (props) => {
+  const handleToggleListening = () => {
+    if (props.isListening) {
+      props.stopListening();
+    } else {
+      props.startListening();
+    }
+  };
+
   return (
     <div
       className={classNames(
-        'relative bg-bolt-elements-background-depth-2 backdrop-blur p-3 rounded-lg border border-bolt-elements-borderColor relative w-full max-w-chat mx-auto z-prompt',
-
-        /*
-         * {
-         *   'sticky bottom-2': chatStarted,
-         * },
-         */
+        'relative backdrop-blur p-3 rounded-lg border border-bolt-elements-borderColor relative w-full mx-auto z-prompt',
+        props.isPreviewMode 
+          ? 'max-w-6xl shadow-2xl bg-bolt-elements-background-depth-2/80' 
+          : 'max-w-chat bg-bolt-elements-background-depth-2',
       )}
     >
-      <svg className={classNames(styles.PromptEffectContainer)}>
+      {props.isPreviewMode && (
+        <div 
+          className="absolute -inset-4 rounded-2xl opacity-30 blur-3xl pointer-events-none z-0"
+          style={{
+            background: 'radial-gradient(circle, rgba(34, 244, 198, 0.4) 0%, rgba(34, 244, 198, 0) 70%)',
+          }}
+        />
+      )}
+      <div className="relative z-10">
+        <svg className={classNames(styles.PromptEffectContainer)}>
         <defs>
           <linearGradient
-            id="line-gradient"
+            id={props.isPreviewMode ? 'preview-line-gradient' : 'line-gradient'}
             x1="20%"
             y1="0%"
             x2="-14%"
@@ -93,15 +104,27 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             <stop offset="50%" stopColor="#22F4C6" stopOpacity="80%"></stop>
             <stop offset="100%" stopColor="#22F4C6" stopOpacity="0%"></stop>
           </linearGradient>
-          <linearGradient id="shine-gradient">
+          <linearGradient id={props.isPreviewMode ? 'preview-shine-gradient' : 'shine-gradient'}>
             <stop offset="0%" stopColor="white" stopOpacity="0%"></stop>
             <stop offset="40%" stopColor="#ffffff" stopOpacity="80%"></stop>
             <stop offset="50%" stopColor="#ffffff" stopOpacity="80%"></stop>
             <stop offset="100%" stopColor="white" stopOpacity="0%"></stop>
           </linearGradient>
         </defs>
-        <rect className={classNames(styles.PromptEffectLine)} pathLength="100" strokeLinecap="round"></rect>
-        <rect className={classNames(styles.PromptShine)} x="48" y="24" width="70" height="1"></rect>
+        <rect 
+          className={classNames(props.isPreviewMode ? styles.PromptEffectLineAnimated : styles.PromptEffectLine)} 
+          pathLength="100" 
+          strokeLinecap="round"
+          stroke={props.isPreviewMode ? `url(#preview-line-gradient)` : `url(#line-gradient)`}
+        ></rect>
+        <rect 
+          className={classNames(styles.PromptShine)} 
+          x="48" 
+          y="24" 
+          width="70" 
+          height="1"
+          fill={props.isPreviewMode ? `url(#preview-shine-gradient)` : `url(#shine-gradient)`}
+        ></rect>
       </svg>
       <div>
         <ClientOnly>
@@ -274,77 +297,40 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
         </ClientOnly>
         <div className="flex justify-between items-center text-sm p-4 pt-2">
           <div className="flex gap-1 items-center">
-            <ColorSchemeDialog designScheme={props.designScheme} setDesignScheme={props.setDesignScheme} />
-            <McpTools />
-            <IconButton title="Enviar arquivo" className="transition-all" onClick={() => props.handleFileUpload()}>
-              <div className="i-ph:paperclip text-xl"></div>
-            </IconButton>
-            <IconButton
-              title="Melhorar prompt"
-              disabled={props.input.length === 0 || props.enhancingPrompt}
-              className={classNames('transition-all', props.enhancingPrompt ? 'opacity-100' : '')}
-              onClick={() => {
-                props.enhancePrompt?.();
-                toast.success('Prompt melhorado!');
-              }}
-            >
-              {props.enhancingPrompt ? (
-                <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-xl animate-spin"></div>
-              ) : (
-                <div className="i-bolt:stars text-xl"></div>
-              )}
-            </IconButton>
-
-            <SpeechRecognitionButton
-              isListening={props.isListening}
-              onStart={props.startListening}
-              onStop={props.stopListening}
-              disabled={props.isStreaming}
-            />
-            {props.chatStarted && (
-              <IconButton
-                title="Discutir"
+            <Tooltip content="Enviar arquivo" side="top">
+              <button
+                type="button"
+                onClick={props.handleFileUpload}
+                className="flex items-center text-bolt-elements-item-contentDefault bg-transparent hover:text-bolt-elements-item-contentActive rounded-md p-1 hover:bg-bolt-elements-item-backgroundActive focus:outline-none transition-all"
+              >
+                <div className="i-ph:folder-plus text-xl" />
+              </button>
+            </Tooltip>
+            <Tooltip content={props.isListening ? 'Parar reconhecimento de voz' : 'Reconhecimento de voz'} side="top">
+              <button
+                type="button"
+                onClick={handleToggleListening}
+                disabled={props.isStreaming}
                 className={classNames(
-                  'transition-all flex items-center gap-1 px-1.5',
-                  props.chatMode === 'discuss'
-                    ? '!bg-bolt-elements-item-backgroundAccent !text-bolt-elements-item-contentAccent'
-                    : 'bg-bolt-elements-item-backgroundDefault text-bolt-elements-item-contentDefault',
+                  'flex items-center bg-transparent rounded-md p-1 focus:outline-none transition-all',
+                  props.isListening
+                    ? 'text-bolt-elements-item-contentAccent hover:bg-bolt-elements-item-backgroundActive'
+                    : 'text-bolt-elements-item-contentDefault hover:text-bolt-elements-item-contentActive hover:bg-bolt-elements-item-backgroundActive',
+                  props.isStreaming && 'opacity-50 cursor-not-allowed'
                 )}
-                onClick={() => {
-                  props.setChatMode?.(props.chatMode === 'discuss' ? 'build' : 'discuss');
-                }}
               >
-                <div className={`i-ph:chats text-xl`} />
-                {props.chatMode === 'discuss' ? <span>Discutir</span> : <span />}
-              </IconButton>
-            )}
-            {/* Ocultar botão de configurações quando configurado via env vars */}
-            {!props.envConfigured && (
-              <IconButton
-                title="Configurações do Modelo"
-                className={classNames('transition-all flex items-center gap-1', {
-                  'bg-bolt-elements-item-backgroundAccent text-bolt-elements-item-contentAccent':
-                    props.isModelSettingsCollapsed,
-                  'bg-bolt-elements-item-backgroundDefault text-bolt-elements-item-contentDefault':
-                    !props.isModelSettingsCollapsed,
-                })}
-                onClick={() => props.setIsModelSettingsCollapsed(!props.isModelSettingsCollapsed)}
-                disabled={!props.providerList || props.providerList.length === 0}
-              >
-                <div className={`i-ph:caret-${props.isModelSettingsCollapsed ? 'right' : 'down'} text-lg`} />
-                {props.isModelSettingsCollapsed ? <span className="text-xs">{props.model}</span> : <span />}
-              </IconButton>
-            )}
+                {props.isListening ? (
+                  <div className="i-ph:microphone-slash text-xl" />
+                ) : (
+                  <div className="i-ph:waveform text-xl" />
+                )}
+              </button>
+            </Tooltip>
           </div>
-          {props.input.length > 3 ? (
-            <div className="text-xs text-bolt-elements-textTertiary">
-              Use <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Shift</kbd> +{' '}
-              <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Enter</kbd> para nova linha
-            </div>
-          ) : null}
           <SupabaseConnection />
           <ExpoQrModal open={props.qrModalOpen} onClose={() => props.setQrModalOpen(false)} />
         </div>
+      </div>
       </div>
     </div>
   );

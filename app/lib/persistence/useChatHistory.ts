@@ -39,6 +39,25 @@ const persistenceEnabled = !import.meta.env.VITE_DISABLE_PERSISTENCE;
 
 export const db = persistenceEnabled ? await openDatabase() : undefined;
 
+/**
+ * Ensures message content is non-empty. The AI SDK rejects requests with empty content
+ * (except the optional final assistant message). Legacy persisted messages may have
+ * empty content if they were stored during streaming before this was fixed.
+ */
+function ensureNonEmptyMessageContent(m: Message): Message {
+  const c = m.content;
+  if (typeof c === 'string') {
+    if (!c || !c.trim()) return { ...m, content: ' ' };
+    return m;
+  }
+  if (Array.isArray(c)) {
+    const hasText = c.some((p: any) => p.type === 'text' && typeof p.text === 'string' && p.text.trim());
+    if (!hasText) return { ...m, content: ' ' };
+    return m;
+  }
+  return m;
+}
+
 export const chatId = atom<string | undefined>(undefined);
 export const description = atom<string | undefined>(undefined);
 export const chatMetadata = atom<IChatMetadata | undefined>(undefined);
@@ -102,7 +121,7 @@ export function useChatHistory() {
             let archivedMessages: Message[] = [];
 
             if (startingIdx >= 0) {
-              archivedMessages = storedMessages.messages.slice(0, startingIdx + 1);
+              archivedMessages = storedMessages.messages.slice(0, startingIdx + 1).map(ensureNonEmptyMessageContent);
             }
 
             setArchivedMessages(archivedMessages);
@@ -176,8 +195,10 @@ ${value.content}
                  *  : []),
                  */
                 ...filteredMessages,
-              ];
+              ].map(ensureNonEmptyMessageContent);
               restoreSnapshot(mixedId);
+            } else {
+              filteredMessages = filteredMessages.map(ensureNonEmptyMessageContent);
             }
 
             setInitialMessages(filteredMessages);
