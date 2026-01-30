@@ -9,7 +9,7 @@ export function themeIsDark() {
   return themeStore.get() === 'dark';
 }
 
-export const DEFAULT_THEME = 'dark';
+export const DEFAULT_THEME: Theme = 'dark';
 
 export const themeStore = atom<Theme>(initStore());
 

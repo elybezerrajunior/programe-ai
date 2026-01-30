@@ -504,15 +504,17 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 </div>
               )}
               <div className="flex flex-col gap-5">
-                {!chatStarted &&
-                  ExamplePrompts((event, messageInput) => {
-                    if (isStreaming) {
-                      handleStop?.();
-                      return;
-                    }
-
-                    handleSendMessage?.(event, messageInput);
-                  })}
+                {!chatStarted && (
+                  <ExamplePrompts
+                    onSelectPrompt={(suggestion) => {
+                      if (isStreaming) {
+                        handleStop?.();
+                        return;
+                      }
+                      handleSendMessage?.({} as React.UIEvent, suggestion);
+                    }}
+                  />
+                )}
                 {!chatStarted && <StarterTemplates />}
               </div>
             </div>

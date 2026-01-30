@@ -23,10 +23,11 @@ export function SignupForm() {
 
   const errorMessage = actionData?.error || loaderData?.error || null;
   const hasError = !!errorMessage;
-  const emailError = hasError && (actionData?.fields?.email || false);
-  const passwordError = hasError && (actionData?.fields?.password || false);
-  const confirmPasswordError = hasError && (actionData?.fields?.confirmPassword || false);
-  const nameError = hasError && (actionData?.fields?.name || false);
+  const fields = actionData?.fields as { email?: boolean; password?: boolean; confirmPassword?: boolean; name?: boolean } | undefined;
+  const emailError = hasError && (fields?.email ?? false);
+  const passwordError = hasError && (fields?.password ?? false);
+  const confirmPasswordError = hasError && (fields?.confirmPassword ?? false);
+  const nameError = hasError && (fields?.name ?? false);
 
   const handleEmailChange = (value: string) => {
     if (value && !validateEmail(value)) {

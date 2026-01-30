@@ -4,9 +4,8 @@ import { LoginForm } from '~/components/login/LoginForm';
 import { LoginFeatures } from '~/components/login/LoginFeatures';
 import { LoginLightEffect } from '~/components/login/LoginLightEffect';
 import { Card } from '~/components/ui/Card';
-import { getSessionFromRequest, validateEmail, validatePassword } from '~/lib/auth/session';
+import { getSessionFromRequest, validateEmail, validatePassword, createSessionCookies, createSessionHeaders } from '~/lib/auth/session';
 import { signInWithPassword, AuthenticationError } from '~/lib/auth/supabase-auth';
-import { createSessionCookies } from '~/lib/auth/session';
 
 export const meta: MetaFunction = () => {
   return [
@@ -28,8 +27,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const error = url.searchParams.get('error');
   const signupSuccess = url.searchParams.get('signupSuccess');
+  const resetSuccess = url.searchParams.get('resetSuccess');
 
-  return json({ error: error || null, signupSuccess: signupSuccess === 'true' });
+  return json({
+    error: error || null,
+    signupSuccess: signupSuccess === 'true',
+    resetSuccess: resetSuccess === 'true',
+  });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -78,9 +82,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     // Redirecionar para a home ou rota solicitada
     return redirect(redirectUrl.toString(), {
-      headers: {
-        'Set-Cookie': cookies,
-      },
+      headers: createSessionHeaders(cookies),
     });
   } catch (error) {
     // Tratar erros de autenticação

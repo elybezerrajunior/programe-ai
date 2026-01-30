@@ -6,7 +6,7 @@ import { supabase } from './supabase-client';
  * usa localStorage para gerenciar a sessão
  */
 export async function syncAuthFromCookies(): Promise<boolean> {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !supabase) {
     return false;
   }
 
@@ -42,7 +42,7 @@ export async function syncAuthFromCookies(): Promise<boolean> {
       cookies['sb-refresh-token'] ||
       '';
 
-    if (!accessToken) {
+    if (!accessToken || !supabase) {
       return false;
     }
 

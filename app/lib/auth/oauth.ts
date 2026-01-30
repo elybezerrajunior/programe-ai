@@ -77,6 +77,7 @@ export async function signInWithOAuth(
     }
 
     // Iniciar fluxo OAuth
+    if (!supabase) throw new Error('Supabase não configurado');
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {

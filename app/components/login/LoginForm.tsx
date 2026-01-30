@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, useActionData, useLoaderData, useNavigation, useSearchParams } from '@remix-run/react';
+import { Form, Link, useActionData, useLoaderData, useNavigation, useSearchParams } from '@remix-run/react';
 import { Button } from '~/components/ui/Button';
 import { Input } from '~/components/ui/Input';
 import { Label } from '~/components/ui/Label';
@@ -19,9 +19,11 @@ export function LoginForm() {
 
   const errorMessage = actionData?.error || loaderData?.error || null;
   const hasError = !!errorMessage;
-  const emailError = hasError && (actionData?.fields?.email || false);
-  const passwordError = hasError && (actionData?.fields?.password || false);
+  const fields = actionData?.fields as { email?: boolean; password?: boolean } | undefined;
+  const emailError = hasError && (fields?.email ?? false);
+  const passwordError = hasError && (fields?.password ?? false);
   const signupSuccess = loaderData?.signupSuccess || false;
+  const resetSuccess = loaderData?.resetSuccess || false;
 
   // Handler para login OAuth
   const handleOAuthLogin = async (provider: OAuthProvider) => {
@@ -65,6 +67,20 @@ export function LoginForm() {
               <p className="text-sm font-medium text-green-500 mb-1">Conta criada com sucesso!</p>
               <p className="text-sm text-green-400">
                 Verifique seu e-mail para confirmar sua conta antes de fazer login.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {resetSuccess && (
+        <div className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/20 animate-in fade-in slide-in-from-top-2">
+          <div className="flex items-start gap-3">
+            <div className="i-ph:check-circle text-xl text-green-500 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-green-500 mb-1">Senha alterada com sucesso!</p>
+              <p className="text-sm text-green-400">
+                Faça login com sua nova senha.
               </p>
             </div>
           </div>
@@ -177,12 +193,12 @@ export function LoginForm() {
               Lembrar de mim
             </Label>
           </div>
-          <a
-            href="#"
+          <Link
+            to="/forgot-password"
             className="text-sm text-accent-500 hover:underline font-medium"
           >
             Esqueceu a senha?
-          </a>
+          </Link>
         </div>
 
         <button

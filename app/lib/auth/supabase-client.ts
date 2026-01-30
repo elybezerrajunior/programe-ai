@@ -48,6 +48,15 @@ if (supabaseUrl && supabaseAnonKey) {
 }
 
 /**
+ * Retorna o project ref da URL do Supabase (para nomes de cookies etc.)
+ */
+export function getSupabaseProjectRef(): string {
+  const url = supabaseUrl || '';
+  const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/);
+  return match ? match[1] : '';
+}
+
+/**
  * Cliente Supabase singleton
  * Funciona tanto no browser quanto no servidor (SSR)
  * No Cloudflare, pode ser null se as variáveis não estiverem disponíveis no módulo

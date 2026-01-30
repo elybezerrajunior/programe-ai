@@ -1,5 +1,5 @@
 import { redirect, type ActionFunctionArgs, type LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { createLogoutCookies } from '~/lib/auth/session';
+import { createLogoutCookies, createSessionHeaders } from '~/lib/auth/session';
 import { signOut } from '~/lib/auth/supabase-auth';
 
 export const loader = async () => {
@@ -20,8 +20,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   // Redirecionar para login
   return redirect('/login', {
-    headers: {
-      'Set-Cookie': cookies,
-    },
+    headers: createSessionHeaders(cookies),
   });
 };

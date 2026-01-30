@@ -51,13 +51,22 @@ export async function openDatabase(): Promise<IDBDatabase | undefined> {
   });
 }
 
-export async function getAll(db: IDBDatabase): Promise<ChatHistoryItem[]> {
+export async function getAll(db: IDBDatabase, userId?: string): Promise<ChatHistoryItem[]> {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction('chats', 'readonly');
     const store = transaction.objectStore('chats');
     const request = store.getAll();
 
-    request.onsuccess = () => resolve(request.result as ChatHistoryItem[]);
+    request.onsuccess = () => {
+      let results = request.result as ChatHistoryItem[];
+      
+      // Filtrar por userId se fornecido
+      if (userId) {
+        results = results.filter(chat => chat.userId === userId);
+      }
+      
+      resolve(results);
+    };
     request.onerror = () => reject(request.error);
   });
 }
@@ -70,6 +79,7 @@ export async function setMessages(
   description?: string,
   timestamp?: string,
   metadata?: IChatMetadata,
+  userId?: string,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction('chats', 'readwrite');
@@ -87,6 +97,7 @@ export async function setMessages(
       description,
       timestamp: timestamp ?? new Date().toISOString(),
       metadata,
+      userId,
     });
 
     request.onsuccess = () => resolve();
@@ -222,7 +233,7 @@ async function getUrlIds(db: IDBDatabase): Promise<string[]> {
   });
 }
 
-export async function forkChat(db: IDBDatabase, chatId: string, messageId: string): Promise<string> {
+export async function forkChat(db: IDBDatabase, chatId: string, messageId: string, userId?: string): Promise<string> {
   const chat = await getMessages(db, chatId);
 
   if (!chat) {
@@ -239,17 +250,19 @@ export async function forkChat(db: IDBDatabase, chatId: string, messageId: strin
   // Get messages up to and including the selected message
   const messages = chat.messages.slice(0, messageIndex + 1);
 
-  return createChatFromMessages(db, chat.description ? `${chat.description} (fork)` : 'Forked chat', messages);
+  // Preservar o userId do chat original ou usar o fornecido
+  return createChatFromMessages(db, chat.description ? `${chat.description} (fork)` : 'Forked chat', messages, chat.metadata, userId || chat.userId);
 }
 
-export async function duplicateChat(db: IDBDatabase, id: string): Promise<string> {
+export async function duplicateChat(db: IDBDatabase, id: string, userId?: string): Promise<string> {
   const chat = await getMessages(db, id);
 
   if (!chat) {
     throw new Error('Chat not found');
   }
 
-  return createChatFromMessages(db, `${chat.description || 'Chat'} (copy)`, chat.messages);
+  // Preservar o userId do chat original ou usar o fornecido
+  return createChatFromMessages(db, `${chat.description || 'Chat'} (copy)`, chat.messages, chat.metadata, userId || chat.userId);
 }
 
 export async function createChatFromMessages(
@@ -257,6 +270,7 @@ export async function createChatFromMessages(
   description: string,
   messages: Message[],
   metadata?: IChatMetadata,
+  userId?: string,
 ): Promise<string> {
   const newId = await getNextId(db);
   const newUrlId = await getUrlId(db, newId); // Get a new urlId for the duplicated chat
@@ -269,6 +283,7 @@ export async function createChatFromMessages(
     description,
     undefined, // Use the current timestamp
     metadata,
+    userId, // Passar userId
   );
 
   return newUrlId; // Return the urlId instead of id for navigation
@@ -285,7 +300,7 @@ export async function updateChatDescription(db: IDBDatabase, id: string, descrip
     throw new Error('Description cannot be empty');
   }
 
-  await setMessages(db, id, chat.messages, chat.urlId, description, chat.timestamp, chat.metadata);
+  await setMessages(db, id, chat.messages, chat.urlId, description, chat.timestamp, chat.metadata, chat.userId);
 }
 
 export async function updateChatMetadata(
@@ -299,7 +314,7 @@ export async function updateChatMetadata(
     throw new Error('Chat not found');
   }
 
-  await setMessages(db, id, chat.messages, chat.urlId, chat.description, chat.timestamp, metadata);
+  await setMessages(db, id, chat.messages, chat.urlId, chat.description, chat.timestamp, metadata, chat.userId);
 }
 
 export async function getSnapshot(db: IDBDatabase, chatId: string): Promise<Snapshot | undefined> {

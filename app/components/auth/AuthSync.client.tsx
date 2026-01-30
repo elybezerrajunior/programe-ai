@@ -23,7 +23,7 @@ export function AuthSync() {
       const accessToken = searchParams.get('access_token');
       const refreshToken = searchParams.get('refresh_token');
 
-      if (accessToken && refreshToken) {
+      if (accessToken && refreshToken && supabase) {
         hasSynced.current = true;
 
         try {

@@ -10,6 +10,7 @@ import {
   validatePassword,
   validatePasswordConfirmation,
   createSessionCookies,
+  createSessionHeaders,
 } from '~/lib/auth/session';
 import { signUpWithPassword, AuthenticationError } from '~/lib/auth/supabase-auth';
 
@@ -104,9 +105,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }
 
       return redirect(redirectUrl.toString(), {
-        headers: {
-          'Set-Cookie': cookies,
-        },
+        headers: createSessionHeaders(cookies),
       });
     }
 

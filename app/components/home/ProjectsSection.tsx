@@ -1,9 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useStore } from '@nanostores/react';
 import { classNames } from '~/utils/classNames';
 import { SearchInput } from '~/components/ui/SearchInput';
 import { ProjectCard, type Project } from './ProjectCard';
 import { NewProjectCard } from './NewProjectCard';
-import { getAll, openDatabase, type ChatHistoryItem } from '~/lib/persistence/db';
+import { getAll, openDatabase } from '~/lib/persistence/db';
+import type { ChatHistoryItem } from '~/lib/persistence/useChatHistory';
+import { authStore } from '~/lib/stores/auth';
 
 // Hook to connect to the database
 function useBoltHistoryDB() {
@@ -110,12 +113,15 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
   const { db } = useBoltHistoryDB();
   const [loadedProjects, setLoadedProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const auth = useStore(authStore);
+  const currentUserId = auth.user?.id;
 
-  // Load projects from database
+  // Load projects from database - filtrado por userId
   useEffect(() => {
     if (db) {
       setIsLoading(true);
-      getAll(db)
+      // Passar userId para filtrar apenas projetos do usuário logado
+      getAll(db, currentUserId)
         .then((chats: ChatHistoryItem[]) => {
           // Filter chats that have urlId and description (valid projects)
           const validChats = chats.filter((chat) => chat.urlId && chat.description);
@@ -132,7 +138,7 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
     } else {
       setIsLoading(false);
     }
-  }, [db]);
+  }, [db, currentUserId]); // Adicionar currentUserId como dependência
 
   // Use provided projects or loaded projects
   const projects = providedProjects || loadedProjects;
