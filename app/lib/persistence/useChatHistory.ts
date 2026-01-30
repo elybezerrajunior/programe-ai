@@ -1,10 +1,12 @@
 import { useLoaderData, useNavigate, useSearchParams } from '@remix-run/react';
 import { useState, useEffect, useCallback } from 'react';
 import { atom } from 'nanostores';
+import { useStore } from '@nanostores/react';
 import { generateId, type JSONValue, type Message } from 'ai';
 import { toast } from 'react-toastify';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { logStore } from '~/lib/stores/logs'; // Import logStore
+import { authStore } from '~/lib/stores/auth'; // Import authStore
 import {
   getMessages,
   getNextId,
@@ -30,6 +32,7 @@ export interface ChatHistoryItem {
   messages: Message[];
   timestamp: string;
   metadata?: IChatMetadata;
+  userId?: string; // ID do usuário dono do chat
 }
 
 const persistenceEnabled = !import.meta.env.VITE_DISABLE_PERSISTENCE;
@@ -39,7 +42,11 @@ export const db = persistenceEnabled ? await openDatabase() : undefined;
 export const chatId = atom<string | undefined>(undefined);
 export const description = atom<string | undefined>(undefined);
 export const chatMetadata = atom<IChatMetadata | undefined>(undefined);
+export const chatUserId = atom<string | undefined>(undefined);
+
 export function useChatHistory() {
+  const auth = useStore(authStore);
+  const currentUserId = auth.user?.id;
   const navigate = useNavigate();
   const { id: mixedId } = useLoaderData<{ id?: string }>();
   const [searchParams] = useSearchParams();
@@ -266,7 +273,7 @@ ${value.content}
       }
 
       try {
-        await setMessages(db, id, initialMessages, urlId, description.get(), undefined, metadata);
+        await setMessages(db, id, initialMessages, urlId, description.get(), undefined, metadata, currentUserId);
         chatMetadata.set(metadata);
       } catch (error) {
         toast.error('Failed to update chat metadata');
@@ -340,6 +347,7 @@ ${value.content}
         description.get(),
         undefined,
         chatMetadata.get(),
+        currentUserId, // Salvar o userId do usuário logado
       );
     },
     duplicateCurrentChat: async (listItemId: string) => {

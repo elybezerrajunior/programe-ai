@@ -1,4 +1,4 @@
-import { supabase } from './supabase-client';
+import { supabase, getSupabaseProjectRef } from './supabase-client';
 import { parseCookies } from '~/lib/api/cookies';
 import type { AuthError } from '@supabase/supabase-js';
 
@@ -83,6 +83,7 @@ function mapAuthError(error: AuthError): string {
  * Realiza login com email e senha
  */
 export async function signInWithPassword(email: string, password: string) {
+  if (!supabase) throw new AuthenticationError('Supabase não configurado');
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
@@ -124,6 +125,7 @@ export async function signUpWithPassword(
     metadata?: Record<string, unknown>;
   }
 ) {
+  if (!supabase) throw new AuthenticationError('Supabase não configurado');
   try {
     const { data, error } = await supabase.auth.signUp({
       email: email.trim().toLowerCase(),
@@ -174,6 +176,7 @@ export async function signUpWithPassword(
  * Realiza logout
  */
 export async function signOut() {
+  if (!supabase) throw new AuthenticationError('Supabase não configurado');
   try {
     const { error } = await supabase.auth.signOut();
 
@@ -195,6 +198,7 @@ export async function signOut() {
  * Obtém a sessão atual (client-side)
  */
 export async function getSession() {
+  if (!supabase) return null;
   try {
     const { data, error } = await supabase.auth.getSession();
 
@@ -222,15 +226,15 @@ export async function getCurrentUser() {
  * Obtém a sessão a partir dos cookies (server-side)
  */
 export async function getSessionFromCookies(cookieHeader: string | null) {
-  if (!cookieHeader) {
+  if (!supabase || !cookieHeader) {
     return null;
   }
 
   try {
     const cookies = parseCookies(cookieHeader);
-    
-    const accessToken = cookies['sb-access-token'] || cookies[`sb-${extractProjectRef(supabase.supabaseUrl)}-auth-token`];
-    const refreshToken = cookies['sb-refresh-token'] || cookies[`sb-${extractProjectRef(supabase.supabaseUrl)}-auth-refresh-token`];
+    const projectRef = getSupabaseProjectRef();
+    const accessToken = cookies['sb-access-token'] || cookies[`sb-${projectRef}-auth-token`];
+    const refreshToken = cookies['sb-refresh-token'] || cookies[`sb-${projectRef}-auth-refresh-token`];
 
     if (!accessToken) {
       return null;
@@ -250,14 +254,5 @@ export async function getSessionFromCookies(cookieHeader: string | null) {
     console.error('Error getting session from cookies:', error);
     return null;
   }
-}
-
-
-/**
- * Extrai o project ref da URL do Supabase
- */
-function extractProjectRef(url: string): string {
-  const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/);
-  return match ? match[1] : '';
 }
 

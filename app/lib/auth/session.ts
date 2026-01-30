@@ -1,6 +1,6 @@
 import { redirect } from '@remix-run/cloudflare';
 import { parseCookies } from '~/lib/api/cookies';
-import { supabase } from './supabase-client';
+import { supabase, getSupabaseProjectRef } from './supabase-client';
 
 const SESSION_COOKIE_NAME = 'programe_session';
 const SUPABASE_ACCESS_TOKEN_COOKIE = 'sb-access-token';
@@ -35,7 +35,7 @@ function extractProjectRef(url: string): string {
  * Obtém o nome do cookie baseado no project ref
  */
 function getCookieName(baseName: string): string {
-  const projectRef = extractProjectRef(supabase.supabaseUrl);
+  const projectRef = getSupabaseProjectRef();
   return projectRef ? `sb-${projectRef}-${baseName}` : baseName;
 }
 
@@ -44,6 +44,8 @@ function getCookieName(baseName: string): string {
  * Extrai o token dos cookies e valida com Supabase
  */
 export async function getSessionFromRequest(request: Request): Promise<Session | null> {
+  if (!supabase) return null;
+
   const cookieHeader = request.headers.get('Cookie');
 
   if (!cookieHeader) {
@@ -112,6 +114,15 @@ export function createSessionCookies(accessToken: string, refreshToken: string):
   );
 
   return cookies;
+}
+
+/**
+ * Cria Headers com múltiplos Set-Cookie (para redirect())
+ */
+export function createSessionHeaders(cookieStrings: string[]): Headers {
+  const headers = new Headers();
+  cookieStrings.forEach((c) => headers.append('Set-Cookie', c));
+  return headers;
 }
 
 /**

@@ -1,5 +1,5 @@
 import { redirect, type LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { createSessionCookies } from '~/lib/auth/session';
+import { createSessionCookies, createSessionHeaders } from '~/lib/auth/session';
 import { supabase } from '~/lib/auth/supabase-client';
 import { AuthenticationError } from '~/lib/auth/supabase-auth';
 import { mapOAuthError } from '~/lib/auth/oauth';
@@ -49,6 +49,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   try {
+    if (!supabase) {
+      throw new Error('Supabase não configurado');
+    }
     // Trocar code por tokens via Supabase
     // O Supabase valida o code e retorna a sessão
     const { data, error: authError } = await supabase.auth.exchangeCodeForSession(code);
@@ -104,9 +107,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
     // Redirecionar para destino final com cookies de sessão
     throw redirect(redirectUrl.toString(), {
-      headers: {
-        'Set-Cookie': cookies,
-      },
+      headers: createSessionHeaders(cookies),
     });
   } catch (error) {
     // Se já for um redirect, relançar

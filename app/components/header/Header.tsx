@@ -7,6 +7,7 @@ import { classNames } from '~/utils/classNames';
 import { HeaderActionButtons } from './HeaderActionButtons.client';
 import { ChatDescription } from '~/lib/persistence/ChatDescription.client';
 import { UserMenu } from './UserMenu.client';
+import { UpgradeButton } from './UpgradeButton.client';
 
 export function Header() {
   const chat = useStore(chatStore);
@@ -57,8 +58,12 @@ export function Header() {
           </Link>
         </nav>
 
-        {/* Right side: Notifications and Profile */}
+        {/* Right side: Upgrade, Notifications and Profile */}
         <div className="flex items-center gap-4">
+          <ClientOnly fallback={null}>
+            {() => <UpgradeButton size="md" />}
+          </ClientOnly>
+
           <button
             className="relative p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors bg-transparent"
             aria-label="Notificações"
@@ -105,6 +110,8 @@ export function Header() {
             {() => (
               <div className="flex items-center gap-4">
                 <HeaderActionButtons chatStarted={chat.started} />
+                {/* Upgrade button - shows badge if paid, upgrade button if free */}
+                <UpgradeButton size="sm" />
                 {/* Notifications and Profile icons */}
                 <button
                   className="relative p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors bg-transparent"

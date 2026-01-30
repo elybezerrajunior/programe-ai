@@ -50,10 +50,12 @@ export function useAuth() {
     // Verificar sessão inicial
     syncSession();
 
+    if (!supabase) return;
+
     // Escutar mudanças de autenticação do Supabase
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (mounted) {
         setAuthSession(session);
         setAuthLoading(false);
