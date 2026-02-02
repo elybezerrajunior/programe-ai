@@ -3,13 +3,20 @@ import { getEncoding } from 'istextorbinary';
 import { map, type MapStore } from 'nanostores';
 import { path } from '~/utils/path';
 
-// Buffer está disponível globalmente no Cloudflare com nodejs_compat
-// No Node.js, também está disponível globalmente ou pode ser importado
-// Este arquivo é usado principalmente no cliente, então o Buffer global deve funcionar
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const Buffer = (typeof globalThis !== 'undefined' && (globalThis as any).Buffer) 
-  || (typeof global !== 'undefined' && (global as any).Buffer)
-  || require('node:buffer').Buffer;
+// Buffer: usar global/polyfill no browser; evitar require() (não existe no client bundle em prod)
+function getBuffer(): typeof import('node:buffer').Buffer | undefined {
+  if (typeof globalThis !== 'undefined' && (globalThis as any).Buffer) return (globalThis as any).Buffer;
+  if (typeof global !== 'undefined' && (global as any).Buffer) return (global as any).Buffer;
+  if (typeof require !== 'undefined') {
+    try {
+      return require('node:buffer').Buffer;
+    } catch {
+      return undefined;
+    }
+  }
+  return undefined;
+}
+const Buffer = getBuffer();
 import { bufferWatchEvents } from '~/utils/buffer';
 import { WORK_DIR } from '~/utils/constants';
 import { computeFileModifications } from '~/utils/diff';
