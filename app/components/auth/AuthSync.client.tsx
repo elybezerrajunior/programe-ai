@@ -4,14 +4,41 @@ import { supabase } from '~/lib/auth/supabase-client';
 import { setAuthSession, clearAuth } from '~/lib/stores/auth';
 
 /**
+ * Sincroniza a sessão com o servidor via cookies
+ * Isso garante que as APIs do servidor reconheçam o usuário
+ */
+async function syncSessionToServer(accessToken: string, refreshToken: string): Promise<void> {
+  try {
+    const response = await fetch('/api/auth/sync-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accessToken,
+        refreshToken,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('[AuthSync] Failed to sync session to server:', response.status);
+    }
+  } catch (error) {
+    console.error('[AuthSync] Error syncing session to server:', error);
+  }
+}
+
+/**
  * Componente que sincroniza a autenticação
  * - Monitora mudanças de estado de auth do Supabase
  * - Sincroniza tokens da URL (login com email/senha)
  * - Inicializa sessão existente do localStorage
+ * - Sincroniza sessão com o servidor via cookies (para OAuth)
  */
 export function AuthSync() {
   const [searchParams] = useSearchParams();
   const hasInitialized = useRef(false);
+  const lastSyncedToken = useRef<string | null>(null);
 
   useEffect(() => {
     if (!supabase || hasInitialized.current) {
@@ -27,8 +54,20 @@ export function AuthSync() {
         
         if (session) {
           setAuthSession(session);
+          
+          // Sincronizar com o servidor quando o token mudar (ex: refresh)
+          // Evitar sincronizações duplicadas
+          if (session.access_token && session.access_token !== lastSyncedToken.current) {
+            lastSyncedToken.current = session.access_token;
+            
+            // Sincronizar em background (não bloquear)
+            if (event === 'TOKEN_REFRESHED' || event === 'SIGNED_IN') {
+              syncSessionToServer(session.access_token, session.refresh_token || '');
+            }
+          }
         } else if (event === 'SIGNED_OUT') {
           clearAuth();
+          lastSyncedToken.current = null;
         }
       }
     );
@@ -41,6 +80,13 @@ export function AuthSync() {
         if (session) {
           console.log('[AuthSync] Found existing session');
           setAuthSession(session);
+          
+          // Sincronizar sessão existente com o servidor
+          // Isso garante que cookies estejam atualizados após refresh da página
+          if (session.access_token && session.access_token !== lastSyncedToken.current) {
+            lastSyncedToken.current = session.access_token;
+            syncSessionToServer(session.access_token, session.refresh_token || '');
+          }
         }
       } catch (error) {
         console.error('[AuthSync] Error getting session:', error);

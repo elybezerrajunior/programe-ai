@@ -14,13 +14,45 @@ function getSupabaseProjectRefFromUrl(url: string): string {
 }
 
 /**
+ * Sincroniza a sessão OAuth com o servidor criando cookies HTTP-only
+ * Isso é necessário porque o OAuth salva apenas no localStorage do cliente,
+ * mas as APIs do servidor precisam de cookies para autenticação.
+ */
+async function syncSessionToServer(accessToken: string, refreshToken: string): Promise<boolean> {
+  try {
+    const response = await fetch('/api/auth/sync-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accessToken,
+        refreshToken,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('[Auth Callback] Failed to sync session to server:', response.status);
+      return false;
+    }
+
+    console.log('[Auth Callback] Session synced to server successfully');
+    return true;
+  } catch (error) {
+    console.error('[Auth Callback] Error syncing session to server:', error);
+    return false;
+  }
+}
+
+/**
  * Rota de callback OAuth (Client-Side)
  * 
  * Com Implicit Flow, o Supabase retorna os tokens diretamente no hash fragment:
  * /auth/callback#access_token=...&refresh_token=...&token_type=bearer&...
  * 
  * O Supabase com detectSessionInUrl: true processa isso automaticamente.
- * Este componente apenas aguarda a sessão ser estabelecida e redireciona.
+ * Este componente aguarda a sessão ser estabelecida, sincroniza com o servidor
+ * via cookies, e então redireciona.
  */
 export default function AuthCallback() {
   const navigate = useNavigate();
@@ -100,6 +132,13 @@ export default function AuthCallback() {
           
           if (session) {
             console.log('[Auth Callback] Session found!');
+            
+            // IMPORTANTE: Sincronizar sessão com o servidor via cookies
+            // Isso permite que as APIs do servidor reconheçam o usuário
+            if (session.access_token && session.refresh_token) {
+              await syncSessionToServer(session.access_token, session.refresh_token);
+            }
+            
             setAuthSession(session);
             
             // Obter redirectTo
