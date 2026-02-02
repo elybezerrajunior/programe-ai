@@ -60,7 +60,8 @@ export function useMessageParser() {
   const parseMessages = useCallback((messages: Message[], isLoading: boolean) => {
     let reset = false;
 
-    if (import.meta.env.DEV && !isLoading) {
+    // Reset and re-parse when not loading so workbench gets artifacts/actions (needed in prod when WebContainer is unavailable)
+    if (!isLoading) {
       reset = true;
       messageParser.reset();
     }

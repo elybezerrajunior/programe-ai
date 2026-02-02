@@ -604,49 +604,84 @@ export class FilesStore {
   }
 
   async #init() {
-    const webcontainer = await this.#webcontainer;
+    try {
+      const webcontainer = await this.#webcontainer;
 
-    // Clean up any files that were previously deleted
-    this.#cleanupDeletedFiles();
+      // Clean up any files that were previously deleted
+      this.#cleanupDeletedFiles();
 
-    // Set up file watcher
-    webcontainer.internal.watchPaths(
-      {
-        include: [`${WORK_DIR}/**`],
-        exclude: ['**/node_modules', '.git', '**/package-lock.json'],
-        includeContent: true,
-      },
-      bufferWatchEvents(100, this.#processEventBuffer.bind(this)),
-    );
+      // Set up file watcher
+      webcontainer.internal.watchPaths(
+        {
+          include: [`${WORK_DIR}/**`],
+          exclude: ['**/node_modules', '.git', '**/package-lock.json'],
+          includeContent: true,
+        },
+        bufferWatchEvents(100, this.#processEventBuffer.bind(this)),
+      );
 
-    // Get the current chat ID
-    const currentChatId = getCurrentChatId();
+      // Get the current chat ID
+      const currentChatId = getCurrentChatId();
 
-    // Migrate any legacy locks to the current chat
-    migrateLegacyLocks(currentChatId);
+      // Migrate any legacy locks to the current chat
+      migrateLegacyLocks(currentChatId);
 
-    // Load locked files immediately for the current chat
-    this.#loadLockedFiles(currentChatId);
-
-    /**
-     * Also set up a timer to load locked files again after a delay.
-     * This ensures that locks are applied even if files are loaded asynchronously.
-     */
-    setTimeout(() => {
+      // Load locked files immediately for the current chat
       this.#loadLockedFiles(currentChatId);
-    }, 2000);
 
-    /**
-     * Set up a less frequent periodic check to ensure locks remain applied.
-     * This is now less critical since we have the storage event listener.
-     */
-    setInterval(() => {
-      // Clear the cache to force a fresh read from localStorage
-      clearCache();
+      /**
+       * Also set up a timer to load locked files again after a delay.
+       * This ensures that locks are applied even if files are loaded asynchronously.
+       */
+      setTimeout(() => {
+        this.#loadLockedFiles(currentChatId);
+      }, 2000);
 
-      const latestChatId = getCurrentChatId();
-      this.#loadLockedFiles(latestChatId);
-    }, 30000); // Reduced from 10s to 30s
+      /**
+       * Set up a less frequent periodic check to ensure locks remain applied.
+       * This is now less critical since we have the storage event listener.
+       */
+      setInterval(() => {
+        // Clear the cache to force a fresh read from localStorage
+        clearCache();
+
+        const latestChatId = getCurrentChatId();
+        this.#loadLockedFiles(latestChatId);
+      }, 30000); // Reduced from 10s to 30s
+    } catch (error) {
+      logger.error('WebContainer unavailable; workbench will show generated code in display-only mode', error);
+    }
+  }
+
+  /**
+   * Add or update a file in the store for display only (e.g. when WebContainer
+   * is unavailable in production). Does not write to WebContainer.
+   */
+  addFileForDisplay(filePath: string, content: string) {
+    const fullPath = filePath.startsWith(WORK_DIR) ? filePath : `${WORK_DIR}/${filePath.replace(/^\//, '')}`;
+    const currentFiles = this.files.get();
+
+    // Ensure parent folders exist in the map
+    const segments = fullPath.split('/').filter(Boolean);
+
+    for (let i = 1; i < segments.length; i++) {
+      const folderPath = segments.slice(0, i).join('/');
+      if (!currentFiles[folderPath]) {
+        this.files.setKey(folderPath, { type: 'folder' });
+      }
+    }
+
+    const existing = currentFiles[fullPath];
+    if (existing?.type !== 'file') {
+      this.#size++;
+    }
+
+    this.files.setKey(fullPath, {
+      type: 'file',
+      content,
+      isBinary: false,
+      isLocked: false,
+    });
   }
 
   /**

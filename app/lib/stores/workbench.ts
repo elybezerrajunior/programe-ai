@@ -13,6 +13,7 @@ import JSZip from 'jszip';
 import fileSaver from 'file-saver';
 import { Octokit, type RestEndpointMethodTypes } from '@octokit/rest';
 import { path } from '~/utils/path';
+import { WORK_DIR } from '~/utils/constants';
 import { extractRelativePath } from '~/utils/diff';
 import { description } from '~/lib/persistence';
 import Cookies from 'js-cookie';
@@ -504,6 +505,14 @@ export class WorkbenchStore {
           }
 
           this.deployAlert.set(alert);
+        },
+        (filePath, content) => {
+          const fullPath = filePath.startsWith(WORK_DIR) ? filePath : `${WORK_DIR}/${filePath.replace(/^\//, '')}`;
+          this.#filesStore.addFileForDisplay(filePath, content);
+          this.setDocuments(this.files.get());
+          this.showWorkbench.set(true);
+          this.currentView.set('code');
+          this.setSelectedFile(fullPath);
         },
       ),
     });

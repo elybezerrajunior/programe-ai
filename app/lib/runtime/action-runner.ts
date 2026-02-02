@@ -72,6 +72,8 @@ export class ActionRunner {
   onAlert?: (alert: ActionAlert) => void;
   onSupabaseAlert?: (alert: SupabaseAlert) => void;
   onDeployAlert?: (alert: DeployAlert) => void;
+  /** Called when a file action cannot be written to WebContainer (e.g. in production). Use to show code in workbench anyway. */
+  onFileActionFallback?: (filePath: string, content: string) => void;
   buildOutput?: { path: string; exitCode: number; output: string };
 
   constructor(
@@ -80,12 +82,14 @@ export class ActionRunner {
     onAlert?: (alert: ActionAlert) => void,
     onSupabaseAlert?: (alert: SupabaseAlert) => void,
     onDeployAlert?: (alert: DeployAlert) => void,
+    onFileActionFallback?: (filePath: string, content: string) => void,
   ) {
     this.#webcontainer = webcontainerPromise;
     this.#shellTerminal = getShellTerminal;
     this.onAlert = onAlert;
     this.onSupabaseAlert = onSupabaseAlert;
     this.onDeployAlert = onDeployAlert;
+    this.onFileActionFallback = onFileActionFallback;
   }
 
   addAction(data: ActionCallbackData) {
@@ -313,28 +317,34 @@ export class ActionRunner {
       unreachable('Expected file action');
     }
 
-    const webcontainer = await this.#webcontainer;
-    const relativePath = nodePath.relative(webcontainer.workdir, action.filePath);
-
-    let folder = nodePath.dirname(relativePath);
-
-    // remove trailing slashes
-    folder = folder.replace(/\/+$/g, '');
-
-    if (folder !== '.') {
-      try {
-        await webcontainer.fs.mkdir(folder, { recursive: true });
-        logger.debug('Created folder', folder);
-      } catch (error) {
-        logger.error('Failed to create folder\n\n', error);
-      }
-    }
-
     try {
-      await webcontainer.fs.writeFile(relativePath, action.content);
-      logger.debug(`File written ${relativePath}`);
+      const webcontainer = await this.#webcontainer;
+      const relativePath = nodePath.relative(webcontainer.workdir, action.filePath);
+
+      let folder = nodePath.dirname(relativePath);
+
+      // remove trailing slashes
+      folder = folder.replace(/\/+$/g, '');
+
+      if (folder !== '.') {
+        try {
+          await webcontainer.fs.mkdir(folder, { recursive: true });
+          logger.debug('Created folder', folder);
+        } catch (error) {
+          logger.error('Failed to create folder\n\n', error);
+        }
+      }
+
+      try {
+        await webcontainer.fs.writeFile(relativePath, action.content);
+        logger.debug(`File written ${relativePath}`);
+      } catch (error) {
+        logger.error('Failed to write file\n\n', error);
+      }
     } catch (error) {
-      logger.error('Failed to write file\n\n', error);
+      // WebContainer unavailable (e.g. in production) — show code in workbench anyway
+      logger.warn('WebContainer unavailable for file write; using display-only fallback', error);
+      this.onFileActionFallback?.(action.filePath, action.content);
     }
   }
 
