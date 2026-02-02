@@ -1,6 +1,6 @@
 import { json, redirect, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import { useLoaderData } from '@remix-run/react';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { BaseChat } from '~/components/chat/BaseChat';
 import { Chat } from '~/components/chat/Chat.client';
@@ -40,7 +40,8 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 function AuthHydration() {
   const loaderData = useLoaderData<{ session?: Awaited<ReturnType<typeof getSessionFromRequest>>; id?: string }>();
   const session = 'session' in loaderData ? loaderData.session : undefined;
-  useEffect(() => {
+  // useLayoutEffect para rodar antes do useAuth e evitar que a store seja limpa em produção
+  useLayoutEffect(() => {
     if (session !== undefined) {
       setAuthFromServerSession(session ?? null);
     }

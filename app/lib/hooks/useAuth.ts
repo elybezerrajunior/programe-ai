@@ -17,7 +17,11 @@ export function useAuth() {
     let mounted = true;
 
     async function syncSession() {
-      setAuthLoading(true);
+      // Não sobrescrever com loading se já tiver usuário (ex.: hidratado pelo servidor em prod)
+      const currentBefore = authStore.get();
+      if (!currentBefore.isAuthenticated || !currentBefore.user) {
+        setAuthLoading(true);
+      }
 
       try {
         // Primeiro, tentar obter a sessão do Supabase (pode estar no localStorage)
@@ -27,7 +31,6 @@ export function useAuth() {
         if (!session && typeof window !== 'undefined') {
           const synced = await syncAuthFromCookies();
           if (synced) {
-            // Tentar obter a sessão novamente após sincronização
             session = await getSession();
           }
         }
@@ -36,16 +39,21 @@ export function useAuth() {
           if (session) {
             setAuthSession(session);
           } else {
-            // Em produção os cookies são HttpOnly; a sessão pode ter sido hidratada pelo loader
+            // Em produção os cookies são HttpOnly; a sessão pode ter sido hidratada pelo loader.
+            // Nunca limpar a store se já houver usuário autenticado (preservar estado do servidor).
             const current = authStore.get();
-            if (!current.isAuthenticated) setAuthSession(null);
+            if (!current.isAuthenticated) {
+              setAuthSession(null);
+            }
           }
         }
       } catch (error) {
         console.error('[useAuth] Error syncing session:', error);
         if (mounted) {
           const current = authStore.get();
-          if (!current.isAuthenticated) setAuthSession(null);
+          if (!current.isAuthenticated) {
+            setAuthSession(null);
+          }
         }
       } finally {
         if (mounted) {
@@ -54,7 +62,6 @@ export function useAuth() {
       }
     }
 
-    // Verificar sessão inicial
     syncSession();
 
     if (!supabase) return;
