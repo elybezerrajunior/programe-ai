@@ -341,6 +341,9 @@ export class ActionRunner {
       } catch (error) {
         logger.error('Failed to write file\n\n', error);
       }
+
+      // Always notify so the code view updates (watcher may not be ready in prod)
+      this.onFileActionFallback?.(action.filePath, action.content);
     } catch (error) {
       // WebContainer unavailable (e.g. in production) — show code in workbench anyway
       logger.warn('WebContainer unavailable for file write; using display-only fallback', error);

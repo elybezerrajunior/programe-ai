@@ -35,11 +35,15 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
  * Hidrata a store de autenticação com a sessão do servidor (cookies HttpOnly).
  * Em produção o cliente não consegue ler os cookies; o loader envia a sessão e este
  * componente atualiza a store para o Header/UserMenu exibirem o usuário e o logout.
+ * Usado em _index e em chat.$id (que reutiliza este componente); só atualiza se o loader retornar session.
  */
 function AuthHydration() {
-  const { session } = useLoaderData<typeof loader>();
+  const loaderData = useLoaderData<{ session?: Awaited<ReturnType<typeof getSessionFromRequest>>; id?: string }>();
+  const session = 'session' in loaderData ? loaderData.session : undefined;
   useEffect(() => {
-    setAuthFromServerSession(session);
+    if (session !== undefined) {
+      setAuthFromServerSession(session ?? null);
+    }
   }, [session]);
   return null;
 }

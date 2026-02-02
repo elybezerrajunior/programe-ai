@@ -571,38 +571,43 @@ export class WorkbenchStore {
     }
 
     if (data.action.type === 'file') {
-      const wc = await webcontainer;
-      const fullPath = path.join(wc.workdir, data.action.filePath);
+      const rawPath = data.action.filePath;
+      const fullPath = rawPath.startsWith(WORK_DIR)
+        ? rawPath
+        : `${WORK_DIR}/${rawPath.replace(/^\//, '')}`;
 
-      /*
-       * For scoped locks, we would need to implement diff checking here
-       * to determine if the AI is modifying existing code or just adding new code
-       * This is a more complex feature that would be implemented in a future update
-       */
-
+      this.showWorkbench.set(true);
+      if (this.currentView.value !== 'code') {
+        this.currentView.set('code');
+      }
       if (this.selectedFile.value !== fullPath) {
         this.setSelectedFile(fullPath);
       }
 
-      if (this.currentView.value !== 'code') {
-        this.currentView.set('code');
-      }
+      // Ensure file is in store so code view can show it (critical when WebContainer is unavailable in prod)
+      this.#filesStore.addFileForDisplay(rawPath, data.action.content);
+      this.setDocuments(this.files.get());
 
       const doc = this.#editorStore.documents.get()[fullPath];
-
       if (!doc) {
-        await artifact.runner.runAction(data, isStreaming);
+        try {
+          await artifact.runner.runAction(data, isStreaming);
+        } catch {
+          // runAction may throw when WebContainer unavailable; UI already updated above
+        }
       }
 
       this.#editorStore.updateFile(fullPath, data.action.content);
 
       if (!isStreaming && data.action.content) {
-        await this.saveFile(fullPath);
-      }
-
-      if (!isStreaming) {
-        await artifact.runner.runAction(data);
-        this.resetAllFileModifications();
+        try {
+          await webcontainer;
+          await this.saveFile(fullPath);
+          await artifact.runner.runAction(data);
+          this.resetAllFileModifications();
+        } catch {
+          // WebContainer unavailable (e.g. prod); code is already visible in workbench
+        }
       }
     } else {
       await artifact.runner.runAction(data);
