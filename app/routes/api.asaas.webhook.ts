@@ -1,6 +1,7 @@
 import { json, type ActionFunctionArgs } from '@remix-run/cloudflare';
 import { supabase } from '~/lib/auth/supabase-client';
 import { processCheckoutPaid } from '~/lib/asaas/processCheckoutPaid';
+import { sendSubscriptionNotification } from '~/lib/notifications/subscription-notifications';
 
 // Tipagem do payload do webhook ASAAS
 interface AsaasWebhookPayload {
@@ -107,7 +108,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
         // Se veio do checkout nativo do ASAAS (externalReference é JSON)
         if (checkoutData && checkoutData.userId && checkoutData.planType) {
           console.log('[Webhook] Processing checkout payment:', checkoutData);
-          
+
           const { userId, planType, creditsPerMonth, billingCycle } = checkoutData;
           const credits = creditsPerMonth || PLAN_CREDITS[planType] || 100;
 
@@ -151,6 +152,13 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
             .eq('user_id', userId)
             .eq('status', 'pending');
 
+          // Enviar notificação de boas-vindas ou bem-vindo de volta
+          await sendSubscriptionNotification(supabase, {
+            userId,
+            planType,
+            idempotencyKey: `payment_${payload.payment.id}`,
+          });
+
         } else if (payload.payment.subscription) {
           // Fluxo tradicional: assinatura já existente
           const { data: subscription } = await (supabase as any)
@@ -163,7 +171,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
             // Atualizar status da assinatura
             await (supabase as any)
               .from('subscriptions')
-              .update({ 
+              .update({
                 status: 'active',
                 updated_at: new Date().toISOString(),
               })
@@ -172,11 +180,18 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
             // Adicionar créditos ao usuário
             const planCredits = subscription.credits_per_month || PLAN_CREDITS[subscription.plan_type] || 100;
             await addCreditsToUser(subscription.user_id, planCredits, subscription.plan_type);
+
+            // Enviar notificação de boas-vindas ou bem-vindo de volta
+            await sendSubscriptionNotification(supabase, {
+              userId: subscription.user_id,
+              planType: subscription.plan_type,
+              idempotencyKey: `payment_${payload.payment.id}`,
+            });
           }
         } else if (payload.payment.externalReference && !checkoutData) {
           // Fluxo antigo: externalReference é apenas userId
           const userId = payload.payment.externalReference;
-          
+
           const { data: userSub } = await (supabase as any)
             .from('subscriptions')
             .select('plan_type, credits_per_month')
@@ -236,7 +251,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       if (supabase && payload.subscription) {
         await (supabase as any)
           .from('subscriptions')
-          .update({ 
+          .update({
             status: 'canceled',
             updated_at: new Date().toISOString(),
           })
@@ -275,7 +290,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
             // Atualizar plano para free
             await (supabase as any)
               .from('subscriptions')
-              .update({ 
+              .update({
                 plan_type: 'free',
                 status: 'active',
                 updated_at: new Date().toISOString(),

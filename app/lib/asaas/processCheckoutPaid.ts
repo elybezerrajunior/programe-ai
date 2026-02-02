@@ -2,6 +2,8 @@
  * Lógica compartilhada para processar CHECKOUT_PAID (webhook e simulação em dev).
  */
 
+import { sendSubscriptionNotification } from '~/lib/notifications/subscription-notifications';
+
 const PLAN_CREDITS: Record<string, number> = {
   free: 5,
   pro: 100,
@@ -82,6 +84,14 @@ export async function processCheckoutPaid(supabase: any, checkout: CheckoutForPr
         completed_at: new Date().toISOString(),
       })
       .eq('checkout_id', checkout.id);
+
+    // Enviar notificação de boas-vindas ou bem-vindo de volta
+    // Usa o checkout.id como chave de idempotência para evitar duplicatas
+    await sendSubscriptionNotification(supabase, {
+      userId,
+      planType,
+      idempotencyKey: `checkout_${checkout.id}`,
+    });
 
     console.log('[processCheckoutPaid] Sucesso para user', userId);
     return { success: true };

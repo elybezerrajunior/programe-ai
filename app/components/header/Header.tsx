@@ -8,6 +8,7 @@ import { HeaderActionButtons } from './HeaderActionButtons.client';
 import { ChatDescription } from '~/lib/persistence/ChatDescription.client';
 import { UserMenu } from './UserMenu.client';
 import { UpgradeButton } from './UpgradeButton.client';
+import { NotificationsDropdown } from '~/components/notifications/NotificationsDropdown.client';
 
 export function Header() {
   const chat = useStore(chatStore);
@@ -64,13 +65,9 @@ export function Header() {
             {() => <UpgradeButton size="md" />}
           </ClientOnly>
 
-          <button
-            className="relative p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors bg-transparent"
-            aria-label="Notificações"
-          >
-            <div className="i-ph:bell text-xl" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-          </button>
+          <ClientOnly fallback={null}>
+            {() => <NotificationsDropdown />}
+          </ClientOnly>
           <ClientOnly fallback={
             <button
               className="p-2 text-bolt-elements-textSecondary transition-colors bg-transparent"
@@ -113,13 +110,7 @@ export function Header() {
                 {/* Upgrade button - shows badge if paid, upgrade button if free */}
                 <UpgradeButton size="sm" />
                 {/* Notifications and Profile icons */}
-                <button
-                  className="relative p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors bg-transparent"
-                  aria-label="Notificações"
-                >
-                  <div className="i-ph:bell text-xl" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-                </button>
+                <NotificationsDropdown />
                 <UserMenu />
               </div>
             )}
