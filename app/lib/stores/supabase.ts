@@ -86,8 +86,12 @@ export const isConnecting = atom(false);
 export const isFetchingStats = atom(false);
 export const isFetchingApiKeys = atom(false);
 
+// Auto-fetch stats se houver token salvo (silenciar erros de token expirado)
 if (initialState.token && !initialState.stats) {
-  fetchSupabaseStats(initialState.token).catch(console.error);
+  fetchSupabaseStats(initialState.token).catch(() => {
+    // Token pode estar expirado/inválido - limpar conexão silenciosamente
+    updateSupabaseConnection({ token: '', user: null, stats: undefined, isConnected: false });
+  });
 }
 
 export function updateSupabaseConnection(connection: Partial<SupabaseConnectionState>) {

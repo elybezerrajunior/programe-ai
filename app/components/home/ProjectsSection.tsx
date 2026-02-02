@@ -3,7 +3,6 @@ import { useStore } from '@nanostores/react';
 import { classNames } from '~/utils/classNames';
 import { SearchInput } from '~/components/ui/SearchInput';
 import { ProjectCard, type Project } from './ProjectCard';
-import { NewProjectCard } from './NewProjectCard';
 import { getAll, openDatabase } from '~/lib/persistence/db';
 import type { ChatHistoryItem } from '~/lib/persistence/useChatHistory';
 import { authStore } from '~/lib/stores/auth';
@@ -53,14 +52,14 @@ function formatRelativeTime(date: string): string {
   if (diffInMinutes < 60) return `${diffInMinutes}min atrás`;
   if (diffInHours < 24) return `${diffInHours}h atrás`;
   if (diffInDays < 7) return `${diffInDays}d atrás`;
-  
+
   return then.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
 }
 
 function chatToProject(chat: ChatHistoryItem): Project {
   // Determine status based on metadata or messages
   let status: 'active' | 'wip' | 'completed' = 'active';
-  
+
   // Extract technologies from messages if available
   const technologies: string[] = [];
   const lastMessage = chat.messages[chat.messages.length - 1];
@@ -78,7 +77,7 @@ function chatToProject(chat: ChatHistoryItem): Project {
   // Try to determine icon based on description or technologies
   let icon = 'i-ph:code';
   let iconColor = 'text-accent';
-  
+
   if (chat.description) {
     const desc = chat.description.toLowerCase();
     if (desc.includes('mobile') || desc.includes('app')) {
@@ -190,62 +189,63 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
           <div className="i-ph:grid-four text-xl text-accent" />
           <h2 className="text-2xl font-semibold text-bolt-elements-textPrimary">Seus projetos</h2>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="w-64">
-            <SearchInput
-              placeholder="Buscar projetos..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor"
-            />
-          </div>
-          <div className="relative">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className={classNames(
-                'px-3 py-2 rounded-xl text-sm font-medium',
-                'border border-bolt-elements-borderColor bg-bolt-elements-background-depth-1',
-                'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary',
-                'flex items-center gap-2 transition-colors'
+        {projects.length > 0 && (
+          <div className="flex items-center gap-3">
+            <div className="w-64">
+              <SearchInput
+                placeholder="Buscar projetos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor"
+              />
+            </div>
+            <div className="relative">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className={classNames(
+                  'px-3 py-2 rounded-xl text-sm font-medium',
+                  'border border-bolt-elements-borderColor bg-bolt-elements-background-depth-1',
+                  'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary',
+                  'flex items-center gap-2 transition-colors'
+                )}
+              >
+                <span>{sortOptions.find((opt) => opt.value === sortBy)?.label || 'Ordenar'}</span>
+                <div className="i-ph:caret-down text-xs" />
+              </button>
+              {isOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setIsOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-48 bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor rounded-xl shadow-lg z-20 py-1">
+                    {sortOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSortBy(option.value);
+                          setIsOpen(false);
+                        }}
+                        className={classNames(
+                          'w-full text-left px-4 py-2 text-sm transition-colors',
+                          sortBy === option.value
+                            ? 'bg-bolt-elements-background-depth-3 text-bolt-elements-textPrimary'
+                            : 'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-3'
+                        )}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
               )}
-            >
-              <span>{sortOptions.find((opt) => opt.value === sortBy)?.label || 'Ordenar'}</span>
-              <div className="i-ph:caret-down text-xs" />
-            </button>
-            {isOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-10"
-                  onClick={() => setIsOpen(false)}
-                />
-                <div className="absolute right-0 mt-2 w-48 bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor rounded-xl shadow-lg z-20 py-1">
-                  {sortOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => {
-                        setSortBy(option.value);
-                        setIsOpen(false);
-                      }}
-                      className={classNames(
-                        'w-full text-left px-4 py-2 text-sm transition-colors',
-                        sortBy === option.value
-                          ? 'bg-bolt-elements-background-depth-3 text-bolt-elements-textPrimary'
-                          : 'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-3'
-                      )}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <NewProjectCard onClick={onNewProjectClick} />
         {isLoading ? (
           <div className="col-span-full text-center py-8 text-bolt-elements-textSecondary">
             Carregando projetos...

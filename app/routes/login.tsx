@@ -68,9 +68,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // Obter redirectTo da query string
     const url = new URL(request.url);
     const redirectTo = url.searchParams.get('redirectTo') || '/';
+    const rememberMe = formData.get('rememberMe') === 'on';
 
     // Criar cookies de sessão
-    const cookies = createSessionCookies(session.access_token, session.refresh_token || '');
+    const cookies = createSessionCookies(session.access_token, session.refresh_token || '', rememberMe);
 
     // Adicionar tokens na URL temporariamente para sincronização no cliente
     // (serão removidos pelo componente AuthSync após sincronização)

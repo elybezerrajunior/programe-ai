@@ -45,13 +45,13 @@ export const db = persistenceEnabled ? await openDatabase() : undefined;
  * empty content if they were stored during streaming before this was fixed.
  */
 function ensureNonEmptyMessageContent(m: Message): Message {
-  const c = m.content;
+  const c = m.content as string | Array<{ type: string; text?: string }>;
   if (typeof c === 'string') {
     if (!c || !c.trim()) return { ...m, content: ' ' };
     return m;
   }
   if (Array.isArray(c)) {
-    const hasText = c.some((p: any) => p.type === 'text' && typeof p.text === 'string' && p.text.trim());
+    const hasText = c.some((p) => p.type === 'text' && typeof p.text === 'string' && p.text.trim());
     if (!hasText) return { ...m, content: ' ' };
     return m;
   }
@@ -144,16 +144,16 @@ export function useChatHistory() {
               // Call the modified function to get only the command actions string
               const commandActionsString = createCommandActionsString(projectCommands);
 
-              filteredMessages = [
+              filteredMessages = ([
                 {
                   id: generateId(),
-                  role: 'user',
+                  role: 'user' as const,
                   content: `Restore project from snapshot`, // Removed newline
                   annotations: ['no-store', 'hidden'],
                 },
                 {
                   id: storedMessages.messages[snapshotIndex].id,
-                  role: 'assistant',
+                  role: 'assistant' as const,
 
                   // Combine followup message and the artifact with files and command actions
                   content: `Programe.IA restaurou seu chat a partir de um snapshot. Você pode reverter esta mensagem para carregar todo o histórico do chat.
@@ -195,7 +195,7 @@ ${value.content}
                  *  : []),
                  */
                 ...filteredMessages,
-              ].map(ensureNonEmptyMessageContent);
+              ] as Message[]).map(ensureNonEmptyMessageContent);
               restoreSnapshot(mixedId);
             } else {
               filteredMessages = filteredMessages.map(ensureNonEmptyMessageContent);

@@ -35,7 +35,8 @@ if (supabaseUrl && supabaseAnonKey) {
     auth: {
       autoRefreshToken: true,
       persistSession: true,
-      detectSessionInUrl: false, // Remix gerencia os redirecionamentos
+      detectSessionInUrl: true, // Permite Supabase processar tokens na URL automaticamente
+      flowType: 'implicit', // Usar Implicit flow (tokens direto na URL, sem code_verifier)
       storage: typeof window !== 'undefined' ? window.localStorage : undefined,
       storageKey: 'sb-auth',
     },

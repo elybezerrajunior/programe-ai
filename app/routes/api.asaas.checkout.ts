@@ -56,11 +56,10 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       const url = new URL(request.url);
       baseUrl = `${url.protocol}//${url.host}`;
       
-      // Se for localhost, usar URL de exemplo para sandbox (o webhook ainda funcionará)
-      if (baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1')) {
-        // Para sandbox do ASAAS, podemos usar qualquer URL válida
-        // O redirecionamento não funcionará em dev, mas o checkout será criado
-        baseUrl = 'https://programe.studio';
+      // Se for localhost, usar URL de produção para sandbox (o webhook ainda funcionará)
+      if (baseUrl.includes('localhost')) {
+        // Para sandbox do ASAAS, usar a URL de produção
+        baseUrl = 'https://programe-ia.pages.dev';
       }
     }
 
