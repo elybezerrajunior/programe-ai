@@ -1,10 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useStore } from '@nanostores/react';
+import { toast } from 'react-toastify';
 import { classNames } from '~/utils/classNames';
 import { SearchInput } from '~/components/ui/SearchInput';
 import { ProjectCard, type Project } from './ProjectCard';
 import { NewProjectCard } from './NewProjectCard';
-import { getAll, openDatabase } from '~/lib/persistence/db';
+import { getAll, deleteById } from '~/lib/persistence/db';
 import type { ChatHistoryItem } from '~/lib/persistence/useChatHistory';
 import { authStore } from '~/lib/stores/auth';
 
@@ -95,6 +96,7 @@ function chatToProject(chat: ChatHistoryItem): Project {
 
   return {
     id: chat.urlId || chat.id,
+    chatId: chat.id,
     title: chat.description || 'Projeto sem título',
     description: chat.description || 'Sem descrição',
     technologies: technologies.length > 0 ? technologies : ['TypeScript'],
@@ -142,6 +144,47 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
 
   // Use provided projects or loaded projects
   const projects = providedProjects || loadedProjects;
+
+  const loadProjects = useCallback(() => {
+    if (db) {
+      getAll(db, currentUserId)
+        .then((chats: ChatHistoryItem[]) => {
+          const validChats = chats.filter((chat) => chat.urlId && chat.description);
+          setLoadedProjects(validChats.map(chatToProject));
+        })
+        .catch((error) => {
+          console.error('Error loading projects:', error);
+          setLoadedProjects([]);
+        });
+    }
+  }, [db, currentUserId]);
+
+  const handleDeleteProject = useCallback(
+    async (project: Project) => {
+      if (!db) {
+        toast.error('Banco de dados indisponível');
+        return;
+      }
+      try {
+        const snapshotKey = `snapshot:${project.chatId}`;
+        localStorage.removeItem(snapshotKey);
+        await deleteById(db, project.chatId);
+        toast.success('Projeto excluído com sucesso', {
+          position: 'bottom-right',
+          autoClose: 3000,
+        });
+        loadProjects();
+      } catch (error) {
+        console.error('Failed to delete project:', error);
+        toast.error('Falha ao excluir projeto', {
+          position: 'bottom-right',
+          autoClose: 3000,
+        });
+        loadProjects();
+      }
+    },
+    [db, loadProjects],
+  );
 
   // Filter and sort projects
   const filteredAndSortedProjects = useMemo(() => {
@@ -256,7 +299,12 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
           </div>
         ) : (
           filteredAndSortedProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} onClick={() => onProjectClick?.(project)} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onClick={() => onProjectClick?.(project)}
+              onDelete={handleDeleteProject}
+            />
           ))
         )}
       </div>

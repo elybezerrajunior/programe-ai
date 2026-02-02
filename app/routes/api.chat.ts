@@ -440,6 +440,10 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
           return 'Custom error: A message with empty content was sent. This can happen if the chat was saved while streaming. Try starting a new message or reloading the chat.';
         }
 
+        if (errorMessage.includes('text content blocks must contain non-whitespace text')) {
+          return 'Custom error: A message had only blank content. Try typing something and sending again, or start a new chat.';
+        }
+
         return `Custom error: ${errorMessage}`;
       },
     }).pipeThrough(

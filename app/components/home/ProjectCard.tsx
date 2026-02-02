@@ -3,6 +3,8 @@ import { Card } from '~/components/ui/Card';
 
 export interface Project {
   id: string;
+  /** Internal chat id used for delete in persistence */
+  chatId: string;
   title: string;
   description: string;
   technologies: string[];
@@ -16,6 +18,7 @@ export interface Project {
 interface ProjectCardProps {
   project: Project;
   onClick?: () => void;
+  onDelete?: (project: Project) => void;
 }
 
 const statusConfig = {
@@ -24,14 +27,20 @@ const statusConfig = {
   completed: { label: 'CONCLUÍDO', color: 'bg-blue-500/20 text-blue-500 border-blue-500/30' },
 };
 
-export function ProjectCard({ project, onClick }: ProjectCardProps) {
+export function ProjectCard({ project, onClick, onDelete }: ProjectCardProps) {
   const status = statusConfig[project.status];
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onDelete?.(project);
+  };
 
   return (
     <Card
       className={classNames(
         'p-4 cursor-pointer transition-all hover:border-bolt-elements-borderColorActive rounded-xl',
-        'bg-bolt-elements-background-depth-2'
+        'bg-bolt-elements-background-depth-2 group/card'
       )}
       onClick={onClick}
     >
@@ -52,14 +61,25 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
             </div>
           )}
         </div>
-        <span
-          className={classNames(
-            'px-2 py-0.5 rounded-lg text-xs font-medium border',
-            status.color
+        <div className="flex items-center gap-2">
+          {onDelete && (
+            <button
+              type="button"
+              onClick={handleDeleteClick}
+              className="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors i-ph:trash h-4 w-4 opacity-0 group-hover/card:opacity-100"
+              title="Excluir projeto"
+              aria-label="Excluir projeto"
+            />
           )}
-        >
-          {status.label}
-        </span>
+          <span
+            className={classNames(
+              'px-2 py-0.5 rounded-lg text-xs font-medium border',
+              status.color
+            )}
+          >
+            {status.label}
+          </span>
+        </div>
       </div>
       <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-2">{project.title}</h3>
       <p className="text-sm text-bolt-elements-textSecondary mb-4 line-clamp-2">{project.description}</p>

@@ -27,6 +27,9 @@ export interface StreamingOptions extends Omit<Parameters<typeof _streamText>[0]
 
 const logger = createScopedLogger('stream-text');
 
+/** Placeholder for empty message content. APIs (e.g. Anthropic) require "non-whitespace text" in text blocks. */
+const EMPTY_CONTENT_PLACEHOLDER = '.';
+
 function getCompletionTokenLimit(modelDetails: any): number {
   // 1. If model specifies completion tokens, use that
   if (modelDetails.maxCompletionTokens && modelDetails.maxCompletionTokens > 0) {
@@ -66,7 +69,7 @@ function getContentAsString(c: string | any[] | null | undefined): string {
 /**
  * Ensures no message has empty content (except the optional final assistant message).
  * Also ensures parts have at least one non-empty text part when present.
- * Avoids "messages.N: all messages must have non-empty content" from the AI SDK.
+ * Uses non-whitespace placeholder so APIs (e.g. Anthropic) accept "text content blocks must contain non-whitespace text".
  */
 function ensureNonEmptyContent(messages: { role: string; content: any; parts?: any[] }[]): void {
   if (!messages.length) return;
@@ -77,11 +80,11 @@ function ensureNonEmptyContent(messages: { role: string; content: any; parts?: a
     const c = m.content;
 
     const ensureNonEmpty = () => {
-      m.content = ' ';
+      m.content = EMPTY_CONTENT_PLACEHOLDER;
       const parts = m.parts;
       if (Array.isArray(parts)) {
         const hasText = parts.some((p: any) => p?.type === 'text' && typeof p?.text === 'string' && p.text.trim());
-        if (!hasText) parts.push({ type: 'text', text: ' ' });
+        if (!hasText) parts.push({ type: 'text', text: EMPTY_CONTENT_PLACEHOLDER });
       }
     };
 
@@ -151,21 +154,21 @@ export async function streamText(props: {
     if (message.role === 'user') {
       if (useEnvConfig) {
         const { content } = extractPropertiesFromMessage(message);
-        newMessage.content = sanitizeText(getContentAsString(content)) || ' ';
+        newMessage.content = sanitizeText(getContentAsString(content)) || EMPTY_CONTENT_PLACEHOLDER;
       } else {
         const { model, provider, content } = extractPropertiesFromMessage(message);
         currentModel = model;
         currentProvider = provider;
-        newMessage.content = sanitizeText(getContentAsString(content)) || ' ';
+        newMessage.content = sanitizeText(getContentAsString(content)) || EMPTY_CONTENT_PLACEHOLDER;
       }
     } else if (message.role == 'assistant') {
       const raw = getContentAsString(message.content);
-      newMessage.content = (raw && sanitizeText(raw)) || ' ';
+      newMessage.content = (raw && sanitizeText(raw)) || EMPTY_CONTENT_PLACEHOLDER;
     }
 
     if (Array.isArray(message.parts)) {
       newMessage.parts = message.parts.map((part) =>
-        part.type === 'text' ? { ...part, text: sanitizeText(part.text ?? '') || ' ' } : part,
+        part.type === 'text' ? { ...part, text: sanitizeText(part.text ?? '') || EMPTY_CONTENT_PLACEHOLDER } : part,
       );
     }
 
