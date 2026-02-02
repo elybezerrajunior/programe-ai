@@ -176,6 +176,15 @@ export async function streamText(props: {
   const staticModels = LLMManager.getInstance().getStaticModelListFromProvider(provider);
   let modelDetails = staticModels.find((m) => m.name === currentModel);
 
+  // When using env config (e.g. prod BOLT_LLM_MODEL), only allow static model IDs.
+  // Dynamic list can include aliases (e.g. "claude-4-5-sonnet-latest") that the Messages API rejects.
+  if (useEnvConfig && !modelDetails && staticModels.length > 0) {
+    logger.warn(
+      `Env model [${currentModel}] not in static list for [${provider.name}]. Using first static model: ${staticModels[0].name}. Set BOLT_LLM_MODEL to a valid static ID (e.g. "claude-sonnet-4-5-20250929" for Anthropic).`,
+    );
+    modelDetails = staticModels[0];
+  }
+
   if (!modelDetails) {
     const modelsList = [
       ...(provider.staticModels || []),

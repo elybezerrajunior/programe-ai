@@ -55,7 +55,7 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
   const envConfig = getLLMConfigFromEnv(env);
 
   if (envConfig) {
-    // Validar se provider existe
+    // Validar se provider existe e se o modelo está na lista estática (evita aliases que a API rejeita em prod)
     const llmManager = LLMManager.getInstance(env);
     const providers = llmManager.getAllProviders();
     const validation = validateLLMConfig(envConfig.provider, envConfig.model, providers);
@@ -67,6 +67,27 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
         JSON.stringify({
           error: true,
           message: `Configuração de LLM inválida: ${validation.error}`,
+          statusCode: 400,
+          isRetryable: false,
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+          statusText: 'Bad Request',
+        },
+      );
+    }
+
+    const providerInfo = providers.find((p) => p.name === envConfig.provider);
+    const staticModelIds = (providerInfo?.staticModels ?? []).map((m) => m.name);
+    if (staticModelIds.length > 0 && !staticModelIds.includes(envConfig.model)) {
+      logger.error(
+        `BOLT_LLM_MODEL "${envConfig.model}" is not a valid static model for ${envConfig.provider}. Use one of: ${staticModelIds.join(', ')}`,
+      );
+      return new Response(
+        JSON.stringify({
+          error: true,
+          message: `Modelo inválido para produção. BOLT_LLM_MODEL deve ser um ID estático (ex: "claude-sonnet-4-5-20250929" para Anthropic). Válidos para ${envConfig.provider}: ${staticModelIds.join(', ')}`,
           statusCode: 400,
           isRetryable: false,
         }),

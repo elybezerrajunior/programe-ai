@@ -57,7 +57,7 @@ function AuthHydration() {
  */
 export default function Index() {
   return (
-    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1 overflow-auto page-enter">
+    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1 overflow-auto modern-scrollbar page-enter">
       <AuthHydration />
       <BackgroundRays />
       <Header />
