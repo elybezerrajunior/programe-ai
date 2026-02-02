@@ -33,12 +33,19 @@ export function useAuth() {
         }
 
         if (mounted) {
-          setAuthSession(session);
+          if (session) {
+            setAuthSession(session);
+          } else {
+            // Em produção os cookies são HttpOnly; a sessão pode ter sido hidratada pelo loader
+            const current = authStore.get();
+            if (!current.isAuthenticated) setAuthSession(null);
+          }
         }
       } catch (error) {
         console.error('[useAuth] Error syncing session:', error);
         if (mounted) {
-          setAuthSession(null);
+          const current = authStore.get();
+          if (!current.isAuthenticated) setAuthSession(null);
         }
       } finally {
         if (mounted) {

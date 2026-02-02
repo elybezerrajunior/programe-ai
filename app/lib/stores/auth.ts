@@ -122,3 +122,34 @@ export function setAuthLoading(isLoading: boolean) {
   setAuthState({ isLoading });
 }
 
+/**
+ * Sessão do servidor (cookies HttpOnly) - usada para hidratar o cliente em produção
+ */
+export interface ServerSession {
+  user: { id: string; email: string; name?: string };
+  accessToken: string;
+}
+
+/**
+ * Hidrata o estado de autenticação a partir da sessão obtida no servidor (loader).
+ * Necessário em produção porque os cookies de sessão são HttpOnly e o cliente
+ * não consegue lê-los; o servidor lê os cookies e envia a sessão no loader.
+ */
+export function setAuthFromServerSession(serverSession: ServerSession | null) {
+  if (!serverSession) {
+    setAuthState({ user: null, session: null, isAuthenticated: false, isLoading: false });
+    return;
+  }
+  setAuthState({
+    user: {
+      id: serverSession.user.id,
+      email: serverSession.user.email,
+      name: serverSession.user.name,
+      avatar: undefined,
+    },
+    session: null,
+    isAuthenticated: true,
+    isLoading: false,
+  });
+}
+
