@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 // Função helper para obter variáveis de ambiente de forma segura
 function getEnvVar(key: string): string | undefined {
@@ -25,6 +25,19 @@ function getEnvVar(key: string): string | undefined {
 // Isso permite que o código funcione no Cloudflare onde as variáveis vêm do context
 const supabaseUrl = getEnvVar('VITE_SUPABASE_URL');
 const supabaseAnonKey = getEnvVar('VITE_SUPABASE_ANON_KEY');
+
+/** Cria um cliente Supabase (uso server-side com env do context) */
+export function createSupabaseClient(url: string, anonKey: string): SupabaseClient {
+  return createClient(url, anonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+      storage: undefined,
+      storageKey: 'sb-auth',
+    },
+  });
+}
 
 // Só criar o cliente se as variáveis estiverem disponíveis
 // No Cloudflare, o cliente pode ser criado dinamicamente com variáveis do context

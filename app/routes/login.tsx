@@ -5,7 +5,13 @@ import { LoginFeatures } from '~/components/login/LoginFeatures';
 import { LoginLightEffect } from '~/components/login/LoginLightEffect';
 import { Card } from '~/components/ui/Card';
 import { getSessionFromRequest, validateEmail, validatePassword, createSessionCookies, createSessionHeaders } from '~/lib/auth/session';
+import { createSupabaseClient, getSupabaseProjectRef } from '~/lib/auth/supabase-client';
 import { signInWithPassword, AuthenticationError } from '~/lib/auth/supabase-auth';
+
+function getSupabaseProjectRefFromUrl(url: string): string {
+  const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/);
+  return match ? match[1] : '';
+}
 
 export const meta: MetaFunction = () => {
   return [
@@ -36,7 +42,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get('email')?.toString() || '';
   const password = formData.get('password')?.toString() || '';
@@ -57,9 +63,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ error: 'Senha deve ter no mínimo 6 caracteres', fields: { password: true } }, { status: 400 });
   }
 
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? process.env;
+  const supabaseUrl = env?.VITE_SUPABASE_URL;
+  const supabaseAnonKey = env?.VITE_SUPABASE_ANON_KEY;
+  const supabaseClient =
+    supabaseUrl && supabaseAnonKey ? createSupabaseClient(supabaseUrl, supabaseAnonKey) : null;
+  const projectRef = supabaseUrl ? getSupabaseProjectRefFromUrl(supabaseUrl) : getSupabaseProjectRef();
+
   try {
     // Autenticar com Supabase
-    const { user, session } = await signInWithPassword(email, password);
+    const { user, session } = await signInWithPassword(email, password, supabaseClient ?? undefined);
 
     if (!session) {
       return json({ error: 'Não foi possível criar uma sessão', fields: { email: true, password: true } }, { status: 401 });
@@ -70,7 +83,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const redirectTo = url.searchParams.get('redirectTo') || '/';
 
     // Criar cookies de sessão
-    const cookies = createSessionCookies(session.access_token, session.refresh_token || '');
+    const cookies = createSessionCookies(
+      session.access_token,
+      session.refresh_token || '',
+      projectRef || undefined
+    );
 
     // Adicionar tokens na URL temporariamente para sincronização no cliente
     // (serão removidos pelo componente AuthSync após sincronização)
@@ -87,12 +104,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   } catch (error) {
     // Tratar erros de autenticação
     if (error instanceof AuthenticationError) {
+      const status = error.isRateLimit ? 429 : 401;
+      if (error.isRateLimit) {
+        console.warn('[Login] Rate limit do Supabase:', error.originalError?.message ?? error.message);
+      }
       return json(
         {
           error: error.message,
           fields: { email: true, password: true },
         },
-        { status: 401 },
+        { status },
       );
     }
 

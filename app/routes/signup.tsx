@@ -12,6 +12,7 @@ import {
   createSessionCookies,
   createSessionHeaders,
 } from '~/lib/auth/session';
+import { createSupabaseClient, getSupabaseProjectRef } from '~/lib/auth/supabase-client';
 import { signUpWithPassword, AuthenticationError } from '~/lib/auth/supabase-auth';
 
 export const meta: MetaFunction = () => {
@@ -37,7 +38,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+function getSupabaseProjectRefFromUrl(url: string): string {
+  const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/);
+  return match ? match[1] : '';
+}
+
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get('email')?.toString() || '';
   const password = formData.get('password')?.toString() || '';
@@ -69,34 +75,50 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!validatePassword(password)) {
     return json(
       { error: 'Senha deve ter no mínimo 6 caracteres', fields: { password: true } },
-    { status: 400 }
-  );
+      { status: 400 }
+    );
   }
 
   if (!validatePasswordConfirmation(password, confirmPassword)) {
     return json(
       { error: 'As senhas não coincidem', fields: { password: true, confirmPassword: true } },
-    { status: 400 }
-  );
+      { status: 400 }
+    );
   }
+
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? process.env;
+  const supabaseUrl = env?.VITE_SUPABASE_URL;
+  const supabaseAnonKey = env?.VITE_SUPABASE_ANON_KEY;
+  const supabaseClient =
+    supabaseUrl && supabaseAnonKey ? createSupabaseClient(supabaseUrl, supabaseAnonKey) : null;
+  const projectRef = supabaseUrl ? getSupabaseProjectRefFromUrl(supabaseUrl) : getSupabaseProjectRef();
+
+  const urlForRedirect = new URL(request.url);
+  const emailRedirectTo = `${urlForRedirect.origin}/login`;
 
   try {
     const { user, session, requiresEmailConfirmation } = await signUpWithPassword(email, password, {
       name: name.trim(),
+      client: supabaseClient,
+      emailRedirectTo,
     });
 
     if (!user) {
       return json(
         { error: 'Não foi possível criar a conta', fields: { email: true, password: true } },
-      { status: 500 }
-    );
-  }
+        { status: 500 }
+      );
+    }
 
   const url = new URL(request.url);
   const redirectTo = url.searchParams.get('redirectTo') || '/';
 
     if (session) {
-      const cookies = createSessionCookies(session.access_token, session.refresh_token || '');
+      const cookies = createSessionCookies(
+        session.access_token,
+        session.refresh_token || '',
+        projectRef || undefined
+      );
 
       const redirectUrl = new URL(redirectTo, url.origin);
       redirectUrl.searchParams.set('access_token', session.access_token);
@@ -118,12 +140,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return redirect(redirectTo);
   } catch (error) {
     if (error instanceof AuthenticationError) {
+      const status = error.isRateLimit ? 429 : 400;
+      if (error.isRateLimit) {
+        console.warn('[Signup] Rate limit do Supabase:', error.originalError?.message ?? error.message);
+      }
       return json(
         {
           error: error.message,
           fields: { email: true, password: true },
         },
-        { status: 400 }
+        { status }
       );
     }
 

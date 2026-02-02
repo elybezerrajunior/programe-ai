@@ -33,10 +33,11 @@ function extractProjectRef(url: string): string {
 
 /**
  * Obtém o nome do cookie baseado no project ref
+ * @param projectRef - Opcional; quando passado (ex.: server com env do context), usa em vez do global
  */
-function getCookieName(baseName: string): string {
-  const projectRef = getSupabaseProjectRef();
-  return projectRef ? `sb-${projectRef}-${baseName}` : baseName;
+function getCookieName(baseName: string, projectRef?: string): string {
+  const ref = projectRef ?? getSupabaseProjectRef();
+  return ref ? `sb-${ref}-${baseName}` : baseName;
 }
 
 /**
@@ -90,10 +91,15 @@ export async function getSessionFromRequest(request: Request): Promise<Session |
 
 /**
  * Cria cookies para a sessão do Supabase
+ * @param projectRef - Opcional; use quando o cliente foi criado com env do context (ex.: signup action)
  */
-export function createSessionCookies(accessToken: string, refreshToken: string): string[] {
-  const accessTokenCookieName = getCookieName('auth-token');
-  const refreshTokenCookieName = getCookieName('auth-refresh-token');
+export function createSessionCookies(
+  accessToken: string,
+  refreshToken: string,
+  projectRef?: string
+): string[] {
+  const accessTokenCookieName = getCookieName('auth-token', projectRef);
+  const refreshTokenCookieName = getCookieName('auth-refresh-token', projectRef);
 
   // Cookies HTTP-only, Secure, SameSite=Lax para segurança
   const cookies: string[] = [];
@@ -128,9 +134,9 @@ export function createSessionHeaders(cookieStrings: string[]): Headers {
 /**
  * Cria cookies para limpar sessão (logout)
  */
-export function createLogoutCookies(): string[] {
-  const accessTokenCookieName = getCookieName('auth-token');
-  const refreshTokenCookieName = getCookieName('auth-refresh-token');
+export function createLogoutCookies(projectRef?: string): string[] {
+  const accessTokenCookieName = getCookieName('auth-token', projectRef);
+  const refreshTokenCookieName = getCookieName('auth-refresh-token', projectRef);
 
   const cookies: string[] = [];
 

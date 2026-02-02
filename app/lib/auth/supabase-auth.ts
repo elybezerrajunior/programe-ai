@@ -1,6 +1,7 @@
-import { supabase, getSupabaseProjectRef } from './supabase-client';
+import { supabase, createSupabaseClient, getSupabaseProjectRef } from './supabase-client';
 import { parseCookies } from '~/lib/api/cookies';
 import type { AuthError } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Erro de autenticação customizado com mensagem em português
@@ -13,6 +14,13 @@ export class AuthenticationError extends Error {
   ) {
     super(message);
     this.name = 'AuthenticationError';
+  }
+
+  /** Indica se o erro é por rate limit (muitas tentativas) */
+  get isRateLimit(): boolean {
+    if (this.code === '429' || this.originalError?.status === 429) return true;
+    const msg = (this.originalError?.message ?? this.message).toLowerCase();
+    return msg.includes('too many') || msg.includes('rate limit');
   }
 }
 
@@ -35,7 +43,7 @@ function mapAuthError(error: AuthError): string {
   }
 
   if (errorMessage.includes('too many requests') || errorMessage.includes('rate limit')) {
-    return 'Muitas tentativas. Tente novamente em alguns minutos';
+    return 'Muitas tentativas. Aguarde 15–30 minutos e tente novamente. Se estiver em desenvolvimento, verifique os limites do projeto no painel do Supabase.';
   }
 
   if (errorMessage.includes('signup_disabled')) {
@@ -81,11 +89,17 @@ function mapAuthError(error: AuthError): string {
 
 /**
  * Realiza login com email e senha
+ * @param client - Cliente Supabase opcional (uso server-side quando env vem do context)
  */
-export async function signInWithPassword(email: string, password: string) {
-  if (!supabase) throw new AuthenticationError('Supabase não configurado');
+export async function signInWithPassword(
+  email: string,
+  password: string,
+  client?: SupabaseClient | null
+) {
+  const authClient = client ?? supabase;
+  if (!authClient) throw new AuthenticationError('Supabase não configurado');
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await authClient.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
       password,
     });
@@ -116,6 +130,8 @@ export async function signInWithPassword(email: string, password: string) {
 
 /**
  * Realiza cadastro com email e senha
+ * @param options.client - Cliente Supabase opcional (uso server-side quando env vem do context)
+ * @param options.emailRedirectTo - URL para redirecionar após confirmação de email (deve estar em Redirect URLs no Supabase)
  */
 export async function signUpWithPassword(
   email: string,
@@ -123,14 +139,18 @@ export async function signUpWithPassword(
   options?: {
     name?: string;
     metadata?: Record<string, unknown>;
+    client?: SupabaseClient | null;
+    emailRedirectTo?: string;
   }
 ) {
-  if (!supabase) throw new AuthenticationError('Supabase não configurado');
+  const authClient = options?.client ?? supabase;
+  if (!authClient) throw new AuthenticationError('Supabase não configurado');
   try {
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await authClient.auth.signUp({
       email: email.trim().toLowerCase(),
       password,
       options: {
+        emailRedirectTo: options?.emailRedirectTo,
         data: {
           name: options?.name,
           full_name: options?.name,
