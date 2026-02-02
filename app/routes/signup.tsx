@@ -93,8 +93,9 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     supabaseUrl && supabaseAnonKey ? createSupabaseClient(supabaseUrl, supabaseAnonKey) : null;
   const projectRef = supabaseUrl ? getSupabaseProjectRefFromUrl(supabaseUrl) : getSupabaseProjectRef();
 
-  const urlForRedirect = new URL(request.url);
-  const emailRedirectTo = `${urlForRedirect.origin}/login`;
+  const requestUrl = new URL(request.url);
+  const baseUrl = env?.APP_URL || env?.VITE_APP_URL || requestUrl.origin;
+  const emailRedirectTo = `${baseUrl.replace(/\/$/, '')}/login`;
 
   try {
     const { user, session, requiresEmailConfirmation } = await signUpWithPassword(email, password, {

@@ -1,4 +1,7 @@
 interface Env {
+  /** URL pública da aplicação (ex.: https://programe-ia.pages.dev). Usada em emailRedirectTo e callbacks. */
+  APP_URL?: string;
+  VITE_APP_URL?: string;
   VITE_SUPABASE_URL?: string;
   VITE_SUPABASE_ANON_KEY?: string;
   RUNNING_IN_DOCKER: Settings;
