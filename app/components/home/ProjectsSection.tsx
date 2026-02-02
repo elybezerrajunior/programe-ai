@@ -1,13 +1,11 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useStore } from '@nanostores/react';
 import { toast } from 'react-toastify';
 import { classNames } from '~/utils/classNames';
 import { SearchInput } from '~/components/ui/SearchInput';
 import { ProjectCard, type Project } from './ProjectCard';
 import { NewProjectCard } from './NewProjectCard';
-import { getAll, deleteById } from '~/lib/persistence/db';
+import { getAll, deleteById, openDatabase } from '~/lib/persistence/db';
 import type { ChatHistoryItem } from '~/lib/persistence/useChatHistory';
-import { authStore } from '~/lib/stores/auth';
 
 // Hook to connect to the database
 function useBoltHistoryDB() {
@@ -115,20 +113,14 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
   const { db } = useBoltHistoryDB();
   const [loadedProjects, setLoadedProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const auth = useStore(authStore);
-  const currentUserId = auth.user?.id;
-
-  // Load projects from database - filtrado por userId
+  // Mesma fonte do sidebar: getAll(db) sem userId para exibir os mesmos projetos
   useEffect(() => {
     if (db) {
       setIsLoading(true);
-      // Passar userId para filtrar apenas projetos do usuário logado
-      getAll(db, currentUserId)
+      getAll(db)
         .then((chats: ChatHistoryItem[]) => {
-          // Filter chats that have urlId and description (valid projects)
           const validChats = chats.filter((chat) => chat.urlId && chat.description);
-          const projects = validChats.map(chatToProject);
-          setLoadedProjects(projects);
+          setLoadedProjects(validChats.map(chatToProject));
         })
         .catch((error) => {
           console.error('Error loading projects:', error);
@@ -140,14 +132,14 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
     } else {
       setIsLoading(false);
     }
-  }, [db, currentUserId]); // Adicionar currentUserId como dependência
+  }, [db]);
 
   // Use provided projects or loaded projects
   const projects = providedProjects || loadedProjects;
 
   const loadProjects = useCallback(() => {
     if (db) {
-      getAll(db, currentUserId)
+      getAll(db)
         .then((chats: ChatHistoryItem[]) => {
           const validChats = chats.filter((chat) => chat.urlId && chat.description);
           setLoadedProjects(validChats.map(chatToProject));
@@ -157,7 +149,7 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
           setLoadedProjects([]);
         });
     }
-  }, [db, currentUserId]);
+  }, [db]);
 
   const handleDeleteProject = useCallback(
     async (project: Project) => {

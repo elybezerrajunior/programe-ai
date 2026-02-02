@@ -209,18 +209,27 @@ export async function loader({ request, context }: { request: Request; context: 
     return json({ error: 'Repository name is required' }, { status: 400 });
   }
 
-  try {
-    // Access environment variables from Cloudflare context or process.env
-    const githubToken =
-      context?.cloudflare?.env?.GITHUB_TOKEN || process.env.GITHUB_TOKEN || process.env.VITE_GITHUB_ACCESS_TOKEN;
+  const githubToken =
+    context?.cloudflare?.env?.GITHUB_TOKEN || process.env.GITHUB_TOKEN || process.env.VITE_GITHUB_ACCESS_TOKEN;
 
-    let fileList;
-
-    if (isCloudflareEnvironment(context)) {
-      fileList = await fetchRepoContentsCloudflare(repo, githubToken);
-    } else {
-      fileList = await fetchRepoContentsZip(repo, githubToken);
+  // Prefer tree API (no release required). Fall back to Zip only in non-Cloudflare when tree fails.
+  async function tryFetch(): Promise<any[]> {
+    try {
+      return await fetchRepoContentsCloudflare(repo!, githubToken);
+    } catch (treeError) {
+      if (isCloudflareEnvironment(context)) {
+        throw treeError;
+      }
+      try {
+        return await fetchRepoContentsZip(repo!, githubToken);
+      } catch (_) {
+        throw treeError;
+      }
     }
+  }
+
+  try {
+    const fileList = await tryFetch();
 
     // Filter out .git files for both methods
     const filteredFiles = fileList.filter((file: any) => !file.path.startsWith('.git'));

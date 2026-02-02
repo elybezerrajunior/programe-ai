@@ -464,12 +464,7 @@ export const ChatImpl = memo(
 
           if (template !== 'blank') {
             const temResp = await getTemplates(template, title).catch((e) => {
-              if (e.message.includes('rate limit')) {
-                toast.warning('Rate limit exceeded. Skipping starter template\n Continuing with blank template');
-              } else {
-                toast.warning('Failed to import starter template\n Continuing with blank template');
-              }
-
+              console.warn('Starter template import failed, continuing with blank template:', e?.message ?? e);
               return null;
             });
 
