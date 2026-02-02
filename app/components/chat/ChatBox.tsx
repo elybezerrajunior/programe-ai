@@ -73,17 +73,18 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
   return (
     <div
       className={classNames(
-        'relative backdrop-blur p-3 rounded-lg border border-bolt-elements-borderColor relative w-full mx-auto z-prompt',
-        props.isPreviewMode 
-          ? 'max-w-6xl shadow-2xl bg-bolt-elements-background-depth-2/80' 
-          : 'max-w-chat bg-bolt-elements-background-depth-2',
+        'relative backdrop-blur-sm p-4 rounded-xl border border-bolt-elements-borderColor w-full mx-auto z-prompt transition-shadow duration-300 ease-out scale-in opacity-0',
+        props.isPreviewMode
+          ? 'max-w-6xl shadow-xl ring-1 ring-bolt-elements-borderColor/50 bg-bolt-elements-background-depth-2/90 hover:shadow-2xl'
+          : 'max-w-chat shadow-lg bg-bolt-elements-background-depth-2 ring-1 ring-black/5 dark:ring-white/5',
       )}
+      style={{ animationFillMode: 'forwards' }}
     >
       {props.isPreviewMode && (
-        <div 
-          className="absolute -inset-4 rounded-2xl opacity-30 blur-3xl pointer-events-none z-0"
+        <div
+          className="absolute -inset-4 rounded-2xl opacity-25 blur-3xl pointer-events-none z-0"
           style={{
-            background: 'radial-gradient(circle, rgba(34, 244, 198, 0.4) 0%, rgba(34, 244, 198, 0) 70%)',
+            background: 'radial-gradient(circle, rgba(34, 244, 198, 0.35) 0%, rgba(34, 244, 198, 0) 70%)',
           }}
         />
       )}
@@ -198,7 +199,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
         </div>
       )}
       <div
-        className={classNames('relative shadow-xs border border-bolt-elements-borderColor backdrop-blur rounded-lg')}
+        className={classNames('relative border border-bolt-elements-borderColor/80 rounded-xl overflow-hidden bg-bolt-elements-background-depth-1/30')}
       >
         <textarea
           ref={props.textareaRef}
@@ -295,7 +296,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             />
           )}
         </ClientOnly>
-        <div className="flex justify-between items-center text-sm p-4 pt-2">
+        <div className="flex justify-between items-center text-sm px-4 pb-3 pt-2">
           <div className="flex gap-1 items-center">
             <Tooltip content="Enviar arquivo" side="top">
               <button

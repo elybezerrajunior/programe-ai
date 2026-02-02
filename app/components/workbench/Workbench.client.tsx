@@ -417,7 +417,7 @@ export const Workbench = memo(
         >
           <div
             className={classNames(
-              'fixed top-[calc(var(--header-height)+1.2rem)] bottom-6 z-0 transition-[left,width] duration-200 bolt-ease-cubic-bezier',
+              'fixed top-[var(--header-height)] bottom-0 z-0 transition-[left,width] duration-200 bolt-ease-cubic-bezier',
               {
                 'w-full': isSmallViewport || (isPreviewMode && showWorkbench),
                 'w-[var(--workbench-inner-width)]': !isSmallViewport && (!isPreviewMode || !showWorkbench),
@@ -430,13 +430,13 @@ export const Workbench = memo(
             <div className="absolute inset-0 px-2 lg:px-4">
               <div
                 className={classNames(
-                  'h-full flex flex-col bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor shadow-sm rounded-lg',
+                  'h-full flex flex-col bg-bolt-elements-background-depth-2/95 backdrop-blur-sm border border-bolt-elements-borderColor rounded-xl shadow-xl ring-1 ring-black/5 dark:ring-white/5',
                   {
                     'overflow-hidden': !isPreviewMode || !chatBoxProps,
                   },
                 )}
               >
-                <div className="flex items-center px-3 py-2 border-b border-bolt-elements-borderColor gap-1.5">
+                <div className="flex items-center px-4 py-2.5 border-b border-bolt-elements-borderColor/80 gap-2 bg-bolt-elements-background-depth-1/50 rounded-t-xl">
                   <Slider selected={selectedView} options={sliderOptions} setSelected={setSelectedView} />
                   <div className="ml-auto" />
                   {selectedView === 'code' && (
@@ -553,14 +553,14 @@ export const Workbench = memo(
                     {isPreviewMode && chatBoxProps ? (
                       <div className="h-full w-full relative flex flex-col">
                         {/* Preview container - ocupa toda altura */}
-                        <div className="absolute inset-0 z-10 px-4 pt-4">
-                          <div className="h-full w-full bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden">
+                        <div className="absolute inset-0 z-10 px-4 pt-4 pb-2">
+                          <div className="h-full w-full bg-white dark:bg-gray-900 rounded-2xl xl:rounded-3xl shadow-2xl overflow-hidden ring-1 ring-bolt-elements-borderColor/50">
                             <Preview setSelectedElement={setSelectedElement} />
                           </div>
                         </div>
                         {/* ChatBox container - flutuando por cima da preview na parte inferior */}
-                        <div className="absolute bottom-6 left-0 right-0 z-50 px-4">
-                          <div className="flex flex-col gap-2 max-w-6xl mx-auto">
+                        <div className="absolute bottom-5 left-0 right-0 z-50 px-4">
+                          <div className="flex flex-col gap-3 max-w-6xl mx-auto">
                             {envConfigError && (
                               <div className="rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 p-4 mb-2 shadow-lg">
                                 <div className="flex items-start">

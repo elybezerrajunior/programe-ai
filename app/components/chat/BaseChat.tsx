@@ -429,18 +429,19 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
             })}
           >
             {!chatStarted && (
-              <div id="intro" className="mt-[16vh] max-w-2xl mx-auto text-center px-4 lg:px-0">
-                <h1 className="text-3xl lg:text-6xl font-bold text-bolt-elements-textPrimary mb-4 animate-fade-in">
+              <div id="intro" className="mt-[14vh] max-w-2xl mx-auto text-center px-4 lg:px-0">
+                <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-bolt-elements-textPrimary mb-5 fade-in-up opacity-0" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
                   Onde as ideias começam
                 </h1>
-                <p className="text-md lg:text-xl mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
+                <p className="text-base lg:text-lg text-bolt-elements-textSecondary fade-in-up opacity-0 leading-relaxed" style={{ animationDelay: '0.25s', animationFillMode: 'forwards' }}>
                   Dê vida às suas ideias em segundos ou obtenha ajuda em projetos existentes.
                 </p>
               </div>
             )}
             <StickToBottom
-              className={classNames('pt-6 pl-6 pr-2 sm:pl-10 sm:pr-6 relative', {
-                'h-full flex flex-col modern-scrollbar': chatStarted,
+              className={classNames('pt-8 pl-8 pr-0 sm:pl-14 relative', {
+                'h-full flex flex-col': chatStarted,
+                [styles.ChatScrollbar]: chatStarted,
               })}
               resize="smooth"
               initial="smooth"
@@ -466,8 +467,8 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 <ScrollToBottom />
               </StickToBottom.Content>
               <div
-                className={classNames('my-auto flex flex-col gap-2 w-full max-w-chat mx-auto z-prompt mb-6', {
-                  'sticky bottom-2': chatStarted,
+                className={classNames('my-auto flex flex-col gap-3 w-full max-w-chat mx-auto z-prompt mb-6', {
+                  'sticky bottom-4': chatStarted,
                 })}
               >
                 <div className="flex flex-col gap-2">
@@ -607,15 +608,15 @@ function ScrollToBottom() {
   const { isAtBottom, scrollToBottom } = useStickToBottomContext();
 
   return (
-    !isAtBottom && (
+        !isAtBottom && (
       <>
-        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-bolt-elements-background-depth-1 to-transparent h-20 z-10" />
+        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-bolt-elements-background-depth-1 to-transparent h-20 z-10 pointer-events-none" />
         <button
-          className="sticky z-50 bottom-0 left-0 right-0 text-4xl rounded-lg px-1.5 py-0.5 flex items-center justify-center mx-auto gap-2 bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor text-bolt-elements-textPrimary text-sm"
+          className="sticky z-50 bottom-0 left-0 right-0 rounded-xl px-4 py-2.5 flex items-center justify-center mx-auto gap-2 bg-bolt-elements-background-depth-2/95 backdrop-blur-sm border border-bolt-elements-borderColor text-bolt-elements-textPrimary text-sm font-medium shadow-lg hover:bg-bolt-elements-background-depth-3 transition-colors"
           onClick={() => scrollToBottom()}
         >
           Ir para última mensagem
-          <span className="i-ph:arrow-down animate-bounce" />
+          <span className="i-ph:arrow-down animate-bounce text-base" />
         </button>
       </>
     )

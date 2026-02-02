@@ -16,6 +16,77 @@
 
 .Chat {
   opacity: 1;
+  position: relative;
+  /* Coluna do chat: borda sutil e fundo levemente elevado */
+  border-left: 1px solid var(--bolt-elements-borderColor);
+  background: var(--bolt-elements-bg-depth-1);
+  box-shadow: -4px 0 20px -8px rgba(0, 0, 0, 0.08);
+  animation: chatColumnFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes chatColumnFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+:root[data-theme='dark'] .Chat {
+  background: linear-gradient(
+    180deg,
+    var(--bolt-elements-bg-depth-1) 0%,
+    var(--bolt-elements-bg-depth-2) 6%,
+    var(--bolt-elements-bg-depth-1) 100%
+  );
+  box-shadow: -8px 0 28px -8px rgba(0, 0, 0, 0.35);
+}
+
+/* Scrollbar do chat: cor escura, largura menor, visível só ao passar o mouse */
+.ChatScrollbar {
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    transition: width 0.15s ease, height 0.15s ease;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--bolt-elements-bg-depth-3);
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background-clip: content-box;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bolt-elements-borderColor);
+  }
+
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.15s ease;
+}
+
+.Chat:hover .ChatScrollbar {
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 0; /* só vertical, sem scroll horizontal */
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--bolt-elements-bg-depth-3) transparent;
+}
+
+.Chat:hover .ChatScrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--bolt-elements-borderColor);
 }
 
 .PromptEffectContainer {
