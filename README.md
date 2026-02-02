@@ -278,7 +278,7 @@ The Local Providers tab manages local AI installations and custom endpoints:
 Bolt.diy supports both methods for maximum flexibility:
 
 #### Environment Variables (Recommended for Production)
-Set API keys and base URLs in your `.env.local` file:
+Set API keys and base URLs in your `.env.local` file. Para deploy em produção (Cloudflare Pages, etc.), use o [checklist de variáveis de ambiente para produção](./docs/ENV_PRODUCAO.md).
 ```bash
 # API Keys
 OPENAI_API_KEY=your_openai_key_here
