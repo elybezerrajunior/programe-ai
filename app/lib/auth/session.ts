@@ -1,6 +1,6 @@
 import { redirect } from '@remix-run/cloudflare';
 import { parseCookies } from '~/lib/api/cookies';
-import { supabase, getSupabaseProjectRef } from './supabase-client';
+import { supabase, createSupabaseClient, getSupabaseProjectRef } from './supabase-client';
 
 const SESSION_COOKIE_NAME = 'programe_session';
 const SUPABASE_ACCESS_TOKEN_COOKIE = 'sb-access-token';
@@ -43,38 +43,39 @@ function getCookieName(baseName: string, projectRef?: string): string {
 /**
  * Valida a sessão do Supabase a partir dos cookies
  * Extrai o token dos cookies e valida com Supabase
+ * @param env - Opcional; em prod (Cloudflare) o cliente global pode ser null; passe context.cloudflare.env para validar sessão
  */
-export async function getSessionFromRequest(request: Request): Promise<Session | null> {
-  if (!supabase) return null;
+export async function getSessionFromRequest(
+  request: Request,
+  env?: Record<string, string> | null
+): Promise<Session | null> {
+  const authClient =
+    supabase ??
+    (env?.VITE_SUPABASE_URL && env?.VITE_SUPABASE_ANON_KEY
+      ? createSupabaseClient(env.VITE_SUPABASE_URL, env.VITE_SUPABASE_ANON_KEY)
+      : null);
+
+  if (!authClient) return null;
 
   const cookieHeader = request.headers.get('Cookie');
+  if (!cookieHeader) return null;
 
-  if (!cookieHeader) {
-    return null;
-  }
+  const projectRef =
+    env?.VITE_SUPABASE_URL?.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1] ?? getSupabaseProjectRef();
 
   try {
     const cookies = parseCookies(cookieHeader);
-
-    // Tentar diferentes formatos de cookie do Supabase
     const accessToken =
       cookies[SUPABASE_ACCESS_TOKEN_COOKIE] ||
-      cookies[getCookieName('auth-token')] ||
+      cookies[getCookieName('auth-token', projectRef || undefined)] ||
       cookies[SESSION_COOKIE_NAME];
 
-    if (!accessToken) {
-      return null;
-    }
+    if (!accessToken) return null;
 
-    // Validar token com Supabase usando getUser()
-    const { data, error } = await supabase.auth.getUser(accessToken);
-
-    if (error || !data.user) {
-      return null;
-    }
+    const { data, error } = await authClient.auth.getUser(accessToken);
+    if (error || !data.user) return null;
 
     const user = data.user;
-
     return {
       user: {
         id: user.id,
@@ -173,9 +174,14 @@ export function validatePasswordConfirmation(password: string, confirmation: str
 /**
  * Helper para proteger rotas (requer autenticação)
  * Redireciona para /login se não autenticado
+ * @param env - Opcional; em prod (Cloudflare) passe context.cloudflare.env para validar sessão
  */
-export async function requireAuth(request: Request, redirectTo?: string) {
-  const session = await getSessionFromRequest(request);
+export async function requireAuth(
+  request: Request,
+  redirectTo?: string,
+  env?: Record<string, string> | null
+) {
+  const session = await getSessionFromRequest(request, env);
 
   if (!session) {
     const url = new URL(request.url);

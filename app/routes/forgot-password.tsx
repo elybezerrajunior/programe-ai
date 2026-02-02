@@ -14,10 +14,10 @@ export const meta: MetaFunction = () => [
   { name: 'description', content: 'Recupere o acesso à sua conta do Programe Studio.' },
 ];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSessionFromRequest(request);
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
+  const session = await getSessionFromRequest(request, env ?? undefined);
   if (session) return redirect('/');
-
   return json({});
 };
 

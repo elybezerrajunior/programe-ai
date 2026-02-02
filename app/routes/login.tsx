@@ -20,9 +20,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // Se o usuário já estiver logado, redirecionar para a home
-  const session = await getSessionFromRequest(request);
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
+  const session = await getSessionFromRequest(request, env ?? undefined);
   if (session) {
     // Verificar se há redirectTo na query string
     const url = new URL(request.url);
@@ -78,9 +78,18 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       return json({ error: 'Não foi possível criar uma sessão', fields: { email: true, password: true } }, { status: 401 });
     }
 
-    // Obter redirectTo da query string
+    // Obter redirectTo da query string; padrão é a home (/)
     const url = new URL(request.url);
-    const redirectTo = url.searchParams.get('redirectTo') || '/';
+    let redirectTo = url.searchParams.get('redirectTo')?.trim() || '/';
+    if (!redirectTo.startsWith('/')) redirectTo = '/';
+
+    // Garantir que o redirect seja apenas para a mesma origem (evitar open redirect)
+    try {
+      const testRedirectUrl = new URL(redirectTo, url.origin);
+      if (testRedirectUrl.origin !== url.origin) redirectTo = '/';
+    } catch {
+      redirectTo = '/';
+    }
 
     // Criar cookies de sessão
     const cookies = createSessionCookies(
@@ -97,7 +106,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       redirectUrl.searchParams.set('refresh_token', session.refresh_token);
     }
 
-    // Redirecionar para a home ou rota solicitada
+    // Redirecionar para a home (/) ou para redirectTo quando vindo de rota protegida
     return redirect(redirectUrl.toString(), {
       headers: createSessionHeaders(cookies),
     });
@@ -131,7 +140,8 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
 export default function Login() {
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === 'submitting';
+  const showLoading =
+    navigation.state === 'submitting' || navigation.state === 'loading';
 
   return (
     <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
@@ -139,17 +149,20 @@ export default function Login() {
         <div className="relative">
           <Card className="p-8 rounded-[2rem] relative z-10 overflow-hidden">
             <LoginLightEffect />
-            {isSubmitting ? (
-              // Loading state - substitui todo o conteúdo do card
+            {showLoading ? (
               <div className="flex flex-col items-center justify-center py-16 px-8 min-h-[400px]">
                 <div className="flex flex-col items-center gap-6">
                   <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-6xl animate-spin" />
                   <div className="text-center">
                     <h2 className="text-xl font-semibold text-bolt-elements-textPrimary mb-2">
-                      Entrando...
+                      {navigation.state === 'submitting'
+                        ? 'Entrando...'
+                        : 'Redirecionando...'}
                     </h2>
                     <p className="text-sm text-bolt-elements-textSecondary">
-                      Aguarde enquanto processamos seu login
+                      {navigation.state === 'submitting'
+                        ? 'Aguarde enquanto processamos seu login'
+                        : 'Em instantes você estará na home'}
                     </p>
                   </div>
                 </div>

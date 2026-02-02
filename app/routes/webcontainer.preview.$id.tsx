@@ -6,10 +6,9 @@ const PREVIEW_CHANNEL = 'preview-updates';
 
 import { requireAuth } from '~/lib/auth/session';
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
-  // Proteger rota - requer autenticação
-  await requireAuth(request);
-
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
+  await requireAuth(request, undefined, env ?? undefined);
   const previewId = params.id;
 
   if (!previewId) {

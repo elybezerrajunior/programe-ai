@@ -22,8 +22,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSessionFromRequest(request);
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
+  const session = await getSessionFromRequest(request, env ?? undefined);
   if (session) {
     const url = new URL(request.url);
     const redirectTo = url.searchParams.get('redirectTo') || '/';

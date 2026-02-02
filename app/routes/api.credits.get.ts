@@ -30,9 +30,10 @@ const DAILY_CREDITS: Record<string, number> = {
   enterprise: 20,
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
   try {
-    const session = await getSessionFromRequest(request);
+    const session = await getSessionFromRequest(request, env ?? undefined);
     if (!session) {
       return json({ error: 'Não autenticado' }, { status: 401 });
     }

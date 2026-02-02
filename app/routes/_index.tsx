@@ -16,10 +16,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // Proteger rota - requer autenticação
-  await requireAuth(request);
-
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
+  await requireAuth(request, undefined, env ?? undefined);
   return json({});
 };
 

@@ -62,8 +62,9 @@ const DAILY_CREDITS: Record<string, number> = {
 };
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
   try {
-    const session = await getSessionFromRequest(request);
+    const session = await getSessionFromRequest(request, env ?? undefined);
     if (!session) {
       return json({ redirect: '/login' }, { status: 401 });
     }
