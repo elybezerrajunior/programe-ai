@@ -47,9 +47,9 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     }
 
     // Obter URL base do ambiente
-    // Em Cloudflare (produção) as variáveis vêm de context.cloudflare.env
+    // Em desenvolvimento, usar variável de ambiente ou URL pública
     // ASAAS não aceita localhost nas URLs de callback
-    const env = (context?.cloudflare?.env as Record<string, string | undefined>) || process.env;
+    const env = process.env;
     let baseUrl = env.APP_URL || env.VITE_APP_URL;
     
     if (!baseUrl) {

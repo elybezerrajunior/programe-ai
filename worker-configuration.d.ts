@@ -19,22 +19,4 @@ interface Env {
   XAI_API_KEY: string;
   PERPLEXITY_API_KEY: string;
   AWS_BEDROCK_CONFIG: string;
-  // Auth / Supabase (build + runtime)
-  VITE_SUPABASE_URL?: string;
-  VITE_SUPABASE_ANON_KEY?: string;
-  // ASAAS (pagamentos) – ver docs/ENV_PRODUCAO.md
-  ASAAS_API_KEY?: string;
-  ASAAS_API_URL?: string;
-  ASAAS_WEBHOOK_TOKEN?: string;
-  APP_URL?: string;
-  VITE_APP_URL?: string;
-  // Integrações opcionais
-  GITHUB_ACCESS_TOKEN?: string;
-  VITE_GITHUB_ACCESS_TOKEN?: string;
-  NETLIFY_TOKEN?: string;
-  VITE_NETLIFY_ACCESS_TOKEN?: string;
-  VITE_VERCEL_ACCESS_TOKEN?: string;
-  VITE_SUPABASE_ACCESS_TOKEN?: string;
-  GITHUB_BUG_REPORT_TOKEN?: string;
-  BUG_REPORT_REPO?: string;
 }
