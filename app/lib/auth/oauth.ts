@@ -56,7 +56,16 @@ export async function signInWithOAuth(
     }
 
     // Validar redirectTo para prevenir open redirects
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    // Em produção, preferir VITE_APP_URL para garantir callback correto
+    // (window.location.origin pode falhar em proxies/CDN/Cloudflare)
+    const origin =
+      typeof window !== 'undefined'
+        ? (
+            import.meta.env.PROD && import.meta.env.VITE_APP_URL
+              ? import.meta.env.VITE_APP_URL
+              : window.location.origin
+          ).replace(/\/$/, '')
+        : '';
     if (!validateRedirectTo(redirectTo, origin)) {
       throw new AuthenticationError('URL de redirecionamento inválida');
     }
