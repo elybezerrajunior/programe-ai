@@ -94,10 +94,17 @@ export async function getSessionFromRequest(
  * Cria cookies para a sessão do Supabase
  * @param projectRef - Opcional; use quando o cliente foi criado com env do context (ex.: signup action)
  */
+/**
+ * Cria cookies para a sessão do Supabase
+ */
 export function createSessionCookies(
+  
   accessToken: string,
+ 
   refreshToken: string,
   projectRef?: string
+,
+  persist: boolean = false
 ): string[] {
   const accessTokenCookieName = getCookieName('auth-token', projectRef);
   const refreshTokenCookieName = getCookieName('auth-refresh-token', projectRef);
@@ -105,19 +112,34 @@ export function createSessionCookies(
   // Cookies HTTP-only, Secure, SameSite=Lax para segurança
   const cookies: string[] = [];
 
+  // Definir expiração
+  // Se persistir:
+  // - Access Token: 1 hora
+  // - Refresh Token: 30 dias (padrão)
+  // - Session Token (compatibilidade): 1 hora
+  // Se não persistir (sessão):
+  // - Sem Max-Age (expira ao fechar navegador) ou Max-Age curto
+
+  // Vamos usar Max-Age fixo para garantir funcionamento, mas variar o tempo do refresh token
+  const accessTokenAge = 3600; // 1 hora
+  const refreshTokenAge = persist ? 2592000 : 3600; // 30 dias ou 1 hora (sessão)
+
+  const maxAgeAccess = `Max-Age=${accessTokenAge}`;
+  const maxAgeRefresh = `Max-Age=${refreshTokenAge}`;
+
   // Cookie de access token
   cookies.push(
-    `${accessTokenCookieName}=${accessToken}; Path=/; Max-Age=3600; HttpOnly; SameSite=Lax; Secure`
+    `${accessTokenCookieName}=${accessToken}; Path=/; ${maxAgeAccess}; HttpOnly; SameSite=Lax; Secure`
   );
 
   // Cookie de refresh token
   cookies.push(
-    `${refreshTokenCookieName}=${refreshToken}; Path=/; Max-Age=604800; HttpOnly; SameSite=Lax; Secure`
+    `${refreshTokenCookieName}=${refreshToken}; Path=/; ${maxAgeRefresh}; HttpOnly; SameSite=Lax; Secure`
   );
 
   // Cookie de compatibilidade (para migração)
   cookies.push(
-    `${SESSION_COOKIE_NAME}=${accessToken}; Path=/; Max-Age=3600; HttpOnly; SameSite=Lax; Secure`
+    `${SESSION_COOKIE_NAME}=${accessToken}; Path=/; ${maxAgeAccess}; HttpOnly; SameSite=Lax; Secure`
   );
 
   return cookies;
@@ -186,7 +208,7 @@ export async function requireAuth(
   if (!session) {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams();
-    
+
     if (redirectTo || url.pathname !== '/login') {
       searchParams.set('redirectTo', redirectTo || url.pathname);
     }

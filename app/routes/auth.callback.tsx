@@ -1,8 +1,12 @@
-import { redirect, type LoaderFunctionArgs } from '@remix-run/cloudflare';
-import { createSessionCookies, createSessionHeaders } from '~/lib/auth/session';
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from '@remix-run/react';
+import type { MetaFunction } from '@remix-run/cloudflare';
 import { supabase, createSupabaseClient, getSupabaseProjectRef } from '~/lib/auth/supabase-client';
-import { AuthenticationError } from '~/lib/auth/supabase-auth';
-import { mapOAuthError } from '~/lib/auth/oauth';
+import { setAuthSession } from '~/lib/stores/auth';
+
+export const meta: MetaFunction = () => {
+  return [{ title: 'Autenticando... - Programe Studio' }];
+};
 
 function getSupabaseProjectRefFromUrl(url: string): string {
   const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/);
@@ -10,145 +14,173 @@ function getSupabaseProjectRefFromUrl(url: string): string {
 }
 
 /**
- * Rota de callback OAuth
- * Processa o retorno do provedor OAuth (Google/GitHub) após autenticação
- *
- * Fluxo:
- * 1. Usuário inicia login OAuth → Redireciona para provedor
- * 2. Provedor autentica → Redireciona para /auth/callback?code=...&state=...
- * 3. Esta rota valida state e code → Troca code por tokens → Cria sessão → Redireciona
+ * Rota de callback OAuth (Client-Side)
+ * 
+ * Com Implicit Flow, o Supabase retorna os tokens diretamente no hash fragment:
+ * /auth/callback#access_token=...&refresh_token=...&token_type=bearer&...
+ * 
+ * O Supabase com detectSessionInUrl: true processa isso automaticamente.
+ * Este componente apenas aguarda a sessão ser estabelecida e redireciona.
  */
-export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
-  
-  // Verificar se há erro na query string (ex: usuário cancelou)
-  const error = url.searchParams.get('error');
-  const errorDescription = url.searchParams.get('error_description');
-  
-  if (error) {
-    // Mapear erro para mensagem amigável
-    const errorObj = new Error(errorDescription || error);
-    const friendlyMessage = mapOAuthError(errorObj);
-    
-    // Redirecionar para login com mensagem de erro
-    const loginUrl = new URL('/login', url.origin);
-    loginUrl.searchParams.set('error', friendlyMessage);
-    throw redirect(loginUrl.toString());
-  }
+export default function AuthCallback() {
+  const navigate = useNavigate();
+  const [status, setStatus] = useState<'processing' | 'error'>('processing');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const hasProcessed = useRef(false);
 
-  // Extrair code e state da query string
-  const code = url.searchParams.get('code');
-  const state = url.searchParams.get('state');
+  useEffect(() => {
+    // Evitar processamento duplo
+    if (hasProcessed.current) return;
+    hasProcessed.current = true;
 
-  // Validar presença de code e state
-  if (!code) {
-    const loginUrl = new URL('/login', url.origin);
-    loginUrl.searchParams.set('error', 'Código de autorização não encontrado');
-    throw redirect(loginUrl.toString());
-  }
+    async function handleCallback() {
+      const url = new URL(window.location.href);
+      const hash = url.hash;
+      const searchParams = url.searchParams;
+      
+      console.log('[Auth Callback] Processing...');
+      console.log('[Auth Callback] URL:', window.location.href);
 
-  if (!state) {
-    const loginUrl = new URL('/login', url.origin);
-    loginUrl.searchParams.set('error', 'Estado de segurança não encontrado');
-    throw redirect(loginUrl.toString());
-  }
+      // Verificar se há erro na query string
+      const error = searchParams.get('error');
+      const errorDescription = searchParams.get('error_description');
 
-  try {
-    const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
-    const supabaseUrl = env?.VITE_SUPABASE_URL;
-    const supabaseAnonKey = env?.VITE_SUPABASE_ANON_KEY;
-    const authClient =
-      supabase ??
-      (supabaseUrl && supabaseAnonKey
-        ? createSupabaseClient(supabaseUrl, supabaseAnonKey)
-        : null);
-
-    if (!authClient) {
-      throw new Error('Supabase não configurado');
-    }
-
-    // Trocar code por tokens via Supabase
-    // O Supabase valida o code e retorna a sessão
-    const { data, error: authError } = await authClient.auth.exchangeCodeForSession(code);
-
-    if (authError) {
-      throw new AuthenticationError(
-        mapOAuthError(authError),
-        authError,
-        authError.status?.toString()
-      );
-    }
-
-    if (!data.session) {
-      throw new AuthenticationError('Não foi possível criar uma sessão após login OAuth');
-    }
-
-    // Validar state (CSRF protection)
-    // Nota: Em um ambiente server-side, o state seria validado comparando com o armazenado
-    // Como estamos usando Edge Runtime, validamos basicamente se o state foi fornecido
-    // O Supabase também valida o state internamente durante o exchangeCodeForSession
-
-    // Criar cookies de sessão (projectRef para nomes corretos dos cookies)
-    const projectRef = supabaseUrl
-      ? getSupabaseProjectRefFromUrl(supabaseUrl)
-      : getSupabaseProjectRef();
-    const cookies = createSessionCookies(
-      data.session.access_token,
-      data.session.refresh_token || '',
-      projectRef || undefined
-    );
-
-    // Obter redirectTo da query string ou usar '/' como padrão
-    // O redirectTo pode ter sido armazenado no client antes do redirect OAuth
-    let redirectTo = url.searchParams.get('redirectTo') || '/';
-
-    // Validar redirectTo para prevenir open redirects
-    // Apenas permitir URLs internas (mesmo origin ou paths relativos)
-    try {
-      const redirectUrl = new URL(redirectTo, url.origin);
-      if (redirectUrl.origin !== url.origin && !redirectTo.startsWith('/')) {
-        redirectTo = '/';
+      if (error) {
+        console.error('[Auth Callback] OAuth error:', error, errorDescription);
+        setStatus('error');
+        setErrorMessage(errorDescription || error);
+        setTimeout(() => {
+          navigate(`/login?error=${encodeURIComponent(errorDescription || error)}`);
+        }, 2000);
+        return;
       }
-    } catch {
-      // Se não for uma URL válida, verificar se é um path relativo
-      if (!redirectTo.startsWith('/')) {
-        redirectTo = '/';
+
+      // Verificar se há erro no hash
+      if (hash) {
+        const hashParams = new URLSearchParams(hash.substring(1));
+        const hashError = hashParams.get('error');
+        const hashErrorDescription = hashParams.get('error_description');
+        
+        if (hashError) {
+          console.error('[Auth Callback] OAuth error in hash:', hashError, hashErrorDescription);
+          setStatus('error');
+          setErrorMessage(hashErrorDescription || hashError);
+          setTimeout(() => {
+            navigate(`/login?error=${encodeURIComponent(hashErrorDescription || hashError)}`);
+          }, 2000);
+          return;
+        }
       }
+
+      if (!supabase) {
+        setStatus('error');
+        setErrorMessage('Supabase não configurado');
+        setTimeout(() => navigate('/login?error=Supabase não configurado'), 2000);
+        return;
+      }
+
+      // Com detectSessionInUrl: true, o Supabase processa automaticamente
+      // os tokens do hash. Vamos aguardar a sessão ser estabelecida.
+      
+      // Primeiro, dar um tempo para o Supabase processar o hash
+      // O onAuthStateChange será disparado automaticamente
+      
+      let attempts = 0;
+      const maxAttempts = 10;
+      const checkInterval = 500; // 500ms entre tentativas
+
+      const checkSession = async (): Promise<boolean> => {
+        try {
+          const { data: { session }, error } = await supabase!.auth.getSession();
+          
+          if (error) {
+            console.error('[Auth Callback] Error getting session:', error);
+            return false;
+          }
+          
+          if (session) {
+            console.log('[Auth Callback] Session found!');
+            setAuthSession(session);
+            
+            // Obter redirectTo
+            const redirectTo = sessionStorage.getItem('oauth_redirect_to') || '/';
+            sessionStorage.removeItem('oauth_redirect_to');
+            
+            // Limpar hash da URL
+            window.history.replaceState({}, '', window.location.pathname);
+            
+            navigate(redirectTo);
+            return true;
+          }
+          
+          return false;
+        } catch (err) {
+          console.error('[Auth Callback] Error:', err);
+          return false;
+        }
+      };
+
+      // Tentar obter sessão imediatamente
+      if (await checkSession()) {
+        return;
+      }
+
+      // Se não encontrou, aguardar e tentar novamente
+      const pollSession = async () => {
+        while (attempts < maxAttempts) {
+          attempts++;
+          console.log(`[Auth Callback] Checking session (attempt ${attempts}/${maxAttempts})...`);
+          
+          await new Promise(resolve => setTimeout(resolve, checkInterval));
+          
+          if (await checkSession()) {
+            return;
+          }
+        }
+
+        // Timeout - nenhuma sessão encontrada
+        console.error('[Auth Callback] Timeout waiting for session');
+        setStatus('error');
+        setErrorMessage('Tempo esgotado aguardando autenticação. Tente novamente.');
+        setTimeout(() => {
+          navigate('/login?error=' + encodeURIComponent('Tempo esgotado. Tente fazer login novamente.'));
+        }, 2000);
+      };
+
+      await pollSession();
     }
 
-    // Adicionar tokens na URL temporariamente para sincronização no cliente
-    // (serão removidos pelo componente AuthSync após sincronização)
-    const redirectUrl = new URL(redirectTo, url.origin);
-    redirectUrl.searchParams.set('access_token', data.session.access_token);
-    if (data.session.refresh_token) {
-      redirectUrl.searchParams.set('refresh_token', data.session.refresh_token);
-    }
+    handleCallback();
+  }, [navigate]);
 
-    // Redirecionar para destino final com cookies de sessão
-    throw redirect(redirectUrl.toString(), {
-      headers: createSessionHeaders(cookies),
-    });
-  } catch (error) {
-    // Se já for um redirect, relançar
-    if (error instanceof Response && error.status === 302) {
-      throw error;
-    }
-
-    // Tratar erros de autenticação
-    if (error instanceof AuthenticationError) {
-      const loginUrl = new URL('/login', url.origin);
-      loginUrl.searchParams.set('error', error.message);
-      throw redirect(loginUrl.toString());
-    }
-
-    // Erro genérico
-    console.error('[auth.callback] Error processing OAuth callback:', error);
-    const loginUrl = new URL('/login', url.origin);
-    loginUrl.searchParams.set(
-      'error',
-      'Erro ao processar login OAuth. Tente novamente'
-    );
-    throw redirect(loginUrl.toString());
-  }
-};
-
+  return (
+    <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
+      <div className="text-center">
+        {status === 'processing' ? (
+          <>
+            <div className="i-svg-spinners:90-ring-with-bg text-accent text-6xl mx-auto mb-6" />
+            <h1 className="text-2xl font-semibold text-bolt-elements-textPrimary mb-2">
+              Autenticando...
+            </h1>
+            <p className="text-bolt-elements-textSecondary">
+              Aguarde enquanto processamos seu login
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="i-ph:warning-circle text-red-500 text-6xl mx-auto mb-6" />
+            <h1 className="text-2xl font-semibold text-bolt-elements-textPrimary mb-2">
+              Erro na autenticação
+            </h1>
+            <p className="text-bolt-elements-textSecondary mb-4">
+              {errorMessage}
+            </p>
+            <p className="text-sm text-bolt-elements-textTertiary">
+              Redirecionando para o login...
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

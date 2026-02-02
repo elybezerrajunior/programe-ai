@@ -29,15 +29,7 @@ function validateRedirectTo(redirectTo: string, origin: string): boolean {
   }
 }
 
-/**
- * Gera um state aleatório para validação CSRF no callback OAuth
- * Compatível com Edge Runtime (Web Crypto API)
- */
-function generateState(): string {
-  const array = new Uint8Array(32);
-  crypto.getRandomValues(array);
-  return Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('');
-}
+
 
 /**
  * Inicia o fluxo de login OAuth com o provedor especificado
@@ -65,12 +57,8 @@ export async function signInWithOAuth(
       throw new AuthenticationError('URL de redirecionamento inválida');
     }
 
-    // Gerar state para validação CSRF
-    const state = generateState();
-    
-    // Armazenar state no sessionStorage para validação no callback
+    // Armazenar redirectTo no sessionStorage
     if (typeof window !== 'undefined') {
-      sessionStorage.setItem('oauth_state', state);
       sessionStorage.setItem('oauth_redirect_to', redirectTo);
     }
 
@@ -81,14 +69,13 @@ export async function signInWithOAuth(
     }
 
     // Iniciar fluxo OAuth
+    // NOTA: Não injetamos 'state' manualmente nos queryParams pois isso sobrescreve
+    // o state interno do Supabase e causa erro "invalid state" / "token malformed" no callback.
     if (!supabase) throw new Error('Supabase não configurado');
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: callbackUrl.toString(),
-        queryParams: {
-          state,
-        },
       },
     });
 
@@ -118,16 +105,6 @@ export async function signInWithOAuth(
 }
 
 /**
- * Obtém o state armazenado para validação CSRF
- */
-export function getStoredOAuthState(): string | null {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-  return sessionStorage.getItem('oauth_state');
-}
-
-/**
  * Obtém o redirectTo armazenado
  */
 export function getStoredOAuthRedirectTo(): string | null {
@@ -144,7 +121,6 @@ export function clearStoredOAuthData(): void {
   if (typeof window === 'undefined') {
     return;
   }
-  sessionStorage.removeItem('oauth_state');
   sessionStorage.removeItem('oauth_redirect_to');
 }
 

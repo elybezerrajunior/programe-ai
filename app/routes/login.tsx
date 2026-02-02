@@ -85,6 +85,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     // Obter redirectTo da query string; padrão é a home (/)
     const url = new URL(request.url);
     let redirectTo = url.searchParams.get('redirectTo')?.trim() || '/';
+    const rememberMe = formData.get('rememberMe') === 'on';
     if (!redirectTo.startsWith('/')) redirectTo = '/';
 
     // Garantir que o redirect seja apenas para a mesma origem (evitar open redirect)
@@ -98,7 +99,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     // Criar cookies de sessão
     const cookies = createSessionCookies(
       session.access_token,
-      session.refresh_token || '',
+      session.refresh_token || '', rememberMe,
       projectRef || undefined
     );
 

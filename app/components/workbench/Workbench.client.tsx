@@ -620,7 +620,7 @@ export const Workbench = memo(
                             )}
                             {llmErrorAlert && <LlmErrorAlert alert={llmErrorAlert} clearAlert={() => clearLlmErrorAlert?.()} />}
                             {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
-                            <ChatBox {...chatBoxProps} isPreviewMode={true} />
+                            {chatBoxProps && <ChatBox {...chatBoxProps} isPreviewMode={true} />}
                           </div>
                         </div>
                       </div>

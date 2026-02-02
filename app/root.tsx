@@ -11,6 +11,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ClientOnly } from 'remix-utils/client-only';
 import { cssTransition, ToastContainer } from 'react-toastify';
 import { AuthSync } from './components/auth/AuthSync.client';
+import { NotificationListener } from './components/notifications/NotificationListener.client';
 
 import reactToastifyStyles from 'react-toastify/dist/ReactToastify.css?url';
 import globalStyles from './styles/index.scss?url';
@@ -114,6 +115,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 import { logStore } from './lib/stores/logs';
 
+
 export default function App() {
   const theme = useStore(themeStore);
 
@@ -150,7 +152,12 @@ export default function App() {
   return (
     <Layout>
       <ClientOnly>
-        {() => <AuthSync />}
+        {() => (
+          <>
+            <AuthSync />
+            <NotificationListener />
+          </>
+        )}
       </ClientOnly>
       <Outlet />
     </Layout>
