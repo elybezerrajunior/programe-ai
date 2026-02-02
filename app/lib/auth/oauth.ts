@@ -43,11 +43,13 @@ function generateState(): string {
  * Inicia o fluxo de login OAuth com o provedor especificado
  * @param provider - Provedor OAuth ('google' ou 'github')
  * @param redirectTo - URL para redirecionar após login (opcional, padrão: '/')
+ * @param appUrl - URL base da aplicação (do servidor). Garante callback correto em produção.
  * @returns Promise que resolve quando o redirecionamento é iniciado
  */
 export async function signInWithOAuth(
   provider: OAuthProvider,
-  redirectTo: string = '/'
+  redirectTo: string = '/',
+  appUrl?: string
 ): Promise<void> {
   try {
     // Validar provedor
@@ -55,17 +57,10 @@ export async function signInWithOAuth(
       throw new AuthenticationError(`Provedor OAuth não suportado: ${provider}`);
     }
 
-    // Validar redirectTo para prevenir open redirects
-    // Em produção, preferir VITE_APP_URL para garantir callback correto
-    // (window.location.origin pode falhar em proxies/CDN/Cloudflare)
+    // URL base para o callback OAuth - prioridade: appUrl (servidor) > VITE_APP_URL > window.location
     const origin =
-      typeof window !== 'undefined'
-        ? (
-            import.meta.env.PROD && import.meta.env.VITE_APP_URL
-              ? import.meta.env.VITE_APP_URL
-              : window.location.origin
-          ).replace(/\/$/, '')
-        : '';
+      (appUrl || (import.meta.env.PROD && import.meta.env.VITE_APP_URL) || (typeof window !== 'undefined' ? window.location.origin : ''))
+        .replace(/\/$/, '') || '';
     if (!validateRedirectTo(redirectTo, origin)) {
       throw new AuthenticationError('URL de redirecionamento inválida');
     }

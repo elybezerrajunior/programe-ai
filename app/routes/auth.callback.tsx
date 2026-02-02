@@ -1,19 +1,24 @@
 import { redirect, type LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { createSessionCookies, createSessionHeaders } from '~/lib/auth/session';
-import { supabase } from '~/lib/auth/supabase-client';
+import { supabase, createSupabaseClient, getSupabaseProjectRef } from '~/lib/auth/supabase-client';
 import { AuthenticationError } from '~/lib/auth/supabase-auth';
 import { mapOAuthError } from '~/lib/auth/oauth';
+
+function getSupabaseProjectRefFromUrl(url: string): string {
+  const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/);
+  return match ? match[1] : '';
+}
 
 /**
  * Rota de callback OAuth
  * Processa o retorno do provedor OAuth (Google/GitHub) após autenticação
- * 
+ *
  * Fluxo:
  * 1. Usuário inicia login OAuth → Redireciona para provedor
  * 2. Provedor autentica → Redireciona para /auth/callback?code=...&state=...
  * 3. Esta rota valida state e code → Troca code por tokens → Cria sessão → Redireciona
  */
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   
   // Verificar se há erro na query string (ex: usuário cancelou)
@@ -49,12 +54,22 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   try {
-    if (!supabase) {
+    const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
+    const supabaseUrl = env?.VITE_SUPABASE_URL;
+    const supabaseAnonKey = env?.VITE_SUPABASE_ANON_KEY;
+    const authClient =
+      supabase ??
+      (supabaseUrl && supabaseAnonKey
+        ? createSupabaseClient(supabaseUrl, supabaseAnonKey)
+        : null);
+
+    if (!authClient) {
       throw new Error('Supabase não configurado');
     }
+
     // Trocar code por tokens via Supabase
     // O Supabase valida o code e retorna a sessão
-    const { data, error: authError } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error: authError } = await authClient.auth.exchangeCodeForSession(code);
 
     if (authError) {
       throw new AuthenticationError(
@@ -73,10 +88,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // Como estamos usando Edge Runtime, validamos basicamente se o state foi fornecido
     // O Supabase também valida o state internamente durante o exchangeCodeForSession
 
-    // Criar cookies de sessão
+    // Criar cookies de sessão (projectRef para nomes corretos dos cookies)
+    const projectRef = supabaseUrl
+      ? getSupabaseProjectRefFromUrl(supabaseUrl)
+      : getSupabaseProjectRef();
     const cookies = createSessionCookies(
       data.session.access_token,
-      data.session.refresh_token || ''
+      data.session.refresh_token || '',
+      projectRef || undefined
     );
 
     // Obter redirectTo da query string ou usar '/' como padrão

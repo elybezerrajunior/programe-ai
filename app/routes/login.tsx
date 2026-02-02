@@ -35,10 +35,14 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const signupSuccess = url.searchParams.get('signupSuccess');
   const resetSuccess = url.searchParams.get('resetSuccess');
 
+  // URL base da aplicação - usada pelo OAuth para garantir callback correto em produção
+  const appUrl = (env?.APP_URL || env?.VITE_APP_URL || url.origin).replace(/\/$/, '');
+
   return json({
     error: error || null,
     signupSuccess: signupSuccess === 'true',
     resetSuccess: resetSuccess === 'true',
+    appUrl,
   });
 };
 

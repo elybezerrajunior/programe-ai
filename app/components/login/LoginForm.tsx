@@ -32,9 +32,11 @@ export function LoginForm() {
       
       // Obter redirectTo da query string
       const redirectTo = searchParams.get('redirectTo') || '/';
+      // appUrl vem do servidor - garante callback OAuth correto em produção
+      const appUrl = (loaderData as { appUrl?: string })?.appUrl;
       
       // Iniciar fluxo OAuth
-      await signInWithOAuth(provider, redirectTo);
+      await signInWithOAuth(provider, redirectTo, appUrl);
     } catch (error) {
       console.error(`[LoginForm] Error starting OAuth with ${provider}:`, error);
       // O erro será tratado na rota de callback ou exibido via loader
