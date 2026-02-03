@@ -10,7 +10,7 @@ import { Switch } from '~/components/ui/Switch';
 import { Progress } from '~/components/ui/Progress';
 import { classNames } from '~/utils/classNames';
 import { getSessionFromRequest } from '~/lib/auth/session';
-import { supabase } from '~/lib/auth/supabase-client';
+import { getSupabaseClient } from '~/lib/auth/supabase-client';
 import { loadSubscription } from '~/lib/stores/subscription';
 import { AsaasService } from '~/lib/services/asaasService';
 import { processCheckoutPaid } from '~/lib/asaas/processCheckoutPaid';
@@ -63,13 +63,17 @@ const DAILY_CREDITS: Record<string, number> = {
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   try {
-    const session = await getSessionFromRequest(request);
+    // Obter variáveis de ambiente do Cloudflare
+    const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+    
+    const session = await getSessionFromRequest(request, env);
     if (!session) {
       return json({ redirect: '/login' }, { status: 401 });
     }
 
     const url = new URL(request.url);
     const checkoutSuccess = url.searchParams.get('checkout') === 'success';
+    const supabase = getSupabaseClient(env);
     if (checkoutSuccess && supabase) {
       try {
         const { data: pendingCheckout } = await (supabase as any)

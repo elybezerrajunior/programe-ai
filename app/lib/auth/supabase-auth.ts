@@ -1,6 +1,14 @@
-import { supabase, getSupabaseProjectRef } from './supabase-client';
+import { supabase, getSupabaseClient, getSupabaseProjectRef } from './supabase-client';
 import { parseCookies } from '~/lib/api/cookies';
 import type { AuthError } from '@supabase/supabase-js';
+
+// Tipo para variáveis de ambiente do Cloudflare
+interface CloudflareEnv {
+  VITE_SUPABASE_URL?: string;
+  SUPABASE_URL?: string;
+  VITE_SUPABASE_ANON_KEY?: string;
+  SUPABASE_ANON_KEY?: string;
+}
 
 /**
  * Erro de autenticação customizado com mensagem em português
@@ -81,11 +89,15 @@ function mapAuthError(error: AuthError): string {
 
 /**
  * Realiza login com email e senha
+ * @param email - Email do usuário
+ * @param password - Senha do usuário
+ * @param env - Variáveis de ambiente do Cloudflare (opcional, necessário em produção)
  */
-export async function signInWithPassword(email: string, password: string) {
-  if (!supabase) throw new AuthenticationError('Supabase não configurado');
+export async function signInWithPassword(email: string, password: string, env?: CloudflareEnv) {
+  const client = getSupabaseClient(env);
+  if (!client) throw new AuthenticationError('Supabase não configurado');
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await client.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
       password,
     });

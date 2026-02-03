@@ -28,7 +28,10 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   }
 
   try {
-    const session = await getSessionFromRequest(request);
+    // Obter variáveis de ambiente do Cloudflare
+    const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+    
+    const session = await getSessionFromRequest(request, env);
     if (!session) {
       return json({ error: 'Não autenticado' }, { status: 401 });
     }
@@ -47,20 +50,23 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     }
 
     // Obter URL base do ambiente
-    // Em desenvolvimento, usar variável de ambiente ou URL pública
-    // ASAAS não aceita localhost nas URLs de callback
+    // ASAAS exige que successUrl seja HTTPS e do domínio registrado na conta
+    // Em desenvolvimento com localhost, isso não funciona - usar URL de produção
     const env = process.env;
     let baseUrl = env.APP_URL || env.VITE_APP_URL;
     
+    // Se não tiver URL configurada, usar da requisição
     if (!baseUrl) {
       const url = new URL(request.url);
       baseUrl = `${url.protocol}//${url.host}`;
-      
-      // Se for localhost, usar URL de produção para sandbox (o webhook ainda funcionará)
-      if (baseUrl.includes('localhost')) {
-        // Para sandbox do ASAAS, usar a URL de produção
-        baseUrl = 'https://programe-ia.pages.dev';
-      }
+    }
+    
+    // ASAAS não aceita localhost ou HTTP nas URLs de callback
+    // Sempre usar URL de produção HTTPS para callbacks do ASAAS
+    if (baseUrl.includes('localhost') || baseUrl.startsWith('http://')) {
+      // Para sandbox do ASAAS, usar a URL de produção
+      baseUrl = 'https://programe-ia.pages.dev';
+      console.log('[Checkout] Using production URL for ASAAS callbacks:', baseUrl);
     }
 
     // Criar referência externa para rastrear o checkout
