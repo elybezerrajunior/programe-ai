@@ -18,7 +18,7 @@ interface SimulateBody {
   checkoutId?: string;
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   if (process.env.NODE_ENV !== 'development') {
     return json({ error: 'Disponível apenas em desenvolvimento' }, { status: 404 });
   }
@@ -27,7 +27,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ error: 'Method not allowed' }, { status: 405 });
   }
 
-  const session = await getSessionFromRequest(request);
+  // Obter variáveis de ambiente do Cloudflare
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+  
+  const session = await getSessionFromRequest(request, env);
   if (!session) {
     return json({ error: 'Não autenticado' }, { status: 401 });
   }

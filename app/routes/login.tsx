@@ -14,9 +14,12 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  // Obter variáveis de ambiente do Cloudflare
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+  
   // Se o usuário já estiver logado, redirecionar para a home
-  const session = await getSessionFromRequest(request);
+  const session = await getSessionFromRequest(request, env);
   if (session) {
     // Verificar se há redirectTo na query string
     const url = new URL(request.url);
@@ -36,7 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get('email')?.toString() || '';
   const password = formData.get('password')?.toString() || '';
@@ -58,8 +61,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    // Autenticar com Supabase
-    const { user, session } = await signInWithPassword(email, password);
+    // Obter variáveis de ambiente do Cloudflare
+    const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+
+    // Autenticar com Supabase (passando env para produção no Cloudflare)
+    const { user, session } = await signInWithPassword(email, password, env);
 
     if (!session) {
       return json({ error: 'Não foi possível criar uma sessão', fields: { email: true, password: true } }, { status: 401 });

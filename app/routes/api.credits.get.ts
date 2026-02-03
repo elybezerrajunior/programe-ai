@@ -1,6 +1,6 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { getSessionFromRequest } from '~/lib/auth/session';
-import { supabase } from '~/lib/auth/supabase-client';
+import { getSupabaseClient } from '~/lib/auth/supabase-client';
 
 export interface UserCredits {
   userId: string;
@@ -30,13 +30,17 @@ const DAILY_CREDITS: Record<string, number> = {
   enterprise: 20,
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   try {
-    const session = await getSessionFromRequest(request);
+    // Obter variáveis de ambiente do Cloudflare
+    const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+    
+    const session = await getSessionFromRequest(request, env);
     if (!session) {
       return json({ error: 'Não autenticado' }, { status: 401 });
     }
 
+    const supabase = getSupabaseClient(env);
     if (!supabase) {
       return json({ error: 'Supabase não configurado' }, { status: 500 });
     }
