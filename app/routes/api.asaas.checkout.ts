@@ -52,8 +52,8 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     // Obter URL base do ambiente
     // ASAAS exige que successUrl seja HTTPS e do domínio registrado na conta
     // Em desenvolvimento com localhost, isso não funciona - usar URL de produção
-    const env = process.env;
-    let baseUrl = env.APP_URL || env.VITE_APP_URL;
+    const processEnv = process.env;
+    let baseUrl = processEnv.APP_URL || processEnv.VITE_APP_URL;
     
     // Se não tiver URL configurada, usar da requisição
     if (!baseUrl) {
