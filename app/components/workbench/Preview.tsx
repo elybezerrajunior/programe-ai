@@ -52,6 +52,17 @@ const WINDOW_SIZES: WindowSize[] = [
   { name: '4K Display', width: 3840, height: 2160, icon: 'i-ph:monitor', hasFrame: true, frameType: 'desktop' },
 ];
 
+const PREVIEW_LOADING_MESSAGES = [
+  'Entendendo o que você precisa...',
+  'Montando a estrutura do projeto...',
+  'Escrevendo o código...',
+  'Configurando dependências...',
+  'Preparando o ambiente de desenvolvimento...',
+  'Subindo o servidor...',
+  'Sua aplicação está quase pronta...',
+  'Só mais um instante...',
+];
+
 export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -89,6 +100,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
   const [showDeviceFrameInPreview, setShowDeviceFrameInPreview] = useState(false);
   const expoUrl = useStore(expoUrlAtom);
   const [isExpoQrModalOpen, setIsExpoQrModalOpen] = useState(false);
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
 
   useEffect(() => {
     if (!activePreview) {
@@ -116,6 +128,15 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
       setActivePreviewIndex(minPortIndex);
     }
   }, [previews, findMinPortIndex]);
+
+  useEffect(() => {
+    if (!activePreview) {
+      const interval = setInterval(() => {
+        setLoadingMessageIndex((i) => (i + 1) % PREVIEW_LOADING_MESSAGES.length);
+      }, 2800);
+      return () => clearInterval(interval);
+    }
+  }, [activePreview]);
 
   const reloadPreview = () => {
     if (iframeRef.current) {
@@ -998,8 +1019,14 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
               />
             </>
           ) : (
-            <div className="flex w-full h-full justify-center items-center bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary">
-              No preview available
+            <div className="flex w-full h-full flex-col justify-center items-center gap-8 bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary">
+              <div className="h-14 w-14 rounded-full border-2 border-bolt-elements-borderColor border-t-accent-500 animate-spin" />
+              <p
+                key={loadingMessageIndex}
+                className="text-base font-medium text-bolt-elements-textSecondary text-center px-4"
+              >
+                {PREVIEW_LOADING_MESSAGES[loadingMessageIndex]}
+              </p>
             </div>
           )}
 

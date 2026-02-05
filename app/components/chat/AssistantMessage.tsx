@@ -37,11 +37,6 @@ interface AssistantMessageProps {
 
 function openArtifactInWorkbench(filePath: string) {
   filePath = normalizedFilePath(filePath);
-
-  if (workbenchStore.currentView.get() !== 'code') {
-    workbenchStore.currentView.set('code');
-  }
-
   workbenchStore.setSelectedFile(`${WORK_DIR}/${filePath}`);
 }
 

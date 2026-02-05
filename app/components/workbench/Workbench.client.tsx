@@ -29,15 +29,9 @@ import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportCh
 import { useChatHistory } from '~/lib/persistence';
 import { streamingState } from '~/lib/stores/streaming';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ChatBox } from '~/components/chat/ChatBox';
 import type { ChatBoxProps } from '~/components/chat/ChatBox';
 import type { ProgressAnnotation } from '~/types/context';
 import type { ActionAlert, SupabaseAlert, DeployAlert, LlmErrorAlertType } from '~/types/actions';
-import DeployChatAlert from '~/components/deploy/DeployAlert';
-import ChatAlert from '~/components/chat/ChatAlert';
-import { SupabaseChatAlert } from '~/components/chat/SupabaseAlert';
-import LlmErrorAlert from '~/components/chat/LLMApiAlert';
-import ProgressCompilation from '~/components/chat/ProgressCompilation';
 
 interface WorkspaceProps {
   chatStarted?: boolean;
@@ -342,8 +336,6 @@ export const Workbench = memo(
     const streaming = useStore(streamingState);
     const { exportChat } = useChatHistory();
     const [isSyncing, setIsSyncing] = useState(false);
-    const isPreviewMode = selectedView === 'preview';
-
     const setSelectedView = (view: WorkbenchViewType) => {
       workbenchStore.currentView.set(view);
     };
@@ -353,6 +345,13 @@ export const Workbench = memo(
         setSelectedView('preview');
       }
     }, [hasPreview]);
+
+    // Durante a execução dos comandos do chat (streaming), garantir que a aba Preview fique visível
+    useEffect(() => {
+      if (streaming && hasPreview && selectedView !== 'preview') {
+        setSelectedView('preview');
+      }
+    }, [streaming, hasPreview, selectedView]);
 
     useEffect(() => {
       workbenchStore.setDocuments(files);
@@ -419,22 +418,17 @@ export const Workbench = memo(
             className={classNames(
               'fixed top-[var(--header-height)] bottom-0 z-0 transition-[left,width] duration-200 bolt-ease-cubic-bezier',
               {
-                'w-full': isSmallViewport || (isPreviewMode && showWorkbench),
-                'w-[var(--workbench-inner-width)]': !isSmallViewport && (!isPreviewMode || !showWorkbench),
-                'left-0': (showWorkbench && isSmallViewport) || (isPreviewMode && showWorkbench),
-                'left-[var(--workbench-left)]': showWorkbench && !isSmallViewport && !isPreviewMode,
+                'w-full': isSmallViewport,
+                'w-[var(--workbench-inner-width)]': !isSmallViewport && showWorkbench,
+                'left-0': showWorkbench && isSmallViewport,
+                'left-[var(--workbench-left)]': showWorkbench && !isSmallViewport,
                 'left-[calc(-1*var(--workbench-width))]': !showWorkbench,
               },
             )}
           >
             <div className="absolute inset-0 px-2 lg:px-4">
               <div
-                className={classNames(
-                  'h-full flex flex-col bg-bolt-elements-background-depth-2/95 backdrop-blur-sm border border-bolt-elements-borderColor rounded-xl shadow-xl ring-1 ring-black/5 dark:ring-white/5',
-                  {
-                    'overflow-hidden': !isPreviewMode || !chatBoxProps,
-                  },
-                )}
+                className="h-full flex flex-col bg-bolt-elements-background-depth-2/95 backdrop-blur-sm border border-bolt-elements-borderColor rounded-xl shadow-xl ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
               >
                 <div className="flex items-center px-4 py-2.5 border-b border-bolt-elements-borderColor/80 gap-2 bg-bolt-elements-background-depth-1/50 rounded-t-xl">
                   <Slider selected={selectedView} options={sliderOptions} setSelected={setSelectedView} />
@@ -449,9 +443,9 @@ export const Workbench = memo(
                         <DropdownMenu.Root>
                           <DropdownMenu.Trigger
                             disabled={isSyncing || streaming}
-                            className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-bolt-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7"
+                            className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
                           >
-                            {isSyncing ? 'Syncing...' : 'Sync'}
+                            {isSyncing ? 'Sincronizando...' : 'Sincronizar'}
                             <span className={classNames('i-ph:caret-down transition-transform')} />
                           </DropdownMenu.Trigger>
                           <DropdownMenu.Content
@@ -479,7 +473,7 @@ export const Workbench = memo(
                                 ) : (
                                   <div className="i-ph:cloud-arrow-down" />
                                 )}
-                                <span>{isSyncing ? 'Syncing...' : 'Sync Files'}</span>
+                                <span>{isSyncing ? 'Sincronizando...' : 'Sincronizar arquivos'}</span>
                               </div>
                             </DropdownMenu.Item>
                           </DropdownMenu.Content>
@@ -492,10 +486,10 @@ export const Workbench = memo(
                           onClick={() => {
                             workbenchStore.toggleTerminal(!workbenchStore.showTerminal.get());
                           }}
-                          className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-bolt-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7"
+                          className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
                         >
                           <div className="i-ph:terminal" />
-                          Toggle Terminal
+                          Terminal
                         </button>
                       </div>
                     </div>
@@ -504,17 +498,15 @@ export const Workbench = memo(
                   {selectedView === 'diff' && (
                     <FileModifiedDropdown fileHistory={fileHistory} onSelectFile={handleSelectFile} />
                   )}
-                  {!isPreviewMode && (
-                    <button
-                      className={`${showChat ? 'i-ph:sidebar-simple-fill' : 'i-ph:sidebar-simple'} scale-x-[-1] text-lg text-bolt-elements-textSecondary ml-1`}
-                      disabled={!canHideChat || isSmallViewport}
-                      onClick={() => {
-                        if (canHideChat) {
-                          chatStore.setKey('showChat', !showChat);
-                        }
-                      }}
-                    />
-                  )}
+                  <button
+                    className={`${showChat ? 'i-ph:sidebar-simple-fill' : 'i-ph:sidebar-simple'} scale-x-[-1] text-lg text-bolt-elements-textSecondary ml-1`}
+                    disabled={!canHideChat || isSmallViewport}
+                    onClick={() => {
+                      if (canHideChat) {
+                        chatStore.setKey('showChat', !showChat);
+                      }
+                    }}
+                  />
                   <IconButton
                     icon="i-ph:x-circle"
                     className="-mr-1"
@@ -524,7 +516,7 @@ export const Workbench = memo(
                     }}
                   />
                 </div>
-                <div className={classNames('relative flex-1', isPreviewMode && chatBoxProps ? 'flex flex-col overflow-hidden' : 'overflow-hidden')}>
+                <div className="relative flex-1 overflow-hidden">
                   <View initial={{ x: '0%' }} animate={{ x: selectedView === 'code' ? '0%' : '-100%' }}>
                     <EditorPanel
                       editorDocument={currentDocument}
@@ -546,89 +538,13 @@ export const Workbench = memo(
                   >
                     <DiffView fileHistory={fileHistory} setFileHistory={setFileHistory} />
                   </View>
-                  <View 
-                    initial={{ x: '100%' }} 
+                  <View
+                    initial={{ x: '100%' }}
                     animate={{ x: selectedView === 'preview' ? '0%' : '100%' }}
                   >
-                    {isPreviewMode && chatBoxProps ? (
-                      <div className="h-full w-full relative flex flex-col">
-                        {/* Preview container - ocupa toda altura */}
-                        <div className="absolute inset-0 z-10 px-4 pt-4 pb-2">
-                          <div className="h-full w-full bg-white dark:bg-gray-900 rounded-2xl xl:rounded-3xl shadow-2xl overflow-hidden ring-1 ring-bolt-elements-borderColor/50">
-                            <Preview setSelectedElement={setSelectedElement} />
-                          </div>
-                        </div>
-                        {/* ChatBox container - flutuando por cima da preview na parte inferior */}
-                        <div className="absolute bottom-5 left-0 right-0 z-50 px-4">
-                          <div className="flex flex-col gap-3 max-w-6xl mx-auto">
-                            {envConfigError && (
-                              <div className="rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 p-4 mb-2 shadow-lg">
-                                <div className="flex items-start">
-                                  <div className="flex-shrink-0">
-                                    <div className="i-ph:warning-duotone text-xl text-bolt-elements-button-danger-text"></div>
-                                  </div>
-                                  <div className="ml-3 flex-1">
-                                    <h3 className="text-sm font-medium text-bolt-elements-textPrimary">
-                                      Configuração de LLM Inválida
-                                    </h3>
-                                    <div className="mt-2 text-sm text-bolt-elements-textSecondary">
-                                      <p>{envConfigError}</p>
-                                      <p className="mt-2 text-xs">
-                                        Configure as variáveis de ambiente <code>BOLT_LLM_PROVIDER</code> e{' '}
-                                        <code>BOLT_LLM_MODEL</code> para usar esta funcionalidade.
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                            {deployAlert && (
-                              <DeployChatAlert
-                                alert={deployAlert}
-                                clearAlert={() => clearDeployAlert?.()}
-                                postMessage={(message: string | undefined) => {
-                                  if (message && chatBoxProps?.handleSendMessage) {
-                                    chatBoxProps.handleSendMessage({} as React.UIEvent, message);
-                                    clearSupabaseAlert?.();
-                                  }
-                                }}
-                              />
-                            )}
-                            {supabaseAlert && (
-                              <SupabaseChatAlert
-                                alert={supabaseAlert}
-                                clearAlert={() => clearSupabaseAlert?.()}
-                                postMessage={(message) => {
-                                  if (message && chatBoxProps?.handleSendMessage) {
-                                    chatBoxProps.handleSendMessage({} as React.UIEvent, message);
-                                    clearSupabaseAlert?.();
-                                  }
-                                }}
-                              />
-                            )}
-                            {actionAlert && (
-                              <ChatAlert
-                                alert={actionAlert}
-                                clearAlert={() => clearAlert?.()}
-                                postMessage={(message) => {
-                                  if (message && chatBoxProps?.handleSendMessage) {
-                                    chatBoxProps.handleSendMessage({} as React.UIEvent, message);
-                                    clearAlert?.();
-                                  }
-                                }}
-                              />
-                            )}
-                            {llmErrorAlert && <LlmErrorAlert alert={llmErrorAlert} clearAlert={() => clearLlmErrorAlert?.()} />}
-                            {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
-                            {chatBoxProps && <ChatBox {...chatBoxProps} isPreviewMode={true} />}
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="h-full w-full">
-                        <Preview setSelectedElement={setSelectedElement} />
-                      </div>
-                    )}
+                    <div className="h-full w-full">
+                      <Preview setSelectedElement={setSelectedElement} />
+                    </div>
                   </View>
                 </div>
               </div>

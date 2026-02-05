@@ -33,8 +33,6 @@ import { ChatBox } from './ChatBox';
 import type { DesignScheme } from '~/types/design-scheme';
 import type { ElementInfo } from '~/components/workbench/Inspector';
 import LlmErrorAlert from './LLMApiAlert';
-import { workbenchStore } from '~/lib/stores/workbench';
-
 const TEXTAREA_MIN_HEIGHT = 76;
 
 interface BaseChatProps {
@@ -151,8 +149,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     const [progressAnnotations, setProgressAnnotations] = useState<ProgressAnnotation[]>([]);
     const expoUrl = useStore(expoUrlAtom);
     const [qrModalOpen, setQrModalOpen] = useState(false);
-    const currentView = useStore(workbenchStore.currentView);
-    const isPreviewMode = currentView === 'preview';
 
     useEffect(() => {
       if (expoUrl) {
@@ -362,53 +358,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 chatStarted={chatStarted}
                 isStreaming={isStreaming}
                 setSelectedElement={setSelectedElement}
-                chatBoxProps={
-                  isPreviewMode
-                    ? {
-                        isModelSettingsCollapsed,
-                        setIsModelSettingsCollapsed,
-                        provider,
-                        setProvider,
-                        providerList: providerList || (PROVIDER_LIST as ProviderInfo[]),
-                        model,
-                        setModel,
-                        modelList,
-                        apiKeys,
-                        isModelLoading,
-                        onApiKeysChange,
-                        uploadedFiles,
-                        setUploadedFiles,
-                        imageDataList,
-                        setImageDataList,
-                        textareaRef,
-                        input,
-                        handleInputChange,
-                        handlePaste,
-                        TEXTAREA_MIN_HEIGHT,
-                        TEXTAREA_MAX_HEIGHT,
-                        isStreaming,
-                        handleStop,
-                        handleSendMessage,
-                        enhancingPrompt,
-                        enhancePrompt,
-                        isListening,
-                        startListening,
-                        stopListening,
-                        chatStarted,
-                        exportChat,
-                        qrModalOpen,
-                        setQrModalOpen,
-                        handleFileUpload,
-                        chatMode,
-                        setChatMode,
-                        designScheme,
-                        setDesignScheme,
-                        selectedElement,
-                        setSelectedElement,
-                        envConfigured,
-                      }
-                    : undefined
-                }
+                chatBoxProps={undefined}
                 progressAnnotations={progressAnnotations}
                 envConfigError={envConfigError}
                 deployAlert={deployAlert}
@@ -423,10 +373,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
             )}
           </ClientOnly>
           <div
-            className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full', {
-              'hidden lg:flex': isPreviewMode,
-              'flex': !isPreviewMode,
-            })}
+            className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full flex')}
           >
             {!chatStarted && (
               <div id="intro" className="mt-[14vh] max-w-2xl mx-auto text-center px-4 lg:px-0">
@@ -439,7 +386,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
               </div>
             )}
             <StickToBottom
-              className={classNames('pt-8 pl-8 pr-0 sm:pl-14 relative', {
+              className={classNames('pl-8 pr-0 sm:pl-14 relative', {
                 'h-full flex flex-col': chatStarted,
                 [styles.ChatScrollbar]: chatStarted,
               })}
@@ -449,7 +396,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
               <StickToBottom.Content className="flex flex-col gap-4 relative ">
                 <ClientOnly>
                   {() => {
-                    return chatStarted && !isPreviewMode ? (
+                    return chatStarted ? (
                       <Messages
                         className="flex flex-col w-full flex-1 max-w-chat pb-4 mx-auto z-1"
                         messages={messages}
@@ -526,8 +473,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                   {llmErrorAlert && <LlmErrorAlert alert={llmErrorAlert} clearAlert={() => clearLlmErrorAlert?.()} />}
                 </div>
                 {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
-                {!isPreviewMode && (
-                  <ChatBox
+                <ChatBox
                     isModelSettingsCollapsed={isModelSettingsCollapsed}
                     setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
                     provider={provider}
@@ -570,7 +516,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                     setSelectedElement={setSelectedElement}
                     envConfigured={envConfigured}
                   />
-                )}
               </div>
             </StickToBottom>
             <div className="flex flex-col justify-center">
