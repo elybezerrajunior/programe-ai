@@ -11,11 +11,14 @@ export const meta: MetaFunction = () => {
   return [{ title: 'Bolt' }, { name: 'description', content: 'Talk with Bolt, an AI assistant from StackBlitz' }];
 };
 
-export async function loader(args: LoaderFunctionArgs) {
-  // Proteger rota - requer autenticação
-  await requireAuth(args.request);
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
+  // Obter variáveis de ambiente do Cloudflare (necessário em produção)
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
 
-  return json({ url: args.params.url });
+  // Proteger rota - requer autenticação
+  await requireAuth(request, undefined, env);
+
+  return json({ url: params.url });
 }
 
 export default function Index() {

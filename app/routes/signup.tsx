@@ -24,7 +24,7 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   // Obter variáveis de ambiente do Cloudflare
   const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
-  
+
   const session = await getSessionFromRequest(request, env);
   if (session) {
     const url = new URL(request.url);
@@ -40,7 +40,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   });
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get('email')?.toString() || '';
   const password = formData.get('password')?.toString() || '';
@@ -72,16 +72,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!validatePassword(password)) {
     return json(
       { error: 'Senha deve ter no mínimo 6 caracteres', fields: { password: true } },
-    { status: 400 }
-  );
+      { status: 400 }
+    );
   }
 
   if (!validatePasswordConfirmation(password, confirmPassword)) {
     return json(
       { error: 'As senhas não coincidem', fields: { password: true, confirmPassword: true } },
-    { status: 400 }
-  );
+      { status: 400 }
+    );
   }
+
+  // Obter variáveis de ambiente do Cloudflare
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
 
   try {
     const { user, session, requiresEmailConfirmation } = await signUpWithPassword(email, password, {
@@ -91,15 +94,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (!user) {
       return json(
         { error: 'Não foi possível criar a conta', fields: { email: true, password: true } },
-      { status: 500 }
-    );
-  }
+        { status: 500 }
+      );
+    }
 
-  const url = new URL(request.url);
-  const redirectTo = url.searchParams.get('redirectTo') || '/';
+    const url = new URL(request.url);
+    const redirectTo = url.searchParams.get('redirectTo') || '/';
 
     if (session) {
-      const cookies = createSessionCookies(session.access_token, session.refresh_token || '');
+      const cookies = createSessionCookies(session.access_token, session.refresh_token || '', false, env);
 
       const redirectUrl = new URL(redirectTo, url.origin);
       redirectUrl.searchParams.set('access_token', session.access_token);

@@ -104,14 +104,19 @@ export async function getSessionFromRequest(request: Request, env?: CloudflareEn
  */
 /**
  * Cria cookies para a sessão do Supabase
+ * @param accessToken - Token de acesso
+ * @param refreshToken - Token de refresh
+ * @param persist - Se deve persistir (30 dias) ou usar sessão (1 hora)
+ * @param env - Variáveis de ambiente do Cloudflare (necessário em produção)
  */
 export function createSessionCookies(
   accessToken: string,
   refreshToken: string,
-  persist: boolean = false
+  persist: boolean = false,
+  env?: CloudflareEnv
 ): string[] {
-  const accessTokenCookieName = getCookieName('auth-token');
-  const refreshTokenCookieName = getCookieName('auth-refresh-token');
+  const accessTokenCookieName = getCookieName('auth-token', env);
+  const refreshTokenCookieName = getCookieName('auth-refresh-token', env);
 
   // Cookies HTTP-only, Secure, SameSite=Lax para segurança
   const cookies: string[] = [];
@@ -160,10 +165,11 @@ export function createSessionHeaders(cookieStrings: string[]): Headers {
 
 /**
  * Cria cookies para limpar sessão (logout)
+ * @param env - Variáveis de ambiente do Cloudflare (necessário em produção)
  */
-export function createLogoutCookies(): string[] {
-  const accessTokenCookieName = getCookieName('auth-token');
-  const refreshTokenCookieName = getCookieName('auth-refresh-token');
+export function createLogoutCookies(env?: CloudflareEnv): string[] {
+  const accessTokenCookieName = getCookieName('auth-token', env);
+  const refreshTokenCookieName = getCookieName('auth-refresh-token', env);
 
   const cookies: string[] = [];
 

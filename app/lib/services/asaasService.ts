@@ -143,12 +143,13 @@ export class AsaasService {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.config.apiUrl}${endpoint}`;
-    
+
     const response = await fetch(url, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
         'access_token': this.config.apiKey,
+        'User-Agent': 'programe-ai/1.0',
         ...options.headers,
       },
     });
@@ -251,18 +252,18 @@ export class AsaasService {
       body: JSON.stringify(checkout),
     });
     console.log('[ASAAS] Checkout API response:', JSON.stringify(apiResponse, null, 2));
-    
+
     // A API retorna o campo 'link' com a URL completa do checkout
     // Se não vier, construímos manualmente
     let checkoutUrl = apiResponse.link;
     if (!checkoutUrl) {
       const isSandbox = this.config.apiUrl.includes('sandbox');
-      const checkoutBaseUrl = isSandbox 
+      const checkoutBaseUrl = isSandbox
         ? 'https://sandbox.asaas.com/checkoutSession/show'
         : 'https://asaas.com/checkoutSession/show';
       checkoutUrl = `${checkoutBaseUrl}/${apiResponse.id}`;
     }
-    
+
     return {
       id: apiResponse.id,
       url: checkoutUrl,

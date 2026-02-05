@@ -4,12 +4,22 @@ import { map, type MapStore } from 'nanostores';
 import { path } from '~/utils/path';
 
 // Buffer está disponível globalmente no Cloudflare com nodejs_compat
-// No Node.js, também está disponível globalmente ou pode ser importado
-// Este arquivo é usado principalmente no cliente, então o Buffer global deve funcionar
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const Buffer = (typeof globalThis !== 'undefined' && (globalThis as any).Buffer) 
+// No Node.js, também está disponível globalmente
+// No browser, usamos uma implementação simples para operações básicas
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Buffer = (typeof globalThis !== 'undefined' && (globalThis as any).Buffer)
   || (typeof global !== 'undefined' && (global as any).Buffer)
-  || require('node:buffer').Buffer;
+  || {
+  // Fallback mínimo para browser - usado apenas para operações básicas
+  from: (data: Uint8Array | string, encoding?: string): Uint8Array => {
+    if (typeof data === 'string') {
+      return new TextEncoder().encode(data);
+    }
+    return new Uint8Array(data);
+  },
+  toString: () => '',
+  isBuffer: () => false,
+};
 import { bufferWatchEvents } from '~/utils/buffer';
 import { WORK_DIR } from '~/utils/constants';
 import { computeFileModifications } from '~/utils/diff';

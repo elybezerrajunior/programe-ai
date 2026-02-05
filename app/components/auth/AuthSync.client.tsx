@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { useSearchParams } from '@remix-run/react';
 import { supabase } from '~/lib/auth/supabase-client';
 import { setAuthSession, clearAuth } from '~/lib/stores/auth';
 
@@ -31,12 +30,10 @@ async function syncSessionToServer(accessToken: string, refreshToken: string): P
 /**
  * Componente que sincroniza a autenticação
  * - Monitora mudanças de estado de auth do Supabase
- * - Sincroniza tokens da URL (login com email/senha)
  * - Inicializa sessão existente do localStorage
- * - Sincroniza sessão com o servidor via cookies (para OAuth)
+ * - Sincroniza sessão com o servidor via cookies (para OAuth e refresh)
  */
 export function AuthSync() {
-  const [searchParams] = useSearchParams();
   const hasInitialized = useRef(false);
   const lastSyncedToken = useRef<string | null>(null);
 
@@ -100,42 +97,6 @@ export function AuthSync() {
       subscription.unsubscribe();
     };
   }, []);
-
-  // 3. Sincronizar tokens da URL (login com email/senha - fluxo legado)
-  useEffect(() => {
-    async function syncTokensFromUrl() {
-      const accessToken = searchParams.get('access_token');
-      const refreshToken = searchParams.get('refresh_token');
-
-      if (accessToken && refreshToken && supabase) {
-        try {
-          const { data, error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
-
-          if (error) {
-            console.error('[AuthSync] Error setting session from URL:', error);
-            return;
-          }
-
-          if (data.session) {
-            setAuthSession(data.session);
-
-            // Remover tokens da URL por segurança
-            const newUrl = new URL(window.location.href);
-            newUrl.searchParams.delete('access_token');
-            newUrl.searchParams.delete('refresh_token');
-            window.history.replaceState({}, '', newUrl.toString());
-          }
-        } catch (error) {
-          console.error('[AuthSync] Unexpected error:', error);
-        }
-      }
-    }
-
-    syncTokensFromUrl();
-  }, [searchParams]);
 
   return null;
 }

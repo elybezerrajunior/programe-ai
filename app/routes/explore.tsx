@@ -8,8 +8,11 @@ export const meta: MetaFunction = () => [
   { name: 'description', content: 'Explore modelos e recursos do Programe Studio.' },
 ];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await requireAuth(request);
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  // Obter variáveis de ambiente do Cloudflare (necessário em produção)
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+
+  await requireAuth(request, undefined, env);
   return json({});
 };
 
