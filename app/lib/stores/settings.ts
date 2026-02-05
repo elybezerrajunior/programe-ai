@@ -1,7 +1,12 @@
 import { atom, map } from 'nanostores';
 import { PROVIDER_LIST } from '~/utils/constants';
 import type { IProviderConfig } from '~/types/model';
-import type { TabVisibilityConfig, TabWindowConfig, UserTabConfig } from '~/components/@settings/core/types';
+import type {
+  TabVisibilityConfig,
+  TabType,
+  TabWindowConfig,
+  UserTabConfig,
+} from '~/components/@settings/core/types';
 import { DEFAULT_TAB_CONFIG } from '~/components/@settings/core/constants';
 import { toggleTheme } from './theme';
 import { create } from 'zustand';
@@ -361,6 +366,9 @@ const getInitialTabConfiguration = (): TabWindowConfig => {
 // console.log('Initial tab configuration:', getInitialTabConfiguration());
 
 export const tabConfigurationStore = map<TabWindowConfig>(getInitialTabConfiguration());
+
+/** When set, Menu should open the settings panel with this tab (e.g. from Deploy dropdown). */
+export const openSettingsWithTabStore = atom<TabType | null>(null);
 
 // Helper function to reset tab configuration
 export const resetTabConfiguration = () => {

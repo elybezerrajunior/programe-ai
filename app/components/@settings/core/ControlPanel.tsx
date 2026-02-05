@@ -33,6 +33,8 @@ import McpTab from '~/components/@settings/tabs/mcp/McpTab';
 interface ControlPanelProps {
   open: boolean;
   onClose: () => void;
+  /** When opening, navigate directly to this tab (e.g. from Deploy dropdown). */
+  initialTab?: TabType | null;
 }
 
 // Beta status for experimental features
@@ -44,7 +46,7 @@ const BetaLabel = () => (
   </div>
 );
 
-export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
+export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) => {
   // State
   const [activeTab, setActiveTab] = useState<TabType | null>(null);
   const [loadingTab, setLoadingTab] = useState<TabType | null>(null);
@@ -91,7 +93,7 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
       .sort((a, b) => a.order - b.order);
   }, [tabConfiguration, profile?.preferences?.notifications, baseTabConfig]);
 
-  // Reset to default view when modal opens/closes
+  // Reset to default view when modal opens/closes; open directly to initialTab when provided
   useEffect(() => {
     if (!open) {
       // Reset when closing
@@ -99,10 +101,15 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
       setLoadingTab(null);
       setShowTabManagement(false);
     } else {
-      // When opening, set to null to show the main view
-      setActiveTab(null);
+      // When opening with a requested tab (e.g. from Deploy dropdown), go straight to that tab
+      if (initialTab) {
+        setShowTabManagement(false);
+        setActiveTab(initialTab);
+      } else {
+        setActiveTab(null);
+      }
     }
-  }, [open]);
+  }, [open, initialTab]);
 
   // Handle closing
   const handleClose = () => {

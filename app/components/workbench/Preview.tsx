@@ -7,6 +7,7 @@ import { ScreenshotSelector } from './ScreenshotSelector';
 import { expoUrlAtom } from '~/lib/stores/qrCodeStore';
 import { ExpoQrModal } from '~/components/workbench/ExpoQrModal';
 import type { ElementInfo } from './Inspector';
+import { classNames } from '~/utils/classNames';
 
 type ResizeSide = 'left' | 'right' | null;
 
@@ -53,14 +54,14 @@ const WINDOW_SIZES: WindowSize[] = [
 ];
 
 const PREVIEW_LOADING_MESSAGES = [
-  'Entendendo o que você precisa...',
+  'Analisando sua solicitação...',
   'Montando a estrutura do projeto...',
-  'Escrevendo o código...',
-  'Configurando dependências...',
-  'Preparando o ambiente de desenvolvimento...',
-  'Subindo o servidor...',
+  'Gerando o código...',
+  'Instalando dependências...',
+  'Preparando o ambiente...',
+  'Iniciando o servidor...',
   'Sua aplicação está quase pronta...',
-  'Só mais um instante...',
+  'Finalizando...',
 ];
 
 export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
@@ -1019,14 +1020,66 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
               />
             </>
           ) : (
-            <div className="flex w-full h-full flex-col justify-center items-center gap-8 bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary">
-              <div className="h-14 w-14 rounded-full border-2 border-bolt-elements-borderColor border-t-accent-500 animate-spin" />
-              <p
-                key={loadingMessageIndex}
-                className="text-base font-medium text-bolt-elements-textSecondary text-center px-4"
-              >
-                {PREVIEW_LOADING_MESSAGES[loadingMessageIndex]}
-              </p>
+            <div className="flex w-full h-full flex-col justify-center items-center gap-10 bg-gradient-to-b from-bolt-elements-background-depth-1 to-bolt-elements-background-depth-2 text-bolt-elements-textPrimary relative overflow-hidden">
+              {/* Grid pattern */}
+              <div
+                className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(to right, currentColor 1px, transparent 1px),
+                    linear-gradient(to bottom, currentColor 1px, transparent 1px)
+                  `,
+                  backgroundSize: '24px 24px',
+                }}
+              />
+              {/* Glow */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-accent-500/10 blur-3xl pointer-events-none" />
+              <div className="relative flex flex-col items-center gap-10 max-w-sm">
+                <div className="flex items-center gap-2 text-accent-500">
+                  <div className="i-ph:robot size-6" />
+                  <span className="text-sm font-semibold tracking-wide uppercase">Programe Studio em ação</span>
+                </div>
+                <h3 className="text-lg font-semibold text-bolt-elements-textPrimary text-center">
+                  Criando sua aplicação
+                </h3>
+                {/* Modern loader: gradient ring + pulse */}
+                <div className="relative flex items-center justify-center">
+                  <div
+                    className="absolute w-16 h-16 rounded-full border-2 border-bolt-elements-borderColor/50"
+                    aria-hidden
+                  />
+                  <div
+                    className="w-16 h-16 rounded-full border-2 border-transparent border-t-accent-500 border-r-accent-500/60 animate-spin"
+                    aria-hidden
+                  />
+                  <div className="absolute w-8 h-8 rounded-full bg-accent-500/20 animate-pulse" />
+                  <div className="absolute w-3 h-3 rounded-full bg-accent-500 ring-4 ring-accent-500/30" />
+                </div>
+                {/* Step message with fade */}
+                <p
+                  key={loadingMessageIndex}
+                  className="text-sm font-medium text-bolt-elements-textSecondary text-center px-4 min-h-[1.5rem] flex items-center justify-center transition-opacity duration-300"
+                >
+                  {PREVIEW_LOADING_MESSAGES[loadingMessageIndex]}
+                </p>
+                {/* Progress dots */}
+                <div className="flex gap-1.5">
+                  {PREVIEW_LOADING_MESSAGES.map((_, i) => (
+                    <div
+                      key={i}
+                      className={classNames(
+                        'w-1.5 h-1.5 rounded-full transition-all duration-300',
+                        i === loadingMessageIndex
+                          ? 'bg-accent-500 w-4'
+                          : i < loadingMessageIndex
+                            ? 'bg-accent-500/50'
+                            : 'bg-bolt-elements-borderColor',
+                      )}
+                      aria-hidden
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
