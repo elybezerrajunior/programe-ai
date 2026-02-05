@@ -42,7 +42,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     // Validar token com Supabase para garantir que é válido
     if (supabase) {
       const { data, error } = await supabase.auth.getUser(accessToken);
-      
+
       if (error || !data.user) {
         console.error('[Sync Session] Invalid token:', error?.message);
         return json({ error: 'Invalid or expired token' }, { status: 401 });
@@ -54,7 +54,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
     }
 
     // Criar cookies de sessão
-    const cookies = createSessionCookies(accessToken, refreshToken || '', true);
+    const cookies = createSessionCookies(accessToken, refreshToken || '', true, env);
 
     // Retornar sucesso com os cookies definidos
     return json(

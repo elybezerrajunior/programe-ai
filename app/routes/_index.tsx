@@ -16,9 +16,12 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  // Obter variáveis de ambiente do Cloudflare (necessário em produção)
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+
   // Proteger rota - requer autenticação
-  await requireAuth(request);
+  await requireAuth(request, undefined, env);
 
   return json({});
 };

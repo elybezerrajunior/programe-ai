@@ -6,7 +6,10 @@ export const loader = async () => {
   return redirect('/login');
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
+  // Obter variáveis de ambiente do Cloudflare
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+
   try {
     // Fazer logout no Supabase
     await signOut();
@@ -16,7 +19,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   // Criar cookies para limpar sessão
-  const cookies = createLogoutCookies();
+  const cookies = createLogoutCookies(env);
 
   // Redirecionar para login
   return redirect('/login', {

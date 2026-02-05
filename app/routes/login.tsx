@@ -17,7 +17,7 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   // Obter variáveis de ambiente do Cloudflare
   const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
-  
+
   // Se o usuário já estiver logado, redirecionar para a home
   const session = await getSessionFromRequest(request, env);
   if (session) {
@@ -76,19 +76,12 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     const redirectTo = url.searchParams.get('redirectTo') || '/';
     const rememberMe = formData.get('rememberMe') === 'on';
 
-    // Criar cookies de sessão
-    const cookies = createSessionCookies(session.access_token, session.refresh_token || '', rememberMe);
-
-    // Adicionar tokens na URL temporariamente para sincronização no cliente
-    // (serão removidos pelo componente AuthSync após sincronização)
-    const redirectUrl = new URL(redirectTo, url.origin);
-    redirectUrl.searchParams.set('access_token', session.access_token);
-    if (session.refresh_token) {
-      redirectUrl.searchParams.set('refresh_token', session.refresh_token);
-    }
+    // Criar cookies de sessão (HTTP-only para segurança)
+    const cookies = createSessionCookies(session.access_token, session.refresh_token || '', rememberMe, env);
 
     // Redirecionar para a home ou rota solicitada
-    return redirect(redirectUrl.toString(), {
+    // Os cookies já contêm os tokens - não expor na URL por segurança
+    return redirect(redirectTo, {
       headers: createSessionHeaders(cookies),
     });
   } catch (error) {
