@@ -21,7 +21,7 @@ export function Header() {
     return (
       <header className="flex items-center justify-between px-6 border-b border-bolt-elements-borderColor h-[var(--header-height)] bg-bolt-elements-background-depth-1">
         {/* Logo */}
-        <div className="flex items-center gap-2 z-logo text-bolt-elements-textPrimary flex-1">
+        <div className="flex items-center gap-2 text-bolt-elements-textPrimary">
           <div className="i-ph:rocket text-xl text-accent" />
           <a href="/" className="text-xl font-semibold text-bolt-elements-textPrimary flex items-center">
             Programe Studio
@@ -29,7 +29,7 @@ export function Header() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+        <nav className="flex items-center gap-8 absolute left-1/2 -translate-x-1/2 z-max">
           <Link
             to="/"
             className={classNames('text-sm font-medium transition-colors', {

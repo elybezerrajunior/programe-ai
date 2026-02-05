@@ -12,7 +12,7 @@
   },
   "scripts": {
     "deploy": "npm run build && wrangler pages deploy",
-    "build": "remix vite:build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 remix vite:build",
     "dev": "node pre-start.cjs  && remix vite:dev",
     "test": "vitest --run",
     "test:watch": "vitest",
@@ -71,6 +71,7 @@
     "@codemirror/search": "^6.5.8",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.35.0",
+    "@fingerprintjs/fingerprintjs": "^5.0.1",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@iconify-json/svg-spinners": "^1.2.1",

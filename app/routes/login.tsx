@@ -5,13 +5,7 @@ import { LoginFeatures } from '~/components/login/LoginFeatures';
 import { LoginLightEffect } from '~/components/login/LoginLightEffect';
 import { Card } from '~/components/ui/Card';
 import { getSessionFromRequest, validateEmail, validatePassword, createSessionCookies, createSessionHeaders } from '~/lib/auth/session';
-import { createSupabaseClient, getSupabaseProjectRef } from '~/lib/auth/supabase-client';
 import { signInWithPassword, AuthenticationError } from '~/lib/auth/supabase-auth';
-
-function getSupabaseProjectRefFromUrl(url: string): string {
-  const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/);
-  return match ? match[1] : '';
-}
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,8 +15,8 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
-  const session = await getSessionFromRequest(request, env ?? undefined);
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+  const session = await getSessionFromRequest(request, env);
   if (session) {
     // Verificar se há redirectTo na query string
     const url = new URL(request.url);
@@ -67,16 +61,10 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     return json({ error: 'Senha deve ter no mínimo 6 caracteres', fields: { password: true } }, { status: 400 });
   }
 
-  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? process.env;
-  const supabaseUrl = env?.VITE_SUPABASE_URL;
-  const supabaseAnonKey = env?.VITE_SUPABASE_ANON_KEY;
-  const supabaseClient =
-    supabaseUrl && supabaseAnonKey ? createSupabaseClient(supabaseUrl, supabaseAnonKey) : null;
-  const projectRef = supabaseUrl ? getSupabaseProjectRefFromUrl(supabaseUrl) : getSupabaseProjectRef();
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
 
   try {
-    // Autenticar com Supabase
-    const { user, session } = await signInWithPassword(email, password, supabaseClient ?? undefined);
+    const { user, session } = await signInWithPassword(email, password, env);
 
     if (!session) {
       return json({ error: 'Não foi possível criar uma sessão', fields: { email: true, password: true } }, { status: 401 });
@@ -96,23 +84,8 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       redirectTo = '/';
     }
 
-    // Criar cookies de sessão
-    const cookies = createSessionCookies(
-      session.access_token,
-      session.refresh_token || '', rememberMe,
-      projectRef || undefined
-    );
-
-    // Adicionar tokens na URL temporariamente para sincronização no cliente
-    // (serão removidos pelo componente AuthSync após sincronização)
-    const redirectUrl = new URL(redirectTo, url.origin);
-    redirectUrl.searchParams.set('access_token', session.access_token);
-    if (session.refresh_token) {
-      redirectUrl.searchParams.set('refresh_token', session.refresh_token);
-    }
-
-    // Redirecionar para a home (/) ou para redirectTo quando vindo de rota protegida
-    return redirect(redirectUrl.toString(), {
+    const cookies = createSessionCookies(session.access_token, session.refresh_token || '', rememberMe, env);
+    return redirect(redirectTo, {
       headers: createSessionHeaders(cookies),
     });
   } catch (error) {

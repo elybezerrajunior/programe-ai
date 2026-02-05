@@ -1,12 +1,20 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
+// Tipo para variáveis de ambiente do Cloudflare
+export interface CloudflareEnv {
+  VITE_SUPABASE_URL?: string;
+  SUPABASE_URL?: string;
+  VITE_SUPABASE_ANON_KEY?: string;
+  SUPABASE_ANON_KEY?: string;
+}
+
 // Função helper para obter variáveis de ambiente de forma segura
 function getEnvVar(key: string): string | undefined {
   // No cliente (browser)
   if (typeof window !== 'undefined') {
     return import.meta.env[key];
   }
-  
+
   // No servidor - tentar process.env (Node.js) ou retornar undefined (Cloudflare)
   // No Cloudflare, process.env pode não estar disponível ou não ter as variáveis
   // Nesse caso, as variáveis devem vir do context.cloudflare.env
@@ -17,7 +25,7 @@ function getEnvVar(key: string): string | undefined {
   } catch {
     // Ignorar erro se process não estiver disponível (Cloudflare)
   }
-  
+
   return undefined;
 }
 
@@ -62,10 +70,44 @@ if (supabaseUrl && supabaseAnonKey) {
 }
 
 /**
+ * Cria um cliente Supabase a partir de variáveis de ambiente do Cloudflare
+ * Use em rotas server-side quando o singleton for null
+ */
+function createSupabaseClientFromEnv(env: CloudflareEnv): SupabaseClient | null {
+  const url = env.VITE_SUPABASE_URL || env.SUPABASE_URL;
+  const anonKey = env.VITE_SUPABASE_ANON_KEY || env.SUPABASE_ANON_KEY;
+
+  if (!url || !anonKey) {
+    console.error('[Supabase] Missing environment variables:', {
+      hasUrl: !!url,
+      hasAnonKey: !!anonKey,
+    });
+    return null;
+  }
+
+  return createClient(url, anonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: false,
+      detectSessionInUrl: false,
+    },
+  });
+}
+
+/**
+ * Obtém o cliente Supabase, tentando o singleton primeiro e criando dinamicamente se necessário
+ */
+export function getSupabaseClient(env?: CloudflareEnv): SupabaseClient | null {
+  if (supabase) return supabase;
+  if (env) return createSupabaseClientFromEnv(env);
+  return null;
+}
+
+/**
  * Retorna o project ref da URL do Supabase (para nomes de cookies etc.)
  */
-export function getSupabaseProjectRef(): string {
-  const url = supabaseUrl || '';
+export function getSupabaseProjectRef(env?: CloudflareEnv): string {
+  const url = supabaseUrl || env?.VITE_SUPABASE_URL || env?.SUPABASE_URL || '';
   const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/);
   return match ? match[1] : '';
 }

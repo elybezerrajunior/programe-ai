@@ -1,20 +1,21 @@
 import { json, type ActionFunctionArgs } from '@remix-run/cloudflare';
 import { AsaasService } from '~/lib/services/asaasService';
 import { getSessionFromRequest } from '~/lib/auth/session';
-import { supabase } from '~/lib/auth/supabase-client';
+import { getSupabaseClient } from '~/lib/auth/supabase-client';
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   if (request.method !== 'POST') {
     return json({ error: 'Method not allowed' }, { status: 405 });
   }
 
-  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
   try {
-    const session = await getSessionFromRequest(request, env ?? undefined);
+    const session = await getSessionFromRequest(request, env);
     if (!session) {
       return json({ error: 'Não autenticado' }, { status: 401 });
     }
 
+    const supabase = getSupabaseClient(env);
     if (!supabase) {
       return json({ error: 'Supabase não configurado' }, { status: 500 });
     }

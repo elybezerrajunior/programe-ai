@@ -20,8 +20,8 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
-  const session = await getSessionFromRequest(request, env ?? undefined);
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+  const session = await getSessionFromRequest(request, env);
   if (!session) {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams();

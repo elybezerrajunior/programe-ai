@@ -1,10 +1,18 @@
 import { redirect } from '@remix-run/cloudflare';
 import { parseCookies } from '~/lib/api/cookies';
-import { supabase, createSupabaseClient, getSupabaseProjectRef } from './supabase-client';
+import { getSupabaseProjectRef, getSupabaseClient } from './supabase-client';
 
 const SESSION_COOKIE_NAME = 'programe_session';
 const SUPABASE_ACCESS_TOKEN_COOKIE = 'sb-access-token';
 const SUPABASE_REFRESH_TOKEN_COOKIE = 'sb-refresh-token';
+
+// Tipo para variáveis de ambiente do Cloudflare
+interface CloudflareEnv {
+  VITE_SUPABASE_URL?: string;
+  SUPABASE_URL?: string;
+  VITE_SUPABASE_ANON_KEY?: string;
+  SUPABASE_ANON_KEY?: string;
+}
 
 /**
  * Interface do usuário (mantida para compatibilidade)
@@ -33,46 +41,33 @@ function extractProjectRef(url: string): string {
 
 /**
  * Obtém o nome do cookie baseado no project ref
- * @param projectRef - Opcional; quando passado (ex.: server com env do context), usa em vez do global
  */
-function getCookieName(baseName: string, projectRef?: string): string {
-  const ref = projectRef ?? getSupabaseProjectRef();
-  return ref ? `sb-${ref}-${baseName}` : baseName;
+function getCookieName(baseName: string, env?: CloudflareEnv): string {
+  const projectRef = getSupabaseProjectRef(env);
+  return projectRef ? `sb-${projectRef}-${baseName}` : baseName;
 }
 
 /**
  * Valida a sessão do Supabase a partir dos cookies
- * Extrai o token dos cookies e valida com Supabase
- * @param env - Opcional; em prod (Cloudflare) o cliente global pode ser null; passe context.cloudflare.env para validar sessão
+ * @param env - Variáveis de ambiente do Cloudflare (necessário em produção)
  */
-export async function getSessionFromRequest(
-  request: Request,
-  env?: Record<string, string> | null
-): Promise<Session | null> {
-  const authClient =
-    supabase ??
-    (env?.VITE_SUPABASE_URL && env?.VITE_SUPABASE_ANON_KEY
-      ? createSupabaseClient(env.VITE_SUPABASE_URL, env.VITE_SUPABASE_ANON_KEY)
-      : null);
-
-  if (!authClient) return null;
+export async function getSessionFromRequest(request: Request, env?: CloudflareEnv): Promise<Session | null> {
+  const client = getSupabaseClient(env);
+  if (!client) return null;
 
   const cookieHeader = request.headers.get('Cookie');
   if (!cookieHeader) return null;
-
-  const projectRef =
-    env?.VITE_SUPABASE_URL?.match(/https?:\/\/([^.]+)\.supabase\.co/)?.[1] ?? getSupabaseProjectRef();
 
   try {
     const cookies = parseCookies(cookieHeader);
     const accessToken =
       cookies[SUPABASE_ACCESS_TOKEN_COOKIE] ||
-      cookies[getCookieName('auth-token', projectRef || undefined)] ||
+      cookies[getCookieName('auth-token', env)] ||
       cookies[SESSION_COOKIE_NAME];
 
     if (!accessToken) return null;
 
-    const { data, error } = await authClient.auth.getUser(accessToken);
+    const { data, error } = await client.auth.getUser(accessToken);
     if (error || !data.user) return null;
 
     const user = data.user;
@@ -92,22 +87,19 @@ export async function getSessionFromRequest(
 
 /**
  * Cria cookies para a sessão do Supabase
- * @param projectRef - Opcional; use quando o cliente foi criado com env do context (ex.: signup action)
- */
-/**
- * Cria cookies para a sessão do Supabase
+ * @param accessToken - Token de acesso
+ * @param refreshToken - Token de refresh
+ * @param persist - Se deve persistir (30 dias) ou usar sessão (1 hora)
+ * @param env - Variáveis de ambiente do Cloudflare (necessário em produção)
  */
 export function createSessionCookies(
-  
   accessToken: string,
- 
   refreshToken: string,
-  projectRef?: string
-,
-  persist: boolean = false
+  persist: boolean = false,
+  env?: CloudflareEnv
 ): string[] {
-  const accessTokenCookieName = getCookieName('auth-token', projectRef);
-  const refreshTokenCookieName = getCookieName('auth-refresh-token', projectRef);
+  const accessTokenCookieName = getCookieName('auth-token', env);
+  const refreshTokenCookieName = getCookieName('auth-refresh-token', env);
 
   // Cookies HTTP-only, Secure, SameSite=Lax para segurança
   const cookies: string[] = [];
@@ -157,9 +149,9 @@ export function createSessionHeaders(cookieStrings: string[]): Headers {
 /**
  * Cria cookies para limpar sessão (logout)
  */
-export function createLogoutCookies(projectRef?: string): string[] {
-  const accessTokenCookieName = getCookieName('auth-token', projectRef);
-  const refreshTokenCookieName = getCookieName('auth-refresh-token', projectRef);
+export function createLogoutCookies(env?: CloudflareEnv): string[] {
+  const accessTokenCookieName = getCookieName('auth-token', env);
+  const refreshTokenCookieName = getCookieName('auth-refresh-token', env);
 
   const cookies: string[] = [];
 
@@ -196,13 +188,8 @@ export function validatePasswordConfirmation(password: string, confirmation: str
 /**
  * Helper para proteger rotas (requer autenticação)
  * Redireciona para /login se não autenticado
- * @param env - Opcional; em prod (Cloudflare) passe context.cloudflare.env para validar sessão
  */
-export async function requireAuth(
-  request: Request,
-  redirectTo?: string,
-  env?: Record<string, string> | null
-) {
+export async function requireAuth(request: Request, redirectTo?: string, env?: CloudflareEnv) {
   const session = await getSessionFromRequest(request, env);
 
   if (!session) {
@@ -218,3 +205,6 @@ export async function requireAuth(
 
   return session;
 }
+
+// Exportar tipo para uso em outras partes
+export type { CloudflareEnv };

@@ -10,7 +10,7 @@ import { Switch } from '~/components/ui/Switch';
 import { Progress } from '~/components/ui/Progress';
 import { classNames } from '~/utils/classNames';
 import { getSessionFromRequest } from '~/lib/auth/session';
-import { supabase } from '~/lib/auth/supabase-client';
+import { getSupabaseClient } from '~/lib/auth/supabase-client';
 import { loadSubscription } from '~/lib/stores/subscription';
 import { AsaasService } from '~/lib/services/asaasService';
 import { processCheckoutPaid } from '~/lib/asaas/processCheckoutPaid';
@@ -62,15 +62,16 @@ const DAILY_CREDITS: Record<string, number> = {
 };
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
-  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
   try {
-    const session = await getSessionFromRequest(request, env ?? undefined);
+    const session = await getSessionFromRequest(request, env);
     if (!session) {
       return json({ redirect: '/login' }, { status: 401 });
     }
 
     const url = new URL(request.url);
     const checkoutSuccess = url.searchParams.get('checkout') === 'success';
+    const supabase = getSupabaseClient(env);
     if (checkoutSuccess && supabase) {
       try {
         const { data: pendingCheckout } = await (supabase as any)
@@ -544,7 +545,27 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
 }
 
 export default function PlansPage() {
-  const { subscription, credits } = useLoaderData<LoaderData>();
+  const loaderData = useLoaderData<LoaderData>();
+
+  // Valores padrão caso os dados não existam
+  const subscription = loaderData?.subscription ?? {
+    planType: 'free' as const,
+    status: 'active',
+    asaasCustomerId: null,
+    currentPeriodEnd: null,
+    cancelAtPeriodEnd: false,
+  };
+
+  const credits = loaderData?.credits ?? {
+    total: 5,
+    used: 0,
+    bonus: 0,
+    dailyUsed: 0,
+    dailyAllowed: 0,
+    planCredits: 5,
+    creditsRollover: false,
+  };
+
   const revalidator = useRevalidator();
   const [searchParams, setSearchParams] = useSearchParams();
 

@@ -11,10 +11,10 @@ export const meta: MetaFunction = () => {
   return [{ title: 'Bolt' }, { name: 'description', content: 'Talk with Bolt, an AI assistant from StackBlitz' }];
 };
 
-export async function loader(args: LoaderFunctionArgs) {
-  const env = (args.context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
-  await requireAuth(args.request, undefined, env ?? undefined);
-  return json({ url: args.params.url });
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+  await requireAuth(request, undefined, env);
+  return json({ url: params.url });
 }
 
 export default function Index() {

@@ -27,8 +27,8 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     return json({ error: 'Method not allowed' }, { status: 405 });
   }
 
-  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
-  const session = await getSessionFromRequest(request, env ?? undefined);
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+  const session = await getSessionFromRequest(request, env);
   if (!session) {
     return json({ error: 'Não autenticado' }, { status: 401 });
   }

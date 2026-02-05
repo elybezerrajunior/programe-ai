@@ -3,20 +3,17 @@ import { getEncoding } from 'istextorbinary';
 import { map, type MapStore } from 'nanostores';
 import { path } from '~/utils/path';
 
-// Buffer: usar global/polyfill no browser; evitar require() (não existe no client bundle em prod)
-function getBuffer(): typeof import('node:buffer').Buffer | undefined {
-  if (typeof globalThis !== 'undefined' && (globalThis as any).Buffer) return (globalThis as any).Buffer;
-  if (typeof global !== 'undefined' && (global as any).Buffer) return (global as any).Buffer;
-  if (typeof require !== 'undefined') {
-    try {
-      return require('node:buffer').Buffer;
-    } catch {
-      return undefined;
-    }
-  }
-  return undefined;
-}
-const Buffer = getBuffer();
+// Buffer: global no Cloudflare/Node; no browser usamos fallback mínimo para operações básicas
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Buffer = (typeof globalThis !== 'undefined' && (globalThis as any).Buffer) ||
+  (typeof global !== 'undefined' && (global as any).Buffer) || {
+  from: (data: Uint8Array | string): Uint8Array => {
+    if (typeof data === 'string') return new TextEncoder().encode(data);
+    return new Uint8Array(data);
+  },
+  toString: () => '',
+  isBuffer: () => false,
+};
 import { bufferWatchEvents } from '~/utils/buffer';
 import { WORK_DIR } from '~/utils/constants';
 import { computeFileModifications } from '~/utils/diff';

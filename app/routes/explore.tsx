@@ -1,5 +1,6 @@
 import { json, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import BackgroundRays from '~/components/ui/BackgroundRays';
+import { Header } from '~/components/header/Header';
 import { requireAuth } from '~/lib/auth/session';
 import { classNames } from '~/utils/classNames';
 
@@ -8,8 +9,11 @@ export const meta: MetaFunction = () => [
   { name: 'description', content: 'Explore modelos e recursos do Programe Studio.' },
 ];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await requireAuth(request);
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  // Obter variáveis de ambiente do Cloudflare (necessário em produção)
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+
+  await requireAuth(request, undefined, env);
   return json({});
 };
 
@@ -32,6 +36,7 @@ const TEMPLATES = [
 export default function Explore() {
   return (
     <div className="flex flex-col min-h-screen w-full bg-bolt-elements-background-depth-1 overflow-auto">
+      <Header />
       <BackgroundRays />
 
       <main className="flex-1 w-full max-w-6xl mx-auto px-6 py-8">

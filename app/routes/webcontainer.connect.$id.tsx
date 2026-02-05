@@ -1,9 +1,9 @@
-import { type LoaderFunction } from '@remix-run/cloudflare';
+import { type LoaderFunctionArgs } from '@remix-run/cloudflare';
 import { requireAuth } from '~/lib/auth/session';
 
-export const loader: LoaderFunction = async ({ request, context }) => {
-  const env = (context?.cloudflare?.env as unknown as Record<string, string> | undefined) ?? undefined;
-  await requireAuth(request, undefined, env ?? undefined);
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
+  await requireAuth(request, undefined, env);
   const url = new URL(request.url);
   const editorOrigin = url.searchParams.get('editorOrigin') || 'https://stackblitz.com';
   console.log('editorOrigin', editorOrigin);
