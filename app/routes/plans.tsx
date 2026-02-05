@@ -65,7 +65,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   try {
     // Obter variáveis de ambiente do Cloudflare
     const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
-    
+
     const session = await getSessionFromRequest(request, env);
     if (!session) {
       return json({ redirect: '/login' }, { status: 401 });
@@ -547,7 +547,27 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
 }
 
 export default function PlansPage() {
-  const { subscription, credits } = useLoaderData<LoaderData>();
+  const loaderData = useLoaderData<LoaderData>();
+
+  // Valores padrão caso os dados não existam
+  const subscription = loaderData?.subscription ?? {
+    planType: 'free' as const,
+    status: 'active',
+    asaasCustomerId: null,
+    currentPeriodEnd: null,
+    cancelAtPeriodEnd: false,
+  };
+
+  const credits = loaderData?.credits ?? {
+    total: 5,
+    used: 0,
+    bonus: 0,
+    dailyUsed: 0,
+    dailyAllowed: 0,
+    planCredits: 5,
+    creditsRollover: false,
+  };
+
   const revalidator = useRevalidator();
   const [searchParams, setSearchParams] = useSearchParams();
 
