@@ -1,3 +1,12 @@
+/**
+ * Rota de Signup com Proteção Antifraude
+ * 
+ * Esta versão do signup integra o sistema antifraude completo.
+ * 
+ * Para usar, renomeie este arquivo para signup.tsx ou importe
+ * o componente SignupFormWithAntifraud no signup existente.
+ */
+
 import { json, redirect, type ActionFunctionArgs, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/cloudflare';
 import { useNavigation } from '@remix-run/react';
 import { SignupFormWithAntifraud } from '~/components/signup/SignupFormWithAntifraud';
@@ -50,7 +59,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   const password = formData.get('password')?.toString() || '';
   const confirmPassword = formData.get('confirmPassword')?.toString() || '';
   const name = formData.get('name')?.toString() || '';
-
+  
   // Dados antifraude
   const fingerprintId = formData.get('fingerprintId')?.toString() || null;
   const fingerprintConfidence = parseFloat(formData.get('fingerprintConfidence')?.toString() || '0');
@@ -61,7 +70,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   const timezone = formData.get('timezone')?.toString() || '';
   const antifraudValidated = formData.get('antifraudValidated')?.toString() === 'true';
   const initialCredits = parseInt(formData.get('initialCredits')?.toString() || '5', 10);
-  const trustLevel = formData.get('trustLevel')?.toString() || 'new';
 
   // Validações básicas
   if (!email || !password || !confirmPassword || !name) {
@@ -102,7 +110,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 
   // Obter variáveis de ambiente do Cloudflare
   const env = context?.cloudflare?.env as unknown as Record<string, string> | undefined;
-
+  
   // Verificar se antifraude está habilitado
   const antifraudEnabled = (env?.ANTIFRAUD_ENABLED || process.env.ANTIFRAUD_ENABLED) !== 'false';
 
@@ -125,7 +133,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
         const supabase = getSupabaseClient(env);
         const turnstileSecretKey = env?.TURNSTILE_SECRET_KEY || process.env.TURNSTILE_SECRET_KEY || '';
         const ipinfoToken = env?.IPINFO_TOKEN || process.env.IPINFO_TOKEN;
-
+        
         const antifraudPayload: SignupAntifraudPayload = {
           email,
           name: name.trim(),
@@ -137,7 +145,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
           language,
           timezone,
         };
-
+        
         // Salvar dados antifraude (não bloqueia o signup pois já foi validado antes)
         await finalizeSignupAntifraud(
           supabase,
@@ -151,7 +159,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
             reason: antifraudValidated ? 'Pre-validated' : 'Validation skipped',
             flags: [],
             initialCredits,
-            trustLevel: trustLevel as 'new' | 'basic' | 'verified' | 'trusted' | 'premium',
             signalId: null,
           },
           {
@@ -160,7 +167,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
             enabled: antifraudEnabled,
           }
         );
-
+        
       } catch (antifraudError) {
         console.error('Antifraud finalization error:', antifraudError);
         // Não falha o signup por erro no antifraude
@@ -213,7 +220,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   }
 };
 
-export default function Signup() {
+export default function SignupWithAntifraud() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
 
