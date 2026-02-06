@@ -5,6 +5,7 @@ import { vercelConnection } from '~/lib/stores/vercel';
 import { isGitLabConnected } from '~/lib/stores/gitlabConnection';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { streamingState } from '~/lib/stores/streaming';
+import { openSettingsWithTabStore } from '~/lib/stores/settings';
 import { classNames } from '~/utils/classNames';
 import { useState } from 'react';
 import { NetlifyDeploymentLink } from '~/components/chat/NetlifyDeploymentLink.client';
@@ -131,9 +132,11 @@ export const DeployButton = ({
         <DropdownMenu.Root>
           <DropdownMenu.Trigger
             disabled={isDeploying || !activePreview || isStreaming}
-            className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-bolt-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7"
+            className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
           >
-            {isDeploying ? `Implantando em ${deployingTo}...` : 'Implantar'}
+            {isDeploying
+              ? `Implantando no ${deployingTo === 'netlify' ? 'Netlify' : deployingTo === 'vercel' ? 'Vercel' : deployingTo === 'github' ? 'GitHub' : 'GitLab'}...`
+              : 'Implantar'}
             <span className={classNames('i-ph:caret-down transition-transform')} />
           </DropdownMenu.Trigger>
           <DropdownMenu.Content
@@ -152,21 +155,30 @@ export const DeployButton = ({
               className={classNames(
                 'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
                 {
-                  'opacity-60 cursor-not-allowed': isDeploying || !activePreview || !netlifyConn.user,
+                  'opacity-60 cursor-not-allowed': isDeploying || !activePreview,
                 },
               )}
-              disabled={isDeploying || !activePreview || !netlifyConn.user}
-              onClick={handleNetlifyDeployClick}
+              disabled={isDeploying || !activePreview}
+              onClick={() => {
+                if (!netlifyConn.user) {
+                  openSettingsWithTabStore.set('netlify');
+                  return;
+                }
+                handleNetlifyDeployClick();
+              }}
             >
-              <img
-                className="w-5 h-5"
-                height="24"
-                width="24"
-                crossOrigin="anonymous"
-                src="https://cdn.simpleicons.org/netlify"
-              />
+              <span className="flex items-center justify-center w-7 h-7 rounded bg-bolt-elements-background-depth-3 dark:bg-white/10 shrink-0">
+                <img
+                  className="w-5 h-5"
+                  height="24"
+                  width="24"
+                  crossOrigin="anonymous"
+                  src="https://cdn.simpleicons.org/netlify"
+                  alt=""
+                />
+              </span>
               <span className="mx-auto">
-                {!netlifyConn.user ? 'Nenhuma Conta Netlify Conectada' : 'Implantar no Netlify'}
+                {!netlifyConn.user ? 'Conectar Netlify' : 'Implantar no Netlify'}
               </span>
               {netlifyConn.user && <NetlifyDeploymentLink />}
             </DropdownMenu.Item>
@@ -175,22 +187,30 @@ export const DeployButton = ({
               className={classNames(
                 'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
                 {
-                  'opacity-60 cursor-not-allowed': isDeploying || !activePreview || !vercelConn.user,
+                  'opacity-60 cursor-not-allowed': isDeploying || !activePreview,
                 },
               )}
-              disabled={isDeploying || !activePreview || !vercelConn.user}
-              onClick={handleVercelDeployClick}
+              disabled={isDeploying || !activePreview}
+              onClick={() => {
+                if (!vercelConn.user) {
+                  openSettingsWithTabStore.set('vercel');
+                  return;
+                }
+                handleVercelDeployClick();
+              }}
             >
-              <img
-                className="w-5 h-5 bg-black p-1 rounded"
-                height="24"
-                width="24"
-                crossOrigin="anonymous"
-                src="https://cdn.simpleicons.org/vercel/white"
-                alt="vercel"
-              />
+              <span className="flex items-center justify-center w-7 h-7 rounded bg-bolt-elements-background-depth-3 dark:bg-white/10 shrink-0">
+                <img
+                  className="w-5 h-5 dark:invert"
+                  height="24"
+                  width="24"
+                  crossOrigin="anonymous"
+                  src="https://cdn.simpleicons.org/vercel/white"
+                  alt=""
+                />
+              </span>
               <span className="mx-auto">
-                {!vercelConn.user ? 'Nenhuma Conta Vercel Conectada' : 'Implantar no Vercel'}
+                {!vercelConn.user ? 'Conectar Vercel' : 'Implantar no Vercel'}
               </span>
               {vercelConn.user && <VercelDeploymentLink />}
             </DropdownMenu.Item>
@@ -205,14 +225,16 @@ export const DeployButton = ({
               disabled={isDeploying || !activePreview}
               onClick={handleGitHubDeployClick}
             >
-              <img
-                className="w-5 h-5"
-                height="24"
-                width="24"
-                crossOrigin="anonymous"
-                src="https://cdn.simpleicons.org/github"
-                alt="github"
-              />
+              <span className="flex items-center justify-center w-7 h-7 rounded bg-bolt-elements-background-depth-3 dark:bg-white/10 shrink-0">
+                <img
+                  className="w-5 h-5 dark:invert"
+                  height="24"
+                  width="24"
+                  crossOrigin="anonymous"
+                  src="https://cdn.simpleicons.org/github"
+                  alt=""
+                />
+              </span>
               <span className="mx-auto">Implantar no GitHub</span>
             </DropdownMenu.Item>
 
@@ -220,38 +242,31 @@ export const DeployButton = ({
               className={classNames(
                 'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
                 {
-                  'opacity-60 cursor-not-allowed': isDeploying || !activePreview || !gitlabIsConnected,
+                  'opacity-60 cursor-not-allowed': isDeploying || !activePreview,
                 },
               )}
-              disabled={isDeploying || !activePreview || !gitlabIsConnected}
-              onClick={handleGitLabDeployClick}
+              disabled={isDeploying || !activePreview}
+              onClick={() => {
+                if (!gitlabIsConnected) {
+                  openSettingsWithTabStore.set('gitlab');
+                  return;
+                }
+                handleGitLabDeployClick();
+              }}
             >
-              <img
-                className="w-5 h-5"
-                height="24"
-                width="24"
-                crossOrigin="anonymous"
-                src="https://cdn.simpleicons.org/gitlab"
-                alt="gitlab"
-              />
-              <span className="mx-auto">
-                {!gitlabIsConnected ? 'Nenhuma Conta GitLab Conectada' : 'Implantar no GitLab'}
+              <span className="flex items-center justify-center w-7 h-7 rounded bg-bolt-elements-background-depth-3 dark:bg-white/10 shrink-0">
+                <img
+                  className="w-5 h-5"
+                  height="24"
+                  width="24"
+                  crossOrigin="anonymous"
+                  src="https://cdn.simpleicons.org/gitlab"
+                  alt=""
+                />
               </span>
-            </DropdownMenu.Item>
-
-            <DropdownMenu.Item
-              disabled
-              className="flex items-center w-full rounded-md px-4 py-2 text-sm text-bolt-elements-textTertiary gap-2 opacity-60 cursor-not-allowed"
-            >
-              <img
-                className="w-5 h-5"
-                height="24"
-                width="24"
-                crossOrigin="anonymous"
-                src="https://cdn.simpleicons.org/cloudflare"
-                alt="cloudflare"
-              />
-              <span className="mx-auto">Implantar no Cloudflare (Em Breve)</span>
+              <span className="mx-auto">
+                {!gitlabIsConnected ? 'Conectar GitLab' : 'Implantar no GitLab'}
+              </span>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>

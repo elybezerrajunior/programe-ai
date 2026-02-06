@@ -2,9 +2,8 @@ import { motion, type Variants } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Dialog, DialogButton, DialogDescription, DialogRoot, DialogTitle } from '~/components/ui/Dialog';
-import { ThemeSwitch } from '~/components/ui/ThemeSwitch';
 import { ControlPanel } from '~/components/@settings/core/ControlPanel';
-import { SettingsButton, HelpButton } from '~/components/ui/SettingsButton';
+import { SettingsButton } from '~/components/ui/SettingsButton';
 import { Button } from '~/components/ui/Button';
 import { db, deleteById, getAll, chatId, type ChatHistoryItem, useChatHistory } from '~/lib/persistence';
 import { cubicEasingFn } from '~/utils/easings';
@@ -14,6 +13,8 @@ import { useSearchFilter } from '~/lib/hooks/useSearchFilter';
 import { classNames } from '~/utils/classNames';
 import { useStore } from '@nanostores/react';
 import { profileStore } from '~/lib/stores/profile';
+import { openSettingsWithTabStore } from '~/lib/stores/settings';
+import type { TabType } from '~/components/@settings/core/types';
 
 const menuVariants = {
   closed: {
@@ -53,7 +54,7 @@ function CurrentDateTime() {
   }, []);
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-100 dark:border-gray-800/50">
+    <div className="flex items-center gap-2 px-4 py-2 text-sm text-bolt-elements-textSecondary border-b border-bolt-elements-borderColor">
       <div className="h-4 w-4 i-ph:clock opacity-80" />
       <div className="flex gap-2">
         <span>{dateTime.toLocaleDateString()}</span>
@@ -70,7 +71,19 @@ export const Menu = () => {
   const [open, setOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<DialogContent>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [initialTabForSettings, setInitialTabForSettings] = useState<TabType | null>(null);
+  const requestedSettingsTab = useStore(openSettingsWithTabStore);
   const profile = useStore(profileStore);
+
+  // When another component requests opening settings with a specific tab (e.g. Deploy dropdown)
+  useEffect(() => {
+    if (requestedSettingsTab) {
+      setInitialTabForSettings(requestedSettingsTab);
+      setIsSettingsOpen(true);
+      openSettingsWithTabStore.set(null);
+    }
+  }, [requestedSettingsTab]);
+  const [avatarLoadError, setAvatarLoadError] = useState(false);
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -267,6 +280,10 @@ export const Menu = () => {
   }, [filteredList]); // Depends only on filteredList
 
   useEffect(() => {
+    setAvatarLoadError(false);
+  }, [profile?.avatar]);
+
+  useEffect(() => {
     if (open) {
       loadEntries();
     }
@@ -320,6 +337,7 @@ export const Menu = () => {
 
   const handleSettingsClose = () => {
     setIsSettingsOpen(false);
+    setInitialTabForSettings(null);
   };
 
   const setDialogContentWithLogging = useCallback((content: DialogContent) => {
@@ -337,32 +355,29 @@ export const Menu = () => {
         style={{ width: '340px' }}
         className={classNames(
           'flex selection-accent flex-col side-menu fixed top-0 h-full rounded-r-2xl',
-          'bg-white dark:bg-gray-950 border-r border-bolt-elements-borderColor',
+          'bg-bolt-elements-background-depth-1 border-r border-bolt-elements-borderColor',
           'shadow-sm text-sm',
-          isSettingsOpen ? 'z-40' : 'z-sidebar',
+          isSettingsOpen ? 'z-40' : 'z-[999]',
         )}
       >
-        <div className="h-12 flex items-center justify-between px-4 border-b border-gray-100 dark:border-gray-800/50 bg-gray-50/50 dark:bg-gray-900/50 rounded-tr-2xl">
-          <div className="text-gray-900 dark:text-white font-medium"></div>
-          <div className="flex items-center gap-3">
-            <HelpButton onClick={() => window.open('https://stackblitz-labs.github.io/bolt.diy/', '_blank')} />
-            <span className="font-medium text-sm text-gray-900 dark:text-white truncate">
-              {profile?.username || 'Usuário Convidado'}
-            </span>
-            <div className="flex items-center justify-center w-[32px] h-[32px] overflow-hidden bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-500 rounded-full shrink-0">
-              {profile?.avatar ? (
-                <img
-                  src={profile.avatar}
-                  alt={profile?.username || 'User'}
-                  className="w-full h-full object-cover"
-                  loading="eager"
-                  decoding="sync"
-                />
-              ) : (
-                <div className="i-ph:user-fill text-lg" />
-              )}
-            </div>
+        <div className="h-12 flex items-center gap-3 px-4 border-b border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 rounded-tr-2xl">
+          <div className="flex items-center justify-center w-9 h-9 overflow-hidden bg-bolt-elements-background-depth-3 text-bolt-elements-textTertiary rounded-full shrink-0">
+            {profile?.avatar && !avatarLoadError ? (
+              <img
+                src={profile.avatar}
+                alt={profile?.username || 'User'}
+                className="w-full h-full object-cover"
+                loading="eager"
+                decoding="sync"
+                onError={() => setAvatarLoadError(true)}
+              />
+            ) : (
+              <div className="i-ph:user-fill text-lg" aria-hidden />
+            )}
           </div>
+          <span className="font-medium text-sm text-bolt-elements-textPrimary truncate flex-1 min-w-0">
+            {profile?.username || 'Usuário convidado'}
+          </span>
         </div>
         <CurrentDateTime />
         <div className="flex-1 flex flex-col h-full w-full overflow-hidden">
@@ -370,7 +385,7 @@ export const Menu = () => {
             <div className="flex gap-2">
               <a
                 href="/"
-                className="flex-1 flex gap-2 items-center bg-accent-50 dark:bg-accent-500/10 text-accent-700 dark:text-accent-300 hover:bg-accent-100 dark:hover:bg-accent-500/20 rounded-lg px-4 py-2 transition-colors"
+                className="flex-1 flex gap-2 items-center bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text hover:bg-bolt-elements-button-primary-backgroundHover rounded-lg px-4 py-2 transition-colors"
               >
                 <span className="inline-block i-ph:plus-circle h-4 w-4" />
                 <span className="text-sm font-medium">Iniciar novo chat</span>
@@ -378,10 +393,10 @@ export const Menu = () => {
               <button
                 onClick={toggleSelectionMode}
                 className={classNames(
-                  'flex gap-1 items-center rounded-lg px-3 py-2 transition-colors',
+                  'flex gap-1 items-center rounded-lg px-3 py-2 transition-colors border border-bolt-elements-borderColor',
                   selectionMode
-                    ? 'bg-accent-600 dark:bg-accent-500 text-white border border-accent-700 dark:border-accent-600'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700',
+                    ? 'bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text hover:bg-bolt-elements-button-primary-backgroundHover'
+                    : 'bg-bolt-elements-button-secondary-background text-bolt-elements-button-secondary-text hover:bg-bolt-elements-button-secondary-backgroundHover',
                 )}
                 aria-label={selectionMode ? 'Sair do modo de seleção' : 'Entrar no modo de seleção'}
               >
@@ -390,10 +405,10 @@ export const Menu = () => {
             </div>
             <div className="relative w-full">
               <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                <span className="i-ph:magnifying-glass h-4 w-4 text-gray-400 dark:text-gray-500" />
+                <span className="i-ph:magnifying-glass h-4 w-4 text-bolt-elements-textTertiary" />
               </div>
               <input
-                className="w-full bg-gray-50 dark:bg-gray-900 relative pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent-500/50 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 border border-gray-200 dark:border-gray-800"
+                className="w-full bg-bolt-elements-background-depth-2 relative pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent-500/50 text-sm text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary border border-bolt-elements-borderColor"
                 type="search"
                 placeholder="Buscar chats..."
                 onChange={handleSearchChange}
@@ -402,7 +417,7 @@ export const Menu = () => {
             </div>
           </div>
           <div className="flex items-center justify-between text-sm px-4 py-2">
-            <div className="font-medium text-gray-600 dark:text-gray-400">Seus Chats</div>
+            <div className="font-medium text-bolt-elements-textSecondary">Seus Chats</div>
             {selectionMode && (
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={selectAll}>
@@ -421,14 +436,14 @@ export const Menu = () => {
           </div>
           <div className="flex-1 overflow-auto px-3 pb-3">
             {filteredList.length === 0 && (
-              <div className="px-4 text-gray-500 dark:text-gray-400 text-sm">
+              <div className="px-4 text-bolt-elements-textTertiary text-sm">
                 {list.length === 0 ? 'Nenhuma conversa anterior' : 'Nenhum resultado encontrado'}
               </div>
             )}
             <DialogRoot open={dialogContent !== null}>
               {binDates(filteredList).map(({ category, items }) => (
                 <div key={category} className="mt-2 first:mt-0 space-y-1">
-                  <div className="text-xs font-medium text-gray-500 dark:text-gray-400 sticky top-0 z-1 bg-white dark:bg-gray-950 px-4 py-1">
+                  <div className="text-xs font-medium text-bolt-elements-textTertiary sticky top-0 z-1 bg-bolt-elements-background-depth-1 px-4 py-1">
                     {category}
                   </div>
                   <div className="space-y-0.5 pr-1">
@@ -455,19 +470,19 @@ export const Menu = () => {
               <Dialog onBackdrop={closeDialog} onClose={closeDialog}>
                 {dialogContent?.type === 'delete' && (
                   <>
-                    <div className="p-6 bg-white dark:bg-gray-950">
-                      <DialogTitle className="text-gray-900 dark:text-white">Excluir Chat?</DialogTitle>
-                      <DialogDescription className="mt-2 text-gray-600 dark:text-gray-400">
+                    <div className="p-6 bg-bolt-elements-background-depth-1">
+                      <DialogTitle className="text-bolt-elements-textPrimary">Excluir Chat?</DialogTitle>
+                      <DialogDescription className="mt-2 text-bolt-elements-textSecondary">
                         <p>
                           Você está prestes a excluir{' '}
-                          <span className="font-medium text-gray-900 dark:text-white">
+                          <span className="font-medium text-bolt-elements-textPrimary">
                             {dialogContent.item.description}
                           </span>
                         </p>
                         <p className="mt-2">Tem certeza de que deseja excluir este chat?</p>
                       </DialogDescription>
                     </div>
-                    <div className="flex justify-end gap-3 px-6 py-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+                    <div className="flex justify-end gap-3 px-6 py-4 bg-bolt-elements-background-depth-2 border-t border-bolt-elements-borderColor">
                       <DialogButton type="secondary" onClick={closeDialog}>
                         Cancelar
                       </DialogButton>
@@ -486,18 +501,18 @@ export const Menu = () => {
                 )}
                 {dialogContent?.type === 'bulkDelete' && (
                   <>
-                    <div className="p-6 bg-white dark:bg-gray-950">
-                      <DialogTitle className="text-gray-900 dark:text-white">Excluir Chats Selecionados?</DialogTitle>
-                      <DialogDescription className="mt-2 text-gray-600 dark:text-gray-400">
+                    <div className="p-6 bg-bolt-elements-background-depth-1">
+                      <DialogTitle className="text-bolt-elements-textPrimary">Excluir Chats Selecionados?</DialogTitle>
+                      <DialogDescription className="mt-2 text-bolt-elements-textSecondary">
                         <p>
                           Você está prestes a excluir {dialogContent.items.length}{' '}
                           {dialogContent.items.length === 1 ? 'chat' : 'chats'}:
                         </p>
-                        <div className="mt-2 max-h-32 overflow-auto border border-gray-100 dark:border-gray-800 rounded-md bg-gray-50 dark:bg-gray-900 p-2">
+                        <div className="mt-2 max-h-32 overflow-auto border border-bolt-elements-borderColor rounded-md bg-bolt-elements-background-depth-2 p-2">
                           <ul className="list-disc pl-5 space-y-1">
                             {dialogContent.items.map((item) => (
                               <li key={item.id} className="text-sm">
-                                <span className="font-medium text-gray-900 dark:text-white">{item.description}</span>
+                                <span className="font-medium text-bolt-elements-textPrimary">{item.description}</span>
                               </li>
                             ))}
                           </ul>
@@ -505,7 +520,7 @@ export const Menu = () => {
                         <p className="mt-3">Tem certeza de que deseja excluir estes chats?</p>
                       </DialogDescription>
                     </div>
-                    <div className="flex justify-end gap-3 px-6 py-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+                    <div className="flex justify-end gap-3 px-6 py-4 bg-bolt-elements-background-depth-2 border-t border-bolt-elements-borderColor">
                       <DialogButton type="secondary" onClick={closeDialog}>
                         Cancelar
                       </DialogButton>
@@ -530,16 +545,17 @@ export const Menu = () => {
               </Dialog>
             </DialogRoot>
           </div>
-          <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 px-4 py-3">
-            <div className="flex items-center gap-3">
-              <SettingsButton onClick={handleSettingsClick} />
-            </div>
-            <ThemeSwitch />
+          <div className="flex items-center border-t border-bolt-elements-borderColor px-4 py-3 bg-bolt-elements-background-depth-2 rounded-br-2xl">
+            <SettingsButton onClick={handleSettingsClick} />
           </div>
         </div>
       </motion.div>
 
-      <ControlPanel open={isSettingsOpen} onClose={handleSettingsClose} />
+      <ControlPanel
+        open={isSettingsOpen}
+        onClose={handleSettingsClose}
+        initialTab={initialTabForSettings}
+      />
     </>
   );
 };

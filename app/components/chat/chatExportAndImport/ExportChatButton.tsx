@@ -6,8 +6,8 @@ export const ExportChatButton = ({ exportChat }: { exportChat?: () => void }) =>
   return (
     <div className="flex border border-bolt-elements-borderColor rounded-md overflow-hidden">
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-accent-500 text-white hover:text-bolt-elements-item-contentAccent [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7">
-          Export
+        <DropdownMenu.Trigger className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors">
+          Exportar
           <span className={classNames('i-ph:caret-down transition-transform')} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content
@@ -31,7 +31,7 @@ export const ExportChatButton = ({ exportChat }: { exportChat?: () => void }) =>
             }}
           >
             <div className="i-ph:code size-4.5"></div>
-            <span>Download Code</span>
+            <span>Baixar código</span>
           </DropdownMenu.Item>
           <DropdownMenu.Item
             className={classNames(
@@ -40,7 +40,7 @@ export const ExportChatButton = ({ exportChat }: { exportChat?: () => void }) =>
             onClick={() => exportChat?.()}
           >
             <div className="i-ph:chat size-4.5"></div>
-            <span>Export Chat</span>
+            <span>Exportar chat</span>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

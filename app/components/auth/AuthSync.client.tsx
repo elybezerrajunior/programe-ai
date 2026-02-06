@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { supabase } from '~/lib/auth/supabase-client';
 import { setAuthSession, clearAuth } from '~/lib/stores/auth';
+import { profileStore, updateProfile } from '~/lib/stores/profile';
 
 /**
  * Sincroniza a sessão com o servidor via cookies
@@ -51,7 +52,16 @@ export function AuthSync() {
         
         if (session) {
           setAuthSession(session);
-          
+          const name =
+            session.user.user_metadata?.name ||
+            session.user.user_metadata?.full_name ||
+            session.user.email ||
+            '';
+          updateProfile({
+            username: name,
+            avatar: session.user.user_metadata?.avatar_url ?? profileStore.get().avatar ?? '',
+          });
+
           // Sincronizar com o servidor quando o token mudar (ex: refresh)
           // Evitar sincronizações duplicadas
           if (session.access_token && session.access_token !== lastSyncedToken.current) {
@@ -65,6 +75,7 @@ export function AuthSync() {
         } else if (event === 'SIGNED_OUT') {
           clearAuth();
           lastSyncedToken.current = null;
+          updateProfile({ username: '', avatar: '' });
         }
       }
     );
@@ -77,7 +88,16 @@ export function AuthSync() {
         if (session) {
           console.log('[AuthSync] Found existing session');
           setAuthSession(session);
-          
+          const name =
+            session.user.user_metadata?.name ||
+            session.user.user_metadata?.full_name ||
+            session.user.email ||
+            '';
+          updateProfile({
+            username: name,
+            avatar: session.user.user_metadata?.avatar_url ?? profileStore.get().avatar ?? '',
+          });
+
           // Sincronizar sessão existente com o servidor
           // Isso garante que cookies estejam atualizados após refresh da página
           if (session.access_token && session.access_token !== lastSyncedToken.current) {

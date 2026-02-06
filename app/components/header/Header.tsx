@@ -91,11 +91,14 @@ export function Header() {
         'border-bolt-elements-borderColor': chat.started,
       })}
     >
-      <div className="flex items-center gap-2 z-logo text-bolt-elements-textPrimary cursor-pointer">
-        <div className="i-ph:sidebar-simple-duotone text-xl" />
-        <a href="/" className="text-2xl font-semibold text-accent flex items-center">
-          <img src="/logo-light-styled.png" alt="logo" className="w-[90px] inline-block dark:hidden" />
-          <img src="/logo-dark-styled.png" alt="logo" className="w-[90px] inline-block hidden dark:block" />
+      <div className="flex items-center gap-2 shrink-0 relative z-[998]">
+        <div className="i-ph:sidebar-simple-duotone text-xl text-bolt-elements-textSecondary" />
+        <a
+          href="/"
+          className="flex items-center gap-2 text-bolt-elements-textPrimary cursor-pointer hover:opacity-90 transition-opacity"
+        >
+          <div className="i-ph:rocket text-xl text-accent" />
+          <span className="text-xl font-semibold">Programe Studio</span>
         </a>
       </div>
       {chat.started && (
@@ -107,9 +110,6 @@ export function Header() {
             {() => (
               <div className="flex items-center gap-4">
                 <HeaderActionButtons chatStarted={chat.started} />
-                {/* Upgrade button - shows badge if paid, upgrade button if free */}
-                <UpgradeButton size="sm" />
-                {/* Notifications and Profile icons */}
                 <NotificationsDropdown />
                 <UserMenu />
               </div>
