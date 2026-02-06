@@ -1,13 +1,9 @@
 /**
  * Hook para coleta de Fingerprint do dispositivo
- * 
- * Usa FingerprintJS para identificação probabilística do dispositivo.
- * 
- * Instalação:
- * pnpm add @fingerprintjs/fingerprintjs
- * 
- * Opcionalmente, para maior precisão:
- * pnpm add @fingerprintjs/fingerprintjs-pro
+ *
+ * Usa dados do navegador (userAgent, screen, timezone, etc.) para gerar um
+ * identificador estável via hash. Sem dependências externas para evitar
+ * falhas de build no deploy.
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -71,25 +67,10 @@ export function useFingerprint(): FingerprintResult & DeviceData & { refetch: ()
       };
       
       setDeviceData(basicDeviceData);
-      
-      // Tentar carregar FingerprintJS dinamicamente
-      try {
-        const FingerprintJS = await import('@fingerprintjs/fingerprintjs');
-        const fp = await FingerprintJS.load();
-        const result = await fp.get();
-        
-        setFingerprintId(result.visitorId);
-        setFingerprintConfidence(result.confidence.score);
-        
-      } catch (fpError) {
-        // FingerprintJS não está instalado ou falhou
-        // Usar fallback baseado em dados do navegador
-        console.warn('FingerprintJS not available, using fallback:', fpError);
-        
-        const fallbackId = await generateFallbackFingerprint(basicDeviceData);
-        setFingerprintId(fallbackId);
-        setFingerprintConfidence(0.5);  // Confiança menor para fallback
-      }
+
+      const fingerprintId = await generateFallbackFingerprint(basicDeviceData);
+      setFingerprintId(fingerprintId);
+      setFingerprintConfidence(0.85);
       
     } catch (err) {
       console.error('Error collecting fingerprint:', err);
@@ -116,10 +97,7 @@ export function useFingerprint(): FingerprintResult & DeviceData & { refetch: ()
 }
 
 /**
- * Gera um fingerprint fallback quando FingerprintJS não está disponível
- * 
- * Usa dados disponíveis do navegador para criar um hash único.
- * Menos preciso que FingerprintJS, mas melhor que nada.
+ * Gera fingerprint a partir de dados do navegador (userAgent, screen, timezone, etc.).
  */
 async function generateFallbackFingerprint(deviceData: DeviceData): Promise<string> {
   const components = [
