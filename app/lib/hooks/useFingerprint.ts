@@ -1,12 +1,17 @@
 /**
  * Hook para coleta de Fingerprint do dispositivo
  *
- * Usa dados do navegador (userAgent, screen, timezone, etc.) para gerar um
- * identificador estável via hash. Sem dependências externas para evitar
- * falhas de build no deploy.
+ * Usa FingerprintJS para identificação probabilística do dispositivo.
+ *
+ * Instalação:
+ * pnpm add @fingerprintjs/fingerprintjs
+ *
+ * Opcionalmente, para maior precisão:
+ * pnpm add @fingerprintjs/fingerprintjs-pro
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 /**
  * Resultado do fingerprint
@@ -68,10 +73,21 @@ export function useFingerprint(): FingerprintResult & DeviceData & { refetch: ()
       
       setDeviceData(basicDeviceData);
 
-      const fingerprintId = await generateFallbackFingerprint(basicDeviceData);
-      setFingerprintId(fingerprintId);
-      setFingerprintConfidence(0.85);
-      
+      // Tentar carregar FingerprintJS
+      try {
+        const fp = await FingerprintJS.load();
+        const result = await fp.get();
+
+        setFingerprintId(result.visitorId);
+        setFingerprintConfidence(result.confidence.score);
+      } catch (fpError) {
+        // FingerprintJS não está instalado ou falhou — usar fallback
+        console.warn('FingerprintJS not available, using fallback:', fpError);
+
+        const fallbackId = await generateFallbackFingerprint(basicDeviceData);
+        setFingerprintId(fallbackId);
+        setFingerprintConfidence(0.5);
+      }
     } catch (err) {
       console.error('Error collecting fingerprint:', err);
       setError(err instanceof Error ? err.message : 'Erro ao coletar fingerprint');
@@ -97,7 +113,9 @@ export function useFingerprint(): FingerprintResult & DeviceData & { refetch: ()
 }
 
 /**
- * Gera fingerprint a partir de dados do navegador (userAgent, screen, timezone, etc.).
+ * Gera um fingerprint fallback quando FingerprintJS não está disponível
+ *
+ * Usa dados disponíveis do navegador para criar um hash único.
  */
 async function generateFallbackFingerprint(deviceData: DeviceData): Promise<string> {
   const components = [

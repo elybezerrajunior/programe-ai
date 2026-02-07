@@ -228,14 +228,12 @@ ${content.trim()}
     // Ensure forward slashes
     filePath = filePath.replace(/\\/g, '/');
 
-    // Remove leading ./ if present
+    // Remove leading ./ or / - WebContainer expects paths relative to workdir
     if (filePath.startsWith('./')) {
       filePath = filePath.substring(2);
     }
-
-    // Add leading slash if missing and not a relative path
-    if (!filePath.startsWith('/') && !filePath.startsWith('.')) {
-      filePath = '/' + filePath;
+    if (filePath.startsWith('/')) {
+      filePath = filePath.substring(1);
     }
 
     return filePath;
