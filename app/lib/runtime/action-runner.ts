@@ -196,11 +196,9 @@ export class ActionRunner {
           // Ensure React entry file exists when index.html references it (fixes "Does the file exist?" for Vite)
           await this.#ensureViteReactEntryExists();
 
-          // Create stub components for imports that don't exist (fixes "Failed to resolve import ./components/X")
           await this.#ensureReactComponentStubs();
 
-          // Allow stub writes to propagate before Vite reads the project
-          await new Promise((resolve) => setTimeout(resolve, 300));
+          await new Promise((resolve) => setTimeout(resolve, 500));
 
           // making the start app non blocking
 
@@ -354,9 +352,8 @@ export class ActionRunner {
         await webcontainer.fs.writeFile(relativePath, action.content);
         logger.debug(`File written ${relativePath}`);
 
-        // When App.jsx/tsx is written, ensure imported components exist (fixes "Failed to resolve import ./components/X")
         const normalizedPath = relativePath.replace(/^\//, '');
-        if (normalizedPath === 'src/App.jsx' || normalizedPath === 'src/App.tsx') {
+        if (normalizedPath.startsWith('src/') && /\.(jsx?|tsx?)$/.test(normalizedPath)) {
           await this.#ensureReactComponentStubs();
         }
       } catch (error) {
@@ -481,87 +478,66 @@ export default defineConfig({
     }
   }
 
-  /**
-   * Creates stub components for relative imports in App.jsx/tsx that don't exist.
-   * Fixes "Failed to resolve import ./components/X. Does the file exist?" when IA references components it didn't create.
-   */
   async #ensureReactComponentStubs(): Promise<void> {
     try {
       const webcontainer = await this.#webcontainer;
-      const appPaths = ['src/App.jsx', 'src/App.tsx'];
-      let appContent = '';
-      let appDir = 'src';
-      let ext = 'jsx';
+      const srcFiles = await this.#collectSrcFiles(webcontainer, 'src');
+      if (srcFiles.length === 0) return;
 
-      for (const appPath of appPaths) {
+      const importRegex = /import\s+(?:\{[\w\s,]+\}|\*\s+as\s+\w+|\w+)\s+from\s+["'](\.\.?\/[^"']+)["']/g;
+      const missing = new Set<string>();
+
+      for (const filePath of srcFiles) {
+        let content: string;
         try {
-          appContent = await webcontainer.fs.readFile(appPath, 'utf-8');
-          appDir = nodePath.dirname(appPath);
-          ext = appPath.endsWith('.tsx') ? 'tsx' : 'jsx';
-          break;
+          content = await webcontainer.fs.readFile(filePath, 'utf-8');
         } catch {
-          /* try next */
+          continue;
         }
-      }
-      if (!appContent) return;
-
-      const importRegex = /import\s+(?:\{[\w\s,]+\}|\w+)\s+from\s+["'](\.\/[^"']+)["']/g;
-      const imports = new Set<string>();
-      let m;
-      while ((m = importRegex.exec(appContent)) !== null) {
-        const importPath = m[1];
-        if (!importPath.startsWith('./')) continue;
-        imports.add(importPath);
-      }
-
-      for (const importPath of imports) {
-        const basePath = nodePath.join(appDir, importPath).replace(/\/$/, '');
-        const extensions = ['.jsx', '.tsx', '.js', '.ts'];
-        const indexPaths = ['/index.jsx', '/index.tsx', '/index.js', '/index.ts'];
-        let exists = false;
-        for (const fileExt of extensions) {
-          try {
-            await webcontainer.fs.readFile(basePath + fileExt, 'utf-8');
-            exists = true;
-            break;
-          } catch {
-            /* try next */
-          }
-        }
-        if (!exists) {
-          for (const ip of indexPaths) {
+        const fileDir = nodePath.dirname(filePath);
+        importRegex.lastIndex = 0;
+        let m;
+        while ((m = importRegex.exec(content)) !== null) {
+          const importPath = m[1];
+          if (importPath.endsWith('.css') || importPath.endsWith('.scss')) continue;
+          const basePath = nodePath.normalize(nodePath.join(fileDir, importPath)).replace(/^\//, '');
+          const extensions = ['.jsx', '.tsx', '.js', '.ts'];
+          const indexPaths = ['/index.jsx', '/index.tsx', '/index.js', '/index.ts'];
+          let exists = false;
+          for (const fileExt of extensions) {
             try {
-              await webcontainer.fs.readFile(basePath + ip, 'utf-8');
+              await webcontainer.fs.readFile(basePath + fileExt, 'utf-8');
               exists = true;
               break;
-            } catch {
-              /* try next */
+            } catch {}
+          }
+          if (!exists) {
+            for (const ip of indexPaths) {
+              try {
+                await webcontainer.fs.readFile(basePath + ip, 'utf-8');
+                exists = true;
+                break;
+              } catch {}
             }
           }
+          if (!exists) missing.add(basePath);
         }
-        if (exists) continue;
+      }
 
-        const componentName = nodePath.basename(basePath).replace(/^./, (c) => c.toUpperCase());
-        const stubPath = basePath + '.' + ext;
-        const stubContent =
-          ext === 'tsx'
-            ? `import React from 'react'
-
-export default function ${componentName}() {
-  return null
-}
-`
-            : `import React from 'react'
-
-export default function ${componentName}() {
-  return null
-}
-`;
+      const projectExt = srcFiles.some((f) => f.endsWith('.tsx')) ? 'tsx' : 'jsx';
+      for (const basePath of missing) {
+        const name = nodePath.basename(basePath);
+        const isHook = /^use[A-Z]/.test(name) || name.includes('Store') || name.includes('store');
+        const stubExt = basePath.includes('store') || isHook ? 'js' : projectExt;
+        const stubPath = basePath + '.' + stubExt;
+        const stubContent = isHook
+          ? `export default function ${name}() { return {} }\n`
+          : `import React from 'react'\nexport default function ${name.replace(/^./, (c) => c.toUpperCase())}() { return null }\n`;
 
         try {
           await webcontainer.fs.mkdir(nodePath.dirname(stubPath), { recursive: true });
           await webcontainer.fs.writeFile(stubPath, stubContent);
-          logger.debug(`Created stub component: ${stubPath}`);
+          logger.debug(`Created stub: ${stubPath}`);
         } catch (err) {
           logger.debug(`Failed to create stub ${stubPath}:`, err);
         }
@@ -569,6 +545,26 @@ export default function ${componentName}() {
     } catch (error) {
       logger.debug('ensureReactComponentStubs failed:', error);
     }
+  }
+
+  async #collectSrcFiles(
+    webcontainer: WebContainer,
+    dir: string,
+    acc: string[] = [],
+  ): Promise<string[]> {
+    try {
+      const entries = await webcontainer.fs.readdir(dir, { withFileTypes: true });
+      for (const entry of entries as Array<{ name: string; isFile: () => boolean; isDirectory: () => boolean }>) {
+        const full = nodePath.join(dir, entry.name);
+        if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
+        if (entry.isDirectory()) {
+          await this.#collectSrcFiles(webcontainer, full, acc);
+        } else if (entry.isFile() && /\.(jsx?|tsx?)$/.test(entry.name)) {
+          acc.push(full);
+        }
+      }
+    } catch {}
+    return acc;
   }
 
   #updateAction(id: string, newState: ActionStateUpdate) {
