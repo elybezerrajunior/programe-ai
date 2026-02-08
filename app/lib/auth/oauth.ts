@@ -50,9 +50,10 @@ export async function signInWithOAuth(
     }
 
     // URL base para o callback OAuth - prioridade: appUrl (servidor) > VITE_APP_URL > window.location
-    const origin =
-      (appUrl || (import.meta.env.PROD && import.meta.env.VITE_APP_URL) || (typeof window !== 'undefined' ? window.location.origin : ''))
-        .replace(/\/$/, '') || '';
+    // URL base para o callback OAuth
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    console.log('[OAuth] Origin for callback:', origin);
+
     if (!validateRedirectTo(redirectTo, origin)) {
       throw new AuthenticationError('URL de redirecionamento inválida');
     }
