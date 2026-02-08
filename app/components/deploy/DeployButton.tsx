@@ -135,8 +135,8 @@ export const DeployButton = ({
             className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
           >
             {isDeploying
-              ? `Implantando no ${deployingTo === 'netlify' ? 'Netlify' : deployingTo === 'vercel' ? 'Vercel' : deployingTo === 'github' ? 'GitHub' : 'GitLab'}...`
-              : 'Implantar'}
+              ? `Publicando no ${deployingTo === 'netlify' ? 'Netlify' : deployingTo === 'vercel' ? 'Vercel' : deployingTo === 'github' ? 'GitHub' : 'GitLab'}...`
+              : 'Publicar'}
             <span className={classNames('i-ph:caret-down transition-transform')} />
           </DropdownMenu.Trigger>
           <DropdownMenu.Content
@@ -178,7 +178,7 @@ export const DeployButton = ({
                 />
               </span>
               <span className="mx-auto">
-                {!netlifyConn.user ? 'Conectar Netlify' : 'Implantar no Netlify'}
+                {!netlifyConn.user ? 'Conectar Netlify' : 'Publicar no Netlify'}
               </span>
               {netlifyConn.user && <NetlifyDeploymentLink />}
             </DropdownMenu.Item>
@@ -210,7 +210,7 @@ export const DeployButton = ({
                 />
               </span>
               <span className="mx-auto">
-                {!vercelConn.user ? 'Conectar Vercel' : 'Implantar no Vercel'}
+                {!vercelConn.user ? 'Conectar Vercel' : 'Publicar no Vercel'}
               </span>
               {vercelConn.user && <VercelDeploymentLink />}
             </DropdownMenu.Item>
@@ -235,7 +235,7 @@ export const DeployButton = ({
                   alt=""
                 />
               </span>
-              <span className="mx-auto">Implantar no GitHub</span>
+              <span className="mx-auto">Publicar no GitHub</span>
             </DropdownMenu.Item>
 
             <DropdownMenu.Item
@@ -265,7 +265,7 @@ export const DeployButton = ({
                 />
               </span>
               <span className="mx-auto">
-                {!gitlabIsConnected ? 'Conectar GitLab' : 'Implantar no GitLab'}
+                {!gitlabIsConnected ? 'Conectar GitLab' : 'Publicar no GitLab'}
               </span>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
