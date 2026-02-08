@@ -52,7 +52,7 @@ export default function GitHubTab() {
     if (!connection?.user) {
       setConnectionTest({
         status: 'error',
-        message: 'No connection established',
+        message: 'Nenhuma conexão estabelecida',
         timestamp: Date.now(),
       });
       return;
@@ -60,7 +60,7 @@ export default function GitHubTab() {
 
     setConnectionTest({
       status: 'testing',
-      message: 'Testing connection...',
+      message: 'Testando conexão...',
     });
 
     try {
@@ -69,20 +69,20 @@ export default function GitHubTab() {
       if (isValid) {
         setConnectionTest({
           status: 'success',
-          message: `Connected successfully as ${connection.user.login}`,
+          message: `Conectado com sucesso como ${connection.user.login}`,
           timestamp: Date.now(),
         });
       } else {
         setConnectionTest({
           status: 'error',
-          message: 'Connection test failed',
+          message: 'Teste de conexão falhou',
           timestamp: Date.now(),
         });
       }
     } catch (error) {
       setConnectionTest({
         status: 'error',
-        message: `Connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        message: `Conexão falhou: ${error instanceof Error ? error.message : 'Erro desconhecido'}`,
         timestamp: Date.now(),
       });
     }
@@ -96,7 +96,7 @@ export default function GitHubTab() {
           <GithubLogo />
           <h2 className="text-lg font-medium text-bolt-elements-textPrimary">GitHub Integration</h2>
         </div>
-        <LoadingState message="Checking GitHub connection..." />
+        <LoadingState message="Verificando conexão GitHub..." />
       </div>
     );
   }
@@ -110,10 +110,10 @@ export default function GitHubTab() {
           <h2 className="text-lg font-medium text-bolt-elements-textPrimary">GitHub Integration</h2>
         </div>
         <ErrorState
-          title="Connection Error"
+          title="Erro de Conexão"
           message={error}
           onRetry={() => window.location.reload()}
-          retryLabel="Reload Page"
+          retryLabel="Recarregar Página"
         />
       </div>
     );
@@ -128,8 +128,8 @@ export default function GitHubTab() {
           <h2 className="text-lg font-medium text-bolt-elements-textPrimary">GitHub Integration</h2>
         </div>
         <p className="text-sm text-bolt-elements-textSecondary">
-          Connect your GitHub account to enable advanced repository management features, statistics, and seamless
-          integration.
+          Conecte sua conta GitHub para habilitar recursos avançados de gerenciamento de repositórios, estatísticas e
+          integração perfeita.
         </p>
         <GitHubConnection connectionTest={connectionTest} onTestConnection={handleTestConnection} />
       </div>
@@ -149,7 +149,7 @@ export default function GitHubTab() {
           <div className="flex items-center gap-2">
             <GithubLogo />
             <h2 className="text-lg font-medium text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary">
-              GitHub Integration
+              Integração GitHub
             </h2>
           </div>
           <div className="flex items-center gap-2">
@@ -165,7 +165,7 @@ export default function GitHubTab() {
         </motion.div>
 
         <p className="text-sm text-bolt-elements-textSecondary dark:text-bolt-elements-textSecondary">
-          Manage your GitHub integration with advanced repository features and comprehensive statistics
+          Gerencie sua integração GitHub com recursos avançados de repositório e estatísticas abrangentes
         </p>
 
         {/* Connection Test Results */}
@@ -198,7 +198,7 @@ export default function GitHubTab() {
                   <div className="flex items-center gap-2">
                     <div className="i-ph:folder w-4 h-4 text-bolt-elements-item-contentAccent" />
                     <span className="text-sm font-medium text-bolt-elements-textPrimary">
-                      All Repositories ({stats.repos.length})
+                      Todos os Repositórios ({stats.repos.length})
                     </span>
                   </div>
                   <ChevronDown
@@ -232,7 +232,7 @@ export default function GitHubTab() {
                         onClick={() => setIsReposExpanded(true)}
                         className="text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary"
                       >
-                        Show {stats.repos.length - 12} more repositories
+                        Mostrar mais {stats.repos.length - 12} repositórios
                       </Button>
                     </div>
                   )}
@@ -245,10 +245,10 @@ export default function GitHubTab() {
         {/* Stats Error State */}
         {statsError && !stats && (
           <ErrorState
-            title="Failed to Load Statistics"
+            title="Falha ao Carregar Estatísticas"
             message={statsError}
             onRetry={() => window.location.reload()}
-            retryLabel="Retry"
+            retryLabel="Tentar Novamente"
           />
         )}
 
@@ -256,13 +256,13 @@ export default function GitHubTab() {
         {isStatsLoading && !stats && (
           <GitHubProgressiveLoader
             isLoading={isStatsLoading}
-            loadingMessage="Loading GitHub statistics..."
+            loadingMessage="Carregando estatísticas GitHub..."
             showProgress={true}
             progressSteps={[
-              { key: 'user', label: 'Fetching user info', completed: !!connection?.user, loading: !connection?.user },
-              { key: 'repos', label: 'Loading repositories', completed: false, loading: true },
-              { key: 'stats', label: 'Calculating statistics', completed: false },
-              { key: 'cache', label: 'Updating cache', completed: false },
+              { key: 'user', label: 'Buscando info do usuário', completed: !!connection?.user, loading: !connection?.user },
+              { key: 'repos', label: 'Carregando repositórios', completed: false, loading: true },
+              { key: 'stats', label: 'Calculando estatísticas', completed: false },
+              { key: 'cache', label: 'Atualizando cache', completed: false },
             ]}
           >
             <div />

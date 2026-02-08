@@ -88,13 +88,13 @@ export function DataTab() {
 
   // State for settings categories and available chats
   const [settingsCategories] = useState<SettingsCategory[]>([
-    { id: 'core', label: 'Core Settings', description: 'User profile and main settings' },
-    { id: 'providers', label: 'Providers', description: 'API keys and provider configurations' },
-    { id: 'features', label: 'Features', description: 'Feature flags and settings' },
-    { id: 'ui', label: 'UI', description: 'UI configuration and preferences' },
-    { id: 'connections', label: 'Connections', description: 'External service connections' },
-    { id: 'debug', label: 'Debug', description: 'Debug settings and logs' },
-    { id: 'updates', label: 'Updates', description: 'Update settings and notifications' },
+    { id: 'core', label: 'Configurações Principais', description: 'Perfil do usuário e configurações principais' },
+    { id: 'providers', label: 'Provedores', description: 'Chaves de API e configurações de provedores' },
+    { id: 'features', label: 'Recursos', description: 'Configurações e flags de recursos' },
+    { id: 'ui', label: 'Interface', description: 'Configuração e preferências de interface' },
+    { id: 'connections', label: 'Conexões', description: 'Conexões com serviços externos' },
+    { id: 'debug', label: 'Debug', description: 'Configurações de debug e logs' },
+    { id: 'updates', label: 'Atualizações', description: 'Configurações de atualização e notificações' },
   ]);
 
   const [availableChats, setAvailableChats] = useState<ExtendedChat[]>([]);
@@ -229,10 +229,10 @@ export function DataTab() {
       <ConfirmationDialog
         isOpen={showResetInlineConfirm}
         onClose={() => setShowResetInlineConfirm(false)}
-        title="Reset All Settings?"
-        description="This will reset all your settings to their default values. This action cannot be undone."
-        confirmLabel="Reset Settings"
-        cancelLabel="Cancel"
+        title="Redefinir Todas as Configurações?"
+        description="Isso irá redefinir todas as suas configurações para os valores padrão. Esta ação não pode ser desfeita."
+        confirmLabel="Redefinir Configurações"
+        cancelLabel="Cancelar"
         variant="destructive"
         isLoading={isResetting}
         onConfirm={handleResetSettings}
@@ -242,10 +242,10 @@ export function DataTab() {
       <ConfirmationDialog
         isOpen={showDeleteInlineConfirm}
         onClose={() => setShowDeleteInlineConfirm(false)}
-        title="Delete All Chats?"
-        description="This will permanently delete all your chat history. This action cannot be undone."
-        confirmLabel="Delete All"
-        cancelLabel="Cancel"
+        title="Excluir Todas as Conversas?"
+        description="Isso irá excluir permanentemente todo o seu histórico de conversas. Esta ação não pode ser desfeita."
+        confirmLabel="Excluir Tudo"
+        cancelLabel="Cancelar"
         variant="destructive"
         isLoading={isDeleting}
         onConfirm={handleResetChatsWithState}
@@ -255,35 +255,35 @@ export function DataTab() {
       <SelectionDialog
         isOpen={showSettingsSelection}
         onClose={() => setShowSettingsSelection(false)}
-        title="Select Settings to Export"
+        title="Selecionar Configurações para Exportar"
         items={settingsCategories}
         onConfirm={(selectedIds) => {
           handleExportSelectedSettings(selectedIds);
           setShowSettingsSelection(false);
         }}
-        confirmLabel="Export Selected"
+        confirmLabel="Exportar Selecionadas"
       />
 
       {/* Chats Selection Dialog */}
       <SelectionDialog
         isOpen={showChatsSelection}
         onClose={() => setShowChatsSelection(false)}
-        title="Select Chats to Export"
+        title="Selecionar Conversas para Exportar"
         items={chatItems}
         onConfirm={(selectedIds) => {
           handleExportSelectedChats(selectedIds);
           setShowChatsSelection(false);
         }}
-        confirmLabel="Export Selected"
+        confirmLabel="Exportar Selecionadas"
       />
 
       {/* Chats Section */}
       <div>
-        <h2 className="text-xl font-semibold mb-4 text-bolt-elements-textPrimary">Chats</h2>
+        <h2 className="text-xl font-semibold mb-4 text-bolt-elements-textPrimary">Conversas</h2>
         {dbLoading ? (
           <div className="flex items-center justify-center p-4">
             <div className="i-ph-spinner-gap-bold animate-spin w-6 h-6 mr-2" />
-            <span>Loading chats database...</span>
+            <span>Carregando banco de dados de conversas...</span>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -294,10 +294,10 @@ export function DataTab() {
                     <div className="i-ph-download-duotone w-5 h-5" />
                   </motion.div>
                   <CardTitle className="text-lg group-hover:text-bolt-elements-item-contentAccent transition-colors">
-                    Export All Chats
+                    Exportar Todas as Conversas
                   </CardTitle>
                 </div>
-                <CardDescription>Export all your chats to a JSON file.</CardDescription>
+                <CardDescription>Exporte todas as suas conversas para um arquivo JSON.</CardDescription>
               </CardHeader>
               <CardFooter>
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full">
@@ -471,7 +471,7 @@ export function DataTab() {
 
       {/* Settings Section */}
       <div>
-        <h2 className="text-xl font-semibold mb-4 text-bolt-elements-textPrimary">Settings</h2>
+        <h2 className="text-xl font-semibold mb-4 text-bolt-elements-textPrimary">Configurações</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card>
             <CardHeader>
@@ -629,7 +629,7 @@ export function DataTab() {
 
       {/* API Keys Section */}
       <div>
-        <h2 className="text-xl font-semibold mb-4 text-bolt-elements-textPrimary">API Keys</h2>
+        <h2 className="text-xl font-semibold mb-4 text-bolt-elements-textPrimary">Chaves de API</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card>
             <CardHeader>
@@ -709,7 +709,7 @@ export function DataTab() {
 
       {/* Data Visualization */}
       <div>
-        <h2 className="text-xl font-semibold mb-4 text-bolt-elements-textPrimary">Data Usage</h2>
+        <h2 className="text-xl font-semibold mb-4 text-bolt-elements-textPrimary">Uso de Dados</h2>
         <Card>
           <CardContent className="p-5">
             <DataVisualization chats={availableChats} />

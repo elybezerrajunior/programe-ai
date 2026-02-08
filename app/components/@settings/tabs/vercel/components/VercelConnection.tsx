@@ -127,20 +127,20 @@ export default function VercelConnection() {
               crossOrigin="anonymous"
               src={`https://cdn.simpleicons.org/vercel/black`}
             />
-            <h3 className="text-base font-medium text-bolt-elements-textPrimary">Vercel Connection</h3>
+            <h3 className="text-base font-medium text-bolt-elements-textPrimary">Conexão Vercel</h3>
           </div>
         </div>
 
         {!connection.user ? (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm text-bolt-elements-textSecondary mb-2">Personal Access Token</label>
+              <label className="block text-sm text-bolt-elements-textSecondary mb-2">Token de Acesso Pessoal</label>
               <input
                 type="password"
                 value={connection.token}
                 onChange={(e) => updateVercelConnection({ ...connection, token: e.target.value })}
                 disabled={connecting}
-                placeholder="Enter your Vercel personal access token"
+                placeholder="Digite seu token de acesso pessoal da Vercel"
                 className={classNames(
                   'w-full px-3 py-2 rounded-lg text-sm',
                   'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
@@ -157,25 +157,9 @@ export default function VercelConnection() {
                   rel="noopener noreferrer"
                   className="text-bolt-elements-borderColorActive hover:underline inline-flex items-center gap-1"
                 >
-                  Get your token
+                  Obter seu token
                   <div className="i-ph:arrow-square-out w-4 h-4" />
                 </a>
-                <div className="mt-2 text-xs text-bolt-elements-textSecondary bg-bolt-elements-background-depth-1 p-2 rounded">
-                  <p className="flex items-center gap-1">
-                    <span className="i-ph:lightbulb w-3.5 h-3.5 text-bolt-elements-icon-success" />
-                    <span className="font-medium">Tip:</span> You can also set{' '}
-                    <code className="px-1 py-0.5 bg-bolt-elements-background-depth-2 rounded text-xs">
-                      VITE_VERCEL_ACCESS_TOKEN
-                    </code>{' '}
-                    in your .env.local for automatic connection.
-                  </p>
-                </div>
-                {/* Debug info - remove this later */}
-                <div className="mt-2 text-xs text-gray-500">
-                  <p>Debug: Token present: {connection.token ? '✅' : '❌'}</p>
-                  <p>Debug: User present: {connection.user ? '✅' : '❌'}</p>
-                  <p>Debug: Env token: {import.meta.env?.VITE_VERCEL_ACCESS_TOKEN ? '✅' : '❌'}</p>
-                </div>
               </div>
             </div>
 
@@ -194,12 +178,12 @@ export default function VercelConnection() {
                 {connecting ? (
                   <>
                     <div className="i-ph:spinner-gap animate-spin" />
-                    Connecting...
+                    Conectando...
                   </>
                 ) : (
                   <>
                     <div className="i-ph:plug-charging w-4 h-4" />
-                    Connect
+                    Conectar
                   </>
                 )}
               </button>
@@ -236,11 +220,11 @@ export default function VercelConnection() {
                   )}
                 >
                   <div className="i-ph:plug w-4 h-4" />
-                  Disconnect
+                  Desconectar
                 </button>
                 <span className="text-sm text-bolt-elements-textSecondary flex items-center gap-1">
                   <div className="i-ph:check-circle w-4 h-4 text-green-500" />
-                  Connected to Vercel
+                  Conectado à Vercel
                 </span>
               </div>
             </div>
@@ -261,7 +245,7 @@ export default function VercelConnection() {
                   {connection.user?.username || connection.user?.user?.username || 'Vercel User'}
                 </h4>
                 <p className="text-sm text-bolt-elements-textSecondary">
-                  {connection.user?.email || connection.user?.user?.email || 'No email available'}
+                  {connection.user?.email || connection.user?.user?.email || 'Email não disponível'}
                 </p>
               </div>
             </div>
@@ -269,7 +253,7 @@ export default function VercelConnection() {
             {fetchingStats ? (
               <div className="flex items-center gap-2 text-sm text-bolt-elements-textSecondary">
                 <div className="i-ph:spinner-gap w-4 h-4 animate-spin" />
-                Fetching Vercel projects...
+                Buscando projetos Vercel...
               </div>
             ) : (
               <div>
@@ -278,7 +262,7 @@ export default function VercelConnection() {
                   className="w-full bg-transparent text-left text-sm font-medium text-bolt-elements-textPrimary mb-3 flex items-center gap-2"
                 >
                   <div className="i-ph:buildings w-4 h-4" />
-                  Your Projects ({connection.stats?.totalProjects || 0})
+                  Seus Projetos ({connection.stats?.totalProjects || 0})
                   <div
                     className={classNames(
                       'i-ph:caret-down w-4 h-4 ml-auto transition-transform',
@@ -355,7 +339,7 @@ export default function VercelConnection() {
                 ) : isProjectsExpanded ? (
                   <div className="text-sm text-bolt-elements-textSecondary flex items-center gap-2">
                     <div className="i-ph:info w-4 h-4" />
-                    No projects found in your Vercel account
+                    Nenhum projeto encontrado na sua conta Vercel
                   </div>
                 ) : null}
               </div>
@@ -363,6 +347,6 @@ export default function VercelConnection() {
           </div>
         )}
       </div>
-    </motion.div>
+    </motion.div >
   );
 }

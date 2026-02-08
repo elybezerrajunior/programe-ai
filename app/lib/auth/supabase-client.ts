@@ -118,4 +118,3 @@ export function getSupabaseProjectRef(env?: CloudflareEnv): string {
  * No Cloudflare, pode ser null se as variáveis não estiverem disponíveis no módulo
  */
 export { supabase };
-

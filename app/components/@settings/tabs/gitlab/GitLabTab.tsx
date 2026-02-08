@@ -30,7 +30,7 @@ export default function GitLabTab() {
     if (!connection?.user) {
       setConnectionTest({
         status: 'error',
-        message: 'No connection established',
+        message: 'Nenhuma conexão estabelecida',
         timestamp: Date.now(),
       });
       return;
@@ -38,7 +38,7 @@ export default function GitLabTab() {
 
     setConnectionTest({
       status: 'testing',
-      message: 'Testing connection...',
+      message: 'Testando conexão...',
     });
 
     try {
@@ -47,20 +47,20 @@ export default function GitLabTab() {
       if (isValid) {
         setConnectionTest({
           status: 'success',
-          message: `Connected successfully as ${connection.user.username}`,
+          message: `Conectado com sucesso como ${connection.user.username}`,
           timestamp: Date.now(),
         });
       } else {
         setConnectionTest({
           status: 'error',
-          message: 'Connection test failed',
+          message: 'Teste de conexão falhou',
           timestamp: Date.now(),
         });
       }
     } catch (error) {
       setConnectionTest({
         status: 'error',
-        message: `Connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        message: `Conexão falhou: ${error instanceof Error ? error.message : 'Erro desconhecido'}`,
         timestamp: Date.now(),
       });
     }
@@ -77,7 +77,7 @@ export default function GitLabTab() {
         <div className="flex items-center justify-center p-4">
           <div className="flex items-center gap-2">
             <div className="i-ph:spinner-gap-bold animate-spin w-4 h-4" />
-            <span className="text-bolt-elements-textSecondary">Loading...</span>
+            <span className="text-bolt-elements-textSecondary">Carregando...</span>
           </div>
         </div>
       </div>
@@ -108,8 +108,8 @@ export default function GitLabTab() {
           <h2 className="text-lg font-medium text-bolt-elements-textPrimary">GitLab Integration</h2>
         </div>
         <p className="text-sm text-bolt-elements-textSecondary">
-          Connect your GitLab account to enable advanced repository management features, statistics, and seamless
-          integration.
+          Conecte sua conta GitLab para habilitar recursos avançados de gerenciamento de repositórios, estatísticas e
+          integração perfeita.
         </p>
         <GitLabConnection connectionTest={connectionTest} onTestConnection={handleTestConnection} />
       </div>
@@ -128,7 +128,7 @@ export default function GitLabTab() {
         <div className="flex items-center gap-2">
           <GitLabLogo />
           <h2 className="text-lg font-medium text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary">
-            GitLab Integration
+            Integração GitLab
           </h2>
         </div>
         <div className="flex items-center gap-2">
@@ -150,23 +150,21 @@ export default function GitLabTab() {
       {/* Connection Test Results */}
       {connectionTest && (
         <div
-          className={`p-3 rounded-lg border ${
-            connectionTest.status === 'success'
+          className={`p-3 rounded-lg border ${connectionTest.status === 'success'
               ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
               : connectionTest.status === 'error'
                 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
                 : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
-          }`}
+            }`}
         >
           <div className="flex items-center gap-2">
             <div
-              className={`w-4 h-4 ${
-                connectionTest.status === 'success'
+              className={`w-4 h-4 ${connectionTest.status === 'success'
                   ? 'text-green-600'
                   : connectionTest.status === 'error'
                     ? 'text-red-600'
                     : 'text-blue-600'
-              }`}
+                }`}
             >
               {connectionTest.status === 'success' ? (
                 <div className="i-ph:check-circle" />
@@ -177,13 +175,12 @@ export default function GitLabTab() {
               )}
             </div>
             <span
-              className={`text-sm ${
-                connectionTest.status === 'success'
+              className={`text-sm ${connectionTest.status === 'success'
                   ? 'text-green-800 dark:text-green-200'
                   : connectionTest.status === 'error'
                     ? 'text-red-800 dark:text-red-200'
                     : 'text-blue-800 dark:text-blue-200'
-              }`}
+                }`}
             >
               {connectionTest.message}
             </span>
@@ -205,8 +202,8 @@ export default function GitLabTab() {
           <div className="flex items-center gap-4 p-4 bg-bolt-elements-background-depth-1 rounded-lg">
             <div className="w-12 h-12 rounded-full border-2 border-bolt-elements-item-contentAccent flex items-center justify-center bg-bolt-elements-background-depth-2 overflow-hidden">
               {connection.user.avatar_url &&
-              connection.user.avatar_url !== 'null' &&
-              connection.user.avatar_url !== '' ? (
+                connection.user.avatar_url !== 'null' &&
+                connection.user.avatar_url !== '' ? (
                 <img
                   src={connection.user.avatar_url}
                   alt={connection.user.username}
@@ -256,7 +253,7 @@ export default function GitLabTab() {
           transition={{ delay: 0.4 }}
           className="border-t border-bolt-elements-borderColor pt-6"
         >
-          <h3 className="text-base font-medium text-bolt-elements-textPrimary mb-4">Statistics</h3>
+          <h3 className="text-base font-medium text-bolt-elements-textPrimary mb-4">Estatísticas</h3>
           <StatsDisplay
             stats={connection.stats}
             onRefresh={async () => {

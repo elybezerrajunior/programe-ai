@@ -6,7 +6,6 @@ export type SettingCategory = 'profile' | 'file_sharing' | 'connectivity' | 'sys
 export type TabType =
   | 'profile'
   | 'settings'
-  | 'notifications'
   | 'features'
   | 'data'
   | 'cloud-providers'
@@ -69,7 +68,6 @@ export interface TabWindowConfig {
 export const TAB_LABELS: Record<TabType, string> = {
   profile: 'Profile',
   settings: 'Settings',
-  notifications: 'Notifications',
   features: 'Features',
   data: 'Data Management',
   'cloud-providers': 'Cloud Providers',
