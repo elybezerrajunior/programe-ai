@@ -4,23 +4,20 @@ import * as RadixDialog from '@radix-ui/react-dialog';
 import { classNames } from '~/utils/classNames';
 import { TabTile } from '~/components/@settings/shared/components/TabTile';
 import { useFeatures } from '~/lib/hooks/useFeatures';
-import { useNotifications } from '~/lib/hooks/useNotifications';
 import { useConnectionStatus } from '~/lib/hooks/useConnectionStatus';
 import { tabConfigurationStore, resetTabConfiguration } from '~/lib/stores/settings';
 import { profileStore } from '~/lib/stores/profile';
 import type { TabType, Profile } from './types';
 import { TAB_LABELS, DEFAULT_TAB_CONFIG, TAB_DESCRIPTIONS } from './constants';
 import { DialogTitle } from '~/components/ui/Dialog';
-import { AvatarDropdown } from './AvatarDropdown';
 import BackgroundRays from '~/components/ui/BackgroundRays';
 
 // Import all tab components
 import ProfileTab from '~/components/@settings/tabs/profile/ProfileTab';
 import SettingsTab from '~/components/@settings/tabs/settings/SettingsTab';
-import NotificationsTab from '~/components/@settings/tabs/notifications/NotificationsTab';
 import FeaturesTab from '~/components/@settings/tabs/features/FeaturesTab';
 import { DataTab } from '~/components/@settings/tabs/data/DataTab';
-import { EventLogsTab } from '~/components/@settings/tabs/event-logs/EventLogsTab';
+
 import GitHubTab from '~/components/@settings/tabs/github/GitHubTab';
 import GitLabTab from '~/components/@settings/tabs/gitlab/GitLabTab';
 import SupabaseTab from '~/components/@settings/tabs/supabase/SupabaseTab';
@@ -33,12 +30,16 @@ import McpTab from '~/components/@settings/tabs/mcp/McpTab';
 interface ControlPanelProps {
   open: boolean;
   onClose: () => void;
-  /** When opening, navigate directly to this tab (e.g. from Deploy dropdown). */
-  initialTab?: TabType | null;
+  tabFilter?: 'preferences' | 'integrations';
+  initialTab?: TabType;
 }
 
 // Beta status for experimental features
 const BETA_TABS = new Set<TabType>(['local-providers', 'mcp']);
+
+// Tabs for each filter mode
+const PREFERENCES_TABS = new Set<TabType>(['features', 'mcp']);
+const INTEGRATIONS_TABS = new Set<TabType>(['data', 'cloud-providers', 'local-providers', 'github', 'gitlab', 'netlify', 'vercel', 'supabase']);
 
 const BetaLabel = () => (
   <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-accent-500/10 dark:bg-accent-500/20">
@@ -46,7 +47,7 @@ const BetaLabel = () => (
   </div>
 );
 
-export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) => {
+export const ControlPanel = ({ open, onClose, tabFilter, initialTab }: ControlPanelProps) => {
   // State
   const [activeTab, setActiveTab] = useState<TabType | null>(null);
   const [loadingTab, setLoadingTab] = useState<TabType | null>(null);
@@ -58,7 +59,6 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
 
   // Status hooks
   const { hasNewFeatures, unviewedFeatures, acknowledgeAllFeatures } = useFeatures();
-  const { hasUnreadNotifications, unreadNotifications, markAllAsRead } = useNotifications();
   const { hasConnectionIssues, currentIssue, acknowledgeIssue } = useConnectionStatus();
 
   // Memoize the base tab configurations to avoid recalculation
@@ -75,7 +75,6 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
       return [];
     }
 
-    const notificationsDisabled = profile?.preferences?.notifications === false;
 
     // Optimize user mode tab filtering
     return tabConfiguration.userTabs
@@ -84,14 +83,21 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
           return false;
         }
 
-        if (tab.id === 'notifications' && notificationsDisabled) {
-          return false;
+        // Apply tabFilter if provided
+        if (tabFilter === 'preferences') {
+          if (!PREFERENCES_TABS.has(tab.id)) {
+            return false;
+          }
+        } else if (tabFilter === 'integrations') {
+          if (!INTEGRATIONS_TABS.has(tab.id)) {
+            return false;
+          }
         }
 
         return tab.visible && tab.window === 'user';
       })
       .sort((a, b) => a.order - b.order);
-  }, [tabConfiguration, profile?.preferences?.notifications, baseTabConfig]);
+  }, [tabConfiguration, baseTabConfig, tabFilter]);
 
   // Reset to default view when modal opens/closes; open directly to initialTab when provided
   useEffect(() => {
@@ -100,14 +106,12 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
       setActiveTab(null);
       setLoadingTab(null);
       setShowTabManagement(false);
+    } else if (initialTab) {
+      // When opening with an initial tab, set it immediately
+      setActiveTab(initialTab);
     } else {
-      // When opening with a requested tab (e.g. from Deploy dropdown), go straight to that tab
-      if (initialTab) {
-        setShowTabManagement(false);
-        setActiveTab(initialTab);
-      } else {
-        setActiveTab(null);
-      }
+      // When opening without an initial tab, show the main view
+      setActiveTab(null);
     }
   }, [open, initialTab]);
 
@@ -134,8 +138,6 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
         return <ProfileTab />;
       case 'settings':
         return <SettingsTab />;
-      case 'notifications':
-        return <NotificationsTab />;
       case 'features':
         return <FeaturesTab />;
       case 'data':
@@ -154,8 +156,7 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
         return <VercelTab />;
       case 'netlify':
         return <NetlifyTab />;
-      case 'event-logs':
-        return <EventLogsTab />;
+
       case 'mcp':
         return <McpTab />;
 
@@ -168,8 +169,6 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
     switch (tabId) {
       case 'features':
         return hasNewFeatures;
-      case 'notifications':
-        return hasUnreadNotifications;
       case 'github':
       case 'gitlab':
       case 'supabase':
@@ -185,8 +184,6 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
     switch (tabId) {
       case 'features':
         return `${unviewedFeatures.length} novo${unviewedFeatures.length === 1 ? '' : 's'} recurso${unviewedFeatures.length === 1 ? '' : 's'} para explorar`;
-      case 'notifications':
-        return `${unreadNotifications.length} notificação${unreadNotifications.length === 1 ? '' : 'ões'} não lida${unreadNotifications.length === 1 ? '' : 's'}`;
       case 'github':
       case 'gitlab':
       case 'supabase':
@@ -209,12 +206,6 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
 
     // Acknowledge notifications based on tab
     switch (tabId) {
-      case 'features':
-        acknowledgeAllFeatures();
-        break;
-      case 'notifications':
-        markAllAsRead();
-        break;
       case 'github':
       case 'gitlab':
       case 'supabase':
@@ -277,11 +268,6 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
                   </div>
 
                   <div className="flex items-center gap-6">
-                    {/* Avatar and Dropdown */}
-                    <div className="pl-6">
-                      <AvatarDropdown onSelectTab={handleTabClick} />
-                    </div>
-
                     {/* Close Button */}
                     <button
                       onClick={handleClose}
@@ -350,7 +336,7 @@ export const ControlPanel = ({ open, onClose, initialTab }: ControlPanelProps) =
             </div>
           </RadixDialog.Content>
         </div>
-      </RadixDialog.Portal>
-    </RadixDialog.Root>
+      </RadixDialog.Portal >
+    </RadixDialog.Root >
   );
 };

@@ -41,7 +41,6 @@ const SupabaseIcon = () => (
 export const TAB_ICONS: Record<TabType, React.ComponentType<{ className?: string }>> = {
   profile: User,
   settings: Settings,
-  notifications: Bell,
   features: Star,
   data: Database,
   'cloud-providers': Cloud,
@@ -58,7 +57,6 @@ export const TAB_ICONS: Record<TabType, React.ComponentType<{ className?: string
 export const TAB_LABELS: Record<TabType, string> = {
   profile: 'Perfil',
   settings: 'Configurações',
-  notifications: 'Notificações',
   features: 'Recursos',
   data: 'Gerenciamento de Dados',
   'cloud-providers': 'Provedores em Nuvem',
@@ -75,7 +73,6 @@ export const TAB_LABELS: Record<TabType, string> = {
 export const TAB_DESCRIPTIONS: Record<TabType, string> = {
   profile: 'Gerencie seu perfil e configurações da conta',
   settings: 'Configure as preferências do aplicativo',
-  notifications: 'Visualize e gerencie suas notificações',
   features: 'Explore novos recursos e próximas funcionalidades',
   data: 'Gerencie seus dados e armazenamento',
   'cloud-providers': 'Configure provedores de IA em nuvem e modelos',
@@ -100,8 +97,7 @@ export const DEFAULT_TAB_CONFIG = [
   { id: 'netlify', visible: true, window: 'user' as const, order: 6 },
   { id: 'vercel', visible: true, window: 'user' as const, order: 7 },
   { id: 'supabase', visible: true, window: 'user' as const, order: 8 },
-  { id: 'notifications', visible: true, window: 'user' as const, order: 9 },
-  { id: 'event-logs', visible: true, window: 'user' as const, order: 10 },
+
   { id: 'mcp', visible: true, window: 'user' as const, order: 11 },
 
   // User Window Tabs (In dropdown, initially hidden)

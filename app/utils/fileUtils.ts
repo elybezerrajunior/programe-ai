@@ -104,18 +104,22 @@ export const detectProjectType = async (
   return { type: '', setupCommand: '', followupMessage: '' };
 };
 
-export const filesToArtifacts = (files: { [path: string]: { content: string } }, id: string): string => {
+export const filesToArtifacts = (
+  files: { [path: string]: { content: string } },
+  id: string,
+  title: string = 'Project Files',
+): string => {
   return `
-<boltArtifact id="${id}" title="User Updated Files">
+<boltArtifact id="${id}" title="${title}">
 ${Object.keys(files)
-  .map(
-    (filePath) => `
+      .map(
+        (filePath) => `
 <boltAction type="file" filePath="${filePath}">
 ${files[filePath].content}
 </boltAction>
 `,
-  )
-  .join('\n')}
+      )
+      .join('\n')}
 </boltArtifact>
   `;
 };

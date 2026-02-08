@@ -8,7 +8,7 @@ import { useMessageParser, usePromptEnhancer, useShortcuts, useLLMConfig } from 
 import { description, useChatHistory } from '~/lib/persistence';
 import { chatStore } from '~/lib/stores/chat';
 import { workbenchStore } from '~/lib/stores/workbench';
-import { DEFAULT_MODEL, DEFAULT_PROVIDER, PROMPT_COOKIE_KEY, PROVIDER_LIST } from '~/utils/constants';
+import { DEFAULT_MODEL, DEFAULT_PROVIDER, PROMPT_COOKIE_KEY, PROVIDER_LIST, WORK_DIR } from '~/utils/constants';
 import { cubicEasingFn } from '~/utils/easings';
 import { createScopedLogger, renderLogger } from '~/utils/logger';
 import { BaseChat } from './BaseChat';
@@ -29,6 +29,7 @@ import type { TextUIPart, FileUIPart, Attachment } from '@ai-sdk/ui-utils';
 import { useMCPStore } from '~/lib/stores/mcp';
 import type { LlmErrorAlertType } from '~/types/actions';
 import { homeHeroFilesStore } from '~/lib/stores/homeFiles';
+import type { FileMap } from '~/lib/stores/files';
 
 const logger = createScopedLogger('Chat');
 
@@ -231,6 +232,82 @@ export const ChatImpl = memo(
         });
       }
     }, [model, provider, searchParams]);
+
+    useEffect(() => {
+      const templateId = searchParams.get('templateId');
+
+      if (templateId && !chatStarted) {
+        setFakeLoading(true);
+
+        fetch(`/api/template/${templateId}`)
+          .then((res) => res.json())
+          .then((data: any) => {
+            if (data.error) {
+              toast.error(data.error);
+              return;
+            }
+
+            const { content, title } = data;
+
+            if (content) {
+              const filesMap: FileMap = {};
+
+              const processNode = (path: string, node: any) => {
+                if (node.file) {
+                  filesMap[path] = {
+                    type: 'file',
+                    content: node.file.contents,
+                    isBinary: false,
+                  };
+                } else if (node.directory) {
+                  filesMap[path] = { type: 'folder' };
+                  Object.entries(node.directory).forEach(([name, child]) => {
+                    processNode(`${path}/${name}`, child);
+                  });
+                }
+              };
+
+              Object.entries(content).forEach(([name, node]) => {
+                processNode(`${WORK_DIR}/${name}`, node);
+              });
+
+              const filesForArtifact: Record<string, { content: string }> = {};
+
+              Object.entries(filesMap).forEach(([path, dirent]) => {
+                if (dirent?.type === 'file') {
+                  filesForArtifact[path] = { content: dirent.content };
+                }
+              });
+
+              const artifact = filesToArtifacts(filesForArtifact, 'project-import', `Template: ${title}`);
+
+              const initMessage = `Projeto **${title}** carregado com sucesso! 🎉\n\nEste modelo foi carregado no seu ambiente de desenvolvimento. Você pode começar a editar os arquivos agora mesmo.\n\n${artifact}`;
+
+              setMessages([
+                {
+                  id: `template-${Date.now()}`,
+                  role: 'assistant',
+                  content: initMessage,
+                },
+              ]);
+
+              setChatStarted(true);
+              chatStore.setKey('started', true);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            toast.error('Erro ao carregar template');
+          })
+          .finally(() => {
+            setFakeLoading(false);
+            setSearchParams((params) => {
+              params.delete('templateId');
+              return params;
+            });
+          });
+      }
+    }, [searchParams, chatStarted]);
 
     const { enhancingPrompt, promptEnhanced, enhancePrompt, resetEnhancer } = usePromptEnhancer();
     const { parsedMessages, parseMessages } = useMessageParser();
@@ -596,24 +673,24 @@ export const ChatImpl = memo(
 
     // Auto-send message when chat is started from home page with cookie prompt
     const hasAutoSentRef = useRef(false);
-    
+
     useEffect(() => {
       const cookiePrompt = Cookies.get(PROMPT_COOKIE_KEY);
-      
+
       // If chat was just started (not already started) and there's a cookie prompt
       // This happens when user clicks "Gerar projeto" in HomeHero
       if (
-        chatStoreValue.started && 
-        !chatStarted && 
+        chatStoreValue.started &&
+        !chatStarted &&
         !hasAutoSentRef.current &&
-        cookiePrompt && 
-        cookiePrompt.trim() && 
-        messages.length === 0 && 
+        cookiePrompt &&
+        cookiePrompt.trim() &&
+        messages.length === 0 &&
         !isLoading &&
         initialMessages.length === 0 // Only auto-send if there are no initial messages
       ) {
         hasAutoSentRef.current = true;
-        
+
         // Get files from HomeHero store if available
         const homeFiles = homeHeroFilesStore.get();
         if (homeFiles.length > 0) {
@@ -621,7 +698,7 @@ export const ChatImpl = memo(
           // Clear the store after reading
           homeHeroFilesStore.set([]);
         }
-        
+
         // Small delay to ensure component is ready
         // The sendMessage function will call runAnimation which sets chatStarted
         setTimeout(() => {
@@ -629,7 +706,7 @@ export const ChatImpl = memo(
           sendMessage(syntheticEvent, cookiePrompt);
         }, 150);
       }
-      
+
       // Reset flag when chat is reset
       if (!chatStoreValue.started && chatStarted) {
         hasAutoSentRef.current = false;

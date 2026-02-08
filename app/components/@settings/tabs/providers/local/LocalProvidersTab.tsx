@@ -159,7 +159,7 @@ export default function LocalProvidersTab() {
       filteredProviders.forEach((provider) => {
         updateProviderSettings(provider.name, { ...provider.settings, enabled });
       });
-      toast(enabled ? 'All local providers enabled' : 'All local providers disabled');
+      toast(enabled ? 'Todos os provedores locais habilitados' : 'Todos os provedores locais desabilitados');
     },
     [filteredProviders, updateProviderSettings, toast],
   );
@@ -174,7 +174,7 @@ export default function LocalProvidersTab() {
       logStore.logProvider(`Provider ${provider.name} ${enabled ? 'enabled' : 'disabled'}`, {
         provider: provider.name,
       });
-      toast(`${provider.name} ${enabled ? 'enabled' : 'disabled'}`);
+      toast(`${provider.name} ${enabled ? 'habilitado' : 'desabilitado'}`);
     },
     [updateProviderSettings, toast],
   );
@@ -185,7 +185,7 @@ export default function LocalProvidersTab() {
         ...provider.settings,
         baseUrl: newBaseUrl,
       });
-      toast(`${provider.name} base URL updated`);
+      toast(`URL base do ${provider.name} atualizada`);
     },
     [updateProviderSettings, toast],
   );
@@ -230,13 +230,13 @@ export default function LocalProvidersTab() {
                 current.map((m) =>
                   m.name === modelName
                     ? {
-                        ...m,
-                        progress: {
-                          current: data.completed,
-                          total: data.total,
-                          status: data.status,
-                        },
-                      }
+                      ...m,
+                      progress: {
+                        current: data.completed,
+                        total: data.total,
+                        status: data.status,
+                      },
+                    }
                     : m,
                 ),
               );
@@ -250,17 +250,17 @@ export default function LocalProvidersTab() {
       setOllamaModels((prev) =>
         prev.map((m) => (m.name === modelName ? { ...m, status: 'updated', progress: undefined } : m)),
       );
-      toast(`Successfully updated ${modelName}`);
+      toast(`${modelName} atualizado com sucesso`);
     } catch {
       setOllamaModels((prev) =>
         prev.map((m) => (m.name === modelName ? { ...m, status: 'error', progress: undefined } : m)),
       );
-      toast(`Failed to update ${modelName}`, { type: 'error' });
+      toast(`Falha ao atualizar ${modelName}`, { type: 'error' });
     }
   };
 
   const handleDeleteOllamaModel = async (modelName: string) => {
-    if (!window.confirm(`Are you sure you want to delete ${modelName}?`)) {
+    if (!window.confirm(`Tem certeza de que deseja excluir ${modelName}?`)) {
       return;
     }
 
@@ -276,9 +276,9 @@ export default function LocalProvidersTab() {
       }
 
       setOllamaModels((current) => current.filter((m) => m.name !== modelName));
-      toast(`Deleted ${modelName}`);
+      toast(`${modelName} excluído`);
     } catch {
-      toast(`Failed to delete ${modelName}`, { type: 'error' });
+      toast(`Falha ao excluir ${modelName}`, { type: 'error' });
     }
   };
 
@@ -309,13 +309,13 @@ export default function LocalProvidersTab() {
               <Cpu className="w-6 h-6 text-accent-500" />
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-bolt-elements-textPrimary">Local AI Providers</h2>
-              <p className="text-sm text-bolt-elements-textSecondary">Configure and manage your local AI models</p>
+              <h2 className="text-2xl font-semibold text-bolt-elements-textPrimary">Provedores de IA Locais</h2>
+              <p className="text-sm text-bolt-elements-textSecondary">Configure e gerencie seus modelos de IA locais</p>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-bolt-elements-textSecondary">Enable All</span>
+              <span className="text-sm font-medium text-bolt-elements-textSecondary">Habilitar Todos</span>
               <Switch
                 checked={categoryEnabled}
                 onCheckedChange={handleToggleCategory}
@@ -330,7 +330,7 @@ export default function LocalProvidersTab() {
                 className="bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3 border-bolt-elements-borderColor hover:border-accent-500/30 transition-all duration-200 gap-2"
               >
                 <BookOpen className="w-4 h-4" />
-                Setup Guide
+                Guia de Configuração
               </Button>
               <Button
                 variant="outline"
@@ -365,7 +365,7 @@ export default function LocalProvidersTab() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <PackageOpen className="w-5 h-5 text-accent-500" />
-                        <h3 className="text-lg font-semibold text-bolt-elements-textPrimary">Installed Models</h3>
+                        <h3 className="text-lg font-semibold text-bolt-elements-textPrimary">Modelos Instalados</h3>
                       </div>
                       <Button
                         variant="outline"
@@ -379,7 +379,7 @@ export default function LocalProvidersTab() {
                         ) : (
                           <RotateCw className="w-4 h-4 mr-2" />
                         )}
-                        Refresh
+                        Atualizar
                       </Button>
                     </div>
                   </CardHeader>
@@ -393,7 +393,7 @@ export default function LocalProvidersTab() {
                     ) : ollamaModels.length === 0 ? (
                       <div className="text-center py-8">
                         <PackageOpen className="w-16 h-16 mx-auto text-bolt-elements-textTertiary mb-4" />
-                        <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">No Models Installed</h3>
+                        <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">Nenhum Modelo Instalado</h3>
                         <p className="text-sm text-bolt-elements-textSecondary mb-4">
                           Visit{' '}
                           <a
@@ -420,7 +420,7 @@ export default function LocalProvidersTab() {
                             className="flex items-center justify-center gap-2"
                           >
                             <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 flex-shrink-0" />
-                            <span className="flex-1 text-center font-medium">Browse Models</span>
+                            <span className="flex-1 text-center font-medium">Navegar Modelos</span>
                           </a>
                         </Button>
                       </div>
@@ -447,7 +447,7 @@ export default function LocalProvidersTab() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Monitor className="w-5 h-5 text-blue-500" />
-                        <h3 className="text-lg font-semibold text-bolt-elements-textPrimary">Available Models</h3>
+                        <h3 className="text-lg font-semibold text-bolt-elements-textPrimary">Modelos Disponíveis</h3>
                       </div>
                       <Button
                         variant="outline"
@@ -461,7 +461,7 @@ export default function LocalProvidersTab() {
                         ) : (
                           <RotateCw className="w-4 h-4 mr-2" />
                         )}
-                        Refresh
+                        Atualizar
                       </Button>
                     </div>
                   </CardHeader>
@@ -475,9 +475,9 @@ export default function LocalProvidersTab() {
                     ) : lmStudioModels.length === 0 ? (
                       <div className="text-center py-8">
                         <Monitor className="w-16 h-16 mx-auto text-bolt-elements-textTertiary mb-4" />
-                        <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">No Models Available</h3>
+                        <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">Nenhum Modelo Disponível</h3>
                         <p className="text-sm text-bolt-elements-textSecondary mb-4">
-                          Make sure LM Studio is running with the local server started and CORS enabled.
+                          Certifique-se de que o LM Studio está em execução com o servidor local iniciado e CORS habilitado.
                         </p>
                         <Button
                           variant="outline"
@@ -492,7 +492,7 @@ export default function LocalProvidersTab() {
                             className="flex items-center justify-center gap-2"
                           >
                             <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 flex-shrink-0" />
-                            <span className="flex-1 text-center font-medium">Get LM Studio</span>
+                            <span className="flex-1 text-center font-medium">Obter LM Studio</span>
                           </a>
                         </Button>
                       </div>
@@ -507,7 +507,7 @@ export default function LocalProvidersTab() {
                                     {model.id}
                                   </h4>
                                   <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
-                                    Available
+                                    Disponível
                                   </span>
                                 </div>
                                 <div className="flex items-center gap-4 text-xs text-bolt-elements-textSecondary">
@@ -517,12 +517,12 @@ export default function LocalProvidersTab() {
                                   </div>
                                   <div className="flex items-center gap-1">
                                     <Activity className="w-3 h-3" />
-                                    <span>Owned by: {model.owned_by}</span>
+                                    <span>Proprietário: {model.owned_by}</span>
                                   </div>
                                   {model.created && (
                                     <div className="flex items-center gap-1">
                                       <Activity className="w-3 h-3" />
-                                      <span>Created: {new Date(model.created * 1000).toLocaleDateString()}</span>
+                                      <span>Criado: {new Date(model.created * 1000).toLocaleDateString()}</span>
                                     </div>
                                   )}
                                 </div>
@@ -543,9 +543,9 @@ export default function LocalProvidersTab() {
           <Card className="bg-bolt-elements-background-depth-2">
             <CardContent className="p-8 text-center">
               <Server className="w-16 h-16 mx-auto text-bolt-elements-textTertiary mb-4" />
-              <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">No Local Providers Available</h3>
+              <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">Nenhum Provedor Local Disponível</h3>
               <p className="text-sm text-bolt-elements-textSecondary">
-                Local providers will appear here when they're configured in the system.
+                Provedores locais aparecerão aqui quando estiverem configurados no sistema.
               </p>
             </CardContent>
           </Card>

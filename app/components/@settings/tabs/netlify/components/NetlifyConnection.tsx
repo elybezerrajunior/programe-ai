@@ -308,7 +308,7 @@ export default function NetlifyConnection() {
             if (isFreeAccount) {
               toast.info(
                 'Analytics unavailable on free accounts. Site info: ' +
-                  `${siteData.name} (${siteData.state || 'Unknown'})`,
+                `${siteData.name} (${siteData.state || 'Unknown'})`,
               );
             } else {
               toast.error(`Failed to load analytics: ${errorText}`);
@@ -885,20 +885,20 @@ export default function NetlifyConnection() {
             <div className="text-[#00AD9F]">
               <NetlifyLogo />
             </div>
-            <h2 className="text-lg font-medium text-bolt-elements-textPrimary">Netlify Connection</h2>
+            <h2 className="text-lg font-medium text-bolt-elements-textPrimary">Conexão Netlify</h2>
           </div>
         </div>
 
         {!connection.user ? (
           <div className="mt-4">
             <label className="block text-sm text-bolt-elements-textSecondary dark:text-bolt-elements-textSecondary mb-2">
-              API Token
+              Token da API
             </label>
             <input
               type="password"
               value={tokenInput}
               onChange={(e) => setTokenInput(e.target.value)}
-              placeholder="Enter your Netlify API token"
+              placeholder="Digite seu token da API Netlify"
               className={classNames(
                 'w-full px-3 py-2 rounded-lg text-sm',
                 'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
@@ -915,7 +915,7 @@ export default function NetlifyConnection() {
                 rel="noopener noreferrer"
                 className="text-bolt-elements-borderColorActive hover:underline inline-flex items-center gap-1"
               >
-                Get your token
+                Obter seu token
                 <div className="i-ph:arrow-square-out w-4 h-4" />
               </a>
             </div>
@@ -940,12 +940,12 @@ export default function NetlifyConnection() {
                 {isConnecting ? (
                   <>
                     <div className="i-ph:spinner-gap animate-spin" />
-                    Connecting...
+                    Conectando...
                   </>
                 ) : (
                   <>
                     <div className="i-ph:plug-charging w-4 h-4" />
-                    Connect
+                    Conectar
                   </>
                 )}
               </button>
@@ -974,11 +974,11 @@ export default function NetlifyConnection() {
                 )}
               >
                 <div className="i-ph:plug w-4 h-4" />
-                Disconnect
+                Desconectar
               </button>
               <span className="text-sm text-bolt-elements-textSecondary flex items-center gap-1">
                 <div className="i-ph:check-circle w-4 h-4 text-green-500" />
-                Connected to Netlify
+                Conectado ao Netlify
               </span>
             </div>
             {renderStats()}

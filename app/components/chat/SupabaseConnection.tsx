@@ -110,17 +110,17 @@ export function SupabaseConnection() {
                     crossOrigin="anonymous"
                     src="https://cdn.simpleicons.org/supabase"
                   />
-                  Connect to Supabase
+                  Conectar ao Supabase
                 </DialogTitle>
 
                 <div>
-                  <label className="block text-sm text-bolt-elements-textSecondary mb-2">Access Token</label>
+                  <label className="block text-sm text-bolt-elements-textSecondary mb-2">Token de Acesso</label>
                   <input
                     type="password"
                     value={supabaseConn.token}
                     onChange={(e) => updateToken(e.target.value)}
                     disabled={connecting}
-                    placeholder="Enter your Supabase access token"
+                    placeholder="Digite seu token de acesso do Supabase"
                     className={classNames(
                       'w-full px-3 py-2 rounded-lg text-sm',
                       'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
@@ -137,7 +137,7 @@ export function SupabaseConnection() {
                       rel="noopener noreferrer"
                       className="text-[#3ECF8E] hover:underline inline-flex items-center gap-1"
                     >
-                      Get your token
+                      Obter seu token
                       <div className="i-ph:arrow-square-out w-4 h-4" />
                     </a>
                   </div>
@@ -145,7 +145,7 @@ export function SupabaseConnection() {
 
                 <div className="flex justify-end gap-2 mt-6">
                   <DialogClose asChild>
-                    <DialogButton type="secondary">Cancel</DialogButton>
+                    <DialogButton type="secondary">Cancelar</DialogButton>
                   </DialogClose>
                   <button
                     onClick={handleConnect}
@@ -160,12 +160,12 @@ export function SupabaseConnection() {
                     {connecting ? (
                       <>
                         <div className="i-ph:spinner-gap animate-spin" />
-                        Connecting...
+                        Conectando...
                       </>
                     ) : (
                       <>
                         <div className="i-ph:plug-charging w-4 h-4" />
-                        Connect
+                        Conectar
                       </>
                     )}
                   </button>
@@ -182,21 +182,21 @@ export function SupabaseConnection() {
                       crossOrigin="anonymous"
                       src="https://cdn.simpleicons.org/supabase"
                     />
-                    Supabase Connection
+                    Conexão Supabase
                   </DialogTitle>
                 </div>
 
                 <div className="flex items-center gap-4 p-3 bg-[#F8F8F8] dark:bg-[#1A1A1A] rounded-lg">
                   <div>
                     <h4 className="text-sm font-medium text-bolt-elements-textPrimary">{supabaseConn.user?.email}</h4>
-                    <p className="text-xs text-bolt-elements-textSecondary">Role: {supabaseConn.user?.role}</p>
+                    <p className="text-xs text-bolt-elements-textSecondary">Função: {supabaseConn.user?.role}</p>
                   </div>
                 </div>
 
                 {fetchingStats ? (
                   <div className="flex items-center gap-2 text-sm text-bolt-elements-textSecondary">
                     <div className="i-ph:spinner-gap w-4 h-4 animate-spin" />
-                    Fetching projects...
+                    Buscando projetos...
                   </div>
                 ) : (
                   <div>
@@ -206,7 +206,7 @@ export function SupabaseConnection() {
                         className="bg-transparent text-left text-sm font-medium text-bolt-elements-textPrimary flex items-center gap-2"
                       >
                         <div className="i-ph:database w-4 h-4" />
-                        Your Projects ({supabaseConn.stats?.totalProjects || 0})
+                        Seus Projetos ({supabaseConn.stats?.totalProjects || 0})
                         <div
                           className={classNames(
                             'i-ph:caret-down w-4 h-4 transition-transform',
@@ -221,14 +221,14 @@ export function SupabaseConnection() {
                           title="Refresh projects list"
                         >
                           <div className="i-ph:arrows-clockwise w-3 h-3" />
-                          Refresh
+                          Atualizar
                         </button>
                         <button
                           onClick={() => handleCreateProject()}
                           className="px-2 py-1 rounded-md text-xs bg-[#3ECF8E] text-white hover:bg-[#3BBF84] flex items-center gap-1"
                         >
                           <div className="i-ph:plus w-3 h-3" />
-                          New Project
+                          Novo Projeto
                         </button>
                       </div>
                     </div>
@@ -237,7 +237,7 @@ export function SupabaseConnection() {
                       <>
                         {!supabaseConn.selectedProjectId && (
                           <div className="mb-2 p-3 bg-[#F8F8F8] dark:bg-[#1A1A1A] rounded-lg text-sm text-bolt-elements-textSecondary">
-                            Select a project or create a new one for this chat
+                            Selecione um projeto ou crie um novo para este chat
                           </div>
                         )}
 
@@ -270,10 +270,10 @@ export function SupabaseConnection() {
                                     {supabaseConn.selectedProjectId === project.id ? (
                                       <span className="flex items-center gap-1">
                                         <div className="i-ph:check w-3 h-3" />
-                                        Selected
+                                        Selecionado
                                       </span>
                                     ) : (
-                                      'Select'
+                                      'Selecionar'
                                     )}
                                   </button>
                                 </div>
@@ -283,7 +283,7 @@ export function SupabaseConnection() {
                         ) : (
                           <div className="text-sm text-bolt-elements-textSecondary flex items-center gap-2">
                             <div className="i-ph:info w-4 h-4" />
-                            No projects found
+                            Nenhum projeto encontrado
                           </div>
                         )}
                       </>
@@ -293,11 +293,11 @@ export function SupabaseConnection() {
 
                 <div className="flex justify-end gap-2 mt-6">
                   <DialogClose asChild>
-                    <DialogButton type="secondary">Close</DialogButton>
+                    <DialogButton type="secondary">Fechar</DialogButton>
                   </DialogClose>
                   <DialogButton type="danger" onClick={handleDisconnect}>
                     <div className="i-ph:plugs w-4 h-4" />
-                    Disconnect
+                    Desconectar
                   </DialogButton>
                 </div>
               </div>

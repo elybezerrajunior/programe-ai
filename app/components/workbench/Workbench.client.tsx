@@ -507,14 +507,7 @@ export const Workbench = memo(
                       }
                     }}
                   />
-                  <IconButton
-                    icon="i-ph:x-circle"
-                    className="-mr-1"
-                    size="xl"
-                    onClick={() => {
-                      workbenchStore.showWorkbench.set(false);
-                    }}
-                  />
+
                 </div>
                 <div className="relative flex-1 overflow-hidden">
                   <View initial={{ x: '0%' }} animate={{ x: selectedView === 'code' ? '0%' : '-100%' }}>
