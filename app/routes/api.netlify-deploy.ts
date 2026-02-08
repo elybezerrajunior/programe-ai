@@ -4,13 +4,14 @@ import type { NetlifySiteInfo } from '~/types/netlify';
 
 interface DeployRequestBody {
   siteId?: string;
+  siteName?: string;
   files: Record<string, string>;
   chatId: string;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   try {
-    const { siteId, files, token, chatId } = (await request.json()) as DeployRequestBody & { token: string };
+    const { siteId, siteName, files, token, chatId } = (await request.json()) as DeployRequestBody & { token: string };
 
     if (!token) {
       return json({ error: 'Not connected to Netlify' }, { status: 401 });
@@ -21,7 +22,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // If no siteId provided, create a new site
     if (!targetSiteId) {
-      const siteName = `bolt-diy-${chatId}-${Date.now()}`;
+      const nameToUse = siteName || `bolt-diy-${chatId}-${Date.now()}`;
       const createSiteResponse = await fetch('https://api.netlify.com/api/v1/sites', {
         method: 'POST',
         headers: {
@@ -29,13 +30,27 @@ export async function action({ request }: ActionFunctionArgs) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: siteName,
+          name: nameToUse,
           custom_domain: null,
         }),
       });
 
       if (!createSiteResponse.ok) {
-        return json({ error: 'Failed to create site' }, { status: 400 });
+        let errorMessage = 'Failed to create site';
+        try {
+          const errorText = await createSiteResponse.text();
+          const errorData = JSON.parse(errorText);
+          const apiMessage = errorData.message || errorData.error || '';
+
+          if (apiMessage.includes('taken') || apiMessage.includes('exists') || (errorData.errors && errorData.errors.name)) {
+            errorMessage = `O nome do site '${nameToUse}' já está em uso. Por favor, escolha outro nome.`;
+          } else {
+            errorMessage = apiMessage || errorMessage;
+          }
+        } catch (e) {
+          console.error('Failed to parse create site error', e);
+        }
+        return json({ error: errorMessage }, { status: 400 });
       }
 
       const newSite = (await createSiteResponse.json()) as any;
@@ -63,6 +78,52 @@ export async function action({ request }: ActionFunctionArgs) {
             url: existingSite.url,
             chatId,
           };
+
+          // Rename if needed
+          if (siteName && existingSite.name !== siteName) {
+            const renameResponse = await fetch(`https://api.netlify.com/api/v1/sites/${targetSiteId}`, {
+              method: 'PATCH',
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                name: siteName,
+              }),
+            });
+
+            if (renameResponse.ok) {
+              const updatedSite = (await renameResponse.json()) as any;
+              siteInfo = {
+                id: updatedSite.id,
+                name: updatedSite.name,
+                url: updatedSite.url,
+                chatId,
+              };
+            } else {
+              const errorText = await renameResponse.text();
+              console.error('Rename failed:', renameResponse.status, errorText);
+              let errorMessage = 'Unknown error';
+              try {
+                const errorData = JSON.parse(errorText);
+                const apiMessage = errorData.message || errorData.error || JSON.stringify(errorData);
+
+                if (
+                  apiMessage.includes('taken') ||
+                  apiMessage.includes('exists') ||
+                  apiMessage.includes('unique') ||
+                  (errorData.errors && (errorData.errors.name || errorData.errors.subdomain))
+                ) {
+                  errorMessage = `O nome do site '${siteName}' já está em uso. Por favor, escolha outro nome.`;
+                } else {
+                  errorMessage = `Falha ao renomear o site: ${apiMessage}`;
+                }
+              } catch {
+                errorMessage = `Falha ao renomear o site: ${errorText.substring(0, 200)}`;
+              }
+              return json({ error: errorMessage }, { status: 400 });
+            }
+          }
         } else {
           targetSiteId = undefined;
         }
@@ -70,7 +131,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
       // If no siteId provided or site doesn't exist, create a new site
       if (!targetSiteId) {
-        const siteName = `bolt-diy-${chatId}-${Date.now()}`;
+        const nameToUse = siteName || `bolt-diy-${chatId}-${Date.now()}`;
         const createSiteResponse = await fetch('https://api.netlify.com/api/v1/sites', {
           method: 'POST',
           headers: {
@@ -78,13 +139,32 @@ export async function action({ request }: ActionFunctionArgs) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: siteName,
+            name: nameToUse,
             custom_domain: null,
           }),
         });
 
         if (!createSiteResponse.ok) {
-          return json({ error: 'Failed to create site' }, { status: 400 });
+          let errorMessage = 'Failed to create site';
+          try {
+            const errorText = await createSiteResponse.text();
+            const errorData = JSON.parse(errorText);
+            const apiMessage = errorData.message || errorData.error || '';
+
+            if (
+              apiMessage.includes('taken') ||
+              apiMessage.includes('exists') ||
+              apiMessage.includes('unique') ||
+              (errorData.errors && (errorData.errors.name || errorData.errors.subdomain))
+            ) {
+              errorMessage = `O nome do site '${nameToUse}' já está em uso. Por favor, escolha outro nome.`;
+            } else {
+              errorMessage = apiMessage || errorMessage;
+            }
+          } catch (e) {
+            console.error('Failed to parse create site error', e);
+          }
+          return json({ error: errorMessage }, { status: 400 });
         }
 
         const newSite = (await createSiteResponse.json()) as any;

@@ -217,7 +217,7 @@ export function useVercelDeploy() {
       });
 
       // Show success toast notification
-      toast.success(`🚀 Vercel deployment completed successfully!`);
+      toast.success(`Deploy na Vercel concluído com sucesso!`);
 
       // Add notification to database
       if (supabase && auth.user) {

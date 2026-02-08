@@ -16,15 +16,15 @@ export function useNetlifyDeploy() {
   const currentChatId = useStore(chatId);
   const auth = useStore(authStore);
 
-  const handleNetlifyDeploy = async () => {
+  const handleNetlifyDeploy = async (siteName?: string) => {
     if (!netlifyConn.user || !netlifyConn.token) {
       toast.error('Please connect to Netlify first in the settings tab!');
-      return false;
+      return { success: false, error: 'Please connect to Netlify first in the settings tab!' };
     }
 
     if (!currentChatId) {
       toast.error('No active chat found');
-      return false;
+      return { success: false, error: 'No active chat found' };
     }
 
     try {
@@ -149,6 +149,7 @@ export function useNetlifyDeploy() {
         },
         body: JSON.stringify({
           siteId: existingSiteId || undefined,
+          siteName: siteName || undefined,
           files: fileContents,
           token: netlifyConn.token,
           chatId: currentChatId,
@@ -228,7 +229,7 @@ export function useNetlifyDeploy() {
       });
 
       // Show success toast notification
-      toast.success(`🚀 Netlify deployment completed successfully!`);
+      toast.success(`Deploy na Netlify concluído com sucesso!`);
 
       // Add notification to database
       if (supabase && auth.user) {
@@ -243,12 +244,12 @@ export function useNetlifyDeploy() {
         });
       }
 
-      return true;
+      return { success: true };
     } catch (error) {
       console.error('Deploy error:', error);
       toast.error(error instanceof Error ? error.message : 'Deployment failed');
 
-      return false;
+      return { success: false, error: error instanceof Error ? error.message : 'Deployment failed' };
     } finally {
       setIsDeploying(false);
     }
