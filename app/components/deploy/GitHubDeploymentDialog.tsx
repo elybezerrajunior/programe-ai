@@ -9,6 +9,8 @@ import type { GitHubUserResponse, GitHubRepoInfo } from '~/types/GitHub';
 import { logStore } from '~/lib/stores/logs';
 import { chatId } from '~/lib/persistence/useChatHistory';
 import { useStore } from '@nanostores/react';
+import { authStore } from '~/lib/stores/auth';
+import { supabase } from '~/lib/auth/supabase-client';
 import { GitHubAuthDialog } from '~/components/@settings/tabs/github/components/GitHubAuthDialog';
 import { SearchInput, EmptyState, StatusIndicator, Badge } from '~/components/ui';
 
@@ -33,6 +35,7 @@ export function GitHubDeploymentDialog({ isOpen, onClose, projectName, files }: 
   const [pushedFiles, setPushedFiles] = useState<{ path: string; size: number }[]>([]);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const currentChatId = useStore(chatId);
+  const auth = useStore(authStore);
 
   /*
    * Load GitHub connection on mount
@@ -469,6 +472,19 @@ export function GitHubDeploymentDialog({ isOpen, onClose, projectName, files }: 
 
       // Show success dialog
       setShowSuccessDialog(true);
+
+      // Add notification to database
+      if (supabase && auth.user) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase as any).from('notifications').insert({
+          user_id: auth.user.id,
+          title: 'Código enviado ao GitHub',
+          message: `O repositório ${sanitizedRepoName} foi atualizado com sucesso.`,
+          type: 'success',
+          read: false,
+          link: createdRepoUrl || `https://github.com/${connection.user.login}/${sanitizedRepoName}`,
+        });
+      }
     } catch (error) {
       console.error('Error pushing to GitHub:', error);
 

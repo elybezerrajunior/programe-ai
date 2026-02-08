@@ -8,6 +8,8 @@ import type { GitLabUserResponse, GitLabProjectInfo } from '~/types/GitLab';
 import { logStore } from '~/lib/stores/logs';
 import { chatId } from '~/lib/persistence/useChatHistory';
 import { useStore } from '@nanostores/react';
+import { authStore } from '~/lib/stores/auth';
+import { supabase } from '~/lib/auth/supabase-client';
 import { GitLabApiService } from '~/lib/services/gitlabApiService';
 import { SearchInput, EmptyState, StatusIndicator, Badge } from '~/components/ui';
 import { formatSize } from '~/utils/formatSize';
@@ -34,6 +36,7 @@ export function GitLabDeploymentDialog({ isOpen, onClose, projectName, files }: 
   const [pushedFiles, setPushedFiles] = useState<{ path: string; size: number }[]>([]);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const currentChatId = useStore(chatId);
+  const auth = useStore(authStore);
 
   // Load GitLab connection on mount
   useEffect(() => {
@@ -180,7 +183,21 @@ export function GitLabDeploymentDialog({ isOpen, onClose, projectName, files }: 
       }));
 
       setPushedFiles(fileList);
+
       setShowSuccessDialog(true);
+
+      // Add notification to database
+      if (supabase && auth.user) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase as any).from('notifications').insert({
+          user_id: auth.user.id,
+          title: 'Código enviado ao GitLab',
+          message: `O repositório ${sanitizedRepoName} foi atualizado com sucesso.`,
+          type: 'success',
+          read: false,
+          link: createdRepoUrl || `https://gitlab.com/${connection.user.username}/${sanitizedRepoName}`,
+        });
+      }
 
       // Save repository info
       localStorage.setItem(

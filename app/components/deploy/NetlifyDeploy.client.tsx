@@ -7,11 +7,14 @@ import { path } from '~/utils/path';
 import { useState } from 'react';
 import type { ActionCallbackData } from '~/lib/runtime/message-parser';
 import { chatId } from '~/lib/persistence/useChatHistory';
+import { supabase } from '~/lib/auth/supabase-client';
+import { authStore } from '~/lib/stores/auth';
 
 export function useNetlifyDeploy() {
   const [isDeploying, setIsDeploying] = useState(false);
   const netlifyConn = useStore(netlifyConnection);
   const currentChatId = useStore(chatId);
+  const auth = useStore(authStore);
 
   const handleNetlifyDeploy = async () => {
     if (!netlifyConn.user || !netlifyConn.token) {
@@ -226,6 +229,19 @@ export function useNetlifyDeploy() {
 
       // Show success toast notification
       toast.success(`🚀 Netlify deployment completed successfully!`);
+
+      // Add notification to database
+      if (supabase && auth.user) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase as any).from('notifications').insert({
+          user_id: auth.user.id,
+          title: 'Deploy Netlify com Sucesso!',
+          message: `O deploy foi concluído com sucesso.`,
+          type: 'success',
+          read: false,
+          link: deploymentStatus.ssl_url || deploymentStatus.url,
+        });
+      }
 
       return true;
     } catch (error) {
