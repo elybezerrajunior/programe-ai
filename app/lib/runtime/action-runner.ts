@@ -758,8 +758,8 @@ export default defineConfig({
       stage === 'building'
         ? 'Building Application'
         : stage === 'deploying'
-          ? 'Deploying Application'
-          : 'Deployment Complete';
+          ? 'Publicando Aplicação'
+          : 'Publicação Completa';
 
     const description =
       status === 'failed'

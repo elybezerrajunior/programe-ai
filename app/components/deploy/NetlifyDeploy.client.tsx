@@ -7,21 +7,24 @@ import { path } from '~/utils/path';
 import { useState } from 'react';
 import type { ActionCallbackData } from '~/lib/runtime/message-parser';
 import { chatId } from '~/lib/persistence/useChatHistory';
+import { supabase } from '~/lib/auth/supabase-client';
+import { authStore } from '~/lib/stores/auth';
 
 export function useNetlifyDeploy() {
   const [isDeploying, setIsDeploying] = useState(false);
   const netlifyConn = useStore(netlifyConnection);
   const currentChatId = useStore(chatId);
+  const auth = useStore(authStore);
 
-  const handleNetlifyDeploy = async () => {
+  const handleNetlifyDeploy = async (siteName?: string) => {
     if (!netlifyConn.user || !netlifyConn.token) {
       toast.error('Please connect to Netlify first in the settings tab!');
-      return false;
+      return { success: false, error: 'Please connect to Netlify first in the settings tab!' };
     }
 
     if (!currentChatId) {
       toast.error('No active chat found');
-      return false;
+      return { success: false, error: 'No active chat found' };
     }
 
     try {
@@ -146,6 +149,7 @@ export function useNetlifyDeploy() {
         },
         body: JSON.stringify({
           siteId: existingSiteId || undefined,
+          siteName: siteName || undefined,
           files: fileContents,
           token: netlifyConn.token,
           chatId: currentChatId,
@@ -225,14 +229,27 @@ export function useNetlifyDeploy() {
       });
 
       // Show success toast notification
-      toast.success(`🚀 Netlify deployment completed successfully!`);
+      toast.success(`Deploy na Netlify concluído com sucesso!`);
 
-      return true;
+      // Add notification to database
+      if (supabase && auth.user) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase as any).from('notifications').insert({
+          user_id: auth.user.id,
+          title: 'Deploy Netlify com Sucesso!',
+          message: `O deploy foi concluído com sucesso.`,
+          type: 'success',
+          read: false,
+          link: deploymentStatus.ssl_url || deploymentStatus.url,
+        });
+      }
+
+      return { success: true };
     } catch (error) {
       console.error('Deploy error:', error);
       toast.error(error instanceof Error ? error.message : 'Deployment failed');
 
-      return false;
+      return { success: false, error: error instanceof Error ? error.message : 'Deployment failed' };
     } finally {
       setIsDeploying(false);
     }

@@ -14,10 +14,10 @@ export function Header() {
   const chat = useStore(chatStore);
   const profile = useStore(profileStore);
   const location = useLocation();
-  const isHomePage = location.pathname === '/';
+  const isLandingPage = ['/', '/explore', '/docs'].includes(location.pathname);
 
   // For home page, show new design. For chat pages, show original design
-  if (isHomePage && !chat.started) {
+  if (isLandingPage && !chat.started) {
     return (
       <header className="flex items-center justify-between px-6 border-b border-bolt-elements-borderColor h-[var(--header-height)] bg-bolt-elements-background-depth-1">
         {/* Logo */}
@@ -91,14 +91,11 @@ export function Header() {
         'border-bolt-elements-borderColor': chat.started,
       })}
     >
-      <div className="flex items-center gap-2 shrink-0 relative z-[998]">
-        <div className="i-ph:sidebar-simple-duotone text-xl text-bolt-elements-textSecondary" />
-        <a
-          href="/"
-          className="flex items-center gap-2 text-bolt-elements-textPrimary cursor-pointer hover:opacity-90 transition-opacity"
-        >
-          <div className="i-ph:rocket text-xl text-accent" />
-          <span className="text-xl font-semibold">Programe Studio</span>
+      <div className="flex items-center gap-2 z-logo text-bolt-elements-textPrimary cursor-pointer">
+        <div className="i-ph:sidebar-simple-duotone text-xl" />
+        <a href="/" className="text-2xl font-semibold text-accent flex items-center">
+          <img src="/logo-light-styled.png" alt="logo" className="w-[90px] inline-block dark:hidden" />
+          <img src="/logo-dark-styled.png" alt="logo" className="w-[90px] inline-block hidden dark:block" />
         </a>
       </div>
       {chat.started && (
@@ -110,6 +107,9 @@ export function Header() {
             {() => (
               <div className="flex items-center gap-4">
                 <HeaderActionButtons chatStarted={chat.started} />
+                {/* Upgrade button - shows badge if paid, upgrade button if free */}
+                <UpgradeButton size="sm" />
+                {/* Notifications and Profile icons */}
                 <NotificationsDropdown />
                 <UserMenu />
               </div>

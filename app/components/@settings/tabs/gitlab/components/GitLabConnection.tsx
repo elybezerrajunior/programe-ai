@@ -71,31 +71,16 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                 />
               </svg>
             </div>
-            <h3 className="text-base font-medium text-bolt-elements-textPrimary">GitLab Connection</h3>
+            <h3 className="text-base font-medium text-bolt-elements-textPrimary">Conexão GitLab</h3>
           </div>
         </div>
 
-        {!isConnected && (
-          <div className="text-xs text-bolt-elements-textSecondary bg-bolt-elements-background-depth-1 p-3 rounded-lg mb-4">
-            <p className="flex items-center gap-1 mb-1">
-              <span className="i-ph:lightbulb w-3.5 h-3.5 text-bolt-elements-icon-success" />
-              <span className="font-medium">Tip:</span> You can also set the{' '}
-              <code className="px-1 py-0.5 bg-bolt-elements-background-depth-2 rounded">VITE_GITLAB_ACCESS_TOKEN</code>{' '}
-              environment variable to connect automatically.
-            </p>
-            <p>
-              For self-hosted GitLab instances, also set{' '}
-              <code className="px-1 py-0.5 bg-bolt-elements-background-depth-2 rounded">
-                VITE_GITLAB_URL=https://your-gitlab-instance.com
-              </code>
-            </p>
-          </div>
-        )}
+
 
         <form onSubmit={handleConnect}>
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-sm text-bolt-elements-textSecondary mb-2">GitLab URL</label>
+              <label className="block text-sm text-bolt-elements-textSecondary mb-2">URL do GitLab</label>
               <input
                 type="text"
                 value={gitlabUrl}
@@ -114,13 +99,13 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
             </div>
 
             <div>
-              <label className="block text-sm text-bolt-elements-textSecondary mb-2">Access Token</label>
+              <label className="block text-sm text-bolt-elements-textSecondary mb-2">Token de Acesso</label>
               <input
                 type="password"
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
                 disabled={isConnecting || isConnected}
-                placeholder="Enter your GitLab access token"
+                placeholder="Digite seu token de acesso do GitLab"
                 className={classNames(
                   'w-full px-3 py-2 rounded-lg text-sm',
                   'bg-bolt-elements-background-depth-1',
@@ -137,11 +122,11 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                   rel="noopener noreferrer"
                   className="text-bolt-elements-borderColorActive hover:underline inline-flex items-center gap-1"
                 >
-                  Get your token
+                  Obter seu token
                   <div className="i-ph:arrow-square-out w-4 h-4" />
                 </a>
                 <span className="mx-2">•</span>
-                <span>Required scopes: api, read_repository</span>
+                <span>Escopos necessários: api, read_repository</span>
               </div>
             </div>
           </div>
@@ -169,12 +154,12 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                   {isConnecting ? (
                     <>
                       <div className="i-ph:spinner-gap animate-spin" />
-                      Connecting...
+                      Conectando...
                     </>
                   ) : (
                     <>
                       <div className="i-ph:plug-charging w-4 h-4" />
-                      Connect
+                      Conectar
                     </>
                   )}
                 </button>
@@ -185,7 +170,7 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                   }
                   className="px-4 py-2 rounded-lg text-sm bg-gray-500 text-white hover:bg-gray-600"
                 >
-                  Test Values
+                  Testar Valores
                 </button>
               </>
             ) : (
@@ -201,11 +186,11 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                       )}
                     >
                       <div className="i-ph:plug w-4 h-4" />
-                      Disconnect
+                      Desconectar
                     </button>
                     <span className="text-sm text-bolt-elements-textSecondary flex items-center gap-1">
                       <div className="i-ph:check-circle w-4 h-4 text-green-500" />
-                      Connected to GitLab
+                      Conectado ao GitLab
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -232,12 +217,12 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                       {connectionTest?.status === 'testing' ? (
                         <>
                           <div className="i-ph:spinner-gap w-4 h-4 animate-spin" />
-                          Testing...
+                          Testando...
                         </>
                       ) : (
                         <>
                           <div className="i-ph:plug-charging w-4 h-4" />
-                          Test Connection
+                          Testar Conexão
                         </>
                       )}
                     </Button>

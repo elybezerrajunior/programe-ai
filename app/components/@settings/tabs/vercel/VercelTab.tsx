@@ -717,8 +717,8 @@ export default function VercelTab() {
     <div className="space-y-6">
       <ServiceHeader
         icon={VercelLogo}
-        title="Vercel Integration"
-        description="Connect and manage your Vercel projects with advanced deployment controls and analytics"
+        title="Integração Vercel"
+        description="Conecte e gerencie seus projetos Vercel com controles avançados de implantação e análises"
         onTestConnection={connection.user ? () => testConnection() : undefined}
         isTestingConnection={isTestingConnection}
       />
@@ -735,25 +735,14 @@ export default function VercelTab() {
         <div className="p-6 space-y-6">
           {!connection.user ? (
             <div className="space-y-4">
-              <div className="text-xs text-bolt-elements-textSecondary bg-bolt-elements-background-depth-1 dark:bg-bolt-elements-background-depth-1 p-3 rounded-lg mb-4">
-                <p className="flex items-center gap-1 mb-1">
-                  <span className="i-ph:lightbulb w-3.5 h-3.5 text-bolt-elements-icon-success dark:text-bolt-elements-icon-success" />
-                  <span className="font-medium">Tip:</span> You can also set the{' '}
-                  <code className="px-1 py-0.5 bg-bolt-elements-background-depth-2 dark:bg-bolt-elements-background-depth-2 rounded">
-                    VITE_VERCEL_ACCESS_TOKEN
-                  </code>{' '}
-                  environment variable to connect automatically.
-                </p>
-              </div>
-
               <div>
-                <label className="block text-sm text-bolt-elements-textSecondary mb-2">Personal Access Token</label>
+                <label className="block text-sm text-bolt-elements-textSecondary mb-2">Token de Acesso Pessoal</label>
                 <input
                   type="password"
                   value={connection.token}
                   onChange={(e) => updateVercelConnection({ ...connection, token: e.target.value })}
                   disabled={connecting}
-                  placeholder="Enter your Vercel personal access token"
+                  placeholder="Digite seu token de acesso pessoal da Vercel"
                   className={classNames(
                     'w-full px-3 py-2 rounded-lg text-sm',
                     'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
@@ -770,7 +759,7 @@ export default function VercelTab() {
                     rel="noopener noreferrer"
                     className="text-bolt-elements-borderColorActive hover:underline inline-flex items-center gap-1"
                   >
-                    Get your token
+                    Obter seu token
                     <div className="i-ph:arrow-square-out w-4 h-4" />
                   </a>
                 </div>
@@ -790,12 +779,12 @@ export default function VercelTab() {
                 {connecting ? (
                   <>
                     <div className="i-ph:spinner-gap animate-spin" />
-                    Connecting...
+                    Conectando...
                   </>
                 ) : (
                   <>
                     <div className="i-ph:plug-charging w-4 h-4" />
-                    Connect
+                    Conectar
                   </>
                 )}
               </button>

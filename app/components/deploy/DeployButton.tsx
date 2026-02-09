@@ -16,6 +16,7 @@ import { useGitHubDeploy } from '~/components/deploy/GitHubDeploy.client';
 import { useGitLabDeploy } from '~/components/deploy/GitLabDeploy.client';
 import { GitHubDeploymentDialog } from '~/components/deploy/GitHubDeploymentDialog';
 import { GitLabDeploymentDialog } from '~/components/deploy/GitLabDeploymentDialog';
+import { NetlifyDeploymentDialog } from '~/components/deploy/NetlifyDeploymentDialog';
 
 interface DeployButtonProps {
   onVercelDeploy?: () => Promise<void>;
@@ -45,6 +46,7 @@ export const DeployButton = ({
   const { handleGitLabDeploy } = useGitLabDeploy();
   const [showGitHubDeploymentDialog, setShowGitHubDeploymentDialog] = useState(false);
   const [showGitLabDeploymentDialog, setShowGitLabDeploymentDialog] = useState(false);
+  const [showNetlifyDeploymentDialog, setShowNetlifyDeploymentDialog] = useState(false);
   const [githubDeploymentFiles, setGithubDeploymentFiles] = useState<Record<string, string> | null>(null);
   const [gitlabDeploymentFiles, setGitlabDeploymentFiles] = useState<Record<string, string> | null>(null);
   const [githubProjectName, setGithubProjectName] = useState('');
@@ -67,18 +69,17 @@ export const DeployButton = ({
   };
 
   const handleNetlifyDeployClick = async () => {
-    setIsDeploying(true);
-    setDeployingTo('netlify');
-
-    try {
-      if (onNetlifyDeploy) {
+    if (onNetlifyDeploy) {
+      setIsDeploying(true);
+      setDeployingTo('netlify');
+      try {
         await onNetlifyDeploy();
-      } else {
-        await handleNetlifyDeploy();
+      } finally {
+        setIsDeploying(false);
+        setDeployingTo(null);
       }
-    } finally {
-      setIsDeploying(false);
-      setDeployingTo(null);
+    } else {
+      setShowNetlifyDeploymentDialog(true);
     }
   };
 
@@ -135,8 +136,8 @@ export const DeployButton = ({
             className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
           >
             {isDeploying
-              ? `Implantando no ${deployingTo === 'netlify' ? 'Netlify' : deployingTo === 'vercel' ? 'Vercel' : deployingTo === 'github' ? 'GitHub' : 'GitLab'}...`
-              : 'Implantar'}
+              ? `Publicando no ${deployingTo === 'netlify' ? 'Netlify' : deployingTo === 'vercel' ? 'Vercel' : deployingTo === 'github' ? 'GitHub' : 'GitLab'}...`
+              : 'Publicar'}
             <span className={classNames('i-ph:caret-down transition-transform')} />
           </DropdownMenu.Trigger>
           <DropdownMenu.Content
@@ -178,7 +179,7 @@ export const DeployButton = ({
                 />
               </span>
               <span className="mx-auto">
-                {!netlifyConn.user ? 'Conectar Netlify' : 'Implantar no Netlify'}
+                {!netlifyConn.user ? 'Conectar Netlify' : 'Publicar no Netlify'}
               </span>
               {netlifyConn.user && <NetlifyDeploymentLink />}
             </DropdownMenu.Item>
@@ -210,7 +211,7 @@ export const DeployButton = ({
                 />
               </span>
               <span className="mx-auto">
-                {!vercelConn.user ? 'Conectar Vercel' : 'Implantar no Vercel'}
+                {!vercelConn.user ? 'Conectar Vercel' : 'Publicar no Vercel'}
               </span>
               {vercelConn.user && <VercelDeploymentLink />}
             </DropdownMenu.Item>
@@ -235,7 +236,7 @@ export const DeployButton = ({
                   alt=""
                 />
               </span>
-              <span className="mx-auto">Implantar no GitHub</span>
+              <span className="mx-auto">Publicar no GitHub</span>
             </DropdownMenu.Item>
 
             <DropdownMenu.Item
@@ -265,7 +266,7 @@ export const DeployButton = ({
                 />
               </span>
               <span className="mx-auto">
-                {!gitlabIsConnected ? 'Conectar GitLab' : 'Implantar no GitLab'}
+                {!gitlabIsConnected ? 'Conectar GitLab' : 'Publicar no GitLab'}
               </span>
             </DropdownMenu.Item>
           </DropdownMenu.Content>
@@ -291,6 +292,13 @@ export const DeployButton = ({
           files={gitlabDeploymentFiles}
         />
       )}
+
+      {/* Netlify Deployment Dialog */}
+      <NetlifyDeploymentDialog
+        isOpen={showNetlifyDeploymentDialog}
+        onClose={() => setShowNetlifyDeploymentDialog(false)}
+        onDeploy={handleNetlifyDeploy}
+      />
     </>
   );
 };

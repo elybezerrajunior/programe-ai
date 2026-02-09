@@ -7,11 +7,14 @@ import { path } from '~/utils/path';
 import { useState } from 'react';
 import type { ActionCallbackData } from '~/lib/runtime/message-parser';
 import { chatId } from '~/lib/persistence/useChatHistory';
+import { supabase } from '~/lib/auth/supabase-client';
+import { authStore } from '~/lib/stores/auth';
 
 export function useVercelDeploy() {
   const [isDeploying, setIsDeploying] = useState(false);
   const vercelConn = useStore(vercelConnection);
   const currentChatId = useStore(chatId);
+  const auth = useStore(authStore);
 
   const handleVercelDeploy = async () => {
     if (!vercelConn.user || !vercelConn.token) {
@@ -214,7 +217,20 @@ export function useVercelDeploy() {
       });
 
       // Show success toast notification
-      toast.success(`🚀 Vercel deployment completed successfully!`);
+      toast.success(`Deploy na Vercel concluído com sucesso!`);
+
+      // Add notification to database
+      if (supabase && auth.user) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabase as any).from('notifications').insert({
+          user_id: auth.user.id,
+          title: 'Deploy Vercel com Sucesso!',
+          message: `O deploy do projeto ${data.project.name} foi concluído com sucesso.`,
+          type: 'success',
+          read: false,
+          link: data.deploy.url,
+        });
+      }
 
       return true;
     } catch (err) {
