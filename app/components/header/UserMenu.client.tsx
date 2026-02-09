@@ -136,21 +136,6 @@ export function UserMenu() {
           <span>Conectar Plataformas</span>
         </DropdownItem>
 
-        {/* ===== SUPORTE ===== */}
-        <div className="px-3 py-1.5 mt-1 border-t border-bolt-elements-borderColor">
-          <p className="text-xs font-semibold text-bolt-elements-textTertiary uppercase tracking-wider">
-            Suporte
-          </p>
-        </div>
-
-        <DropdownItem
-          onSelect={() => window.open('https://github.com/stackblitz-labs/bolt.diy/issues/new?template=bug_report.yml', '_blank')}
-          className={classNames('text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive')}
-        >
-          <div className="i-ph:bug text-base" />
-          <span>Reportar Bug</span>
-        </DropdownItem>
-
         {/* ===== SESSÃO ===== */}
         <div className="px-3 py-1.5 mt-1 border-t border-bolt-elements-borderColor">
           <p className="text-xs font-semibold text-bolt-elements-textTertiary uppercase tracking-wider">

@@ -44,7 +44,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
 const CATEGORIES = [
   { id: 'all', label: 'Todos', icon: 'i-ph:squares-four' },
-  { id: 'apps', label: 'Apps e Jogos', icon: 'i-ph:game-controller' },
   { id: 'landing', label: 'Landing Pages', icon: 'i-ph:layout' },
   { id: 'components', label: 'Componentes', icon: 'i-ph:package' },
   { id: 'dashboards', label: 'Dashboards', icon: 'i-ph:chart-bar' },
@@ -359,12 +358,6 @@ export default function Explore() {
                   >
                     <span className="i-ph:rocket-launch w-5 h-5 mr-2" />
                     Começar com este Template
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full sm:w-auto border-bolt-elements-borderColor text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 font-medium py-2.5 rounded-xl"
-                  >
-                    Visualizar Demo
                   </Button>
                 </div>
               </div>

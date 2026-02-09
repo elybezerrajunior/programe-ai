@@ -7,7 +7,7 @@ export interface SubscriptionData {
   userId: string;
   asaasCustomerId: string | null;
   asaasSubscriptionId: string | null;
-  planType: 'free' | 'pro' | 'business' | 'enterprise';
+  planType: 'free' | 'starter' | 'builder' | 'pro' | 'business' | 'enterprise';
   status: 'active' | 'canceled' | 'expired' | 'pending';
   currentPeriodStart: string | null;
   currentPeriodEnd: string | null;
