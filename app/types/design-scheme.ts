@@ -6,17 +6,17 @@ export interface DesignScheme {
 
 export const defaultDesignScheme: DesignScheme = {
   palette: {
-    primary: '#22F4C6', // Verde menta neon
-    secondary: '#19D8AE', // Verde turquesa
-    accent: '#4FFFE1', // Ciano claro
-    background: '#171717',
-    surface: '#262626',
-    text: '#FFFFFF',
-    textSecondary: '#A3A3A3',
-    border: '#2F2F2F',
-    success: '#10b981',
-    warning: '#f59e0b',
-    error: '#ef4444',
+    primary: '#0D9488', // Teal elegante
+    secondary: '#0F766E', // Teal escuro
+    accent: '#2DD4BF', // Teal claro
+    background: '#F8FAFC',
+    surface: '#FFFFFF',
+    text: '#0F172A',
+    textSecondary: '#64748B',
+    border: '#E2E8F0',
+    success: '#059669',
+    warning: '#D97706',
+    error: '#DC2626',
   },
   features: ['rounded'],
   font: ['sans-serif'],
