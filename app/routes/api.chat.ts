@@ -1,5 +1,7 @@
 import { type ActionFunctionArgs } from '@remix-run/cloudflare';
 import { createDataStream, generateId } from 'ai';
+import { getSessionFromRequest } from '~/lib/auth/session';
+import { getSupabaseClient } from '~/lib/auth/supabase-client';
 import { MAX_RESPONSE_SEGMENTS, MAX_TOKENS, type FileMap } from '~/lib/.server/llm/constants';
 import { CONTINUE_PROMPT } from '~/lib/common/prompts/prompts';
 import { streamText, type Messages, type StreamingOptions } from '~/lib/.server/llm/stream-text';
@@ -16,6 +18,7 @@ import { MCPService } from '~/lib/services/mcpService';
 import { StreamRecoveryManager } from '~/lib/.server/llm/stream-recovery';
 import { getLLMConfigFromEnv, validateLLMConfig } from '~/utils/envConfig';
 import { LLMManager } from '~/lib/modules/llm/manager';
+import { hasSufficientCredits, deductCredits, calculateCost } from '~/lib/credits.server';
 
 export async function action(args: ActionFunctionArgs) {
   return chatAction(args);
@@ -136,6 +139,31 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
   let progressCounter: number = 1;
 
   try {
+
+    const session = await getSessionFromRequest(request, env);
+    const supabaseClient = getSupabaseClient(env);
+
+    // Verificar créditos antes de começar
+    if (session?.user?.id && supabaseClient) {
+      const hasCredits = await hasSufficientCredits(supabaseClient, session.user.id, 1);
+
+      if (!hasCredits) {
+        return new Response(
+          JSON.stringify({
+            error: true,
+            message: 'Saldo insuficiente. Por favor, recarregue seus créditos ou faça um upgrade para continuar.',
+            statusCode: 402, // Payment Required
+            isRetryable: false,
+          }),
+          {
+            status: 402,
+            headers: { 'Content-Type': 'application/json' },
+            statusText: 'Payment Required',
+          },
+        );
+      }
+    }
+
     const mcpService = MCPService.getInstance();
     const totalMessageContent = messages.reduce((acc, message) => acc + message.content, '');
     logger.debug(`Total message length: ${totalMessageContent.split(' ').length}, words`);
@@ -288,6 +316,20 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
                   totalTokens: cumulativeUsage.totalTokens,
                 },
               });
+
+              // Deduzir créditos baseados no uso real
+              const totalTokens = cumulativeUsage.totalTokens;
+              const cost = calculateCost(totalTokens);
+
+              if (session?.user?.id && supabaseClient) {
+                // Executar em background para não bloquear
+                deductCredits(supabaseClient, session.user.id, cost).then(() => {
+                  logger.debug(`Deducted ${cost} credits for ${totalTokens} tokens`);
+                }).catch(err => {
+                  logger.error('Failed to deduct credits', err);
+                });
+              }
+
               dataStream.writeData({
                 type: 'progress',
                 label: 'response',

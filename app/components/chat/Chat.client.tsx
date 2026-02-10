@@ -382,7 +382,10 @@ export const ChatImpl = memo(
         let errorType: LlmErrorAlertType['errorType'] = 'unknown';
         let title = 'Request Failed';
 
-        if (errorInfo.statusCode === 401 || errorInfo.message.toLowerCase().includes('api key')) {
+        if (errorInfo.statusCode === 402) {
+          errorType = 'quota';
+          title = 'Saldo Insuficiente';
+        } else if (errorInfo.statusCode === 401 || errorInfo.message.toLowerCase().includes('api key')) {
           errorType = 'authentication';
           title = 'Authentication Error';
         } else if (errorInfo.statusCode === 429 || errorInfo.message.toLowerCase().includes('rate limit')) {

@@ -9,6 +9,7 @@ interface TabTileProps {
   onClick?: () => void;
   isActive?: boolean;
   hasUpdate?: boolean;
+  isConnected?: boolean;
   statusMessage?: string;
   description?: string;
   isLoading?: boolean;
@@ -21,6 +22,7 @@ export const TabTile: React.FC<TabTileProps> = ({
   onClick,
   isActive,
   hasUpdate,
+  isConnected,
   statusMessage,
   description,
   isLoading,
@@ -88,17 +90,22 @@ export const TabTile: React.FC<TabTileProps> = ({
 
                 {/* Label and Description */}
                 <div className="flex flex-col items-center mt-4 w-full">
-                  <h3
-                    className={classNames(
-                      'text-[15px] font-medium leading-snug mb-2',
-                      'text-gray-700 dark:text-gray-200',
-                      'group-hover:text-accent-600 dark:group-hover:text-accent-300/90',
-                      'transition-colors duration-100 ease-out',
-                      isActive ? 'text-accent-500 dark:text-accent-400/90' : '',
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <h3
+                      className={classNames(
+                        'text-[15px] font-medium leading-snug',
+                        'text-gray-700 dark:text-gray-200',
+                        'group-hover:text-accent-600 dark:group-hover:text-accent-300/90',
+                        'transition-colors duration-100 ease-out',
+                        isActive ? 'text-accent-500 dark:text-accent-400/90' : '',
+                      )}
+                    >
+                      {TAB_LABELS[tab.id]}
+                    </h3>
+                    {isConnected && (
+                      <div className="i-ph:check-circle w-4 h-4 text-green-500 dark:text-green-400" title="Conectado" />
                     )}
-                  >
-                    {TAB_LABELS[tab.id]}
-                  </h3>
+                  </div>
                   {description && (
                     <p
                       className={classNames(

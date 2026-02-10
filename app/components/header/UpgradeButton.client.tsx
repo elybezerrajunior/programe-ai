@@ -26,8 +26,8 @@ export function UpgradeButton({ size = 'md' }: UpgradeButtonProps) {
   if (subscription.planType !== 'free') {
     return (
       <Link to="/plans" className="flex items-center">
-        <Badge 
-          variant="primary" 
+        <Badge
+          variant="primary"
           size={size === 'sm' ? 'sm' : 'md'}
           className="cursor-pointer hover:opacity-80 transition-opacity"
         >
@@ -39,7 +39,7 @@ export function UpgradeButton({ size = 'md' }: UpgradeButtonProps) {
   }
 
   // Plano free - mostrar botão de upgrade
-  const sizeClasses = size === 'sm' 
+  const sizeClasses = size === 'sm'
     ? 'px-3 py-1.5 text-sm'
     : 'px-4 py-2 text-sm';
 
@@ -51,7 +51,7 @@ export function UpgradeButton({ size = 'md' }: UpgradeButtonProps) {
         rounded-lg transition-colors`}
     >
       <div className={size === 'sm' ? 'i-ph:rocket-launch text-base' : 'i-ph:rocket-launch text-lg'} />
-      Upgrade to Pro
+      Fazer Upgrade
     </Link>
   );
 }

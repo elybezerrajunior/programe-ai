@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from '@remix-run/react';
 import type { LlmErrorAlertType } from '~/types/actions';
 import { classNames } from '~/utils/classNames';
 
@@ -9,6 +10,7 @@ interface Props {
 
 export default function LlmErrorAlert({ alert, clearAlert }: Props) {
   const { title, description, provider, errorType } = alert;
+  const navigate = useNavigate();
 
   const getErrorIcon = () => {
     switch (errorType) {
@@ -30,7 +32,7 @@ export default function LlmErrorAlert({ alert, clearAlert }: Props) {
       case 'rate_limit':
         return `Rate limit exceeded for ${provider}. Please wait before retrying.`;
       case 'quota':
-        return `Quota exceeded for ${provider}. Please check your account limits.`;
+        return `Seus créditos acabaram. Recarregue para continuar usando.`;
       default:
         return 'An error occurred while processing your request.';
     }
@@ -87,6 +89,21 @@ export default function LlmErrorAlert({ alert, clearAlert }: Props) {
               transition={{ delay: 0.3 }}
             >
               <div className="flex gap-2">
+                {errorType === 'quota' && (
+                  <button
+                    onClick={() => {
+                      navigate('/plans');
+                      clearAlert();
+                    }}
+                    className={classNames(
+                      'px-3 py-1.5 rounded-md text-sm font-medium',
+                      'bg-accent-500 hover:bg-accent-600 text-white',
+                      'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500',
+                    )}
+                  >
+                    Recarregar Créditos
+                  </button>
+                )}
                 <button
                   onClick={clearAlert}
                   className={classNames(

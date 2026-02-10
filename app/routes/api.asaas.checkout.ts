@@ -4,7 +4,7 @@ import { getSessionFromRequest } from '~/lib/auth/session';
 import { supabase } from '~/lib/auth/supabase-client';
 
 interface CreateCheckoutBody {
-  planType: 'pro' | 'business';
+  planType: 'starter' | 'builder' | 'pro' | 'business';
   billingCycle: 'MONTHLY' | 'YEARLY';
   creditsPerMonth: number;
   price: number;
@@ -12,9 +12,17 @@ interface CreateCheckoutBody {
 
 // Configuração dos planos
 const PLAN_CONFIG = {
+  starter: {
+    name: 'Plano Starter',
+    description: 'Acesso completo ao Programe Studio com créditos mensais',
+  },
+  builder: {
+    name: 'Plano Builder',
+    description: 'Mais créditos e recursos para quem constrói',
+  },
   pro: {
     name: 'Plano Pro',
-    description: 'Acesso completo ao Programe Studio com créditos mensais',
+    description: 'Volume e performance para profissionais',
   },
   business: {
     name: 'Plano Business',
@@ -52,13 +60,13 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     // Em desenvolvimento com localhost, isso não funciona - usar URL de produção
     const processEnv = process.env;
     let baseUrl = processEnv.APP_URL || processEnv.VITE_APP_URL;
-    
+
     // Se não tiver URL configurada, usar da requisição
     if (!baseUrl) {
       const url = new URL(request.url);
       baseUrl = `${url.protocol}//${url.host}`;
     }
-    
+
     // ASAAS não aceita localhost ou HTTP nas URLs de callback
     // Sempre usar URL de produção HTTPS para callbacks do ASAAS
     if (baseUrl.includes('localhost') || baseUrl.startsWith('http://')) {
@@ -86,7 +94,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     // PIX e Boleto só funcionam para pagamentos únicos (DETACHED)
     // Nome do item deve ter no máximo 30 caracteres
     const itemName = `Plano ${planType} ${creditsPerMonth}cr`.substring(0, 30);
-    
+
     // Preparar dados do checkout (sem campos no nível raiz que não existem na API)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const checkoutData: any = {
@@ -119,7 +127,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     // Se não tiver os dados completos, o cliente preencherá no checkout
     const userEmail = session.user.email;
     const userName = (session.user as { user_metadata?: { name?: string } }).user_metadata?.name;
-    
+
     if (userEmail && userName) {
       checkoutData.customerData = {
         email: userEmail,
@@ -127,7 +135,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       };
     }
     // Se não tiver ambos, não enviamos customerData e o cliente preenche no checkout
-    
+
     if (process.env.NODE_ENV === 'development') {
       console.log('[Checkout] Sending data to ASAAS:', JSON.stringify(checkoutData, null, 2));
     }

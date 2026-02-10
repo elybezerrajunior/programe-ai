@@ -49,15 +49,17 @@ interface UserCreditsRow {
 // Créditos por plano
 const PLAN_CREDITS: Record<string, number> = {
   free: 5,
-  pro: 100,
-  business: 100,
-  enterprise: 500,
+  starter: 200,
+  builder: 700,
+  pro: 1600,
+  enterprise: 500, // Personalizável
 };
 
 const DAILY_CREDITS: Record<string, number> = {
   free: 0,
-  pro: 5,
-  business: 10,
+  starter: 0,
+  builder: 5,
+  pro: 10,
   enterprise: 20,
 };
 
@@ -183,17 +185,14 @@ interface CreditOption {
 }
 
 const CREDIT_OPTIONS: Record<string, CreditOption[]> = {
-  pro: [
-    { credits: 100, monthlyPrice: 59, yearlyPrice: 49 },
-    { credits: 200, monthlyPrice: 99, yearlyPrice: 82 },
-    { credits: 500, monthlyPrice: 199, yearlyPrice: 165 },
-    { credits: 1000, monthlyPrice: 349, yearlyPrice: 290 },
+  starter: [
+    { credits: 200, monthlyPrice: 59.90, yearlyPrice: 49.90 },
   ],
-  business: [
-    { credits: 100, monthlyPrice: 119, yearlyPrice: 99 },
-    { credits: 200, monthlyPrice: 199, yearlyPrice: 165 },
-    { credits: 500, monthlyPrice: 399, yearlyPrice: 332 },
-    { credits: 1000, monthlyPrice: 699, yearlyPrice: 581 },
+  builder: [
+    { credits: 700, monthlyPrice: 149.90, yearlyPrice: 124.90 },
+  ],
+  pro: [
+    { credits: 1600, monthlyPrice: 299.90, yearlyPrice: 249.90 },
   ],
 };
 
@@ -212,59 +211,74 @@ interface Plan {
 
 const plans: Plan[] = [
   {
-    id: 'pro',
-    name: 'Pro',
-    description: 'Ideal para times ágeis construindo projetos em tempo real.',
-    baseMonthlyPrice: 59,
-    baseYearlyPrice: 49,
-    baseCredits: 100,
-    buttonText: 'Fazer Upgrade',
-    isPopular: true,
+    id: 'starter',
+    name: 'Starter',
+    description: 'Comece a escalar seus projetos com custo acessível.',
+    baseMonthlyPrice: 59.90,
+    baseYearlyPrice: 49.90,
+    baseCredits: 200,
+    buttonText: 'Assinar Starter',
+    isPopular: false,
     features: [
-      { text: 'Créditos mensais configuráveis', included: true, tooltip: 'Escolha a quantidade de créditos' },
-      { text: '5 créditos diários bônus', included: true },
-      { text: 'Cloud + IA baseado em uso', included: true, tooltip: 'Uso adicional cobrado separadamente' },
-      { text: 'Acúmulo de créditos', included: true, tooltip: 'Créditos não usados acumulam' },
-      { text: 'Recarga de créditos sob demanda', included: true },
-      { text: 'Domínios ilimitados programe.app', included: true },
-      { text: 'Domínios personalizados', included: true },
-      { text: 'Remover marca Programe', included: true },
-      { text: 'Funções e permissões de usuário', included: true },
+      { text: '200 créditos mensais (~200k tokens)', included: true },
+      { text: 'Cloud + IA', included: true },
+      { text: 'Domínios ilimitados', included: true },
+      { text: 'Projetos ilimitados', included: true },
+      { text: '1 top-up por mês', included: true, tooltip: 'Limite de 1 recarga adicional mensal' },
     ],
   },
   {
-    id: 'business',
-    name: 'Business',
-    description: 'Controles avançados e recursos poderosos para departamentos em crescimento.',
-    baseMonthlyPrice: 119,
-    baseYearlyPrice: 99,
-    baseCredits: 100,
-    buttonText: 'Fazer Upgrade',
+    id: 'builder',
+    name: 'Builder',
+    description: 'Para quem constrói e precisa de margem real.',
+    baseMonthlyPrice: 149.90,
+    baseYearlyPrice: 124.90,
+    baseCredits: 700,
+    buttonText: 'Assinar Builder',
+    isPopular: true,
     features: [
-      { text: 'Créditos mensais configuráveis', included: true, tooltip: 'Escolha a quantidade de créditos' },
+      { text: '700 créditos mensais (~700k tokens)', included: true },
+      { text: '5 créditos diários bônus', included: true },
+      { text: 'Sem limite de top-ups', included: true },
       { text: 'Publicação interna', included: true, isNew: true },
-      { text: 'SSO (Single Sign-On)', included: true },
-      { text: 'Projetos pessoais', included: true },
-      { text: 'Não participar do treinamento de dados', included: true },
+      { text: 'Suporte prioritário', included: true },
       { text: 'Templates de design', included: true },
+    ],
+  },
+  {
+    id: 'pro',
+    name: 'Pro',
+    description: 'O plano do profissional sério. Mais volume e retenção.',
+    baseMonthlyPrice: 299.90,
+    baseYearlyPrice: 249.90,
+    baseCredits: 1600,
+    buttonText: 'Assinar Pro',
+    isPopular: false,
+    features: [
+      { text: '1.600 créditos mensais (~1.6M tokens)', included: true },
+      { text: '10 créditos diários bônus', included: true },
+      { text: 'Acúmulo de créditos (rollover)', included: true },
+      { text: 'SSO e segurança avançada', included: true },
+      { text: 'Domínios personalizados', included: true },
+      { text: 'Remover marca Programe', included: true },
     ],
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    description: 'Para grandes organizações que precisam de flexibilidade, escala e governança.',
+    description: 'Contratos personalizados com governança e SLA.',
     baseMonthlyPrice: null,
     baseYearlyPrice: null,
     baseCredits: 0,
-    buttonText: 'Agendar Demo',
+    buttonText: 'Falar com Vendas',
     isEnterprise: true,
     features: [
-      { text: 'Suporte dedicado', included: true },
-      { text: 'Serviços de onboarding', included: true },
-      { text: 'Conexões personalizadas', included: true },
-      { text: 'Controle de acesso por grupo', included: true },
-      { text: 'SCIM', included: true },
-      { text: 'Sistemas de design personalizados', included: true },
+      { text: 'Contratos anuais (R$ 10k+)', included: true },
+      { text: 'Créditos por "pool" negociado', included: true },
+      { text: 'Projetos privados/isolados', included: true },
+      { text: 'Onboarding e treinamento', included: true },
+      { text: 'Controle de acesso granular', included: true },
+      { text: 'SLA garantido', included: true },
     ],
   },
 ];
@@ -414,10 +428,12 @@ function PlanCard({
         <div className="pt-2 border-t border-bolt-elements-borderColor">
           <p className="text-xs text-bolt-elements-textTertiary mb-3">
             {plan.isEnterprise
-              ? 'Todos os recursos do Business, mais:'
-              : plan.id === 'business'
-                ? 'Todos os recursos do Pro, mais:'
-                : 'Todos os recursos do Free, mais:'}
+              ? 'Todos os recursos do Pro, mais:'
+              : plan.id === 'pro'
+                ? 'Todos os recursos do Builder, mais:'
+                : plan.id === 'builder'
+                  ? 'Todos os recursos do Starter, mais:'
+                  : 'Todos os recursos do Free, mais:'}
           </p>
           <ul className="space-y-2.5">
             {plan.features.map((feature, index) => (
@@ -571,8 +587,9 @@ export default function PlansPage() {
 
   const [isAnnual, setIsAnnual] = useState(false);
   const [selectedCredits, setSelectedCredits] = useState<Record<string, number>>({
-    pro: 100,
-    business: 100,
+    starter: 200,
+    builder: 700,
+    pro: 1600,
   });
   const [isCanceling, setIsCanceling] = useState(false);
   const [checkoutMessage, setCheckoutMessage] = useState<{ type: 'success' | 'error' | 'warning'; message: string } | null>(null);
@@ -631,7 +648,7 @@ export default function PlansPage() {
     setCheckoutMessage(null);
 
     try {
-      const planCredits = selectedCredits[plan.id] || 100;
+      const planCredits = selectedCredits[plan.id] || 200;
       const creditOptions = CREDIT_OPTIONS[plan.id] || [];
       const selectedOption = creditOptions.find(opt => opt.credits === planCredits) || creditOptions[0];
       const price = selectedOption
@@ -674,15 +691,15 @@ export default function PlansPage() {
     setIsSimulating(true);
     setSimulateMessage(null);
     try {
-      const planCredits = selectedCredits.pro || 100;
-      const creditOptions = CREDIT_OPTIONS.pro || [];
+      const planCredits = selectedCredits.starter || 200;
+      const creditOptions = CREDIT_OPTIONS.starter || [];
       const selectedOption = creditOptions.find(opt => opt.credits === planCredits) || creditOptions[0];
       const price = selectedOption ? (isAnnual ? selectedOption.yearlyPrice : selectedOption.monthlyPrice) : 59;
       const res = await fetch('/api/asaas/simulate-checkout-paid', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          planType: 'pro',
+          planType: 'starter',
           creditsPerMonth: planCredits,
           billingCycle: isAnnual ? 'YEARLY' : 'MONTHLY',
           price,
@@ -812,7 +829,7 @@ export default function PlansPage() {
                 isCurrentPlan={subscription.planType === plan.id}
                 isCanceled={subscription.cancelAtPeriodEnd}
                 onUpgrade={() => handleUpgrade(plan)}
-                selectedCredits={selectedCredits[plan.id] || 100}
+                selectedCredits={selectedCredits[plan.id] || 200}
                 onCreditsChange={(credits) => handleCreditsChange(plan.id, credits)}
                 isCreatingCheckout={isCreatingCheckout}
               />
@@ -850,7 +867,7 @@ export default function PlansPage() {
                     disabled={isSimulating}
                     className="border-amber-500/50 text-amber-600 hover:bg-amber-500/10"
                   >
-                    {isSimulating ? 'Simulando...' : 'Simular pagamento concluído (Pro)'}
+                    {isSimulating ? 'Simulando...' : 'Simular pagamento concluído (Starter)'}
                   </Button>
                   {simulateMessage && (
                     <span className={classNames(

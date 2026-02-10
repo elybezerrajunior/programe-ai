@@ -53,7 +53,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   const externalReference = JSON.stringify({
     userId,
     planType,
-    creditsPerMonth: creditsPerMonth ?? 100,
+    creditsPerMonth: creditsPerMonth ?? 200,
     billingCycle: billingCycle ?? 'MONTHLY',
     price: price ?? 0,
   });
@@ -76,6 +76,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     message: 'Pagamento simulado. Assinatura e créditos atualizados no Supabase.',
     userId,
     planType,
-    creditsPerMonth: creditsPerMonth ?? 100,
+    creditsPerMonth: creditsPerMonth ?? 200,
   });
 };
