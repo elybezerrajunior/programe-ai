@@ -1,4 +1,5 @@
 import type { DesignScheme } from '~/types/design-scheme';
+import { defaultDesignScheme, themePresets } from '~/types/design-scheme';
 import { WORK_DIR } from '~/utils/constants';
 import { allowedHTMLElements } from '~/utils/markdown';
 import { stripIndents } from '~/utils/stripIndent';
@@ -236,7 +237,25 @@ The year is 2025.
   User Design Scheme:
   ${
     designScheme
-      ? `
+      ? designScheme.themeId
+        ? (() => {
+            const theme = themePresets.find((t) => t.id === designScheme.themeId);
+            const themeName = theme?.name ?? designScheme.themeId;
+            const palette = theme?.scheme?.palette
+              ? { ...defaultDesignScheme.palette, ...theme.scheme.palette }
+              : designScheme.palette;
+            const scheme = theme?.scheme ?? designScheme;
+            const paletteLines = Object.entries(palette)
+              .map(([key, hex]) => `  - ${key}: ${hex}`)
+              .join('\n');
+            return `
+  CRITICAL: The user selected the "${themeName}" theme. Use ONLY these exact colors (palette roles from the Colors tab). Apply them in your CSS/HTML:
+${paletteLines}
+
+  FONT: ${JSON.stringify(scheme.font)}
+  FEATURES: ${JSON.stringify(scheme.features)}`;
+          })()
+        : `
   FONT: ${JSON.stringify(designScheme.font)}
   PALETTE: ${JSON.stringify(designScheme.palette)}
   FEATURES: ${JSON.stringify(designScheme.features)}`

@@ -152,7 +152,18 @@ export const ChatImpl = memo(
     }, [llmConfig]);
 
     const chatStoreValue = useStore(chatStore);
-    const { showChat } = chatStoreValue;
+    const { showChat, designScheme: designSchemeFromStore } = chatStoreValue;
+
+    // Use design scheme from HomeHero (when starting from landing) or Chat's state
+    const effectiveDesignScheme = designSchemeFromStore ?? designScheme;
+
+    // Sync design scheme from HomeHero to local state (for ColorSchemeDialog) and clear store
+    useEffect(() => {
+      if (designSchemeFromStore) {
+        setDesignScheme(designSchemeFromStore);
+        chatStore.setKey('designScheme', undefined);
+      }
+    }, [designSchemeFromStore]);
     const [animationScope, animate] = useAnimate();
     const [apiKeys, setApiKeys] = useState<Record<string, string>>({});
     const [chatMode, setChatMode] = useState<'discuss' | 'build'>('build');
@@ -181,7 +192,7 @@ export const ChatImpl = memo(
         promptId,
         contextOptimization: contextOptimizationEnabled,
         chatMode,
-        designScheme,
+        designScheme: effectiveDesignScheme,
         supabase: {
           isConnected: supabaseConn.isConnected,
           hasSelectedProject: !!selectedProject,

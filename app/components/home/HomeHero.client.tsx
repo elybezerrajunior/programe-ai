@@ -108,6 +108,9 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
         homeHeroFilesStore.set(uploadedFiles);
       }
 
+      // Pass design scheme (theme/palette) to Chat so projects use the selected theme
+      chatStore.setKey('designScheme', designScheme);
+
       // Mark chat as started - this will trigger the Chat component to show
       chatStore.setKey('started', true);
 

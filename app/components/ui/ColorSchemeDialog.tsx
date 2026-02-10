@@ -28,59 +28,74 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
 
   const [features, setFeatures] = useState<string[]>(designScheme?.features || defaultDesignScheme.features);
   const [font, setFont] = useState<string[]>(designScheme?.font || defaultDesignScheme.font);
+  const [selectedThemeId, setSelectedThemeId] = useState<string | undefined>(designScheme?.themeId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<'colors' | 'typography' | 'features' | 'themes'>('colors');
+  const [activeSection, setActiveSection] = useState<'colors' | 'typography' | 'features' | 'themes'>('themes');
 
   useEffect(() => {
     if (designScheme) {
       setPalette(() => ({ ...defaultDesignScheme.palette, ...designScheme.palette }));
       setFeatures(designScheme.features || defaultDesignScheme.features);
       setFont(designScheme.font || defaultDesignScheme.font);
+      setSelectedThemeId(designScheme.themeId);
     } else {
       setPalette(defaultDesignScheme.palette);
       setFeatures(defaultDesignScheme.features);
       setFont(defaultDesignScheme.font);
+      setSelectedThemeId(undefined);
     }
   }, [designScheme]);
 
   const handleColorChange = (role: string, value: string) => {
+    setSelectedThemeId(undefined); // Ao editar manualmente, deixa de ser tema pré-definido
     setPalette((prev) => ({ ...prev, [role]: value }));
   };
 
   const handleFeatureToggle = (key: string) => {
+    setSelectedThemeId(undefined);
     setFeatures((prev) => (prev.includes(key) ? prev.filter((f) => f !== key) : [...prev, key]));
   };
 
   const handleFontToggle = (key: string) => {
+    setSelectedThemeId(undefined);
     setFont((prev) => (prev.includes(key) ? prev.filter((f) => f !== key) : [...prev, key]));
   };
 
   const handleSave = () => {
-    setDesignScheme?.({ palette, features, font });
+    if (selectedThemeId) {
+      const theme = themePresets.find((t) => t.id === selectedThemeId);
+      if (theme) {
+        const fullPalette = { ...defaultDesignScheme.palette, ...theme.scheme.palette };
+        setDesignScheme?.({
+          palette: fullPalette,
+          features: theme.scheme.features,
+          font: theme.scheme.font,
+          themeId: selectedThemeId,
+        });
+      } else {
+        setDesignScheme?.({ palette, features, font, themeId: selectedThemeId });
+      }
+    } else {
+      setDesignScheme?.({ palette, features, font });
+    }
     setIsDialogOpen(false);
   };
 
   const handleReset = () => {
+    setSelectedThemeId(undefined);
     setPalette(defaultDesignScheme.palette);
     setFeatures(defaultDesignScheme.features);
     setFont(defaultDesignScheme.font);
   };
 
   const handleThemeSelect = (theme: ThemePreset) => {
+    setSelectedThemeId(theme.id);
     setPalette({ ...defaultDesignScheme.palette, ...theme.scheme.palette });
     setFeatures(theme.scheme.features);
     setFont(theme.scheme.font);
   };
 
-  const isThemeSelected = (theme: ThemePreset) => {
-    const p = theme.scheme.palette;
-    const keys = Object.keys(defaultDesignScheme.palette) as (keyof typeof defaultDesignScheme.palette)[];
-    const paletteMatch = keys.every((k) => palette[k] === p[k]);
-    const featuresMatch =
-      [...features].sort().join() === [...theme.scheme.features].sort().join();
-    const fontMatch = [...font].sort().join() === [...theme.scheme.font].sort().join();
-    return paletteMatch && featuresMatch && fontMatch;
-  };
+  const isThemeSelected = (theme: ThemePreset) => selectedThemeId === theme.id;
 
   const renderColorSection = () => (
     <div className="space-y-4">
@@ -379,10 +394,10 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
             {/* Navigation Tabs */}
             <div className="flex gap-1 p-1 bg-bolt-elements-bg-depth-3 rounded-xl">
               {[
+                { key: 'themes', label: 'Temas', icon: 'i-ph:sun' },
                 { key: 'colors', label: 'Cores', icon: 'i-ph:palette' },
                 { key: 'typography', label: 'Tipografia', icon: 'i-ph:text-aa' },
                 { key: 'features', label: 'Recursos', icon: 'i-ph:magic-wand' },
-                { key: 'themes', label: 'Temas', icon: 'i-ph:sun' },
               ].map((tab) => (
                 <button
                   key={tab.key}
