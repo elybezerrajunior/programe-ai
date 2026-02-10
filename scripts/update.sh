@@ -3,7 +3,7 @@
 # Exit on any error
 set -e
 
-echo "Starting Bolt.DIY update process..."
+echo "Starting Programe.Ai update process..."
 
 # Get the current directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

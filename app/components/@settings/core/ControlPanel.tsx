@@ -264,9 +264,9 @@ export const ControlPanel = ({ open, onClose, tabFilter, initialTab }: ControlPa
             <div
               className={classNames(
                 'w-[1200px] h-[90vh]',
-                'bg-bolt-elements-background-depth-1',
+                'bg-programe-elements-background-depth-1',
                 'rounded-2xl shadow-2xl',
-                'border border-bolt-elements-borderColor',
+                'border border-programe-elements-borderColor',
                 'flex flex-col overflow-hidden',
                 'relative',
                 'transform transition-all duration-200 ease-out',

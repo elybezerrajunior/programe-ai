@@ -39,8 +39,8 @@ export function ProjectCard({ project, onClick, onDelete }: ProjectCardProps) {
   return (
     <Card
       className={classNames(
-        'p-4 cursor-pointer transition-all hover:border-bolt-elements-borderColorActive rounded-xl',
-        'bg-bolt-elements-background-depth-2 group/card'
+        'p-4 cursor-pointer transition-all hover:border-programe-elements-borderColorActive rounded-xl',
+        'bg-programe-elements-background-depth-2 group/card'
       )}
       onClick={onClick}
     >
@@ -56,8 +56,8 @@ export function ProjectCard({ project, onClick, onDelete }: ProjectCardProps) {
               <div className={classNames(project.icon, 'text-xl', project.iconColor || 'text-accent')} />
             </div>
           ) : (
-            <div className="w-10 h-10 rounded-xl bg-bolt-elements-background-depth-3 flex items-center justify-center">
-              <div className="i-ph:folder text-xl text-bolt-elements-textSecondary" />
+            <div className="w-10 h-10 rounded-xl bg-programe-elements-background-depth-3 flex items-center justify-center">
+              <div className="i-ph:folder text-xl text-programe-elements-textSecondary" />
             </div>
           )}
         </div>
@@ -81,14 +81,14 @@ export function ProjectCard({ project, onClick, onDelete }: ProjectCardProps) {
           </span>
         </div>
       </div>
-      <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-2">{project.title}</h3>
-      <p className="text-sm text-bolt-elements-textSecondary mb-4 line-clamp-2">{project.description}</p>
+      <h3 className="text-lg font-semibold text-programe-elements-textPrimary mb-2">{project.title}</h3>
+      <p className="text-sm text-programe-elements-textSecondary mb-4 line-clamp-2">{project.description}</p>
       <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-1 text-bolt-elements-textSecondary">
+        <div className="flex items-center gap-1 text-programe-elements-textSecondary">
           <div className="i-ph:code text-base" />
           <span>{project.technologies.join(' + ')}</span>
         </div>
-        <span className="text-bolt-elements-textTertiary">{project.lastUpdated}</span>
+        <span className="text-programe-elements-textTertiary">{project.lastUpdated}</span>
       </div>
     </Card>
   );

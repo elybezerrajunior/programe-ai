@@ -21,8 +21,8 @@ export const DropdownItem = ({ children, onSelect, className }: DropdownItemProp
   <DropdownMenu.Item
     className={classNames(
       'relative flex items-center gap-2 px-3 py-2 rounded-lg text-sm',
-      'text-bolt-elements-textPrimary hover:text-bolt-elements-textPrimary',
-      'hover:bg-bolt-elements-background-depth-3',
+      'text-programe-elements-textPrimary hover:text-programe-elements-textPrimary',
+      'hover:bg-programe-elements-background-depth-3',
       'transition-colors cursor-pointer',
       'outline-none',
       className,
@@ -33,7 +33,7 @@ export const DropdownItem = ({ children, onSelect, className }: DropdownItemProp
   </DropdownMenu.Item>
 );
 
-export const DropdownSeparator = () => <DropdownMenu.Separator className="h-px bg-bolt-elements-borderColor my-1" />;
+export const DropdownSeparator = () => <DropdownMenu.Separator className="h-px bg-programe-elements-borderColor my-1" />;
 
 export const Dropdown = ({ trigger, children, align = 'end', sideOffset = 5, open, onOpenChange }: DropdownProps) => {
   return (
@@ -44,8 +44,8 @@ export const Dropdown = ({ trigger, children, align = 'end', sideOffset = 5, ope
         <DropdownMenu.Content
           className={classNames(
             'min-w-[220px] rounded-lg p-2',
-            'bg-bolt-elements-background-depth-2',
-            'border border-bolt-elements-borderColor',
+            'bg-programe-elements-background-depth-2',
+            'border border-programe-elements-borderColor',
             'shadow-lg dropdown-animation',
             'z-[9999]',
           )}

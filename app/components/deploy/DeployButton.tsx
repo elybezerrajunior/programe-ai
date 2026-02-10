@@ -129,11 +129,11 @@ export const DeployButton = ({
 
   return (
     <>
-      <div className="flex border border-bolt-elements-borderColor rounded-md overflow-hidden text-sm">
+      <div className="flex border border-programe-elements-borderColor rounded-md overflow-hidden text-sm">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger
             disabled={isDeploying || !activePreview || isStreaming}
-            className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
+            className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-programe-elements-button-primary-background text-programe-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-programe-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
           >
             {isDeploying
               ? `Publicando no ${deployingTo === 'netlify' ? 'Netlify' : deployingTo === 'vercel' ? 'Vercel' : deployingTo === 'github' ? 'GitHub' : 'GitLab'}...`
@@ -143,9 +143,9 @@ export const DeployButton = ({
           <DropdownMenu.Content
             className={classNames(
               'z-[250]',
-              'bg-bolt-elements-background-depth-2',
+              'bg-programe-elements-background-depth-2',
               'rounded-lg shadow-lg',
-              'border border-bolt-elements-borderColor',
+              'border border-programe-elements-borderColor',
               'animate-in fade-in-0 zoom-in-95',
               'py-1',
             )}
@@ -154,7 +154,7 @@ export const DeployButton = ({
           >
             <DropdownMenu.Item
               className={classNames(
-                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
+                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive gap-2 rounded-md group relative',
                 {
                   'opacity-60 cursor-not-allowed': isDeploying || !activePreview,
                 },
@@ -168,7 +168,7 @@ export const DeployButton = ({
                 handleNetlifyDeployClick();
               }}
             >
-              <span className="flex items-center justify-center w-7 h-7 rounded bg-bolt-elements-background-depth-3 dark:bg-white/10 shrink-0">
+              <span className="flex items-center justify-center w-7 h-7 rounded bg-programe-elements-background-depth-3 dark:bg-white/10 shrink-0">
                 <img
                   className="w-5 h-5"
                   height="24"
@@ -186,7 +186,7 @@ export const DeployButton = ({
 
             <DropdownMenu.Item
               className={classNames(
-                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
+                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive gap-2 rounded-md group relative',
                 {
                   'opacity-60 cursor-not-allowed': isDeploying || !activePreview,
                 },
@@ -200,7 +200,7 @@ export const DeployButton = ({
                 handleVercelDeployClick();
               }}
             >
-              <span className="flex items-center justify-center w-7 h-7 rounded bg-bolt-elements-background-depth-3 dark:bg-white/10 shrink-0">
+              <span className="flex items-center justify-center w-7 h-7 rounded bg-programe-elements-background-depth-3 dark:bg-white/10 shrink-0">
                 <img
                   className="w-5 h-5 dark:invert"
                   height="24"
@@ -218,7 +218,7 @@ export const DeployButton = ({
 
             <DropdownMenu.Item
               className={classNames(
-                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
+                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive gap-2 rounded-md group relative',
                 {
                   'opacity-60 cursor-not-allowed': isDeploying || !activePreview,
                 },
@@ -226,7 +226,7 @@ export const DeployButton = ({
               disabled={isDeploying || !activePreview}
               onClick={handleGitHubDeployClick}
             >
-              <span className="flex items-center justify-center w-7 h-7 rounded bg-bolt-elements-background-depth-3 dark:bg-white/10 shrink-0">
+              <span className="flex items-center justify-center w-7 h-7 rounded bg-programe-elements-background-depth-3 dark:bg-white/10 shrink-0">
                 <img
                   className="w-5 h-5 dark:invert"
                   height="24"
@@ -241,7 +241,7 @@ export const DeployButton = ({
 
             <DropdownMenu.Item
               className={classNames(
-                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
+                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive gap-2 rounded-md group relative',
                 {
                   'opacity-60 cursor-not-allowed': isDeploying || !activePreview,
                 },
@@ -255,7 +255,7 @@ export const DeployButton = ({
                 handleGitLabDeployClick();
               }}
             >
-              <span className="flex items-center justify-center w-7 h-7 rounded bg-bolt-elements-background-depth-3 dark:bg-white/10 shrink-0">
+              <span className="flex items-center justify-center w-7 h-7 rounded bg-programe-elements-background-depth-3 dark:bg-white/10 shrink-0">
                 <img
                   className="w-5 h-5"
                   height="24"

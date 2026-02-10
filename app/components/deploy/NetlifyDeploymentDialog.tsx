@@ -56,11 +56,11 @@ export function NetlifyDeploymentDialog({ isOpen, onClose, onDeploy }: NetlifyDe
                         className="w-[90vw] md:w-[500px]"
                     >
                         <Dialog.Content
-                            className="bg-white dark:bg-bolt-elements-background-depth-1 rounded-lg border border-bolt-elements-borderColor dark:border-bolt-elements-borderColor-dark shadow-xl"
+                            className="bg-white dark:bg-programe-elements-background-depth-1 rounded-lg border border-programe-elements-borderColor dark:border-programe-elements-borderColor-dark shadow-xl"
                             aria-describedby="netlify-deploy-dialog-description"
                         >
-                            <div className="flex items-center justify-between p-4 border-b border-bolt-elements-borderColor dark:border-bolt-elements-borderColor-dark">
-                                <Dialog.Title className="text-lg font-medium text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary-dark flex items-center gap-2">
+                            <div className="flex items-center justify-between p-4 border-b border-programe-elements-borderColor dark:border-programe-elements-borderColor-dark">
+                                <Dialog.Title className="text-lg font-medium text-programe-elements-textPrimary dark:text-programe-elements-textPrimary-dark flex items-center gap-2">
                                     <span className="i-simple-icons:netlify w-5 h-5 text-[#00C7B7]" />
                                     Publicar no Netlify
                                 </Dialog.Title>
@@ -68,7 +68,7 @@ export function NetlifyDeploymentDialog({ isOpen, onClose, onDeploy }: NetlifyDe
                                     <button
                                         onClick={handleClose}
                                         disabled={isDeploying}
-                                        className="p-2 rounded-lg transition-all duration-200 ease-in-out bg-transparent text-bolt-elements-textTertiary hover:text-bolt-elements-textPrimary dark:text-bolt-elements-textTertiary-dark dark:hover:text-bolt-elements-textPrimary-dark hover:bg-bolt-elements-background-depth-2 dark:hover:bg-bolt-elements-background-depth-3 focus:outline-none focus:ring-2 focus:ring-bolt-elements-borderColor dark:focus:ring-bolt-elements-borderColor-dark disabled:opacity-50"
+                                        className="p-2 rounded-lg transition-all duration-200 ease-in-out bg-transparent text-programe-elements-textTertiary hover:text-programe-elements-textPrimary dark:text-programe-elements-textTertiary-dark dark:hover:text-programe-elements-textPrimary-dark hover:bg-programe-elements-background-depth-2 dark:hover:bg-programe-elements-background-depth-3 focus:outline-none focus:ring-2 focus:ring-programe-elements-borderColor dark:focus:ring-programe-elements-borderColor-dark disabled:opacity-50"
                                     >
                                         <span className="i-ph:x block w-5 h-5" aria-hidden="true" />
                                         <span className="sr-only">Close dialog</span>
@@ -79,7 +79,7 @@ export function NetlifyDeploymentDialog({ isOpen, onClose, onDeploy }: NetlifyDe
                             <form onSubmit={handleSubmit} className="p-6 space-y-4">
                                 <p
                                     id="netlify-deploy-dialog-description"
-                                    className="text-sm text-bolt-elements-textSecondary dark:text-bolt-elements-textSecondary-dark"
+                                    className="text-sm text-programe-elements-textSecondary dark:text-programe-elements-textSecondary-dark"
                                 >
                                     Insira um nome para o seu site. Se deixar em branco, um nome aleatório será gerado.
                                 </p>
@@ -87,7 +87,7 @@ export function NetlifyDeploymentDialog({ isOpen, onClose, onDeploy }: NetlifyDe
                                 <div className="space-y-2">
                                     <label
                                         htmlFor="site-name"
-                                        className="block text-sm font-medium text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary-dark"
+                                        className="block text-sm font-medium text-programe-elements-textPrimary dark:text-programe-elements-textPrimary-dark"
                                     >
                                         Nome para o seu site (Opcional)
                                     </label>
@@ -104,18 +104,18 @@ export function NetlifyDeploymentDialog({ isOpen, onClose, onDeploy }: NetlifyDe
                                             disabled={isDeploying}
                                             className={classNames(
                                                 'w-full pl-3 pr-10 py-2 rounded-lg text-sm',
-                                                'bg-bolt-elements-background-depth-2 dark:bg-bolt-elements-background-depth-3',
+                                                'bg-programe-elements-background-depth-2 dark:bg-programe-elements-background-depth-3',
                                                 'border',
                                                 error
                                                     ? 'border-red-500 focus:ring-red-500'
-                                                    : 'border-bolt-elements-borderColor dark:border-bolt-elements-borderColor-dark focus:ring-accent-500',
-                                                'text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary-dark',
+                                                    : 'border-programe-elements-borderColor dark:border-programe-elements-borderColor-dark focus:ring-accent-500',
+                                                'text-programe-elements-textPrimary dark:text-programe-elements-textPrimary-dark',
                                                 'focus:outline-none focus:ring-2',
-                                                'placeholder:text-bolt-elements-textTertiary dark:placeholder:text-bolt-elements-textTertiary-dark',
+                                                'placeholder:text-programe-elements-textTertiary dark:placeholder:text-programe-elements-textTertiary-dark',
                                                 'disabled:opacity-60 disabled:cursor-not-allowed',
                                             )}
                                         />
-                                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-bolt-elements-textTertiary dark:text-bolt-elements-textTertiary-dark text-xs">
+                                        <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-programe-elements-textTertiary dark:text-programe-elements-textTertiary-dark text-xs">
                                             .netlify.app
                                         </div>
                                     </div>
@@ -125,7 +125,7 @@ export function NetlifyDeploymentDialog({ isOpen, onClose, onDeploy }: NetlifyDe
                                             {error}
                                         </p>
                                     ) : (
-                                        <p className="text-xs text-bolt-elements-textTertiary dark:text-bolt-elements-textTertiary-dark">
+                                        <p className="text-xs text-programe-elements-textTertiary dark:text-programe-elements-textTertiary-dark">
                                             Somente caracteres alfanuméricos e hífens são permitidos.
                                         </p>
                                     )}
@@ -136,7 +136,7 @@ export function NetlifyDeploymentDialog({ isOpen, onClose, onDeploy }: NetlifyDe
                                         type="button"
                                         onClick={handleClose}
                                         disabled={isDeploying}
-                                        className="px-4 py-2 rounded-lg text-bolt-elements-textSecondary dark:text-bolt-elements-textSecondary-dark hover:text-bolt-elements-textPrimary dark:hover:text-bolt-elements-textPrimary-dark hover:bg-bolt-elements-background-depth-2 dark:hover:bg-bolt-elements-background-depth-3 text-sm transition-colors disabled:opacity-50"
+                                        className="px-4 py-2 rounded-lg text-programe-elements-textSecondary dark:text-programe-elements-textSecondary-dark hover:text-programe-elements-textPrimary dark:hover:text-programe-elements-textPrimary-dark hover:bg-programe-elements-background-depth-2 dark:hover:bg-programe-elements-background-depth-3 text-sm transition-colors disabled:opacity-50"
                                     >
                                         Cancelar
                                     </button>

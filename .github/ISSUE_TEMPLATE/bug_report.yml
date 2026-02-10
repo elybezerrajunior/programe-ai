@@ -6,8 +6,7 @@ body:
       value: |
         Thank you for reporting an issue :pray:.
 
-        This issue tracker is for bugs and issues found with [Bolt.diy](https://bolt.diy).
-        If you experience issues related to WebContainer, please file an issue in the official [StackBlitz WebContainer repo](https://github.com/stackblitz/webcontainer-core).
+        This issue tracker is for bugs and issues found with [Programe AI](https://programe.ai).
 
         The more information you fill in, the better we can help you.
   - type: textarea
@@ -20,7 +19,7 @@ body:
   - type: input
     id: link
     attributes:
-      label: Link to the Bolt URL that caused the error
+      label: Link to the Programe AI URL that caused the error
       description: Please do not delete it after reporting!
     validations:
       required: true

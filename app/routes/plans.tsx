@@ -289,13 +289,13 @@ function FeatureItem({ feature }: { feature: PlanFeature }) {
       <span
         className={classNames(
           'i-ph:check text-lg flex-shrink-0 mt-0.5',
-          feature.included ? 'text-accent-500' : 'text-bolt-elements-textTertiary',
+          feature.included ? 'text-accent-500' : 'text-programe-elements-textTertiary',
         )}
       />
-      <span className="text-bolt-elements-textSecondary flex items-center gap-2">
+      <span className="text-programe-elements-textSecondary flex items-center gap-2">
         {feature.text}
         {feature.tooltip && (
-          <span className="i-ph:info text-bolt-elements-textTertiary cursor-help" title={feature.tooltip} />
+          <span className="i-ph:info text-programe-elements-textTertiary cursor-help" title={feature.tooltip} />
         )}
         {feature.isNew && (
           <Badge variant="primary" size="sm">
@@ -336,7 +336,7 @@ function PlanCard({
         'flex flex-col h-full transition-all duration-300 relative',
         plan.isPopular && 'border-accent-500/50 shadow-lg shadow-accent-500/10',
         isCurrentPlan && 'ring-2 ring-accent-500',
-        'hover:border-bolt-elements-borderColorActive hover:shadow-xl',
+        'hover:border-programe-elements-borderColorActive hover:shadow-xl',
       )}
     >
       {isCurrentPlan && (
@@ -356,13 +356,13 @@ function PlanCard({
         {/* Seletor de créditos (apenas para planos pagos não-enterprise) - MOVIDO PARA CIMA */}
         {!plan.isEnterprise && creditOptions.length > 0 && (
           <div className="space-y-2">
-            <label className="text-xs text-bolt-elements-textSecondary font-medium">
+            <label className="text-xs text-programe-elements-textSecondary font-medium">
               Quantidade de créditos mensais
             </label>
             <select
               value={selectedCredits}
               onChange={(e) => onCreditsChange(Number(e.target.value))}
-              className="w-full px-3 py-2 rounded-md bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor text-bolt-elements-textPrimary text-sm focus:outline-none focus:border-accent-500 cursor-pointer"
+              className="w-full px-3 py-2 rounded-md bg-programe-elements-background-depth-2 border border-programe-elements-borderColor text-programe-elements-textPrimary text-sm focus:outline-none focus:border-accent-500 cursor-pointer"
             >
               {creditOptions.map((option) => (
                 <option key={option.credits} value={option.credits}>
@@ -376,14 +376,14 @@ function PlanCard({
         {/* Preço */}
         <div className="space-y-1">
           {plan.isEnterprise ? (
-            <div className="text-3xl font-bold text-bolt-elements-textPrimary">Personalizado</div>
+            <div className="text-3xl font-bold text-programe-elements-textPrimary">Personalizado</div>
           ) : (
             <>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-bolt-elements-textPrimary">R${price}</span>
-                <span className="text-bolt-elements-textSecondary text-sm">por mês</span>
+                <span className="text-3xl font-bold text-programe-elements-textPrimary">R${price}</span>
+                <span className="text-programe-elements-textSecondary text-sm">por mês</span>
               </div>
-              <p className="text-xs text-bolt-elements-textTertiary">
+              <p className="text-xs text-programe-elements-textTertiary">
                 {selectedCredits} créditos • compartilhado entre usuários ilimitados
               </p>
             </>
@@ -394,7 +394,7 @@ function PlanCard({
         {!plan.isEnterprise && (
           <div className="flex items-center gap-2">
             <Switch checked={isAnnual} />
-            <span className="text-sm text-bolt-elements-textSecondary">Anual</span>
+            <span className="text-sm text-programe-elements-textSecondary">Anual</span>
             {isAnnual && (
               <Badge variant="success" size="sm">
                 Economize 17%
@@ -411,7 +411,7 @@ function PlanCard({
             'w-full',
             plan.isPopular && !isCurrentPlan
               ? 'bg-accent-500 hover:bg-accent-600 text-white'
-              : 'bg-bolt-elements-background-depth-3 hover:bg-bolt-elements-background-depth-4 text-bolt-elements-textPrimary',
+              : 'bg-programe-elements-background-depth-3 hover:bg-programe-elements-background-depth-4 text-programe-elements-textPrimary',
           )}
           disabled={(isCurrentPlan && !isCanceled) || isCreatingCheckout}
         >
@@ -425,8 +425,8 @@ function PlanCard({
         </Button>
 
         {/* Descrição dos recursos */}
-        <div className="pt-2 border-t border-bolt-elements-borderColor">
-          <p className="text-xs text-bolt-elements-textTertiary mb-3">
+        <div className="pt-2 border-t border-programe-elements-borderColor">
+          <p className="text-xs text-programe-elements-textTertiary mb-3">
             {plan.isEnterprise
               ? 'Todos os recursos do Pro, mais:'
               : plan.id === 'pro'
@@ -485,7 +485,7 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-semibold text-bolt-elements-textPrimary">
+                <h2 className="text-lg font-semibold text-programe-elements-textPrimary">
                   Você está no Plano {planDisplayName}
                 </h2>
                 {subscription.planType === 'free' && (
@@ -495,7 +495,7 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
                   <Badge variant="warning">Cancela em breve</Badge>
                 )}
               </div>
-              <p className="text-sm text-bolt-elements-textSecondary">
+              <p className="text-sm text-programe-elements-textSecondary">
                 {subscription.planType === 'free'
                   ? 'Faça upgrade a qualquer momento para desbloquear mais recursos'
                   : subscription.currentPeriodEnd
@@ -513,12 +513,12 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
           {/* Créditos restantes */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-bolt-elements-textPrimary">Créditos restantes</h3>
+              <h3 className="text-sm font-medium text-programe-elements-textPrimary">Créditos restantes</h3>
               <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold text-bolt-elements-textPrimary">
+                <span className="text-lg font-semibold text-programe-elements-textPrimary">
                   {Math.max(0, remaining)}
                 </span>
-                <span className="text-sm text-bolt-elements-textTertiary">de {total}</span>
+                <span className="text-sm text-programe-elements-textTertiary">de {total}</span>
               </div>
             </div>
 
@@ -531,12 +531,12 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
               )}
             />
 
-            <div className="flex flex-wrap gap-4 text-xs text-bolt-elements-textTertiary">
+            <div className="flex flex-wrap gap-4 text-xs text-programe-elements-textTertiary">
               <div className="flex items-center gap-1.5">
                 {credits.creditsRollover ? (
                   <span className="i-ph:check-circle text-accent-500" />
                 ) : (
-                  <span className="i-ph:x-circle text-bolt-elements-textTertiary" />
+                  <span className="i-ph:x-circle text-programe-elements-textTertiary" />
                 )}
                 <span>{credits.creditsRollover ? 'Créditos acumulam' : 'Créditos não acumulam'}</span>
               </div>
@@ -746,7 +746,7 @@ export default function PlansPage() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1">
+    <div className="flex flex-col h-full w-full bg-programe-elements-background-depth-1">
       <BackgroundRays />
       <Header />
 
@@ -784,8 +784,8 @@ export default function PlansPage() {
 
           {/* Header da página */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-bolt-elements-textPrimary mb-2">Planos e Preços</h1>
-            <p className="text-bolt-elements-textSecondary max-w-2xl mx-auto">
+            <h1 className="text-3xl font-bold text-programe-elements-textPrimary mb-2">Planos e Preços</h1>
+            <p className="text-programe-elements-textSecondary max-w-2xl mx-auto">
               Escolha o plano ideal para suas necessidades. Todos os planos incluem acesso ao Programe Studio.
             </p>
           </div>
@@ -798,7 +798,7 @@ export default function PlansPage() {
             <span
               className={classNames(
                 'text-sm font-medium',
-                !isAnnual ? 'text-bolt-elements-textPrimary' : 'text-bolt-elements-textTertiary',
+                !isAnnual ? 'text-programe-elements-textPrimary' : 'text-programe-elements-textTertiary',
               )}
             >
               Mensal
@@ -807,7 +807,7 @@ export default function PlansPage() {
             <span
               className={classNames(
                 'text-sm font-medium',
-                isAnnual ? 'text-bolt-elements-textPrimary' : 'text-bolt-elements-textTertiary',
+                isAnnual ? 'text-programe-elements-textPrimary' : 'text-programe-elements-textTertiary',
               )}
             >
               Anual
@@ -855,7 +855,7 @@ export default function PlansPage() {
           {typeof import.meta !== 'undefined' && import.meta.env?.DEV && (
             <Card className="mb-6 border-amber-500/50 bg-amber-500/5">
               <CardContent className="p-4">
-                <p className="text-sm text-bolt-elements-textSecondary mb-2">
+                <p className="text-sm text-programe-elements-textSecondary mb-2">
                   <strong className="text-amber-500">Desenvolvimento:</strong> Como o ASAAS não envia webhook para localhost,
                   use o botão abaixo após &quot;pagar&quot; no checkout para gravar assinatura e créditos no Supabase.
                 </p>
@@ -883,13 +883,13 @@ export default function PlansPage() {
           )}
 
           {/* FAQ ou informações adicionais */}
-          <Card className="bg-bolt-elements-background-depth-2/50 pt-6">
+          <Card className="bg-programe-elements-background-depth-2/50 pt-6">
             <CardContent className="p-6">
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-2">
+                <h3 className="text-lg font-semibold text-programe-elements-textPrimary mb-2">
                   Precisa de ajuda para escolher?
                 </h3>
-                <p className="text-sm text-bolt-elements-textSecondary mb-4">
+                <p className="text-sm text-programe-elements-textSecondary mb-4">
                   Nossa equipe está disponível para ajudá-lo a encontrar o plano perfeito para suas necessidades.
                 </p>
                 <div className="flex items-center justify-center gap-4">

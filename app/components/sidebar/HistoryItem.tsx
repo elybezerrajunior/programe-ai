@@ -68,8 +68,8 @@ export function HistoryItem({
   return (
     <div
       className={classNames(
-        'group rounded-lg text-sm text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive overflow-hidden flex justify-between items-center px-3 py-2 transition-colors',
-        { 'text-bolt-elements-textPrimary bg-bolt-elements-item-backgroundActive': isActiveChat },
+        'group rounded-lg text-sm text-programe-elements-textSecondary hover:text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive overflow-hidden flex justify-between items-center px-3 py-2 transition-colors',
+        { 'text-programe-elements-textPrimary bg-programe-elements-item-backgroundActive': isActiveChat },
         { 'cursor-pointer': selectionMode },
       )}
       onClick={selectionMode ? handleItemClick : undefined}
@@ -89,7 +89,7 @@ export function HistoryItem({
         <form onSubmit={handleSubmit} className="flex-1 flex items-center gap-2">
           <input
             type="text"
-            className="flex-1 bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary rounded-md px-3 py-1.5 text-sm border border-bolt-elements-borderColor focus:outline-none focus:ring-1 focus:ring-accent-500/50"
+            className="flex-1 bg-programe-elements-background-depth-2 text-programe-elements-textPrimary rounded-md px-3 py-1.5 text-sm border border-programe-elements-borderColor focus:outline-none focus:ring-1 focus:ring-accent-500/50"
             autoFocus
             value={currentDescription}
             onChange={handleChange}
@@ -98,7 +98,7 @@ export function HistoryItem({
           />
           <button
             type="submit"
-            className="i-ph:check h-4 w-4 text-bolt-elements-textTertiary hover:text-accent-500 transition-colors"
+            className="i-ph:check h-4 w-4 text-programe-elements-textTertiary hover:text-accent-500 transition-colors"
             onMouseDown={handleSubmit}
           />
         </form>
@@ -116,7 +116,7 @@ export function HistoryItem({
               'absolute right-0 top-0 bottom-0 flex items-center bg-transparent px-2 transition-colors',
             )}
           >
-            <div className="flex items-center gap-2.5 text-bolt-elements-textTertiary opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex items-center gap-2.5 text-programe-elements-textTertiary opacity-0 group-hover:opacity-100 transition-opacity">
               <ChatActionButton
                 toolTipContent="Exportar"
                 icon="i-ph:download-simple h-4 w-4"
@@ -146,7 +146,7 @@ export function HistoryItem({
               <ChatActionButton
                 toolTipContent="Excluir"
                 icon="i-ph:trash h-4 w-4"
-                className="hover:text-bolt-elements-item-contentDanger"
+                className="hover:text-programe-elements-item-contentDanger"
                 onClick={handleDeleteClick}
               />
             </div>
@@ -178,7 +178,7 @@ const ChatActionButton = forwardRef(
         <button
           ref={ref}
           type="button"
-          className={`text-bolt-elements-textTertiary hover:text-bolt-elements-item-contentAccent transition-colors ${icon} ${className ? className : ''}`}
+          className={`text-programe-elements-textTertiary hover:text-programe-elements-item-contentAccent transition-colors ${icon} ${className ? className : ''}`}
           onClick={onClick}
         />
       </WithTooltip>

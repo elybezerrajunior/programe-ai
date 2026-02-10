@@ -50,14 +50,14 @@ function AuthHydration() {
 }
 
 /**
- * Landing page component for Bolt
+ * Landing page component for Programe
  * Note: Settings functionality should ONLY be accessed through the sidebar menu.
  * Do not add settings button/panel to this landing page as it was intentionally removed
  * to keep the UI clean and consistent with the design system.
  */
 export default function Index() {
   return (
-    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1 overflow-auto modern-scrollbar page-enter">
+    <div className="flex flex-col h-full w-full bg-programe-elements-background-depth-1 overflow-auto modern-scrollbar page-enter">
       <AuthHydration />
       <BackgroundRays />
       <Header />

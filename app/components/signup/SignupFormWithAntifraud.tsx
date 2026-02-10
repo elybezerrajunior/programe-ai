@@ -184,14 +184,14 @@ export function SignupFormWithAntifraud() {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-6">
           <div className="i-ph:rocket text-xl text-accent" />
-          <span className="text-xl font-semibold text-bolt-elements-textPrimary">
+          <span className="text-xl font-semibold text-programe-elements-textPrimary">
             Programe Studio
           </span>
         </div>
-        <h1 className="text-3xl font-bold text-bolt-elements-textPrimary mb-2">
+        <h1 className="text-3xl font-bold text-programe-elements-textPrimary mb-2">
           Criar conta grátis
         </h1>
-        <p className="text-sm text-bolt-elements-textSecondary">
+        <p className="text-sm text-programe-elements-textSecondary">
           Comece a construir seus projetos com IA agora mesmo.
         </p>
       </div>
@@ -211,11 +211,11 @@ export function SignupFormWithAntifraud() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {/* Campo Nome */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="name" className="text-sm text-bolt-elements-textPrimary">
+          <Label htmlFor="name" className="text-sm text-programe-elements-textPrimary">
             Nome
           </Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none">
               <span className="i-ph:user w-4 h-4" />
             </div>
             <Input
@@ -224,7 +224,7 @@ export function SignupFormWithAntifraud() {
               type="text"
               placeholder="Seu nome"
               className={classNames(
-                'pl-10 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor',
+                'pl-10 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor',
                 'transition-colors',
                 nameError && 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
               )}
@@ -243,11 +243,11 @@ export function SignupFormWithAntifraud() {
 
         {/* Campo E-mail */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="email" className="text-sm text-bolt-elements-textPrimary">
+          <Label htmlFor="email" className="text-sm text-programe-elements-textPrimary">
             E-mail
           </Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none">
               <span className="i-ph:envelope w-4 h-4" />
             </div>
             <Input
@@ -256,7 +256,7 @@ export function SignupFormWithAntifraud() {
               type="email"
               placeholder="seuemail@exemplo.com"
               className={classNames(
-                'pl-10 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor',
+                'pl-10 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor',
                 'transition-colors',
                 (emailError || clientValidation.email) &&
                   'border-red-500 focus:border-red-500 focus:ring-red-500/50'
@@ -277,12 +277,12 @@ export function SignupFormWithAntifraud() {
 
         {/* Campo Senha */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password" className="text-sm text-bolt-elements-textPrimary">
+          <Label htmlFor="password" className="text-sm text-programe-elements-textPrimary">
             Senha
           </Label>
           <div className="relative flex items-center gap-2">
             <div className="relative flex-1">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none">
                 <span className="i-ph:lock w-4 h-4" />
               </div>
               <Input
@@ -291,7 +291,7 @@ export function SignupFormWithAntifraud() {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 className={classNames(
-                  'pl-10 pr-4 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor',
+                  'pl-10 pr-4 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor',
                   'transition-colors',
                   (passwordError || clientValidation.password) &&
                     'border-red-500 focus:border-red-500 focus:ring-red-500/50'
@@ -315,14 +315,14 @@ export function SignupFormWithAntifraud() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="flex-shrink-0 text-bolt-elements-textTertiary hover:text-bolt-elements-textSecondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500/50 rounded p-1 bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3"
+              className="flex-shrink-0 text-programe-elements-textTertiary hover:text-programe-elements-textSecondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500/50 rounded p-1 bg-programe-elements-background-depth-2 hover:bg-programe-elements-background-depth-3"
               aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
               title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
               {showPassword ? (
-                <span className="i-ph:eye-slash w-4 h-4 block text-bolt-elements-textTertiary" />
+                <span className="i-ph:eye-slash w-4 h-4 block text-programe-elements-textTertiary" />
               ) : (
-                <span className="i-ph:eye w-4 h-4 block text-bolt-elements-textTertiary" />
+                <span className="i-ph:eye w-4 h-4 block text-programe-elements-textTertiary" />
               )}
             </button>
           </div>
@@ -335,12 +335,12 @@ export function SignupFormWithAntifraud() {
 
         {/* Campo Confirmar Senha */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="confirmPassword" className="text-sm text-bolt-elements-textPrimary">
+          <Label htmlFor="confirmPassword" className="text-sm text-programe-elements-textPrimary">
             Confirmar senha
           </Label>
           <div className="relative flex items-center gap-2">
             <div className="relative flex-1">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none">
                 <span className="i-ph:lock w-4 h-4" />
               </div>
               <Input
@@ -349,7 +349,7 @@ export function SignupFormWithAntifraud() {
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 className={classNames(
-                  'pl-10 pr-4 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor',
+                  'pl-10 pr-4 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor',
                   'transition-colors',
                   (confirmPasswordError || clientValidation.confirmPassword) &&
                     'border-red-500 focus:border-red-500 focus:ring-red-500/50'
@@ -376,14 +376,14 @@ export function SignupFormWithAntifraud() {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="flex-shrink-0 text-bolt-elements-textTertiary hover:text-bolt-elements-textSecondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500/50 rounded p-1 bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3"
+              className="flex-shrink-0 text-programe-elements-textTertiary hover:text-programe-elements-textSecondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500/50 rounded p-1 bg-programe-elements-background-depth-2 hover:bg-programe-elements-background-depth-3"
               aria-label={showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'}
               title={showConfirmPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
               {showConfirmPassword ? (
-                <span className="i-ph:eye-slash w-4 h-4 block text-bolt-elements-textTertiary" />
+                <span className="i-ph:eye-slash w-4 h-4 block text-programe-elements-textTertiary" />
               ) : (
-                <span className="i-ph:eye w-4 h-4 block text-bolt-elements-textTertiary" />
+                <span className="i-ph:eye w-4 h-4 block text-programe-elements-textTertiary" />
               )}
             </button>
           </div>
@@ -396,7 +396,7 @@ export function SignupFormWithAntifraud() {
 
         {/* Cloudflare Turnstile */}
         <div className="flex flex-col gap-2">
-          <Label className="text-sm text-bolt-elements-textSecondary">
+          <Label className="text-sm text-programe-elements-textSecondary">
             Verificação de segurança
           </Label>
           {TURNSTILE_SITE_KEY ? (
@@ -427,7 +427,7 @@ export function SignupFormWithAntifraud() {
 
         {/* Indicador de fingerprint (debug - pode ser removido em produção) */}
         {fingerprint.loading && (
-          <div className="flex items-center gap-2 text-xs text-bolt-elements-textSecondary">
+          <div className="flex items-center gap-2 text-xs text-programe-elements-textSecondary">
             <span className="i-ph:spinner-gap animate-spin" />
             <span>Verificando dispositivo...</span>
           </div>
@@ -441,7 +441,7 @@ export function SignupFormWithAntifraud() {
             'w-full px-6 py-2.5 flex items-center justify-center gap-2 rounded-2xl font-medium transition-colors',
             {
               'bg-accent-500 hover:bg-accent-400 text-black': canSubmit,
-              'bg-bolt-elements-background-depth-2 text-bolt-elements-textSecondary cursor-not-allowed': !canSubmit,
+              'bg-programe-elements-background-depth-2 text-programe-elements-textSecondary cursor-not-allowed': !canSubmit,
             }
           )}
         >
@@ -464,7 +464,7 @@ export function SignupFormWithAntifraud() {
         </button>
 
         <div className="text-center mt-4">
-          <span className="text-sm text-bolt-elements-textSecondary">
+          <span className="text-sm text-programe-elements-textSecondary">
             Já tem uma conta?{' '}
             <Link to="/login" className="text-accent-500 hover:underline font-medium">
               Entrar

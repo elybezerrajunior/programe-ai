@@ -68,7 +68,7 @@ export function HomePageContent({ children }: HomePageContentProps) {
             </section> */}
 
             {/* Projects Section */}
-            <section className="py-8 border-t border-bolt-elements-borderColor">
+            <section className="py-8 border-t border-programe-elements-borderColor">
               <ProjectsSection
                 onProjectClick={handleProjectClick}
                 onNewProjectClick={handleNewProjectClick}

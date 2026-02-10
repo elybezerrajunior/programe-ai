@@ -23,14 +23,14 @@ const getModifierSymbol = (modifier: string): string => {
 export default function SettingsTab() {
   const [currentTimezone, setCurrentTimezone] = useState('');
   const [settings, setSettings] = useState<UserProfile>(() => {
-    const saved = localStorage.getItem('bolt_user_profile');
+    const saved = localStorage.getItem('programe_user_profile');
     return saved
       ? JSON.parse(saved)
       : {
-          notifications: true,
-          language: 'en',
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        };
+        notifications: true,
+        language: 'en',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      };
   });
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function SettingsTab() {
   useEffect(() => {
     try {
       // Get existing profile data
-      const existingProfile = JSON.parse(localStorage.getItem('bolt_user_profile') || '{}');
+      const existingProfile = JSON.parse(localStorage.getItem('programe_user_profile') || '{}');
 
       // Merge with new settings
       const updatedProfile = {
@@ -51,7 +51,7 @@ export default function SettingsTab() {
         timezone: settings.timezone,
       };
 
-      localStorage.setItem('bolt_user_profile', JSON.stringify(updatedProfile));
+      localStorage.setItem('programe_user_profile', JSON.stringify(updatedProfile));
       toast.success('Configurações atualizadas');
     } catch (error) {
       console.error('Error saving settings:', error);
@@ -70,13 +70,13 @@ export default function SettingsTab() {
       >
         <div className="flex items-center gap-2 mb-4">
           <div className="i-ph:palette-fill w-4 h-4 text-accent-500" />
-          <span className="text-sm font-medium text-bolt-elements-textPrimary">Preferências</span>
+          <span className="text-sm font-medium text-programe-elements-textPrimary">Preferências</span>
         </div>
 
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="i-ph:translate-fill w-4 h-4 text-bolt-elements-textSecondary" />
-            <label className="block text-sm text-bolt-elements-textSecondary">Idioma</label>
+            <div className="i-ph:translate-fill w-4 h-4 text-programe-elements-textSecondary" />
+            <label className="block text-sm text-programe-elements-textSecondary">Idioma</label>
           </div>
           <select
             value={settings.language}
@@ -85,7 +85,7 @@ export default function SettingsTab() {
               'w-full px-3 py-2 rounded-lg text-sm',
               'bg-[#FAFAFA] dark:bg-[#0A0A0A]',
               'border border-[#E5E5E5] dark:border-[#1A1A1A]',
-              'text-bolt-elements-textPrimary',
+              'text-programe-elements-textPrimary',
               'focus:outline-none focus:ring-2 focus:ring-accent-500/30',
               'transition-all duration-200',
             )}
@@ -105,11 +105,11 @@ export default function SettingsTab() {
 
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="i-ph:bell-fill w-4 h-4 text-bolt-elements-textSecondary" />
-            <label className="block text-sm text-bolt-elements-textSecondary">Notificações</label>
+            <div className="i-ph:bell-fill w-4 h-4 text-programe-elements-textSecondary" />
+            <label className="block text-sm text-programe-elements-textSecondary">Notificações</label>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-sm text-bolt-elements-textSecondary">
+            <span className="text-sm text-programe-elements-textSecondary">
               {settings.notifications ? 'Notificações estão habilitadas' : 'Notificações estão desabilitadas'}
             </span>
             <Switch
@@ -119,17 +119,17 @@ export default function SettingsTab() {
                 setSettings((prev) => ({ ...prev, notifications: checked }));
 
                 // Update localStorage immediately
-                const existingProfile = JSON.parse(localStorage.getItem('bolt_user_profile') || '{}');
+                const existingProfile = JSON.parse(localStorage.getItem('programe_user_profile') || '{}');
                 const updatedProfile = {
                   ...existingProfile,
                   notifications: checked,
                 };
-                localStorage.setItem('bolt_user_profile', JSON.stringify(updatedProfile));
+                localStorage.setItem('programe_user_profile', JSON.stringify(updatedProfile));
 
                 // Dispatch storage event for other components
                 window.dispatchEvent(
                   new StorageEvent('storage', {
-                    key: 'bolt_user_profile',
+                    key: 'programe_user_profile',
                     newValue: JSON.stringify(updatedProfile),
                   }),
                 );
@@ -150,13 +150,13 @@ export default function SettingsTab() {
       >
         <div className="flex items-center gap-2 mb-4">
           <div className="i-ph:clock-fill w-4 h-4 text-accent-500" />
-          <span className="text-sm font-medium text-bolt-elements-textPrimary">Configurações de Hora</span>
+          <span className="text-sm font-medium text-programe-elements-textPrimary">Configurações de Hora</span>
         </div>
 
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="i-ph:globe-fill w-4 h-4 text-bolt-elements-textSecondary" />
-            <label className="block text-sm text-bolt-elements-textSecondary">Fuso Horário</label>
+            <div className="i-ph:globe-fill w-4 h-4 text-programe-elements-textSecondary" />
+            <label className="block text-sm text-programe-elements-textSecondary">Fuso Horário</label>
           </div>
           <select
             value={settings.timezone}
@@ -165,7 +165,7 @@ export default function SettingsTab() {
               'w-full px-3 py-2 rounded-lg text-sm',
               'bg-[#FAFAFA] dark:bg-[#0A0A0A]',
               'border border-[#E5E5E5] dark:border-[#1A1A1A]',
-              'text-bolt-elements-textPrimary',
+              'text-programe-elements-textPrimary',
               'focus:outline-none focus:ring-2 focus:ring-accent-500/30',
               'transition-all duration-200',
             )}
@@ -184,26 +184,26 @@ export default function SettingsTab() {
       >
         <div className="flex items-center gap-2 mb-4">
           <div className="i-ph:keyboard-fill w-4 h-4 text-accent-500" />
-          <span className="text-sm font-medium text-bolt-elements-textPrimary">Atalhos de Teclado</span>
+          <span className="text-sm font-medium text-programe-elements-textPrimary">Atalhos de Teclado</span>
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between p-2 rounded-lg bg-[#FAFAFA] dark:bg-[#1A1A1A]">
             <div className="flex flex-col">
-              <span className="text-sm text-bolt-elements-textPrimary">Alternar Tema</span>
-              <span className="text-xs text-bolt-elements-textSecondary">Alternar entre modo claro e escuro</span>
+              <span className="text-sm text-programe-elements-textPrimary">Alternar Tema</span>
+              <span className="text-xs text-programe-elements-textSecondary">Alternar entre modo claro e escuro</span>
             </div>
             <div className="flex items-center gap-1">
-              <kbd className="px-2 py-1 text-xs font-semibold text-bolt-elements-textSecondary bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#1A1A1A] rounded shadow-sm">
+              <kbd className="px-2 py-1 text-xs font-semibold text-programe-elements-textSecondary bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#1A1A1A] rounded shadow-sm">
                 {getModifierSymbol('meta')}
               </kbd>
-              <kbd className="px-2 py-1 text-xs font-semibold text-bolt-elements-textSecondary bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#1A1A1A] rounded shadow-sm">
+              <kbd className="px-2 py-1 text-xs font-semibold text-programe-elements-textSecondary bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#1A1A1A] rounded shadow-sm">
                 {getModifierSymbol('alt')}
               </kbd>
-              <kbd className="px-2 py-1 text-xs font-semibold text-bolt-elements-textSecondary bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#1A1A1A] rounded shadow-sm">
+              <kbd className="px-2 py-1 text-xs font-semibold text-programe-elements-textSecondary bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#1A1A1A] rounded shadow-sm">
                 {getModifierSymbol('shift')}
               </kbd>
-              <kbd className="px-2 py-1 text-xs font-semibold text-bolt-elements-textSecondary bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#1A1A1A] rounded shadow-sm">
+              <kbd className="px-2 py-1 text-xs font-semibold text-programe-elements-textSecondary bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#1A1A1A] rounded shadow-sm">
                 D
               </kbd>
             </div>

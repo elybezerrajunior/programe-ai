@@ -67,16 +67,16 @@ export const Markdown = memo(
             }
 
             return (
-              <div className="bg-bolt-elements-background-depth-3 border border-bolt-elements-borderColor rounded-lg p-3 my-2">
+              <div className="bg-programe-elements-background-depth-3 border border-programe-elements-borderColor rounded-lg p-3 my-2">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-mono bg-bolt-elements-background-depth-2 px-2 py-1 rounded text-bolt-elements-textTer">
+                  <span className="text-xs font-mono bg-programe-elements-background-depth-2 px-2 py-1 rounded text-programe-elements-textTer">
                     {elementData?.tagName}
                   </span>
                   {elementData?.className && (
-                    <span className="text-xs text-bolt-elements-textSecondary">.{elementData.className}</span>
+                    <span className="text-xs text-programe-elements-textSecondary">.{elementData.className}</span>
                   )}
                 </div>
-                <code className="block text-sm !text-bolt-elements-textSecondary !bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor p-2 rounded">
+                <code className="block text-sm !text-programe-elements-textSecondary !bg-programe-elements-background-depth-2 border border-programe-elements-borderColor p-2 rounded">
                   {elementData?.displayText}
                 </code>
               </div>
@@ -87,7 +87,7 @@ export const Markdown = memo(
             return <ThoughtBox title="Thought process">{children}</ThoughtBox>;
           }
 
-          if (className?.includes('__boltQuickAction__') || dataProps?.dataBoltQuickAction) {
+          if (className?.includes('__programeQuickAction__') || dataProps?.dataProgrameQuickAction) {
             return <div className="flex items-center gap-2 flex-wrap mt-3.5">{children}</div>;
           }
 
@@ -120,8 +120,8 @@ export const Markdown = memo(
           const dataProps = node?.properties as Record<string, unknown>;
 
           if (
-            dataProps?.class?.toString().includes('__boltQuickAction__') ||
-            dataProps?.dataBoltQuickAction === 'true'
+            dataProps?.class?.toString().includes('__programeQuickAction__') ||
+            dataProps?.dataProgrameQuickAction === 'true'
           ) {
             const type = dataProps['data-type'] || dataProps.dataType;
             const message = dataProps['data-message'] || dataProps.dataMessage;
@@ -140,7 +140,7 @@ export const Markdown = memo(
 
             return (
               <button
-                className="rounded-md justify-center px-3 py-1.5 text-xs bg-bolt-elements-item-backgroundAccent text-bolt-elements-item-contentAccent opacity-90 hover:opacity-100 flex items-center gap-2 cursor-pointer"
+                className="rounded-md justify-center px-3 py-1.5 text-xs bg-programe-elements-item-backgroundAccent text-programe-elements-item-contentAccent opacity-90 hover:opacity-100 flex items-center gap-2 cursor-pointer"
                 data-type={type}
                 data-message={message}
                 data-path={path}

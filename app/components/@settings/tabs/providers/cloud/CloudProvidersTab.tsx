@@ -146,20 +146,20 @@ const CloudProvidersTab = () => {
             <div
               className={classNames(
                 'w-8 h-8 flex items-center justify-center rounded-lg',
-                'bg-bolt-elements-background-depth-3',
+                'bg-programe-elements-background-depth-3',
                 'text-accent-500',
               )}
             >
               <TbCloudComputing className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-md font-medium text-bolt-elements-textPrimary">Provedores Cloud</h4>
-              <p className="text-sm text-bolt-elements-textSecondary">Conecte-se a modelos e serviços de IA baseados em nuvem</p>
+              <h4 className="text-md font-medium text-programe-elements-textPrimary">Provedores Cloud</h4>
+              <p className="text-sm text-programe-elements-textSecondary">Conecte-se a modelos e serviços de IA baseados em nuvem</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm text-bolt-elements-textSecondary">Habilitar Todos</span>
+            <span className="text-sm text-programe-elements-textSecondary">Habilitar Todos</span>
             <Switch checked={categoryEnabled} onCheckedChange={handleToggleCategory} />
           </div>
         </div>
@@ -169,9 +169,9 @@ const CloudProvidersTab = () => {
             <motion.div
               key={provider.name}
               className={classNames(
-                'rounded-lg border bg-bolt-elements-background text-bolt-elements-textPrimary shadow-sm',
-                'bg-bolt-elements-background-depth-2',
-                'hover:bg-bolt-elements-background-depth-3',
+                'rounded-lg border bg-programe-elements-background text-programe-elements-textPrimary shadow-sm',
+                'bg-programe-elements-background-depth-2',
+                'hover:bg-programe-elements-background-depth-3',
                 'transition-all duration-200',
                 'relative overflow-hidden group',
                 'flex flex-col',
@@ -197,9 +197,9 @@ const CloudProvidersTab = () => {
                 <motion.div
                   className={classNames(
                     'w-10 h-10 flex items-center justify-center rounded-xl',
-                    'bg-bolt-elements-background-depth-3 group-hover:bg-bolt-elements-background-depth-4',
+                    'bg-programe-elements-background-depth-3 group-hover:bg-programe-elements-background-depth-4',
                     'transition-all duration-200',
-                    provider.settings.enabled ? 'text-accent-500' : 'text-bolt-elements-textSecondary',
+                    provider.settings.enabled ? 'text-accent-500' : 'text-programe-elements-textSecondary',
                   )}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -215,10 +215,10 @@ const CloudProvidersTab = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-4 mb-2">
                     <div>
-                      <h4 className="text-sm font-medium text-bolt-elements-textPrimary group-hover:text-accent-500 transition-colors">
+                      <h4 className="text-sm font-medium text-programe-elements-textPrimary group-hover:text-accent-500 transition-colors">
                         {provider.name}
                       </h4>
-                      <p className="text-xs text-bolt-elements-textSecondary mt-0.5">
+                      <p className="text-xs text-programe-elements-textSecondary mt-0.5">
                         {PROVIDER_DESCRIPTIONS[provider.name as keyof typeof PROVIDER_DESCRIPTIONS] ||
                           (URL_CONFIGURABLE_PROVIDERS.includes(provider.name)
                             ? 'Configure endpoint personalizado para este provedor'
@@ -246,8 +246,8 @@ const CloudProvidersTab = () => {
                             placeholder={`Enter ${provider.name} base URL`}
                             className={classNames(
                               'flex-1 px-3 py-1.5 rounded-lg text-sm',
-                              'bg-bolt-elements-background-depth-3 border border-bolt-elements-borderColor',
-                              'text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary',
+                              'bg-programe-elements-background-depth-3 border border-programe-elements-borderColor',
+                              'text-programe-elements-textPrimary placeholder-programe-elements-textTertiary',
                               'focus:outline-none focus:ring-2 focus:ring-accent-500/30',
                               'transition-all duration-200',
                             )}
@@ -266,7 +266,7 @@ const CloudProvidersTab = () => {
                             className="flex-1 px-3 py-1.5 rounded-lg text-sm cursor-pointer group/url"
                             onClick={() => setEditingProvider(provider.name)}
                           >
-                            <div className="flex items-center gap-2 text-bolt-elements-textSecondary">
+                            <div className="flex items-center gap-2 text-programe-elements-textSecondary">
                               <div className="i-ph:link text-sm" />
                               <span className="group-hover/url:text-accent-500 transition-colors">
                                 {provider.settings.baseUrl || 'Clique para definir URL base'}

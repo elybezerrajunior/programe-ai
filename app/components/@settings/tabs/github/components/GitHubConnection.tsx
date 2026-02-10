@@ -47,7 +47,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
       <div className="flex items-center justify-center p-8">
         <div className="flex items-center gap-2">
           <div className="i-ph:spinner-gap-bold animate-spin w-4 h-4" />
-          <span className="text-bolt-elements-textSecondary">Carregando conexão...</span>
+          <span className="text-programe-elements-textSecondary">Carregando conexão...</span>
         </div>
       </div>
     );
@@ -55,7 +55,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
 
   return (
     <motion.div
-      className="bg-bolt-elements-background dark:bg-bolt-elements-background border border-bolt-elements-borderColor dark:border-bolt-elements-borderColor rounded-lg"
+      className="bg-programe-elements-background dark:bg-programe-elements-background border border-programe-elements-borderColor dark:border-programe-elements-borderColor rounded-lg"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
@@ -64,7 +64,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
         <form onSubmit={handleConnect} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-bolt-elements-textSecondary dark:text-bolt-elements-textSecondary mb-2">
+              <label className="block text-sm text-programe-elements-textSecondary dark:text-programe-elements-textSecondary mb-2">
                 Tipo de Token
               </label>
               <select
@@ -73,10 +73,10 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
                 disabled={isConnecting || isConnected}
                 className={classNames(
                   'w-full px-3 py-2 rounded-lg text-sm',
-                  'bg-bolt-elements-background-depth-1 dark:bg-bolt-elements-background-depth-1',
-                  'border border-bolt-elements-borderColor dark:border-bolt-elements-borderColor',
-                  'text-bolt-elements-textPrimary dark:text-bolt-elements-textPrimary',
-                  'focus:outline-none focus:ring-1 focus:ring-bolt-elements-item-contentAccent dark:focus:ring-bolt-elements-item-contentAccent',
+                  'bg-programe-elements-background-depth-1 dark:bg-programe-elements-background-depth-1',
+                  'border border-programe-elements-borderColor dark:border-programe-elements-borderColor',
+                  'text-programe-elements-textPrimary dark:text-programe-elements-textPrimary',
+                  'focus:outline-none focus:ring-1 focus:ring-programe-elements-item-contentAccent dark:focus:ring-programe-elements-item-contentAccent',
                   'disabled:opacity-50',
                 )}
               >
@@ -86,7 +86,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
             </div>
 
             <div>
-              <label className="block text-sm text-bolt-elements-textSecondary dark:text-bolt-elements-textSecondary mb-2">
+              <label className="block text-sm text-programe-elements-textSecondary dark:text-programe-elements-textSecondary mb-2">
                 {tokenType === 'classic' ? 'Token de Acesso Pessoal' : 'Token Refinado'}
               </label>
               <input
@@ -99,17 +99,17 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
                   'w-full px-3 py-2 rounded-lg text-sm',
                   'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
                   'border border-[#E5E5E5] dark:border-[#333333]',
-                  'text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary',
-                  'focus:outline-none focus:ring-1 focus:ring-bolt-elements-borderColorActive',
+                  'text-programe-elements-textPrimary placeholder-programe-elements-textTertiary',
+                  'focus:outline-none focus:ring-1 focus:ring-programe-elements-borderColorActive',
                   'disabled:opacity-50',
                 )}
               />
-              <div className="mt-2 text-sm text-bolt-elements-textSecondary">
+              <div className="mt-2 text-sm text-programe-elements-textSecondary">
                 <a
                   href={`https://github.com/settings/tokens${tokenType === 'fine-grained' ? '/beta' : '/new'}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-bolt-elements-borderColorActive hover:underline inline-flex items-center gap-1"
+                  className="text-programe-elements-borderColorActive hover:underline inline-flex items-center gap-1"
                 >
                   Get your token
                   <div className="i-ph:arrow-square-out w-4 h-4" />
@@ -169,7 +169,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
                     <div className="i-ph:plug w-4 h-4" />
                     Desconectar
                   </button>
-                  <span className="text-sm text-bolt-elements-textSecondary flex items-center gap-1">
+                  <span className="text-sm text-programe-elements-textSecondary flex items-center gap-1">
                     <div className="i-ph:check-circle w-4 h-4 text-green-500" />
                     Conectado ao GitHub
                   </span>
@@ -178,7 +178,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
                   <Button
                     variant="outline"
                     onClick={() => window.open('https://github.com/dashboard', '_blank', 'noopener,noreferrer')}
-                    className="flex items-center gap-2 hover:bg-bolt-elements-item-backgroundActive/10 hover:text-bolt-elements-textPrimary dark:hover:text-bolt-elements-textPrimary transition-colors"
+                    className="flex items-center gap-2 hover:bg-programe-elements-item-backgroundActive/10 hover:text-programe-elements-textPrimary dark:hover:text-programe-elements-textPrimary transition-colors"
                   >
                     <div className="i-ph:layout w-4 h-4" />
                     Dashboard
@@ -187,7 +187,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
                     onClick={onTestConnection}
                     disabled={connectionTest?.status === 'testing'}
                     variant="outline"
-                    className="flex items-center gap-2 hover:bg-bolt-elements-item-backgroundActive/10 hover:text-bolt-elements-textPrimary dark:hover:text-bolt-elements-textPrimary transition-colors"
+                    className="flex items-center gap-2 hover:bg-programe-elements-item-backgroundActive/10 hover:text-programe-elements-textPrimary dark:hover:text-programe-elements-textPrimary transition-colors"
                   >
                     {connectionTest?.status === 'testing' ? (
                       <>

@@ -974,11 +974,11 @@ Sistema de temas dinâmico baseado em CSS variables.
 #### Variáveis CSS Principais
 
 ```css
---bolt-elements-background-depth-1
---bolt-elements-background-depth-2
---bolt-elements-textPrimary
---bolt-elements-textSecondary
---bolt-elements-borderColor
+--programe-elements-background-depth-1
+--programe-elements-background-depth-2
+--programe-elements-textPrimary
+--programe-elements-textSecondary
+--programe-elements-borderColor
 /* ... e muitas outras */
 ```
 

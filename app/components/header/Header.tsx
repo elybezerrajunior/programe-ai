@@ -19,11 +19,11 @@ export function Header() {
   // For home page, show new design. For chat pages, show original design
   if (isLandingPage && !chat.started) {
     return (
-      <header className="flex items-center justify-between px-6 border-b border-bolt-elements-borderColor h-[var(--header-height)] bg-bolt-elements-background-depth-1">
+      <header className="flex items-center justify-between px-6 border-b border-programe-elements-borderColor h-[var(--header-height)] bg-programe-elements-background-depth-1">
         {/* Logo */}
-        <div className="flex items-center gap-2 text-bolt-elements-textPrimary">
+        <div className="flex items-center gap-2 text-programe-elements-textPrimary">
           <div className="i-ph:rocket text-xl text-accent" />
-          <a href="/" className="text-xl font-semibold text-bolt-elements-textPrimary flex items-center">
+          <a href="/" className="text-xl font-semibold text-programe-elements-textPrimary flex items-center">
             Programe Studio
           </a>
         </div>
@@ -34,7 +34,7 @@ export function Header() {
             to="/"
             className={classNames('text-sm font-medium transition-colors', {
               'text-white border-b-2 border-accent pb-1': location.pathname === '/',
-              'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary': location.pathname !== '/',
+              'text-programe-elements-textSecondary hover:text-programe-elements-textPrimary': location.pathname !== '/',
             })}
           >
             Início
@@ -43,7 +43,7 @@ export function Header() {
             to="/explore"
             className={classNames('text-sm font-medium transition-colors', {
               'text-white border-b-2 border-accent pb-1': location.pathname === '/explore',
-              'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary': location.pathname !== '/explore',
+              'text-programe-elements-textSecondary hover:text-programe-elements-textPrimary': location.pathname !== '/explore',
             })}
           >
             Explorar
@@ -52,7 +52,7 @@ export function Header() {
             to="/docs"
             className={classNames('text-sm font-medium transition-colors', {
               'text-white border-b-2 border-accent pb-1': location.pathname === '/docs',
-              'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary': location.pathname !== '/docs',
+              'text-programe-elements-textSecondary hover:text-programe-elements-textPrimary': location.pathname !== '/docs',
             })}
           >
             Documentação
@@ -70,7 +70,7 @@ export function Header() {
           </ClientOnly>
           <ClientOnly fallback={
             <button
-              className="p-2 text-bolt-elements-textSecondary transition-colors bg-transparent"
+              className="p-2 text-programe-elements-textSecondary transition-colors bg-transparent"
               aria-label="Perfil"
             >
               <div className="i-ph:user text-xl" />
@@ -88,10 +88,10 @@ export function Header() {
     <header
       className={classNames('flex items-center px-4 border-b h-[var(--header-height)]', {
         'border-transparent': !chat.started,
-        'border-bolt-elements-borderColor': chat.started,
+        'border-programe-elements-borderColor': chat.started,
       })}
     >
-      <div className="flex items-center gap-2 z-logo text-bolt-elements-textPrimary cursor-pointer">
+      <div className="flex items-center gap-2 z-logo text-programe-elements-textPrimary cursor-pointer">
         <div className="i-ph:sidebar-simple-duotone text-xl" />
         <a href="/" className="text-2xl font-semibold text-accent flex items-center">
           <img src="/logo-light-styled.png" alt="logo" className="w-[90px] inline-block dark:hidden" />
@@ -100,7 +100,7 @@ export function Header() {
       </div>
       {chat.started && (
         <>
-          <span className="flex-1 px-4 truncate text-center text-bolt-elements-textPrimary">
+          <span className="flex-1 px-4 truncate text-center text-programe-elements-textPrimary">
             <ClientOnly>{() => <ChatDescription />}</ClientOnly>
           </span>
           <ClientOnly>

@@ -49,14 +49,14 @@ export function LoginForm() {
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-6">
           <div className="i-ph:rocket text-xl text-accent" />
-          <span className="text-xl font-semibold text-bolt-elements-textPrimary">
+          <span className="text-xl font-semibold text-programe-elements-textPrimary">
             Programe Studio
           </span>
         </div>
-        <h1 className="text-3xl font-bold text-bolt-elements-textPrimary mb-2">
+        <h1 className="text-3xl font-bold text-programe-elements-textPrimary mb-2">
           Entrar no Modo Construção
         </h1>
-        <p className="text-sm text-bolt-elements-textSecondary">
+        <p className="text-sm text-programe-elements-textSecondary">
           Crie apps reais a partir de uma ideia — com guia passo a passo.
         </p>
       </div>
@@ -103,11 +103,11 @@ export function LoginForm() {
 
       <Form method="post" className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Label htmlFor="email" className="text-sm text-bolt-elements-textPrimary">
+          <Label htmlFor="email" className="text-sm text-programe-elements-textPrimary">
             E-mail
           </Label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none">
               <span className="i-ph:envelope w-4 h-4" />
             </div>
             <Input
@@ -116,7 +116,7 @@ export function LoginForm() {
               type="email"
               placeholder="seuemail@exemplo.com"
               className={classNames(
-                'pl-10 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor',
+                'pl-10 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor',
                 'transition-colors',
                 emailError && 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
               )}
@@ -134,12 +134,12 @@ export function LoginForm() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password" className="text-sm text-bolt-elements-textPrimary">
+          <Label htmlFor="password" className="text-sm text-programe-elements-textPrimary">
             Senha
           </Label>
           <div className="relative flex items-center gap-2">
             <div className="relative flex-1">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none">
                 <span className="i-ph:lock w-4 h-4" />
               </div>
               <Input
@@ -148,7 +148,7 @@ export function LoginForm() {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 className={classNames(
-                  'pl-10 pr-4 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor',
+                  'pl-10 pr-4 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor',
                   'transition-colors',
                   passwordError && 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
                 )}
@@ -162,14 +162,14 @@ export function LoginForm() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="flex-shrink-0 text-bolt-elements-textTertiary hover:text-bolt-elements-textSecondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500/50 rounded p-1 bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3"
+              className="flex-shrink-0 text-programe-elements-textTertiary hover:text-programe-elements-textSecondary transition-colors focus:outline-none focus:ring-2 focus:ring-accent-500/50 rounded p-1 bg-programe-elements-background-depth-2 hover:bg-programe-elements-background-depth-3"
               aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
               title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
               {showPassword ? (
-                <span className="i-ph:eye-slash w-4 h-4 block text-bolt-elements-textTertiary" />
+                <span className="i-ph:eye-slash w-4 h-4 block text-programe-elements-textTertiary" />
               ) : (
-                <span className="i-ph:eye w-4 h-4 block text-bolt-elements-textTertiary" />
+                <span className="i-ph:eye w-4 h-4 block text-programe-elements-textTertiary" />
               )}
             </button>
           </div>
@@ -190,7 +190,7 @@ export function LoginForm() {
             />
             <Label
               htmlFor="remember-me"
-              className="text-sm text-bolt-elements-textSecondary cursor-pointer select-none"
+              className="text-sm text-programe-elements-textSecondary cursor-pointer select-none"
             >
               Lembrar de mim
             </Label>
@@ -210,7 +210,7 @@ export function LoginForm() {
             'w-full px-6 py-2.5 flex items-center justify-center gap-2 rounded-2xl font-medium transition-colors',
             {
               'bg-accent-500 hover:bg-accent-400 text-black': !isSubmitting,
-              'bg-bolt-elements-background-depth-2 text-bolt-elements-textSecondary cursor-not-allowed': isSubmitting,
+              'bg-programe-elements-background-depth-2 text-programe-elements-textSecondary cursor-not-allowed': isSubmitting,
             }
           )}
         >
@@ -229,10 +229,10 @@ export function LoginForm() {
 
         <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-bolt-elements-borderColor" />
+            <div className="w-full border-t border-programe-elements-borderColor" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-bolt-elements-background-depth-1 text-bolt-elements-textSecondary text-xs">
+            <span className="px-4 bg-programe-elements-background-depth-1 text-programe-elements-textSecondary text-xs">
               ou continue com
             </span>
           </div>
@@ -243,7 +243,7 @@ export function LoginForm() {
             type="button"
             variant="outline"
             className={classNames(
-              'flex-1 h-11 border-bolt-elements-borderColor hover:bg-bolt-elements-background-depth-2',
+              'flex-1 h-11 border-programe-elements-borderColor hover:bg-programe-elements-background-depth-2',
               'flex items-center justify-center gap-3 transition-colors',
               {
                 'opacity-50 cursor-not-allowed': oauthLoading === 'google' || isSubmitting,
@@ -276,7 +276,7 @@ export function LoginForm() {
             type="button"
             variant="outline"
             className={classNames(
-              'flex-1 h-11 border-bolt-elements-borderColor hover:bg-bolt-elements-background-depth-2',
+              'flex-1 h-11 border-programe-elements-borderColor hover:bg-programe-elements-background-depth-2',
               'flex items-center justify-center gap-3 transition-colors',
               {
                 'opacity-50 cursor-not-allowed': oauthLoading === 'github' || isSubmitting,

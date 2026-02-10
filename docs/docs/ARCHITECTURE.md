@@ -777,19 +777,19 @@ export async function loader() {
 ```css
 /* styles/variables.scss */
 :root[data-theme="light"] {
-  --bolt-elements-background-depth-1: #ffffff;
-  --bolt-elements-background-depth-2: #f5f5f5;
-  --bolt-elements-textPrimary: #171717;
-  --bolt-elements-textSecondary: #525252;
-  --bolt-elements-borderColor: #e5e5e5;
+  --programe-elements-background-depth-1: #ffffff;
+  --programe-elements-background-depth-2: #f5f5f5;
+  --programe-elements-textPrimary: #171717;
+  --programe-elements-textSecondary: #525252;
+  --programe-elements-borderColor: #e5e5e5;
 }
 
 :root[data-theme="dark"] {
-  --bolt-elements-background-depth-1: #0a0a0a;
-  --bolt-elements-background-depth-2: #171717;
-  --bolt-elements-textPrimary: #fafafa;
-  --bolt-elements-textSecondary: #a3a3a3;
-  --bolt-elements-borderColor: #404040;
+  --programe-elements-background-depth-1: #0a0a0a;
+  --programe-elements-background-depth-2: #171717;
+  --programe-elements-textPrimary: #fafafa;
+  --programe-elements-textSecondary: #a3a3a3;
+  --programe-elements-borderColor: #404040;
 }
 ```
 
@@ -804,12 +804,12 @@ export default defineConfig({
         elements: {
           background: {
             depth: {
-              1: 'var(--bolt-elements-bg-depth-1)',
-              2: 'var(--bolt-elements-bg-depth-2)',
+              1: 'var(--programe-elements-bg-depth-1)',
+              2: 'var(--programe-elements-bg-depth-2)',
             }
           },
-          textPrimary: 'var(--bolt-elements-textPrimary)',
-          textSecondary: 'var(--bolt-elements-textSecondary)',
+          textPrimary: 'var(--programe-elements-textPrimary)',
+          textSecondary: 'var(--programe-elements-textSecondary)',
         }
       }
     }
@@ -821,12 +821,12 @@ export default defineConfig({
 
 ```typescript
 // ✅ BOM: Usar classes UnoCSS
-<div className="bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary">
+<div className="bg-programe-elements-background-depth-1 text-programe-elements-textPrimary">
   Content
 </div>
 
 // ✅ BOM: CSS Variables direto quando necessário
-<div style={{ backgroundColor: 'var(--bolt-elements-bg-depth-1)' }}>
+<div style={{ backgroundColor: 'var(--programe-elements-bg-depth-1)' }}>
   Content
 </div>
 ```
@@ -845,9 +845,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant = 'primary', size = 'md', className, ...props }, ref) => {
     const variantClasses = {
-      primary: 'bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text',
-      secondary: 'bg-bolt-elements-button-secondary-background',
-      danger: 'bg-bolt-elements-button-danger-background'
+      primary: 'bg-programe-elements-button-primary-background text-programe-elements-button-primary-text',
+      secondary: 'bg-programe-elements-button-secondary-background',
+      danger: 'bg-programe-elements-button-danger-background'
     };
     
     const sizeClasses = {
