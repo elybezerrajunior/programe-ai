@@ -3,7 +3,14 @@ import { Dialog, DialogTitle, DialogDescription, DialogRoot } from './Dialog';
 import { Button } from './Button';
 import { IconButton } from './IconButton';
 import type { DesignScheme } from '~/types/design-scheme';
-import { defaultDesignScheme, designFeatures, designFonts, paletteRoles } from '~/types/design-scheme';
+import {
+  defaultDesignScheme,
+  designFeatures,
+  designFonts,
+  paletteRoles,
+  themePresets,
+  type ThemePreset,
+} from '~/types/design-scheme';
 
 export interface ColorSchemeDialogProps {
   designScheme?: DesignScheme;
@@ -22,7 +29,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
   const [features, setFeatures] = useState<string[]>(designScheme?.features || defaultDesignScheme.features);
   const [font, setFont] = useState<string[]>(designScheme?.font || defaultDesignScheme.font);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<'colors' | 'typography' | 'features'>('colors');
+  const [activeSection, setActiveSection] = useState<'colors' | 'typography' | 'features' | 'themes'>('colors');
 
   useEffect(() => {
     if (designScheme) {
@@ -57,6 +64,22 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
     setPalette(defaultDesignScheme.palette);
     setFeatures(defaultDesignScheme.features);
     setFont(defaultDesignScheme.font);
+  };
+
+  const handleThemeSelect = (theme: ThemePreset) => {
+    setPalette({ ...defaultDesignScheme.palette, ...theme.scheme.palette });
+    setFeatures(theme.scheme.features);
+    setFont(theme.scheme.font);
+  };
+
+  const isThemeSelected = (theme: ThemePreset) => {
+    const p = theme.scheme.palette;
+    const keys = Object.keys(defaultDesignScheme.palette) as (keyof typeof defaultDesignScheme.palette)[];
+    const paletteMatch = keys.every((k) => palette[k] === p[k]);
+    const featuresMatch =
+      [...features].sort().join() === [...theme.scheme.features].sort().join();
+    const fontMatch = [...font].sort().join() === [...theme.scheme.font].sort().join();
+    return paletteMatch && featuresMatch && fontMatch;
   };
 
   const renderColorSection = () => (
@@ -270,6 +293,70 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
     </div>
   );
 
+  const renderThemesSection = () => (
+    <div className="space-y-4">
+      <h3 className="text-lg font-semibold text-bolt-elements-textPrimary flex items-center gap-2">
+        <div className="w-2 h-2 rounded-full bg-bolt-elements-item-contentAccent"></div>
+        Temas pré-definidos
+      </h3>
+
+      <p className="text-sm text-bolt-elements-textSecondary">
+        Escolha um tema para aplicar rapidamente cores, tipografia e recursos.
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+        {themePresets.map((theme) => {
+          const isSelected = isThemeSelected(theme);
+          return (
+            <button
+              key={theme.id}
+              type="button"
+              onClick={() => handleThemeSelect(theme)}
+              className={`group flex items-center gap-4 p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                isSelected
+                  ? 'border-bolt-elements-borderColorActive bg-bolt-elements-item-backgroundAccent shadow-lg'
+                  : 'bg-bolt-elements-background-depth-3 border-bolt-elements-borderColor hover:border-bolt-elements-borderColorActive hover:bg-bolt-elements-background-depth-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary'
+              }`}
+            >
+              {/* Swatch - overlapping circles like Lovable */}
+              <div className="relative flex-shrink-0 w-12 h-12">
+                {theme.swatchColors.map((color, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-6 h-6 rounded-full border-2 border-bolt-elements-borderColor shadow-sm"
+                    style={{
+                      backgroundColor: color,
+                      left: i === 0 ? 0 : i === 1 ? 14 : 7,
+                      top: i === 0 ? 14 : i === 1 ? 0 : 7,
+                      zIndex: theme.swatchColors.length - i,
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="flex-1 min-w-0">
+                <span
+                  className={`font-semibold transition-colors ${
+                    isSelected
+                      ? 'text-bolt-elements-item-contentAccent'
+                      : 'text-bolt-elements-textSecondary group-hover:text-bolt-elements-textPrimary'
+                  }`}
+                >
+                  {theme.name}
+                </span>
+                {isSelected && (
+                  <div className="flex items-center gap-1 mt-1">
+                    <span className="i-ph:check text-bolt-elements-item-contentAccent text-sm" />
+                    <span className="text-xs text-bolt-elements-textSecondary">Selecionado</span>
+                  </div>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     <div>
       <IconButton title="Paleta de design" className="transition-all" onClick={() => setIsDialogOpen(!isDialogOpen)}>
@@ -295,6 +382,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                 { key: 'colors', label: 'Cores', icon: 'i-ph:palette' },
                 { key: 'typography', label: 'Tipografia', icon: 'i-ph:text-aa' },
                 { key: 'features', label: 'Recursos', icon: 'i-ph:magic-wand' },
+                { key: 'themes', label: 'Temas', icon: 'i-ph:sun' },
               ].map((tab) => (
                 <button
                   key={tab.key}
@@ -316,6 +404,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
               {activeSection === 'colors' && renderColorSection()}
               {activeSection === 'typography' && renderTypographySection()}
               {activeSection === 'features' && renderFeaturesSection()}
+              {activeSection === 'themes' && renderThemesSection()}
             </div>
 
             {/* Action Buttons */}
