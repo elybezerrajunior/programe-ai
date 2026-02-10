@@ -14,6 +14,7 @@ import { usePromptEnhancer } from '~/lib/hooks/usePromptEnhancer';
 import { useSettings } from '~/lib/hooks/useSettings';
 import { useLLMConfig } from '~/lib/hooks/useLLMConfig';
 import { homeHeroFilesStore } from '~/lib/stores/homeFiles';
+import { ColorSchemeDialog } from '~/components/ui/ColorSchemeDialog';
 
 interface HomeHeroProps {
   onGenerateProject?: (description: string) => void;
@@ -325,7 +326,9 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
           {/* Actions */}
           <div className="flex items-center justify-between text-sm pt-2">
             <div className="flex gap-1 items-center">
-              {/* <ColorSchemeDialog designScheme={designScheme || defaultDesignScheme} setDesignScheme={setDesignScheme} /> */}
+              <Tooltip content="Tema e paleta do projeto" side="top">
+                <ColorSchemeDialog designScheme={designScheme || defaultDesignScheme} setDesignScheme={setDesignScheme} />
+              </Tooltip>
               {/* <McpTools /> */}
               <Tooltip content="Enviar arquivo" side="top">
                 <button
