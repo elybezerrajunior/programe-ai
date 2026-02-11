@@ -49,15 +49,17 @@ interface UserCreditsRow {
 // Créditos por plano
 const PLAN_CREDITS: Record<string, number> = {
   free: 5,
-  pro: 100,
-  business: 100,
-  enterprise: 500,
+  starter: 200,
+  builder: 700,
+  pro: 1600,
+  enterprise: 500, // Personalizável
 };
 
 const DAILY_CREDITS: Record<string, number> = {
   free: 0,
-  pro: 5,
-  business: 10,
+  starter: 0,
+  builder: 5,
+  pro: 10,
   enterprise: 20,
 };
 
@@ -183,17 +185,14 @@ interface CreditOption {
 }
 
 const CREDIT_OPTIONS: Record<string, CreditOption[]> = {
-  pro: [
-    { credits: 100, monthlyPrice: 59, yearlyPrice: 49 },
-    { credits: 200, monthlyPrice: 99, yearlyPrice: 82 },
-    { credits: 500, monthlyPrice: 199, yearlyPrice: 165 },
-    { credits: 1000, monthlyPrice: 349, yearlyPrice: 290 },
+  starter: [
+    { credits: 200, monthlyPrice: 59.90, yearlyPrice: 49.90 },
   ],
-  business: [
-    { credits: 100, monthlyPrice: 119, yearlyPrice: 99 },
-    { credits: 200, monthlyPrice: 199, yearlyPrice: 165 },
-    { credits: 500, monthlyPrice: 399, yearlyPrice: 332 },
-    { credits: 1000, monthlyPrice: 699, yearlyPrice: 581 },
+  builder: [
+    { credits: 700, monthlyPrice: 149.90, yearlyPrice: 124.90 },
+  ],
+  pro: [
+    { credits: 1600, monthlyPrice: 299.90, yearlyPrice: 249.90 },
   ],
 };
 
@@ -212,59 +211,74 @@ interface Plan {
 
 const plans: Plan[] = [
   {
-    id: 'pro',
-    name: 'Pro',
-    description: 'Ideal para times ágeis construindo projetos em tempo real.',
-    baseMonthlyPrice: 59,
-    baseYearlyPrice: 49,
-    baseCredits: 100,
-    buttonText: 'Fazer Upgrade',
-    isPopular: true,
+    id: 'starter',
+    name: 'Starter',
+    description: 'Comece a escalar seus projetos com custo acessível.',
+    baseMonthlyPrice: 59.90,
+    baseYearlyPrice: 49.90,
+    baseCredits: 200,
+    buttonText: 'Assinar Starter',
+    isPopular: false,
     features: [
-      { text: 'Créditos mensais configuráveis', included: true, tooltip: 'Escolha a quantidade de créditos' },
-      { text: '5 créditos diários bônus', included: true },
-      { text: 'Cloud + IA baseado em uso', included: true, tooltip: 'Uso adicional cobrado separadamente' },
-      { text: 'Acúmulo de créditos', included: true, tooltip: 'Créditos não usados acumulam' },
-      { text: 'Recarga de créditos sob demanda', included: true },
-      { text: 'Domínios ilimitados programe.app', included: true },
-      { text: 'Domínios personalizados', included: true },
-      { text: 'Remover marca Programe', included: true },
-      { text: 'Funções e permissões de usuário', included: true },
+      { text: '200 créditos mensais (~200k tokens)', included: true },
+      { text: 'Cloud + IA', included: true },
+      { text: 'Domínios ilimitados', included: true },
+      { text: 'Projetos ilimitados', included: true },
+      { text: '1 top-up por mês', included: true, tooltip: 'Limite de 1 recarga adicional mensal' },
     ],
   },
   {
-    id: 'business',
-    name: 'Business',
-    description: 'Controles avançados e recursos poderosos para departamentos em crescimento.',
-    baseMonthlyPrice: 119,
-    baseYearlyPrice: 99,
-    baseCredits: 100,
-    buttonText: 'Fazer Upgrade',
+    id: 'builder',
+    name: 'Builder',
+    description: 'Para quem constrói e precisa de margem real.',
+    baseMonthlyPrice: 149.90,
+    baseYearlyPrice: 124.90,
+    baseCredits: 700,
+    buttonText: 'Assinar Builder',
+    isPopular: true,
     features: [
-      { text: 'Créditos mensais configuráveis', included: true, tooltip: 'Escolha a quantidade de créditos' },
+      { text: '700 créditos mensais (~700k tokens)', included: true },
+      { text: '5 créditos diários bônus', included: true },
+      { text: 'Sem limite de top-ups', included: true },
       { text: 'Publicação interna', included: true, isNew: true },
-      { text: 'SSO (Single Sign-On)', included: true },
-      { text: 'Projetos pessoais', included: true },
-      { text: 'Não participar do treinamento de dados', included: true },
+      { text: 'Suporte prioritário', included: true },
       { text: 'Templates de design', included: true },
+    ],
+  },
+  {
+    id: 'pro',
+    name: 'Pro',
+    description: 'O plano do profissional sério. Mais volume e retenção.',
+    baseMonthlyPrice: 299.90,
+    baseYearlyPrice: 249.90,
+    baseCredits: 1600,
+    buttonText: 'Assinar Pro',
+    isPopular: false,
+    features: [
+      { text: '1.600 créditos mensais (~1.6M tokens)', included: true },
+      { text: '10 créditos diários bônus', included: true },
+      { text: 'Acúmulo de créditos (rollover)', included: true },
+      { text: 'SSO e segurança avançada', included: true },
+      { text: 'Domínios personalizados', included: true },
+      { text: 'Remover marca Programe', included: true },
     ],
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    description: 'Para grandes organizações que precisam de flexibilidade, escala e governança.',
+    description: 'Contratos personalizados com governança e SLA.',
     baseMonthlyPrice: null,
     baseYearlyPrice: null,
     baseCredits: 0,
-    buttonText: 'Agendar Demo',
+    buttonText: 'Falar com Vendas',
     isEnterprise: true,
     features: [
-      { text: 'Suporte dedicado', included: true },
-      { text: 'Serviços de onboarding', included: true },
-      { text: 'Conexões personalizadas', included: true },
-      { text: 'Controle de acesso por grupo', included: true },
-      { text: 'SCIM', included: true },
-      { text: 'Sistemas de design personalizados', included: true },
+      { text: 'Contratos anuais (R$ 10k+)', included: true },
+      { text: 'Créditos por "pool" negociado', included: true },
+      { text: 'Projetos privados/isolados', included: true },
+      { text: 'Onboarding e treinamento', included: true },
+      { text: 'Controle de acesso granular', included: true },
+      { text: 'SLA garantido', included: true },
     ],
   },
 ];
@@ -275,13 +289,13 @@ function FeatureItem({ feature }: { feature: PlanFeature }) {
       <span
         className={classNames(
           'i-ph:check text-lg flex-shrink-0 mt-0.5',
-          feature.included ? 'text-accent-500' : 'text-bolt-elements-textTertiary',
+          feature.included ? 'text-accent-500' : 'text-programe-elements-textTertiary',
         )}
       />
-      <span className="text-bolt-elements-textSecondary flex items-center gap-2">
+      <span className="text-programe-elements-textSecondary flex items-center gap-2">
         {feature.text}
         {feature.tooltip && (
-          <span className="i-ph:info text-bolt-elements-textTertiary cursor-help" title={feature.tooltip} />
+          <span className="i-ph:info text-programe-elements-textTertiary cursor-help" title={feature.tooltip} />
         )}
         {feature.isNew && (
           <Badge variant="primary" size="sm">
@@ -322,7 +336,7 @@ function PlanCard({
         'flex flex-col h-full transition-all duration-300 relative',
         plan.isPopular && 'border-accent-500/50 shadow-lg shadow-accent-500/10',
         isCurrentPlan && 'ring-2 ring-accent-500',
-        'hover:border-bolt-elements-borderColorActive hover:shadow-xl',
+        'hover:border-programe-elements-borderColorActive hover:shadow-xl',
       )}
     >
       {isCurrentPlan && (
@@ -342,13 +356,13 @@ function PlanCard({
         {/* Seletor de créditos (apenas para planos pagos não-enterprise) - MOVIDO PARA CIMA */}
         {!plan.isEnterprise && creditOptions.length > 0 && (
           <div className="space-y-2">
-            <label className="text-xs text-bolt-elements-textSecondary font-medium">
+            <label className="text-xs text-programe-elements-textSecondary font-medium">
               Quantidade de créditos mensais
             </label>
             <select
               value={selectedCredits}
               onChange={(e) => onCreditsChange(Number(e.target.value))}
-              className="w-full px-3 py-2 rounded-md bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor text-bolt-elements-textPrimary text-sm focus:outline-none focus:border-accent-500 cursor-pointer"
+              className="w-full px-3 py-2 rounded-md bg-programe-elements-background-depth-2 border border-programe-elements-borderColor text-programe-elements-textPrimary text-sm focus:outline-none focus:border-accent-500 cursor-pointer"
             >
               {creditOptions.map((option) => (
                 <option key={option.credits} value={option.credits}>
@@ -362,14 +376,14 @@ function PlanCard({
         {/* Preço */}
         <div className="space-y-1">
           {plan.isEnterprise ? (
-            <div className="text-3xl font-bold text-bolt-elements-textPrimary">Personalizado</div>
+            <div className="text-3xl font-bold text-programe-elements-textPrimary">Personalizado</div>
           ) : (
             <>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-bolt-elements-textPrimary">R${price}</span>
-                <span className="text-bolt-elements-textSecondary text-sm">por mês</span>
+                <span className="text-3xl font-bold text-programe-elements-textPrimary">R${price}</span>
+                <span className="text-programe-elements-textSecondary text-sm">por mês</span>
               </div>
-              <p className="text-xs text-bolt-elements-textTertiary">
+              <p className="text-xs text-programe-elements-textTertiary">
                 {selectedCredits} créditos • compartilhado entre usuários ilimitados
               </p>
             </>
@@ -380,7 +394,7 @@ function PlanCard({
         {!plan.isEnterprise && (
           <div className="flex items-center gap-2">
             <Switch checked={isAnnual} />
-            <span className="text-sm text-bolt-elements-textSecondary">Anual</span>
+            <span className="text-sm text-programe-elements-textSecondary">Anual</span>
             {isAnnual && (
               <Badge variant="success" size="sm">
                 Economize 17%
@@ -397,7 +411,7 @@ function PlanCard({
             'w-full',
             plan.isPopular && !isCurrentPlan
               ? 'bg-accent-500 hover:bg-accent-600 text-white'
-              : 'bg-bolt-elements-background-depth-3 hover:bg-bolt-elements-background-depth-4 text-bolt-elements-textPrimary',
+              : 'bg-programe-elements-background-depth-3 hover:bg-programe-elements-background-depth-4 text-programe-elements-textPrimary',
           )}
           disabled={(isCurrentPlan && !isCanceled) || isCreatingCheckout}
         >
@@ -411,13 +425,15 @@ function PlanCard({
         </Button>
 
         {/* Descrição dos recursos */}
-        <div className="pt-2 border-t border-bolt-elements-borderColor">
-          <p className="text-xs text-bolt-elements-textTertiary mb-3">
+        <div className="pt-2 border-t border-programe-elements-borderColor">
+          <p className="text-xs text-programe-elements-textTertiary mb-3">
             {plan.isEnterprise
-              ? 'Todos os recursos do Business, mais:'
-              : plan.id === 'business'
-                ? 'Todos os recursos do Pro, mais:'
-                : 'Todos os recursos do Free, mais:'}
+              ? 'Todos os recursos do Pro, mais:'
+              : plan.id === 'pro'
+                ? 'Todos os recursos do Builder, mais:'
+                : plan.id === 'builder'
+                  ? 'Todos os recursos do Starter, mais:'
+                  : 'Todos os recursos do Free, mais:'}
           </p>
           <ul className="space-y-2.5">
             {plan.features.map((feature, index) => (
@@ -469,7 +485,7 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-semibold text-bolt-elements-textPrimary">
+                <h2 className="text-lg font-semibold text-programe-elements-textPrimary">
                   Você está no Plano {planDisplayName}
                 </h2>
                 {subscription.planType === 'free' && (
@@ -479,7 +495,7 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
                   <Badge variant="warning">Cancela em breve</Badge>
                 )}
               </div>
-              <p className="text-sm text-bolt-elements-textSecondary">
+              <p className="text-sm text-programe-elements-textSecondary">
                 {subscription.planType === 'free'
                   ? 'Faça upgrade a qualquer momento para desbloquear mais recursos'
                   : subscription.currentPeriodEnd
@@ -497,12 +513,12 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
           {/* Créditos restantes */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-bolt-elements-textPrimary">Créditos restantes</h3>
+              <h3 className="text-sm font-medium text-programe-elements-textPrimary">Créditos restantes</h3>
               <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold text-bolt-elements-textPrimary">
+                <span className="text-lg font-semibold text-programe-elements-textPrimary">
                   {Math.max(0, remaining)}
                 </span>
-                <span className="text-sm text-bolt-elements-textTertiary">de {total}</span>
+                <span className="text-sm text-programe-elements-textTertiary">de {total}</span>
               </div>
             </div>
 
@@ -515,12 +531,12 @@ function CreditsOverview({ subscription, credits }: { subscription: LoaderData['
               )}
             />
 
-            <div className="flex flex-wrap gap-4 text-xs text-bolt-elements-textTertiary">
+            <div className="flex flex-wrap gap-4 text-xs text-programe-elements-textTertiary">
               <div className="flex items-center gap-1.5">
                 {credits.creditsRollover ? (
                   <span className="i-ph:check-circle text-accent-500" />
                 ) : (
-                  <span className="i-ph:x-circle text-bolt-elements-textTertiary" />
+                  <span className="i-ph:x-circle text-programe-elements-textTertiary" />
                 )}
                 <span>{credits.creditsRollover ? 'Créditos acumulam' : 'Créditos não acumulam'}</span>
               </div>
@@ -571,8 +587,9 @@ export default function PlansPage() {
 
   const [isAnnual, setIsAnnual] = useState(false);
   const [selectedCredits, setSelectedCredits] = useState<Record<string, number>>({
-    pro: 100,
-    business: 100,
+    starter: 200,
+    builder: 700,
+    pro: 1600,
   });
   const [isCanceling, setIsCanceling] = useState(false);
   const [checkoutMessage, setCheckoutMessage] = useState<{ type: 'success' | 'error' | 'warning'; message: string } | null>(null);
@@ -631,7 +648,7 @@ export default function PlansPage() {
     setCheckoutMessage(null);
 
     try {
-      const planCredits = selectedCredits[plan.id] || 100;
+      const planCredits = selectedCredits[plan.id] || 200;
       const creditOptions = CREDIT_OPTIONS[plan.id] || [];
       const selectedOption = creditOptions.find(opt => opt.credits === planCredits) || creditOptions[0];
       const price = selectedOption
@@ -674,15 +691,15 @@ export default function PlansPage() {
     setIsSimulating(true);
     setSimulateMessage(null);
     try {
-      const planCredits = selectedCredits.pro || 100;
-      const creditOptions = CREDIT_OPTIONS.pro || [];
+      const planCredits = selectedCredits.starter || 200;
+      const creditOptions = CREDIT_OPTIONS.starter || [];
       const selectedOption = creditOptions.find(opt => opt.credits === planCredits) || creditOptions[0];
       const price = selectedOption ? (isAnnual ? selectedOption.yearlyPrice : selectedOption.monthlyPrice) : 59;
       const res = await fetch('/api/asaas/simulate-checkout-paid', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          planType: 'pro',
+          planType: 'starter',
           creditsPerMonth: planCredits,
           billingCycle: isAnnual ? 'YEARLY' : 'MONTHLY',
           price,
@@ -729,7 +746,7 @@ export default function PlansPage() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1">
+    <div className="flex flex-col h-full w-full bg-programe-elements-background-depth-1">
       <BackgroundRays />
       <Header />
 
@@ -767,8 +784,8 @@ export default function PlansPage() {
 
           {/* Header da página */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-bolt-elements-textPrimary mb-2">Planos e Preços</h1>
-            <p className="text-bolt-elements-textSecondary max-w-2xl mx-auto">
+            <h1 className="text-3xl font-bold text-programe-elements-textPrimary mb-2">Planos e Preços</h1>
+            <p className="text-programe-elements-textSecondary max-w-2xl mx-auto">
               Escolha o plano ideal para suas necessidades. Todos os planos incluem acesso ao Programe Studio.
             </p>
           </div>
@@ -781,7 +798,7 @@ export default function PlansPage() {
             <span
               className={classNames(
                 'text-sm font-medium',
-                !isAnnual ? 'text-bolt-elements-textPrimary' : 'text-bolt-elements-textTertiary',
+                !isAnnual ? 'text-programe-elements-textPrimary' : 'text-programe-elements-textTertiary',
               )}
             >
               Mensal
@@ -790,7 +807,7 @@ export default function PlansPage() {
             <span
               className={classNames(
                 'text-sm font-medium',
-                isAnnual ? 'text-bolt-elements-textPrimary' : 'text-bolt-elements-textTertiary',
+                isAnnual ? 'text-programe-elements-textPrimary' : 'text-programe-elements-textTertiary',
               )}
             >
               Anual
@@ -812,7 +829,7 @@ export default function PlansPage() {
                 isCurrentPlan={subscription.planType === plan.id}
                 isCanceled={subscription.cancelAtPeriodEnd}
                 onUpgrade={() => handleUpgrade(plan)}
-                selectedCredits={selectedCredits[plan.id] || 100}
+                selectedCredits={selectedCredits[plan.id] || 200}
                 onCreditsChange={(credits) => handleCreditsChange(plan.id, credits)}
                 isCreatingCheckout={isCreatingCheckout}
               />
@@ -838,7 +855,7 @@ export default function PlansPage() {
           {typeof import.meta !== 'undefined' && import.meta.env?.DEV && (
             <Card className="mb-6 border-amber-500/50 bg-amber-500/5">
               <CardContent className="p-4">
-                <p className="text-sm text-bolt-elements-textSecondary mb-2">
+                <p className="text-sm text-programe-elements-textSecondary mb-2">
                   <strong className="text-amber-500">Desenvolvimento:</strong> Como o ASAAS não envia webhook para localhost,
                   use o botão abaixo após &quot;pagar&quot; no checkout para gravar assinatura e créditos no Supabase.
                 </p>
@@ -850,7 +867,7 @@ export default function PlansPage() {
                     disabled={isSimulating}
                     className="border-amber-500/50 text-amber-600 hover:bg-amber-500/10"
                   >
-                    {isSimulating ? 'Simulando...' : 'Simular pagamento concluído (Pro)'}
+                    {isSimulating ? 'Simulando...' : 'Simular pagamento concluído (Starter)'}
                   </Button>
                   {simulateMessage && (
                     <span className={classNames(
@@ -866,13 +883,13 @@ export default function PlansPage() {
           )}
 
           {/* FAQ ou informações adicionais */}
-          <Card className="bg-bolt-elements-background-depth-2/50 pt-6">
+          <Card className="bg-programe-elements-background-depth-2/50 pt-6">
             <CardContent className="p-6">
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-2">
+                <h3 className="text-lg font-semibold text-programe-elements-textPrimary mb-2">
                   Precisa de ajuda para escolher?
                 </h3>
-                <p className="text-sm text-bolt-elements-textSecondary mb-4">
+                <p className="text-sm text-programe-elements-textSecondary mb-4">
                   Nossa equipe está disponível para ajudá-lo a encontrar o plano perfeito para suas necessidades.
                 </p>
                 <div className="flex items-center justify-center gap-4">

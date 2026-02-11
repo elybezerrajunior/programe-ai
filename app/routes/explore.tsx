@@ -44,7 +44,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
 const CATEGORIES = [
   { id: 'all', label: 'Todos', icon: 'i-ph:squares-four' },
-  { id: 'apps', label: 'Apps e Jogos', icon: 'i-ph:game-controller' },
   { id: 'landing', label: 'Landing Pages', icon: 'i-ph:layout' },
   { id: 'components', label: 'Componentes', icon: 'i-ph:package' },
   { id: 'dashboards', label: 'Dashboards', icon: 'i-ph:chart-bar' },
@@ -154,7 +153,7 @@ export default function Explore() {
   }, [activeCategory, searchQuery, allTemplates]);
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-bolt-elements-background-depth-1 overflow-auto">
+    <div className="flex flex-col min-h-screen w-full bg-programe-elements-background-depth-1 overflow-auto">
       <Header />
       <BackgroundRays />
 
@@ -162,10 +161,10 @@ export default function Explore() {
         {/* Header da Seção */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-6">
           <div className="text-center md:text-left">
-            <h1 className="text-3xl md:text-4xl font-bold text-bolt-elements-textPrimary mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-programe-elements-textPrimary mb-2">
               Explore Modelos
             </h1>
-            <p className="text-bolt-elements-textSecondary">
+            <p className="text-programe-elements-textSecondary">
               Inicie seu próximo projeto com templates prontos para produção.
             </p>
           </div>
@@ -173,14 +172,14 @@ export default function Explore() {
           {/* Barra de Busca */}
           <div className="relative w-full md:w-80 group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span className="i-ph:magnifying-glass w-5 h-5 text-bolt-elements-textTertiary group-focus-within:text-accent-500 transition-colors" />
+              <span className="i-ph:magnifying-glass w-5 h-5 text-programe-elements-textTertiary group-focus-within:text-accent-500 transition-colors" />
             </div>
             <input
               type="text"
               placeholder="Buscar templates..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor rounded-xl text-sm text-bolt-elements-textPrimary focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-all placeholder-bolt-elements-textTertiary"
+              className="w-full pl-10 pr-4 py-2.5 bg-programe-elements-background-depth-2 border border-programe-elements-borderColor rounded-xl text-sm text-programe-elements-textPrimary focus:outline-none focus:border-accent-500 focus:ring-1 focus:ring-accent-500 transition-all placeholder-programe-elements-textTertiary"
             />
           </div>
         </div>
@@ -196,7 +195,7 @@ export default function Explore() {
                 'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200',
                 activeCategory === cat.id
                   ? 'bg-accent-500/10 text-accent-500 border border-accent-500/50 shadow-sm shadow-accent-500/20'
-                  : 'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary border border-bolt-elements-borderColor/50 hover:border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3'
+                  : 'text-programe-elements-textSecondary hover:text-programe-elements-textPrimary border border-programe-elements-borderColor/50 hover:border-programe-elements-borderColor bg-programe-elements-background-depth-2 hover:bg-programe-elements-background-depth-3'
               )}
             >
               <span className={classNames(cat.icon, 'w-4 h-4')} />
@@ -213,7 +212,7 @@ export default function Explore() {
                 key={t.id}
                 type="button"
                 onClick={() => setSelectedTemplate(t)}
-                className="group flex flex-col text-left h-full rounded-2xl overflow-hidden border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 hover:border-accent-500/50 hover:shadow-lg hover:shadow-accent-500/5 transition-all duration-300 transform hover:-translate-y-1"
+                className="group flex flex-col text-left h-full rounded-2xl overflow-hidden border border-programe-elements-borderColor bg-programe-elements-background-depth-2 hover:border-accent-500/50 hover:shadow-lg hover:shadow-accent-500/5 transition-all duration-300 transform hover:-translate-y-1"
               >
                 {/* Imagem / Preview (Gradiente) */}
                 <div className={classNames(
@@ -244,19 +243,19 @@ export default function Explore() {
 
                 {/* Conteúdo do Card */}
                 <div className="flex flex-col flex-1 p-5">
-                  <h3 className="text-lg font-bold text-bolt-elements-textPrimary mb-2 group-hover:text-accent-500 transition-colors">
+                  <h3 className="text-lg font-bold text-programe-elements-textPrimary mb-2 group-hover:text-accent-500 transition-colors">
                     {t.title}
                   </h3>
-                  <p className="text-sm text-bolt-elements-textSecondary mb-4 line-clamp-2 flex-1">
+                  <p className="text-sm text-programe-elements-textSecondary mb-4 line-clamp-2 flex-1">
                     {t.description}
                   </p>
 
-                  <div className="flex items-center justify-end pt-4 border-t border-bolt-elements-borderColor/50">
+                  <div className="flex items-center justify-end pt-4 border-t border-programe-elements-borderColor/50">
                     {/* Tech Stacks (Mini ícones ou texto) */}
 
                     <div className="flex -space-x-2">
                       {t.technologies.slice(0, 3).map((tech: string, i: number) => (
-                        <div key={i} title={tech} className="w-6 h-6 rounded-full bg-bolt-elements-background-depth-3 border border-bolt-elements-borderColor flex items-center justify-center text-[10px] text-bolt-elements-textSecondary font-bold ring-2 ring-bolt-elements-background-depth-2">
+                        <div key={i} title={tech} className="w-6 h-6 rounded-full bg-programe-elements-background-depth-3 border border-programe-elements-borderColor flex items-center justify-center text-[10px] text-programe-elements-textSecondary font-bold ring-2 ring-programe-elements-background-depth-2">
                           {tech[0]}
                         </div>
                       ))}
@@ -268,11 +267,11 @@ export default function Explore() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 bg-bolt-elements-background-depth-2 rounded-full flex items-center justify-center mb-4">
-              <span className="i-ph:magnifying-glass w-8 h-8 text-bolt-elements-textTertiary" />
+            <div className="w-16 h-16 bg-programe-elements-background-depth-2 rounded-full flex items-center justify-center mb-4">
+              <span className="i-ph:magnifying-glass w-8 h-8 text-programe-elements-textTertiary" />
             </div>
-            <h3 className="text-xl font-medium text-bolt-elements-textPrimary mb-2">Nenhum template encontrado</h3>
-            <p className="text-bolt-elements-textSecondary max-w-md mx-auto">
+            <h3 className="text-xl font-medium text-programe-elements-textPrimary mb-2">Nenhum template encontrado</h3>
+            <p className="text-programe-elements-textSecondary max-w-md mx-auto">
               Tente ajustar sua busca ou mudar o filtro de categoria para encontrar o que procura.
             </p>
             <button
@@ -287,7 +286,7 @@ export default function Explore() {
 
       {/* Modal de Detalhes do Projeto */}
       <DialogRoot open={!!selectedTemplate} onOpenChange={(open) => !open && setSelectedTemplate(null)}>
-        <Dialog onClose={() => setSelectedTemplate(null)} className="w-full max-w-2xl overflow-hidden p-0 !bg-bolt-elements-background-depth-1">
+        <Dialog onClose={() => setSelectedTemplate(null)} className="w-full max-w-2xl overflow-hidden p-0 !bg-programe-elements-background-depth-1">
           {selectedTemplate && (
             <div className="flex flex-col max-h-[90vh]">
               {/* Header do Modal com Imagem */}
@@ -326,7 +325,7 @@ export default function Explore() {
                   </div>
                 </div>
 
-                <div className="prose dark:prose-invert text-bolt-elements-textSecondary text-sm leading-relaxed mb-8">
+                <div className="prose dark:prose-invert text-programe-elements-textSecondary text-sm leading-relaxed mb-8">
                   <p>{selectedTemplate.description}</p>
                   <p>
                     Este template é otimizado para performance e segue as melhores práticas de SEO e acessibilidade.
@@ -335,12 +334,12 @@ export default function Explore() {
                 </div>
 
                 <div className="mb-8">
-                  <h4 className="text-sm font-bold text-bolt-elements-textPrimary uppercase tracking-wider mb-4">Tecnologias</h4>
+                  <h4 className="text-sm font-bold text-programe-elements-textPrimary uppercase tracking-wider mb-4">Tecnologias</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedTemplate.technologies.map((tech: string) => (
                       <span
                         key={tech}
-                        className="px-3 py-1.5 bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor rounded-md text-sm text-bolt-elements-textSecondary font-medium"
+                        className="px-3 py-1.5 bg-programe-elements-background-depth-2 border border-programe-elements-borderColor rounded-md text-sm text-programe-elements-textSecondary font-medium"
                       >
                         {tech}
                       </span>
@@ -348,7 +347,7 @@ export default function Explore() {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 mt-auto border-t border-bolt-elements-borderColor">
+                <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 mt-auto border-t border-programe-elements-borderColor">
                   <Button
                     className="w-full sm:flex-1 bg-accent-500 hover:bg-accent-600 text-white font-medium py-2.5 rounded-xl transition-all shadow-lg shadow-accent-500/20"
                     onClick={() => {
@@ -359,12 +358,6 @@ export default function Explore() {
                   >
                     <span className="i-ph:rocket-launch w-5 h-5 mr-2" />
                     Começar com este Template
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full sm:w-auto border-bolt-elements-borderColor text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2 font-medium py-2.5 rounded-xl"
-                  >
-                    Visualizar Demo
                   </Button>
                 </div>
               </div>

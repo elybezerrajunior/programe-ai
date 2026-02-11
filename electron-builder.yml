@@ -1,5 +1,5 @@
 appId: com.stackblitz.bolt.diy
-productName: Bolt Local
+productName: Programe Local
 directories:
   buildResources: build
   output: dist

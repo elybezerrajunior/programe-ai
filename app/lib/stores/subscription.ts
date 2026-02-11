@@ -1,7 +1,7 @@
 import { atom } from 'nanostores';
 
 export interface SubscriptionState {
-  planType: 'free' | 'pro' | 'business' | 'enterprise';
+  planType: 'free' | 'starter' | 'builder' | 'pro' | 'business' | 'enterprise';
   status: 'active' | 'canceled' | 'expired' | 'pending';
   isLoaded: boolean;
 }

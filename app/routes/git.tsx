@@ -8,7 +8,7 @@ import BackgroundRays from '~/components/ui/BackgroundRays';
 import { requireAuth } from '~/lib/auth/session';
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Bolt' }, { name: 'description', content: 'Talk with Bolt, an AI assistant from StackBlitz' }];
+  return [{ title: 'Bolt' }, { name: 'description', content: 'Talk with Programe, an AI assistant from StackBlitz' }];
 };
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
@@ -19,7 +19,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
 
 export default function Index() {
   return (
-    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1">
+    <div className="flex flex-col h-full w-full bg-programe-elements-background-depth-1">
       <BackgroundRays />
       <Header />
       <ClientOnly fallback={<BaseChat />}>{() => <GitUrlImport />}</ClientOnly>

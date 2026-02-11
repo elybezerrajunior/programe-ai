@@ -225,7 +225,7 @@ export default function Signup() {
   const isSubmitting = navigation.state === 'submitting';
 
   return (
-    <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-programe-elements-background-depth-1 flex items-center justify-center p-6">
       <div className="w-full max-w-5xl">
         <div className="relative">
           <Card className="p-8 rounded-[2rem] relative z-10 overflow-hidden">
@@ -233,12 +233,12 @@ export default function Signup() {
             {isSubmitting ? (
               <div className="flex flex-col items-center justify-center py-16 px-8 min-h-[400px]">
                 <div className="flex flex-col items-center gap-6">
-                  <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-6xl animate-spin" />
+                  <div className="i-svg-spinners:90-ring-with-bg text-programe-elements-loader-progress text-6xl animate-spin" />
                   <div className="text-center">
-                    <h2 className="text-xl font-semibold text-bolt-elements-textPrimary mb-2">
+                    <h2 className="text-xl font-semibold text-programe-elements-textPrimary mb-2">
                       Criando conta...
                     </h2>
-                    <p className="text-sm text-bolt-elements-textSecondary">
+                    <p className="text-sm text-programe-elements-textSecondary">
                       Aguarde enquanto processamos seu cadastro
                     </p>
                   </div>
@@ -250,7 +250,7 @@ export default function Signup() {
                   <div className="flex-1 w-full">
                     <SignupFormWithAntifraud />
                   </div>
-                  <div className="lg:border-l border-bolt-elements-borderColor lg:pl-8 flex-1 w-full">
+                  <div className="lg:border-l border-programe-elements-borderColor lg:pl-8 flex-1 w-full">
                     <SignupFeatures />
                   </div>
                 </div>

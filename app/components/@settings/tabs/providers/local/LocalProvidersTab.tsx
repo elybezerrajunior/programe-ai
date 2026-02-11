@@ -309,13 +309,13 @@ export default function LocalProvidersTab() {
               <Cpu className="w-6 h-6 text-accent-500" />
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-bolt-elements-textPrimary">Provedores de IA Locais</h2>
-              <p className="text-sm text-bolt-elements-textSecondary">Configure e gerencie seus modelos de IA locais</p>
+              <h2 className="text-2xl font-semibold text-programe-elements-textPrimary">Provedores de IA Locais</h2>
+              <p className="text-sm text-programe-elements-textSecondary">Configure e gerencie seus modelos de IA locais</p>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-bolt-elements-textSecondary">Habilitar Todos</span>
+              <span className="text-sm font-medium text-programe-elements-textSecondary">Habilitar Todos</span>
               <Switch
                 checked={categoryEnabled}
                 onCheckedChange={handleToggleCategory}
@@ -327,7 +327,7 @@ export default function LocalProvidersTab() {
                 variant="outline"
                 size="sm"
                 onClick={() => setViewMode('guide')}
-                className="bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3 border-bolt-elements-borderColor hover:border-accent-500/30 transition-all duration-200 gap-2"
+                className="bg-programe-elements-background-depth-2 hover:bg-programe-elements-background-depth-3 border-programe-elements-borderColor hover:border-accent-500/30 transition-all duration-200 gap-2"
               >
                 <BookOpen className="w-4 h-4" />
                 Guia de Configuração
@@ -336,7 +336,7 @@ export default function LocalProvidersTab() {
                 variant="outline"
                 size="sm"
                 onClick={() => setViewMode('status')}
-                className="bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3 border-bolt-elements-borderColor hover:border-accent-500/30 transition-all duration-200 gap-2"
+                className="bg-programe-elements-background-depth-2 hover:bg-programe-elements-background-depth-3 border-programe-elements-borderColor hover:border-accent-500/30 transition-all duration-200 gap-2"
               >
                 <Activity className="w-4 h-4" />
                 Status
@@ -360,19 +360,19 @@ export default function LocalProvidersTab() {
 
               {/* Ollama Models Section */}
               {provider.name === 'Ollama' && provider.settings.enabled && (
-                <Card className="mt-4 bg-bolt-elements-background-depth-2">
+                <Card className="mt-4 bg-programe-elements-background-depth-2">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <PackageOpen className="w-5 h-5 text-accent-500" />
-                        <h3 className="text-lg font-semibold text-bolt-elements-textPrimary">Modelos Instalados</h3>
+                        <h3 className="text-lg font-semibold text-programe-elements-textPrimary">Modelos Instalados</h3>
                       </div>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={fetchOllamaModels}
                         disabled={isLoadingModels}
-                        className="bg-transparent hover:bg-bolt-elements-background-depth-2"
+                        className="bg-transparent hover:bg-programe-elements-background-depth-2"
                       >
                         {isLoadingModels ? (
                           <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -392,9 +392,9 @@ export default function LocalProvidersTab() {
                       </div>
                     ) : ollamaModels.length === 0 ? (
                       <div className="text-center py-8">
-                        <PackageOpen className="w-16 h-16 mx-auto text-bolt-elements-textTertiary mb-4" />
-                        <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">Nenhum Modelo Instalado</h3>
-                        <p className="text-sm text-bolt-elements-textSecondary mb-4">
+                        <PackageOpen className="w-16 h-16 mx-auto text-programe-elements-textTertiary mb-4" />
+                        <h3 className="text-lg font-medium text-programe-elements-textPrimary mb-2">Nenhum Modelo Instalado</h3>
+                        <p className="text-sm text-programe-elements-textSecondary mb-4">
                           Visit{' '}
                           <a
                             href="https://ollama.com/library"
@@ -442,19 +442,19 @@ export default function LocalProvidersTab() {
 
               {/* LM Studio Models Section */}
               {provider.name === 'LMStudio' && provider.settings.enabled && (
-                <Card className="mt-4 bg-bolt-elements-background-depth-2">
+                <Card className="mt-4 bg-programe-elements-background-depth-2">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Monitor className="w-5 h-5 text-blue-500" />
-                        <h3 className="text-lg font-semibold text-bolt-elements-textPrimary">Modelos Disponíveis</h3>
+                        <h3 className="text-lg font-semibold text-programe-elements-textPrimary">Modelos Disponíveis</h3>
                       </div>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => fetchLMStudioModels(provider.settings.baseUrl!)}
                         disabled={isLoadingLMStudioModels}
-                        className="bg-transparent hover:bg-bolt-elements-background-depth-2"
+                        className="bg-transparent hover:bg-programe-elements-background-depth-2"
                       >
                         {isLoadingLMStudioModels ? (
                           <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -474,9 +474,9 @@ export default function LocalProvidersTab() {
                       </div>
                     ) : lmStudioModels.length === 0 ? (
                       <div className="text-center py-8">
-                        <Monitor className="w-16 h-16 mx-auto text-bolt-elements-textTertiary mb-4" />
-                        <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">Nenhum Modelo Disponível</h3>
-                        <p className="text-sm text-bolt-elements-textSecondary mb-4">
+                        <Monitor className="w-16 h-16 mx-auto text-programe-elements-textTertiary mb-4" />
+                        <h3 className="text-lg font-medium text-programe-elements-textPrimary mb-2">Nenhum Modelo Disponível</h3>
+                        <p className="text-sm text-programe-elements-textSecondary mb-4">
                           Certifique-se de que o LM Studio está em execução com o servidor local iniciado e CORS habilitado.
                         </p>
                         <Button
@@ -499,18 +499,18 @@ export default function LocalProvidersTab() {
                     ) : (
                       <div className="grid gap-4">
                         {lmStudioModels.map((model) => (
-                          <Card key={model.id} className="bg-bolt-elements-background-depth-3">
+                          <Card key={model.id} className="bg-programe-elements-background-depth-3">
                             <CardContent className="p-4">
                               <div className="space-y-2">
                                 <div className="flex items-center gap-2">
-                                  <h4 className="text-sm font-medium text-bolt-elements-textPrimary font-mono">
+                                  <h4 className="text-sm font-medium text-programe-elements-textPrimary font-mono">
                                     {model.id}
                                   </h4>
                                   <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-500">
                                     Disponível
                                   </span>
                                 </div>
-                                <div className="flex items-center gap-4 text-xs text-bolt-elements-textSecondary">
+                                <div className="flex items-center gap-4 text-xs text-programe-elements-textSecondary">
                                   <div className="flex items-center gap-1">
                                     <Server className="w-3 h-3" />
                                     <span>{model.object}</span>
@@ -540,11 +540,11 @@ export default function LocalProvidersTab() {
         </div>
 
         {filteredProviders.length === 0 && (
-          <Card className="bg-bolt-elements-background-depth-2">
+          <Card className="bg-programe-elements-background-depth-2">
             <CardContent className="p-8 text-center">
-              <Server className="w-16 h-16 mx-auto text-bolt-elements-textTertiary mb-4" />
-              <h3 className="text-lg font-medium text-bolt-elements-textPrimary mb-2">Nenhum Provedor Local Disponível</h3>
-              <p className="text-sm text-bolt-elements-textSecondary">
+              <Server className="w-16 h-16 mx-auto text-programe-elements-textTertiary mb-4" />
+              <h3 className="text-lg font-medium text-programe-elements-textPrimary mb-2">Nenhum Provedor Local Disponível</h3>
+              <p className="text-sm text-programe-elements-textSecondary">
                 Provedores locais aparecerão aqui quando estiverem configurados no sistema.
               </p>
             </CardContent>

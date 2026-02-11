@@ -54,10 +54,10 @@ export function ProjectTypeTags({ selectedTypes = [], onTypeSelect }: ProjectTyp
             onClick={() => onTypeSelect?.(type.id, type.suggestion)}
             className={classNames(
               'px-4 py-2 rounded-full text-sm font-medium transition-all',
-              'border border-bolt-elements-borderColor',
+              'border border-programe-elements-borderColor',
               isSelected
                 ? 'bg-accent/10 text-accent border-accent'
-                : 'bg-bolt-elements-background-depth-1 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:border-bolt-elements-borderColorActive'
+                : 'bg-programe-elements-background-depth-1 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary hover:border-programe-elements-borderColorActive'
             )}
           >
             {type.label}

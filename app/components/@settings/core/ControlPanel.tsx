@@ -27,6 +27,12 @@ import CloudProvidersTab from '~/components/@settings/tabs/providers/cloud/Cloud
 import LocalProvidersTab from '~/components/@settings/tabs/providers/local/LocalProvidersTab';
 import McpTab from '~/components/@settings/tabs/mcp/McpTab';
 
+import { isGitHubConnected } from '~/lib/stores/githubConnection';
+import { isGitLabConnected } from '~/lib/stores/gitlabConnection';
+import { supabaseConnection } from '~/lib/stores/supabase';
+import { vercelConnection } from '~/lib/stores/vercel';
+import { netlifyConnection } from '~/lib/stores/netlify';
+
 interface ControlPanelProps {
   open: boolean;
   onClose: () => void;
@@ -60,6 +66,30 @@ export const ControlPanel = ({ open, onClose, tabFilter, initialTab }: ControlPa
   // Status hooks
   const { hasNewFeatures, unviewedFeatures, acknowledgeAllFeatures } = useFeatures();
   const { hasConnectionIssues, currentIssue, acknowledgeIssue } = useConnectionStatus();
+
+  // Connection states
+  const isGithubConnected = useStore(isGitHubConnected);
+  const isGitlabConnected = useStore(isGitLabConnected);
+  const supabaseState = useStore(supabaseConnection);
+  const vercelState = useStore(vercelConnection);
+  const netlifyState = useStore(netlifyConnection);
+
+  const getTabConnectionStatus = (tabId: TabType): boolean => {
+    switch (tabId) {
+      case 'github':
+        return isGithubConnected;
+      case 'gitlab':
+        return isGitlabConnected;
+      case 'supabase':
+        return !!supabaseState.isConnected;
+      case 'vercel':
+        return !!vercelState.user;
+      case 'netlify':
+        return !!netlifyState.user;
+      default:
+        return false;
+    }
+  };
 
   // Memoize the base tab configurations to avoid recalculation
   const baseTabConfig = useMemo(() => {
@@ -234,9 +264,9 @@ export const ControlPanel = ({ open, onClose, tabFilter, initialTab }: ControlPa
             <div
               className={classNames(
                 'w-[1200px] h-[90vh]',
-                'bg-bolt-elements-background-depth-1',
+                'bg-programe-elements-background-depth-1',
                 'rounded-2xl shadow-2xl',
-                'border border-bolt-elements-borderColor',
+                'border border-programe-elements-borderColor',
                 'flex flex-col overflow-hidden',
                 'relative',
                 'transform transition-all duration-200 ease-out',
@@ -258,11 +288,18 @@ export const ControlPanel = ({ open, onClose, tabFilter, initialTab }: ControlPa
                         <div className="i-ph:arrow-left w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-accent-500 transition-colors" />
                       </button>
                     )}
-                    <DialogTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <DialogTitle className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                       {showTabManagement
                         ? 'Gerenciamento de Abas'
                         : activeTab
-                          ? TAB_LABELS[activeTab]
+                          ? (
+                            <>
+                              {TAB_LABELS[activeTab]}
+                              {getTabConnectionStatus(activeTab) && (
+                                <div className="i-ph:check-circle w-5 h-5 text-green-500" title="Conectado" />
+                              )}
+                            </>
+                          )
                           : 'Painel de Controle'}
                     </DialogTitle>
                   </div>
@@ -319,6 +356,7 @@ export const ControlPanel = ({ open, onClose, tabFilter, initialTab }: ControlPa
                               onClick={() => handleTabClick(tab.id as TabType)}
                               isActive={activeTab === tab.id}
                               hasUpdate={getTabUpdateStatus(tab.id)}
+                              isConnected={getTabConnectionStatus(tab.id)}
                               statusMessage={getStatusMessage(tab.id)}
                               description={TAB_DESCRIPTIONS[tab.id]}
                               isLoading={loadingTab === tab.id}

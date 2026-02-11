@@ -115,10 +115,10 @@ export default function ResetPassword() {
 
   if (!ready) {
     return (
-      <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-programe-elements-background-depth-1 flex items-center justify-center p-6">
         <div className="flex flex-col items-center gap-4">
           <span className="i-ph:spinner-gap text-4xl text-accent animate-spin" />
-          <p className="text-sm text-bolt-elements-textSecondary">Verificando link...</p>
+          <p className="text-sm text-programe-elements-textSecondary">Verificando link...</p>
         </div>
       </div>
     );
@@ -126,20 +126,20 @@ export default function ResetPassword() {
 
   if (!hasRecoverySession) {
     return (
-      <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
+      <div className="min-h-screen bg-programe-elements-background-depth-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           <Card className="p-8 rounded-2xl text-center">
             <span className="i-ph:link-break text-5xl text-amber-500 mb-4 block" />
-            <h1 className="text-xl font-bold text-bolt-elements-textPrimary mb-2">
+            <h1 className="text-xl font-bold text-programe-elements-textPrimary mb-2">
               Link inválido ou expirado
             </h1>
-            <p className="text-sm text-bolt-elements-textSecondary mb-6">
+            <p className="text-sm text-programe-elements-textSecondary mb-6">
               O link de redefinição de senha não é válido ou já foi usado. Solicite um novo em &quot;Esqueceu a senha?&quot; na tela de login.
             </p>
             <Link to="/forgot-password" className="text-accent-500 hover:underline font-medium">
               Solicitar novo link
             </Link>
-            <span className="mx-2 text-bolt-elements-textTertiary">|</span>
+            <span className="mx-2 text-programe-elements-textTertiary">|</span>
             <Link to="/login" className="text-accent-500 hover:underline font-medium">
               Voltar ao login
             </Link>
@@ -150,18 +150,18 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-programe-elements-background-depth-1 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <Card className="p-8 rounded-2xl">
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-6">
               <span className="i-ph:rocket text-xl text-accent" />
-              <span className="text-xl font-semibold text-bolt-elements-textPrimary">Programe Studio</span>
+              <span className="text-xl font-semibold text-programe-elements-textPrimary">Programe Studio</span>
             </div>
-            <h1 className="text-2xl font-bold text-bolt-elements-textPrimary mb-2">
+            <h1 className="text-2xl font-bold text-programe-elements-textPrimary mb-2">
               Definir nova senha
             </h1>
-            <p className="text-sm text-bolt-elements-textSecondary">
+            <p className="text-sm text-programe-elements-textSecondary">
               Escolha uma senha segura com pelo menos 6 caracteres.
             </p>
           </div>
@@ -187,11 +187,11 @@ export default function ResetPassword() {
           {status !== 'success' && (
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="password" className="text-sm text-bolt-elements-textPrimary">
+                <Label htmlFor="password" className="text-sm text-programe-elements-textPrimary">
                   Nova senha
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none i-ph:lock w-4 h-4" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none i-ph:lock w-4 h-4" />
                   <Input
                     id="password"
                     type="password"
@@ -199,7 +199,7 @@ export default function ResetPassword() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className={classNames(
-                      'pl-10 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor',
+                      'pl-10 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor',
                       passwordError && 'border-red-500'
                     )}
                     required
@@ -210,11 +210,11 @@ export default function ResetPassword() {
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="confirmPassword" className="text-sm text-bolt-elements-textPrimary">
+                <Label htmlFor="confirmPassword" className="text-sm text-programe-elements-textPrimary">
                   Confirmar nova senha
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none i-ph:lock w-4 h-4" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none i-ph:lock w-4 h-4" />
                   <Input
                     id="confirmPassword"
                     type="password"
@@ -222,7 +222,7 @@ export default function ResetPassword() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className={classNames(
-                      'pl-10 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor',
+                      'pl-10 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor',
                       passwordError && 'border-red-500'
                     )}
                     required
@@ -256,7 +256,7 @@ export default function ResetPassword() {
             </form>
           )}
 
-          <div className="mt-6 pt-6 border-t border-bolt-elements-borderColor text-center">
+          <div className="mt-6 pt-6 border-t border-programe-elements-borderColor text-center">
             <Link to="/login" className="text-sm text-accent-500 hover:underline font-medium">
               Voltar para o login
             </Link>

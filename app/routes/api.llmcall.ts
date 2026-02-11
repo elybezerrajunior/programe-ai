@@ -1,4 +1,7 @@
 import { type ActionFunctionArgs } from '@remix-run/cloudflare';
+import { getSessionFromRequest } from '~/lib/auth/session';
+import { getSupabaseClient } from '~/lib/auth/supabase-client';
+import { hasSufficientCredits, deductCredits, calculateCost } from '~/lib/credits.server';
 import { streamText } from '~/lib/.server/llm/stream-text';
 import type { IProviderSetting, ProviderInfo } from '~/types/model';
 import { generateText } from 'ai';
@@ -86,6 +89,23 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
     }
   }
 
+  const session = await getSessionFromRequest(request, env);
+  const supabaseClient = getSupabaseClient(env);
+
+  if (session?.user?.id && supabaseClient) {
+    const hasCredits = await hasSufficientCredits(supabaseClient, session.user.id, 1);
+    if (!hasCredits) {
+      throw new Response(
+        JSON.stringify({
+          error: true,
+          message: 'Saldo insuficiente. Por favor, recarregue seus credits.',
+          statusCode: 402
+        }),
+        { status: 402, statusText: 'Payment Required', headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+  }
+
   const { system, message, model, provider, streamOutput } = await request.json<{
     system: string;
     message: string;
@@ -120,6 +140,17 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
       const result = await streamText({
         options: {
           system,
+          onFinish: async ({ usage }) => {
+            if (usage && session?.user?.id && supabaseClient) {
+              const cost = calculateCost(usage.totalTokens);
+              try {
+                await deductCredits(supabaseClient, session.user.id, cost);
+                logger.debug(`Deducted ${cost} credits for ${usage.totalTokens} tokens`);
+              } catch (err) {
+                logger.error('Failed to deduct credits in stream', err);
+              }
+            }
+          }
         },
         messages: [
           {
@@ -251,6 +282,14 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
       );
 
       const result = await generateText(finalParams);
+
+      if (result.usage && session?.user?.id && supabaseClient) {
+        const cost = calculateCost(result.usage.totalTokens);
+        // Não esperar
+        deductCredits(supabaseClient, session.user.id, cost).catch(err => {
+          logger.error('Failed to deduct credits in generateText', err);
+        });
+      }
       logger.info(`Generated response`);
 
       return new Response(JSON.stringify(result), {

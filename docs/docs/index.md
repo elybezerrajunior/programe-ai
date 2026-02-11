@@ -18,7 +18,7 @@
 
 ## Visão Geral
 
-**bolt.diy** é uma plataforma open-source de desenvolvimento web full-stack alimentada por IA que permite criar e desenvolver aplicações web diretamente no navegador. O projeto é a versão open-source oficial do Bolt.new, oferecendo a flexibilidade de escolher qual modelo de linguagem (LLM) usar para cada prompt.
+**bolt.diy** é uma plataforma open-source de desenvolvimento web full-stack alimentada por IA que permite criar e desenvolver aplicações web diretamente no navegador. O projeto é a versão open-source oficial do Programe.new, oferecendo a flexibilidade de escolher qual modelo de linguagem (LLM) usar para cada prompt.
 
 A aplicação utiliza o **WebContainer API** da StackBlitz para fornecer um ambiente de desenvolvimento Node.js completo no navegador, permitindo executar projetos, instalar dependências, executar servidores de desenvolvimento e visualizar aplicações em tempo real, tudo sem sair do navegador.
 
@@ -155,7 +155,7 @@ A forma mais simples de começar é baixar a aplicação desktop pré-compilada:
 1. **Download**: Acesse a [página de releases](https://github.com/stackblitz-labs/bolt.diy/releases/latest)
 2. **Instalação**:
    - **macOS**: Extraia o `.dmg` e arraste para Applications
-     - Se aparecer "app is damaged", execute: `xattr -cr /path/to/Bolt.app`
+     - Se aparecer "app is damaged", execute: `xattr -cr /path/to/Programe.app`
    - **Windows**: Execute o `.exe` installer
    - **Linux**: Extraia e execute o AppImage ou instale o `.deb`
 
@@ -240,14 +240,14 @@ cp .env.example .env.local
 ```bash
 pnpm run dockerbuild
 # Ou diretamente:
-docker build -t bolt-ai:development -t bolt-ai:latest --target development .
+docker build -t programe-ai:development -t programe-ai:latest --target development .
 ```
 
 **Produção** (otimizada):
 ```bash
 pnpm run dockerbuild:prod
 # Ou diretamente:
-docker build -t bolt-ai:production -t bolt-ai:latest --target bolt-ai-production .
+docker build -t programe-ai:production -t programe-ai:latest --target programe-ai-production .
 ```
 
 #### Passo 3: Executar Container
@@ -262,7 +262,7 @@ docker compose --profile development up
 docker compose --profile production up
 
 # Ou container one-off:
-docker run --rm -p 5173:5173 --env-file .env.local bolt-ai:latest
+docker run --rm -p 5173:5173 --env-file .env.local programe-ai:latest
 ```
 
 O container de desenvolvimento monta o código local, permitindo hot reload. O container de produção executa a versão otimizada.
@@ -429,9 +429,9 @@ Ou manualmente:
 
 ```bash
 docker build \
-  -t bolt-ai:production \
-  -t bolt-ai:latest \
-  --target bolt-ai-production \
+  -t programe-ai:production \
+  -t programe-ai:latest \
+  --target programe-ai-production \
   .
 ```
 
@@ -439,10 +439,10 @@ docker build \
 
 ```bash
 docker run -d \
-  --name bolt-ai \
+  --name programe-ai \
   -p 5173:5173 \
   --env-file .env.local \
-  bolt-ai:production
+  programe-ai:production
 ```
 
 #### Docker Compose (Produção)
@@ -790,7 +790,7 @@ BOLT_LLM_MODEL=llama2
 
 ## Configuração de Provedores de IA (Método Manual)
 
-Bolt.diy oferece uma interface moderna e intuitiva para gerenciar provedores de IA e chaves de API.
+Programe.ai oferece uma interface moderna e intuitiva para gerenciar provedores de IA e chaves de API.
 
 ### Acessando Configurações de Provedores
 
@@ -841,7 +841,7 @@ A aba Local Providers gerencia instalações locais de IA:
 
 ### Variáveis de Ambiente vs UI
 
-Bolt.diy suporta ambos os métodos:
+Programe.ai suporta ambos os métodos:
 
 #### Variáveis de Ambiente (Recomendado para Produção)
 
@@ -891,7 +891,7 @@ OLLAMA_BASE_URL=http://127.0.0.1:11434
 
 ## Templates de Projetos
 
-Bolt.diy vem com uma coleção abrangente de templates para iniciar projetos rapidamente:
+Programe.ai vem com uma coleção abrangente de templates para iniciar projetos rapidamente:
 
 ### Frameworks Frontend
 
@@ -940,7 +940,7 @@ Todos os templates vêm pré-configurados com tooling moderno, linting e process
 
 ### Ícone de Ajuda na Sidebar
 
-Bolt.diy inclui um ícone de ajuda (?) na sidebar que fornece acesso rápido à documentação completa. Clique no ícone para abrir a documentação em nova aba.
+Programe.ai inclui um ícone de ajuda (?) na sidebar que fornece acesso rápido à documentação completa. Clique no ícone para abrir a documentação em nova aba.
 
 A documentação inclui:
 - **Guias de setup completos** para todos os provedores

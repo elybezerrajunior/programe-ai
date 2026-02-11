@@ -4,7 +4,7 @@
     --workbench-left: 0;
 
     .Chat {
-      --at-apply: bolt-ease-cubic-bezier;
+      --at-apply: programe-ease-cubic-bezier;
       transition-property: transform, opacity;
       transition-duration: 0.3s;
       will-change: transform, opacity;
@@ -18,8 +18,8 @@
   opacity: 1;
   position: relative;
   /* Coluna do chat: borda sutil e fundo levemente elevado */
-  border-left: 1px solid var(--bolt-elements-borderColor);
-  background: var(--bolt-elements-bg-depth-1);
+  border-left: 1px solid var(--programe-elements-borderColor);
+  background: var(--programe-elements-bg-depth-1);
   box-shadow: -4px 0 20px -8px rgba(0, 0, 0, 0.08);
   animation: chatColumnFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -29,6 +29,7 @@
     opacity: 0;
     transform: translateX(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -36,12 +37,10 @@
 }
 
 :root[data-theme='dark'] .Chat {
-  background: linear-gradient(
-    180deg,
-    var(--bolt-elements-bg-depth-1) 0%,
-    var(--bolt-elements-bg-depth-2) 6%,
-    var(--bolt-elements-bg-depth-1) 100%
-  );
+  background: linear-gradient(180deg,
+      var(--programe-elements-bg-depth-1) 0%,
+      var(--programe-elements-bg-depth-2) 6%,
+      var(--programe-elements-bg-depth-1) 100%);
   box-shadow: -8px 0 28px -8px rgba(0, 0, 0, 0.35);
 }
 
@@ -60,14 +59,14 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: var(--bolt-elements-bg-depth-3);
+    background-color: var(--programe-elements-bg-depth-3);
     border-radius: 9999px;
     border: 1px solid transparent;
     background-clip: content-box;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background-color: var(--bolt-elements-borderColor);
+    background-color: var(--programe-elements-borderColor);
   }
 
   scrollbar-width: none;
@@ -78,15 +77,16 @@
 .Chat:hover .ChatScrollbar {
   &::-webkit-scrollbar {
     width: 4px;
-    height: 0; /* só vertical, sem scroll horizontal */
+    height: 0;
+    /* só vertical, sem scroll horizontal */
   }
 
   scrollbar-width: thin;
-  scrollbar-color: var(--bolt-elements-bg-depth-3) transparent;
+  scrollbar-color: var(--programe-elements-bg-depth-3) transparent;
 }
 
 .Chat:hover .ChatScrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--bolt-elements-borderColor);
+  background-color: var(--programe-elements-borderColor);
 }
 
 .PromptEffectContainer {
@@ -136,6 +136,7 @@
   0% {
     stroke-dashoffset: 0;
   }
+
   100% {
     stroke-dashoffset: -100px;
   }

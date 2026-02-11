@@ -1,13 +1,13 @@
 import type { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import { atom, type WritableAtom } from 'nanostores';
 import type { ITerminal } from '~/types/terminal';
-import { newBoltShellProcess, newShellProcess } from '~/utils/shell';
+import { newProgrameShellProcess, newShellProcess } from '~/utils/shell';
 import { coloredText } from '~/utils/terminal';
 
 export class TerminalStore {
   #webcontainer: Promise<WebContainer>;
   #terminals: Array<{ terminal: ITerminal; process: WebContainerProcess }> = [];
-  #boltTerminal = newBoltShellProcess();
+  #boltTerminal = newProgrameShellProcess();
 
   showTerminal: WritableAtom<boolean> = import.meta.hot?.data.showTerminal ?? atom(false);
 
@@ -25,7 +25,7 @@ export class TerminalStore {
   toggleTerminal(value?: boolean) {
     this.showTerminal.set(value !== undefined ? value : !this.showTerminal.get());
   }
-  async attachBoltTerminal(terminal: ITerminal) {
+  async attachProgrameTerminal(terminal: ITerminal) {
     try {
       const wc = await this.#webcontainer;
       await this.#boltTerminal.init(wc, terminal);

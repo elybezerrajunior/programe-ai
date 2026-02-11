@@ -44,7 +44,7 @@ export function extractPropertiesFromMessage(message: Omit<Message, 'id'>): {
   return { model, provider, content: cleanedContent };
 }
 
-export function simplifyBoltActions(input: string): string {
+export function simplifyProgrameActions(input: string): string {
   // Using regex to match boltAction tags that have type="file"
   const regex = /(<boltAction[^>]*type="file"[^>]*>)([\s\S]*?)(<\/boltAction>)/g;
 

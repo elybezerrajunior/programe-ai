@@ -10,16 +10,16 @@ export function NewProjectCard({ onClick }: NewProjectCardProps) {
     <Card
       className={classNames(
         'p-6 cursor-pointer transition-all border-dashed rounded-xl',
-        'bg-transparent hover:border-bolt-elements-borderColorActive hover:bg-bolt-elements-background-depth-2',
+        'bg-transparent hover:border-programe-elements-borderColorActive hover:bg-programe-elements-background-depth-2',
         'flex flex-col items-center justify-center min-h-[200px]'
       )}
       onClick={onClick}
     >
-      <div className="w-16 h-16 rounded-full bg-bolt-elements-background-depth-3 flex items-center justify-center mb-4">
-        <div className="i-ph:plus text-3xl text-bolt-elements-textSecondary" />
+      <div className="w-16 h-16 rounded-full bg-programe-elements-background-depth-3 flex items-center justify-center mb-4">
+        <div className="i-ph:plus text-3xl text-programe-elements-textSecondary" />
       </div>
-      <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-1">Novo projeto</h3>
-      <p className="text-sm text-bolt-elements-textTertiary">Template em branco</p>
+      <h3 className="text-lg font-semibold text-programe-elements-textPrimary mb-1">Novo projeto</h3>
+      <p className="text-sm text-programe-elements-textTertiary">Template em branco</p>
     </Card>
   );
 }

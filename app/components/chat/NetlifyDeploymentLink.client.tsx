@@ -28,7 +28,7 @@ export function NetlifyDeploymentLink() {
             href={deployedSite.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-bolt-elements-item-backgroundActive text-bolt-elements-textSecondary hover:text-[#00AD9F] z-50"
+            className="inline-flex items-center justify-center w-8 h-8 rounded hover:bg-programe-elements-item-backgroundActive text-programe-elements-textSecondary hover:text-[#00AD9F] z-50"
             onClick={(e) => {
               e.stopPropagation(); // This is to prevent click from bubbling up
             }}
@@ -38,11 +38,11 @@ export function NetlifyDeploymentLink() {
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
-            className="px-3 py-2 rounded bg-bolt-elements-background-depth-3 text-bolt-elements-textPrimary text-xs z-50"
+            className="px-3 py-2 rounded bg-programe-elements-background-depth-3 text-programe-elements-textPrimary text-xs z-50"
             sideOffset={5}
           >
             {deployedSite.url}
-            <Tooltip.Arrow className="fill-bolt-elements-background-depth-3" />
+            <Tooltip.Arrow className="fill-programe-elements-background-depth-3" />
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>

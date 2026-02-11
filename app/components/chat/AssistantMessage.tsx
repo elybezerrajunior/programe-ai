@@ -30,8 +30,8 @@ interface AssistantMessageProps {
   model?: string;
   provider?: ProviderInfo;
   parts:
-    | (TextUIPart | ReasoningUIPart | ToolInvocationUIPart | SourceUIPart | FileUIPart | StepStartUIPart)[]
-    | undefined;
+  | (TextUIPart | ReasoningUIPart | ToolInvocationUIPart | SourceUIPart | FileUIPart | StepStartUIPart)[]
+  | undefined;
   addToolResult: ({ toolCallId, result }: { toolCallId: string; result: any }) => void;
 }
 
@@ -100,27 +100,27 @@ export const AssistantMessage = memo(
     return (
       <div className="overflow-hidden w-full">
         <>
-          <div className=" flex gap-2 items-center text-sm text-bolt-elements-textSecondary mb-2">
+          <div className=" flex gap-2 items-center text-sm text-programe-elements-textSecondary mb-2">
             {(codeContext || chatSummary) && (
               <Popover side="right" align="start" trigger={<div className="i-ph:info" />}>
                 {chatSummary && (
                   <div className="max-w-chat">
                     <div className="summary max-h-96 flex flex-col">
-                      <h2 className="border border-bolt-elements-borderColor rounded-md p4">Resumo</h2>
+                      <h2 className="border border-programe-elements-borderColor rounded-md p4">Resumo</h2>
                       <div style={{ zoom: 0.7 }} className="overflow-y-auto m4">
                         <Markdown>{chatSummary}</Markdown>
                       </div>
                     </div>
                     {codeContext && (
-                      <div className="code-context flex flex-col p4 border border-bolt-elements-borderColor rounded-md">
+                      <div className="code-context flex flex-col p4 border border-programe-elements-borderColor rounded-md">
                         <h2>Contexto</h2>
-                        <div className="flex gap-4 mt-4 bolt" style={{ zoom: 0.6 }}>
+                        <div className="flex gap-4 mt-4 programe" style={{ zoom: 0.6 }}>
                           {codeContext.map((x) => {
                             const normalized = normalizedFilePath(x);
                             return (
                               <Fragment key={normalized}>
                                 <code
-                                  className="bg-bolt-elements-artifacts-inlineCode-background text-bolt-elements-artifacts-inlineCode-text px-1.5 py-1 rounded-md text-bolt-elements-item-contentAccent hover:underline cursor-pointer"
+                                  className="bg-programe-elements-artifacts-inlineCode-background text-programe-elements-artifacts-inlineCode-text px-1.5 py-1 rounded-md text-programe-elements-item-contentAccent hover:underline cursor-pointer"
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -153,7 +153,7 @@ export const AssistantMessage = memo(
                       <button
                         onClick={() => onRewind(messageId)}
                         key="i-ph:arrow-u-up-left"
-                        className="i-ph:arrow-u-up-left text-xl text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors"
+                        className="i-ph:arrow-u-up-left text-xl text-programe-elements-textSecondary hover:text-programe-elements-textPrimary transition-colors"
                       />
                     </WithTooltip>
                   )}
@@ -162,7 +162,7 @@ export const AssistantMessage = memo(
                       <button
                         onClick={() => onFork(messageId)}
                         key="i-ph:git-fork"
-                        className="i-ph:git-fork text-xl text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors"
+                        className="i-ph:git-fork text-xl text-programe-elements-textSecondary hover:text-programe-elements-textPrimary transition-colors"
                       />
                     </WithTooltip>
                   )}

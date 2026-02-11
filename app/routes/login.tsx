@@ -122,7 +122,7 @@ export default function Login() {
     navigation.state === 'submitting' || navigation.state === 'loading';
 
   return (
-    <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-programe-elements-background-depth-1 flex items-center justify-center p-6">
       <div className="w-full max-w-5xl">
         <div className="relative">
           <Card className="p-8 rounded-[2rem] relative z-10 overflow-hidden">
@@ -130,14 +130,14 @@ export default function Login() {
             {showLoading ? (
               <div className="flex flex-col items-center justify-center py-16 px-8 min-h-[400px]">
                 <div className="flex flex-col items-center gap-6">
-                  <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-6xl animate-spin" />
+                  <div className="i-svg-spinners:90-ring-with-bg text-programe-elements-loader-progress text-6xl animate-spin" />
                   <div className="text-center">
-                    <h2 className="text-xl font-semibold text-bolt-elements-textPrimary mb-2">
+                    <h2 className="text-xl font-semibold text-programe-elements-textPrimary mb-2">
                       {navigation.state === 'submitting'
                         ? 'Entrando...'
                         : 'Redirecionando...'}
                     </h2>
-                    <p className="text-sm text-bolt-elements-textSecondary">
+                    <p className="text-sm text-programe-elements-textSecondary">
                       {navigation.state === 'submitting'
                         ? 'Aguarde enquanto processamos seu login'
                         : 'Em instantes você estará na home'}
@@ -152,12 +152,12 @@ export default function Login() {
                   <div className="flex-1 w-full">
                     <LoginForm />
                   </div>
-                  <div className="lg:border-l border-bolt-elements-borderColor lg:pl-8 flex-1 w-full">
+                  <div className="lg:border-l border-programe-elements-borderColor lg:pl-8 flex-1 w-full">
                     <LoginFeatures />
                   </div>
                 </div>
-                <div className="text-center mt-8 pt-6 border-t border-bolt-elements-borderColor">
-                  <span className="text-sm text-bolt-elements-textSecondary">
+                <div className="text-center mt-8 pt-6 border-t border-programe-elements-borderColor">
+                  <span className="text-sm text-programe-elements-textSecondary">
                     Novo por aqui?{' '}
                     <a
                       href="/signup"
