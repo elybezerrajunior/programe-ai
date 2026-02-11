@@ -28,7 +28,7 @@ import type { ElementInfo } from '~/components/workbench/Inspector';
 import type { TextUIPart, FileUIPart, Attachment } from '@ai-sdk/ui-utils';
 import { useMCPStore } from '~/lib/stores/mcp';
 import type { LlmErrorAlertType } from '~/types/actions';
-import { homeHeroFilesStore } from '~/lib/stores/homeFiles';
+import { homeHeroFilesStore, homeHeroPromptStore } from '~/lib/stores/homeFiles';
 import type { FileMap } from '~/lib/stores/files';
 
 const logger = createScopedLogger('Chat');
@@ -227,7 +227,7 @@ export const ChatImpl = memo(
         logger.debug('Finished streaming');
       },
       initialMessages,
-      initialInput: Cookies.get(PROMPT_COOKIE_KEY) || '',
+      initialInput: homeHeroPromptStore.get() || Cookies.get(PROMPT_COOKIE_KEY) || '',
     });
     useEffect(() => {
       const prompt = searchParams.get('prompt');
@@ -690,20 +690,27 @@ export const ChatImpl = memo(
 
     useEffect(() => {
       const cookiePrompt = Cookies.get(PROMPT_COOKIE_KEY);
+      const storePrompt = homeHeroPromptStore.get();
+      const promptToUse = storePrompt || cookiePrompt;
 
-      // If chat was just started (not already started) and there's a cookie prompt
+      // If chat was just started (not already started) and there's a prompt (from store or cookie)
       // This happens when user clicks "Gerar projeto" in HomeHero
       if (
         chatStoreValue.started &&
         !chatStarted &&
         !hasAutoSentRef.current &&
-        cookiePrompt &&
-        cookiePrompt.trim() &&
+        promptToUse &&
+        promptToUse.trim() &&
         messages.length === 0 &&
         !isLoading &&
         initialMessages.length === 0 // Only auto-send if there are no initial messages
       ) {
         hasAutoSentRef.current = true;
+
+        // Clear store after reading if it was used
+        if (storePrompt) {
+          homeHeroPromptStore.set('');
+        }
 
         // Get files from HomeHero store if available
         const homeFiles = homeHeroFilesStore.get();
@@ -717,7 +724,7 @@ export const ChatImpl = memo(
         // The sendMessage function will call runAnimation which sets chatStarted
         setTimeout(() => {
           const syntheticEvent = {} as React.UIEvent;
-          sendMessage(syntheticEvent, cookiePrompt);
+          sendMessage(syntheticEvent, promptToUse);
         }, 150);
       }
 

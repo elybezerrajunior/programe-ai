@@ -14,7 +14,7 @@ import type { ProviderInfo } from '~/types/model';
 import { usePromptEnhancer } from '~/lib/hooks/usePromptEnhancer';
 import { useSettings } from '~/lib/hooks/useSettings';
 import { useLLMConfig } from '~/lib/hooks/useLLMConfig';
-import { homeHeroFilesStore } from '~/lib/stores/homeFiles';
+import { homeHeroFilesStore, homeHeroPromptStore } from '~/lib/stores/homeFiles';
 import { ColorSchemeDialog } from '~/components/ui/ColorSchemeDialog';
 import { BlueprintModal } from '~/components/chat/BlueprintModal';
 import { useStore } from '@nanostores/react';
@@ -155,6 +155,9 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
       if (uploadedFiles.length > 0) {
         homeHeroFilesStore.set(uploadedFiles);
       }
+
+      // Store prompt in memory for reliable transfer (fixes cookie size limits)
+      homeHeroPromptStore.set(projectDescription.trim());
 
       // Pass design scheme (theme/palette) to Chat so projects use the selected theme
       chatStore.setKey('designScheme', designScheme);
