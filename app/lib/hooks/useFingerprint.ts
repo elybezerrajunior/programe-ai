@@ -1,16 +1,17 @@
 /**
  * Hook para coleta de Fingerprint do dispositivo
- * 
+ *
  * Usa FingerprintJS para identificação probabilística do dispositivo.
- * 
+ *
  * Instalação:
  * pnpm add @fingerprintjs/fingerprintjs
- * 
+ *
  * Opcionalmente, para maior precisão:
  * pnpm add @fingerprintjs/fingerprintjs-pro
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 /**
  * Resultado do fingerprint
@@ -71,26 +72,22 @@ export function useFingerprint(): FingerprintResult & DeviceData & { refetch: ()
       };
       
       setDeviceData(basicDeviceData);
-      
-      // Tentar carregar FingerprintJS dinamicamente
+
+      // Tentar carregar FingerprintJS
       try {
-        const FingerprintJS = await import('@fingerprintjs/fingerprintjs');
         const fp = await FingerprintJS.load();
         const result = await fp.get();
-        
+
         setFingerprintId(result.visitorId);
         setFingerprintConfidence(result.confidence.score);
-        
       } catch (fpError) {
-        // FingerprintJS não está instalado ou falhou
-        // Usar fallback baseado em dados do navegador
+        // FingerprintJS não está instalado ou falhou — usar fallback
         console.warn('FingerprintJS not available, using fallback:', fpError);
-        
+
         const fallbackId = await generateFallbackFingerprint(basicDeviceData);
         setFingerprintId(fallbackId);
-        setFingerprintConfidence(0.5);  // Confiança menor para fallback
+        setFingerprintConfidence(0.5);
       }
-      
     } catch (err) {
       console.error('Error collecting fingerprint:', err);
       setError(err instanceof Error ? err.message : 'Erro ao coletar fingerprint');
@@ -117,9 +114,8 @@ export function useFingerprint(): FingerprintResult & DeviceData & { refetch: ()
 
 /**
  * Gera um fingerprint fallback quando FingerprintJS não está disponível
- * 
+ *
  * Usa dados disponíveis do navegador para criar um hash único.
- * Menos preciso que FingerprintJS, mas melhor que nada.
  */
 async function generateFallbackFingerprint(deviceData: DeviceData): Promise<string> {
   const components = [

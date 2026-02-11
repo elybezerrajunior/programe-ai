@@ -54,14 +54,18 @@ const WINDOW_SIZES: WindowSize[] = [
 ];
 
 const PREVIEW_LOADING_MESSAGES = [
-  'Analisando sua solicitação...',
-  'Montando a estrutura do projeto...',
-  'Gerando o código...',
-  'Instalando dependências...',
-  'Preparando o ambiente...',
-  'Iniciando o servidor...',
+  'Entendendo o que você pediu...',
+  'Organizando as pastas do seu projeto...',
+  'Escrevendo a tela e os componentes...',
+  'Separando as bibliotecas que vamos usar...',
+  'Baixando e instalando o que precisa...',
+  'Montando tudo para funcionar...',
+  'Ligando o motor da sua aplicação...',
+  'Preparando a prévia para você ver...',
+  'Dando uma última conferida...',
+  'Quase lá — só mais um instante...',
   'Sua aplicação está quase pronta...',
-  'Finalizando...',
+  'Em breve você pode testar tudo aí...',
 ];
 
 export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
@@ -134,7 +138,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
     if (!activePreview) {
       const interval = setInterval(() => {
         setLoadingMessageIndex((i) => (i + 1) % PREVIEW_LOADING_MESSAGES.length);
-      }, 2800);
+      }, 2200);
       return () => clearInterval(interval);
     }
   }, [activePreview]);

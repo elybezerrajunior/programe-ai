@@ -3,7 +3,14 @@ import { Dialog, DialogTitle, DialogDescription, DialogRoot } from './Dialog';
 import { Button } from './Button';
 import { IconButton } from './IconButton';
 import type { DesignScheme } from '~/types/design-scheme';
-import { defaultDesignScheme, designFeatures, designFonts, paletteRoles } from '~/types/design-scheme';
+import {
+  defaultDesignScheme,
+  designFeatures,
+  designFonts,
+  paletteRoles,
+  themePresets,
+  type ThemePreset,
+} from '~/types/design-scheme';
 
 export interface ColorSchemeDialogProps {
   designScheme?: DesignScheme;
@@ -21,57 +28,88 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
 
   const [features, setFeatures] = useState<string[]>(designScheme?.features || defaultDesignScheme.features);
   const [font, setFont] = useState<string[]>(designScheme?.font || defaultDesignScheme.font);
+  const [selectedThemeId, setSelectedThemeId] = useState<string | undefined>(designScheme?.themeId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<'colors' | 'typography' | 'features'>('colors');
+  const [activeSection, setActiveSection] = useState<'colors' | 'typography' | 'features' | 'themes'>('themes');
 
   useEffect(() => {
     if (designScheme) {
       setPalette(() => ({ ...defaultDesignScheme.palette, ...designScheme.palette }));
       setFeatures(designScheme.features || defaultDesignScheme.features);
       setFont(designScheme.font || defaultDesignScheme.font);
+      setSelectedThemeId(designScheme.themeId);
     } else {
       setPalette(defaultDesignScheme.palette);
       setFeatures(defaultDesignScheme.features);
       setFont(defaultDesignScheme.font);
+      setSelectedThemeId(undefined);
     }
   }, [designScheme]);
 
   const handleColorChange = (role: string, value: string) => {
+    setSelectedThemeId(undefined); // Ao editar manualmente, deixa de ser tema pré-definido
     setPalette((prev) => ({ ...prev, [role]: value }));
   };
 
   const handleFeatureToggle = (key: string) => {
+    setSelectedThemeId(undefined);
     setFeatures((prev) => (prev.includes(key) ? prev.filter((f) => f !== key) : [...prev, key]));
   };
 
   const handleFontToggle = (key: string) => {
+    setSelectedThemeId(undefined);
     setFont((prev) => (prev.includes(key) ? prev.filter((f) => f !== key) : [...prev, key]));
   };
 
   const handleSave = () => {
-    setDesignScheme?.({ palette, features, font });
+    if (selectedThemeId) {
+      const theme = themePresets.find((t) => t.id === selectedThemeId);
+      if (theme) {
+        const fullPalette = { ...defaultDesignScheme.palette, ...theme.scheme.palette };
+        setDesignScheme?.({
+          palette: fullPalette,
+          features: theme.scheme.features,
+          font: theme.scheme.font,
+          themeId: selectedThemeId,
+        });
+      } else {
+        setDesignScheme?.({ palette, features, font, themeId: selectedThemeId });
+      }
+    } else {
+      setDesignScheme?.({ palette, features, font });
+    }
     setIsDialogOpen(false);
   };
 
   const handleReset = () => {
+    setSelectedThemeId(undefined);
     setPalette(defaultDesignScheme.palette);
     setFeatures(defaultDesignScheme.features);
     setFont(defaultDesignScheme.font);
   };
 
+  const handleThemeSelect = (theme: ThemePreset) => {
+    setSelectedThemeId(theme.id);
+    setPalette({ ...defaultDesignScheme.palette, ...theme.scheme.palette });
+    setFeatures(theme.scheme.features);
+    setFont(theme.scheme.font);
+  };
+
+  const isThemeSelected = (theme: ThemePreset) => selectedThemeId === theme.id;
+
   const renderColorSection = () => (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-programe-elements-textPrimary flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-programe-elements-item-contentAccent"></div>
-          Color Palette
+        <h3 className="text-base font-semibold text-programe-elements-textPrimary flex items-center gap-2">
+          <span className="i-ph:palette text-programe-elements-item-contentAccent text-sm" />
+          Paleta de cores
         </h3>
         <button
           onClick={handleReset}
-          className="text-sm bg-transparent hover:bg-programe-elements-bg-depth-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary rounded-lg flex items-center gap-2 transition-all duration-200"
+          className="text-sm bg-transparent hover:bg-programe-elements-background-depth-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary rounded-lg flex items-center gap-2 transition-all duration-200"
         >
           <span className="i-ph:arrow-clockwise text-sm" />
-          Reset
+          Redefinir
         </button>
       </div>
 
@@ -79,7 +117,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
         {paletteRoles.map((role) => (
           <div
             key={role.key}
-            className="group flex items-center gap-4 p-4 rounded-xl bg-programe-elements-bg-depth-3 hover:bg-programe-elements-bg-depth-2 border border-transparent hover:border-programe-elements-borderColor transition-all duration-200"
+            className="group flex items-center gap-4 p-4 rounded-xl bg-programe-elements-background-depth-3 hover:bg-programe-elements-background-depth-2 border border-programe-elements-borderColor/30 hover:border-programe-elements-borderColor transition-all duration-200"
           >
             <div className="relative flex-shrink-0">
               <div
@@ -88,7 +126,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                 onClick={() => document.getElementById(`color-input-${role.key}`)?.click()}
                 role="button"
                 tabIndex={0}
-                aria-label={`Change ${role.label} color`}
+                aria-label={`Alterar cor de ${role.label}`}
               />
               <input
                 id={`color-input-${role.key}`}
@@ -98,7 +136,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 tabIndex={-1}
               />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-programe-elements-bg-depth-1 rounded-full flex items-center justify-center shadow-sm">
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-programe-elements-background-depth-1 rounded-full flex items-center justify-center shadow-sm">
                 <span className="i-ph:pencil-simple text-xs text-programe-elements-textSecondary" />
               </div>
             </div>
@@ -107,7 +145,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
               <div className="text-sm text-programe-elements-textSecondary line-clamp-2 leading-relaxed">
                 {role.description}
               </div>
-              <div className="text-xs text-programe-elements-textTertiary font-mono mt-1 px-2 py-1 bg-programe-elements-bg-depth-1 rounded-md inline-block">
+              <div className="text-xs text-programe-elements-textTertiary font-mono mt-1 px-2 py-1 bg-programe-elements-background-depth-1 rounded-md inline-block">
                 {palette[role.key]}
               </div>
             </div>
@@ -119,9 +157,9 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
 
   const renderTypographySection = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-programe-elements-textPrimary flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-programe-elements-item-contentAccent"></div>
-        Typography
+      <h3 className="text-base font-semibold text-programe-elements-textPrimary flex items-center gap-2">
+        <span className="i-ph:text-aa text-programe-elements-item-contentAccent text-sm" />
+        Tipografia
       </h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
@@ -133,7 +171,7 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
             className={`group p-4 rounded-xl border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-programe-elements-borderColorActive ${
               font.includes(f.key)
                 ? 'bg-programe-elements-item-backgroundAccent border-programe-elements-borderColorActive shadow-lg'
-                : 'bg-programe-elements-background-depth-3 border-programe-elements-borderColor hover:border-programe-elements-borderColorActive hover:bg-programe-elements-bg-depth-2'
+                : 'bg-programe-elements-background-depth-3 border-programe-elements-borderColor hover:border-programe-elements-borderColorActive hover:bg-programe-elements-background-depth-2'
             }`}
           >
             <div className="text-center space-y-2">
@@ -166,9 +204,9 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
 
   const renderFeaturesSection = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-programe-elements-textPrimary flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-programe-elements-item-contentAccent"></div>
-        Design Features
+      <h3 className="text-base font-semibold text-programe-elements-textPrimary flex items-center gap-2">
+        <span className="i-ph:magic-wand text-programe-elements-item-contentAccent text-sm" />
+        Recursos de design
       </h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
@@ -197,19 +235,19 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                       ? ''
                       : isSelected
                         ? 'bg-programe-elements-item-backgroundAccent text-programe-elements-item-contentAccent shadow-lg'
-                        : 'bg-programe-elements-bg-depth-3 hover:bg-programe-elements-bg-depth-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary'
+                        : 'bg-programe-elements-background-depth-3 hover:bg-programe-elements-background-depth-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary'
                 } ${f.key === 'shadow' ? (isSelected ? 'shadow-xl' : 'shadow-lg') : 'shadow-md'}`}
                 style={{
                   ...(f.key === 'gradient' && {
                     background: isSelected
-                      ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-                      : 'var(--programe-elements-bg-depth-3)',
+                      ? 'linear-gradient(135deg, #0D9488 0%, #059669 50%, #34D399 100%)'
+                      : 'var(--programe-elements-background-depth-3)',
                     color: isSelected ? 'white' : 'var(--programe-elements-textSecondary)',
                   }),
                 }}
               >
                 <div className="flex flex-col items-center gap-4">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-programe-elements-bg-depth-1 bg-opacity-20">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-programe-elements-background-depth-1 bg-opacity-20">
                     {f.key === 'rounded' && (
                       <div
                         className={`w-6 h-6 bg-current transition-all duration-200 ${
@@ -225,7 +263,10 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
                       />
                     )}
                     {f.key === 'gradient' && (
-                      <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-accent-400 via-cyan-400 to-blue-400 opacity-90" />
+                      <div
+                        className="w-6 h-6 rounded-lg opacity-90"
+                        style={{ background: 'linear-gradient(135deg, #0D9488 0%, #059669 50%, #34D399 100%)' }}
+                      />
                     )}
                     {f.key === 'shadow' && (
                       <div className="relative">
@@ -270,69 +311,157 @@ export const ColorSchemeDialog: React.FC<ColorSchemeDialogProps> = ({ setDesignS
     </div>
   );
 
+  const renderThemesSection = () => (
+    <div className="space-y-4">
+      <h3 className="text-base font-semibold text-programe-elements-textPrimary flex items-center gap-2">
+        <span className="i-ph:sun text-programe-elements-item-contentAccent text-sm" />
+        Temas pré-definidos
+      </h3>
+
+      <p className="text-sm text-programe-elements-textSecondary">
+        Escolha um tema para aplicar rapidamente cores, tipografia e recursos.
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+        {themePresets.map((theme) => {
+          const isSelected = isThemeSelected(theme);
+          return (
+            <button
+              key={theme.id}
+              type="button"
+              onClick={() => handleThemeSelect(theme)}
+              className={`group flex items-center gap-4 p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+                isSelected
+                  ? 'border-programe-elements-borderColorActive bg-programe-elements-item-backgroundAccent shadow-lg'
+                  : 'bg-programe-elements-background-depth-3 border-programe-elements-borderColor hover:border-programe-elements-borderColorActive hover:bg-programe-elements-background-depth-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary'
+              }`}
+            >
+              {/* Swatch - overlapping circles like Lovable */}
+              <div className="relative flex-shrink-0 w-12 h-12">
+                {theme.swatchColors.map((color, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-6 h-6 rounded-full border-2 border-programe-elements-borderColor shadow-sm"
+                    style={{
+                      backgroundColor: color,
+                      left: i === 0 ? 0 : i === 1 ? 14 : 7,
+                      top: i === 0 ? 14 : i === 1 ? 0 : 7,
+                      zIndex: theme.swatchColors.length - i,
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="flex-1 min-w-0">
+                <span
+                  className={`font-semibold transition-colors ${
+                    isSelected
+                      ? 'text-programe-elements-item-contentAccent'
+                      : 'text-programe-elements-textSecondary group-hover:text-programe-elements-textPrimary'
+                  }`}
+                >
+                  {theme.name}
+                </span>
+                {isSelected && (
+                  <div className="flex items-center gap-1 mt-1">
+                    <span className="i-ph:check text-programe-elements-item-contentAccent text-sm" />
+                    <span className="text-xs text-programe-elements-textSecondary">Selecionado</span>
+                  </div>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     <div>
-      <IconButton title="Design Palette" className="transition-all" onClick={() => setIsDialogOpen(!isDialogOpen)}>
-        <div className="i-ph:palette text-xl"></div>
+      <IconButton
+        title="Paleta de design"
+        className="transition-all hover:bg-programe-elements-item-backgroundAccent/50 hover:text-programe-elements-item-contentAccent rounded-lg"
+        onClick={() => setIsDialogOpen(!isDialogOpen)}
+      >
+        <span className="i-ph:palette text-xl" />
       </IconButton>
 
       <DialogRoot open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <Dialog>
-          <div className="py-4 px-4 min-w-[480px] max-w-[90vw] max-h-[85vh] flex flex-col gap-6 overflow-hidden">
-            <div className="">
-              <DialogTitle className="text-2xl font-bold text-programe-elements-textPrimary">
-                Design Palette & Features
-              </DialogTitle>
-              <DialogDescription className="text-programe-elements-textSecondary leading-relaxed">
-                Customize your color palette, typography, and design features. These preferences will guide the AI in
-                creating designs that match your style.
-              </DialogDescription>
+        <Dialog
+          className="min-w-[520px] max-w-[90vw] max-h-[90vh] overflow-hidden rounded-2xl border border-programe-elements-borderColor bg-programe-elements-background-depth-1 shadow-2xl shadow-black/20 dark:shadow-black/40"
+          showCloseButton={true}
+        >
+          <div className="flex flex-col h-full max-h-[85vh]">
+            {/* Header com accent */}
+            <div className="relative px-6 pt-6 pb-4 border-b border-programe-elements-borderColor/50">
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-programe-elements-item-contentAccent/60 to-transparent rounded-full" />
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-programe-elements-item-backgroundAccent flex items-center justify-center">
+                  <span className="i-ph:palette text-xl text-programe-elements-item-contentAccent" />
+                </div>
+                <div>
+                  <DialogTitle className="text-xl font-semibold text-programe-elements-textPrimary tracking-tight">
+                    Paleta de design e recursos
+                  </DialogTitle>
+                  <DialogDescription className="text-sm text-programe-elements-textSecondary leading-relaxed mt-1">
+                    Personalize cores, tipografia e recursos. A IA usará essas preferências para criar designs que combinem com seu estilo.
+                  </DialogDescription>
+                </div>
+              </div>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex gap-1 p-1 bg-programe-elements-bg-depth-3 rounded-xl">
-              {[
-                { key: 'colors', label: 'Colors', icon: 'i-ph:palette' },
-                { key: 'typography', label: 'Typography', icon: 'i-ph:text-aa' },
-                { key: 'features', label: 'Features', icon: 'i-ph:magic-wand' },
-              ].map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveSection(tab.key as any)}
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                    activeSection === tab.key
-                      ? 'bg-programe-elements-background-depth-3 text-programe-elements-textPrimary shadow-md'
-                      : 'bg-programe-elements-background-depth-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary hover:bg-programe-elements-bg-depth-2'
-                  }`}
-                >
-                  <span className={`${tab.icon} text-lg`} />
-                  <span>{tab.label}</span>
-                </button>
-              ))}
+            <div className="px-4 pt-4">
+              <div className="flex gap-0.5 p-0.5 rounded-xl bg-programe-elements-background-depth-3/80 border border-programe-elements-borderColor/50">
+                {[
+                  { key: 'themes', label: 'Temas', icon: 'i-ph:sun' },
+                  { key: 'colors', label: 'Cores', icon: 'i-ph:palette' },
+                  { key: 'typography', label: 'Tipografia', icon: 'i-ph:text-aa' },
+                  { key: 'features', label: 'Recursos', icon: 'i-ph:magic-wand' },
+                ].map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setActiveSection(tab.key as any)}
+                    className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      activeSection === tab.key
+                        ? 'bg-programe-elements-background-depth-1 text-programe-elements-textPrimary shadow-sm border border-programe-elements-borderColor/50'
+                        : 'bg-programe-elements-background-depth-3 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary hover:bg-programe-elements-background-depth-2'
+                    }`}
+                  >
+                    <span className={`${tab.icon} text-base`} />
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Content Area */}
-            <div className=" min-h-92 overflow-y-auto">
-              {activeSection === 'colors' && renderColorSection()}
-              {activeSection === 'typography' && renderTypographySection()}
-              {activeSection === 'features' && renderFeaturesSection()}
+            <div className="flex-1 min-h-0 px-4 py-4 overflow-y-auto">
+              <div className="min-h-[320px]">
+                {activeSection === 'colors' && renderColorSection()}
+                {activeSection === 'typography' && renderTypographySection()}
+                {activeSection === 'features' && renderFeaturesSection()}
+                {activeSection === 'themes' && renderThemesSection()}
+              </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex justify-between items-center">
-              <div className="text-sm text-programe-elements-textSecondary">
-                {Object.keys(palette).length} colors • {font.length} fonts • {features.length} features
+            {/* Footer */}
+            <div className="flex justify-between items-center px-4 py-4 border-t border-programe-elements-borderColor/50 bg-programe-elements-background-depth-2/30 rounded-b-2xl">
+              <div className="text-xs text-programe-elements-textTertiary">
+                {Object.keys(palette).length} cores · {font.length} fontes · {features.length} recursos
               </div>
-              <div className="flex gap-3">
-                <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
-                  Cancel
+              <div className="flex gap-2">
+                <Button
+                  variant="secondary"
+                  onClick={() => setIsDialogOpen(false)}
+                  className="border-programe-elements-borderColor text-programe-elements-textSecondary hover:bg-programe-elements-item-backgroundActive hover:text-programe-elements-textPrimary"
+                >
+                  Cancelar
                 </Button>
                 <Button
-                  variant="ghost"
                   onClick={handleSave}
-                  className="bg-programe-elements-button-primary-background hover:bg-programe-elements-button-primary-backgroundHover text-programe-elements-button-primary-text"
+                  className="bg-programe-elements-button-primary-background hover:bg-programe-elements-button-primary-backgroundHover text-programe-elements-button-primary-text font-medium px-5"
                 >
-                  Save Changes
+                  Salvar alterações
                 </Button>
               </div>
             </div>

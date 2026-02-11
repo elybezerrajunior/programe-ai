@@ -1,4 +1,5 @@
 import type { DesignScheme } from '~/types/design-scheme';
+import { defaultDesignScheme, themePresets } from '~/types/design-scheme';
 import { WORK_DIR } from '~/utils/constants';
 import { allowedHTMLElements } from '~/utils/markdown';
 import { stripIndents } from '~/utils/stripIndent';
@@ -38,6 +39,7 @@ The year is 2025.
 
 <technology_preferences>
   - Use Vite for web servers
+  - For web project creation: ALWAYS use React (e.g. create-vite with react template, npm create vite@latest ... -- --template react). NEVER use Vue, Svelte, Vanilla JS, or other frameworks for new web projects unless the user explicitly requests a different stack.
   - ALWAYS choose Node.js scripts over shell scripts
   - Use Supabase for databases by default. If user specifies otherwise, only JavaScript-implemented databases/npm packages (e.g., libsql, sqlite) will work
   - Programe ALWAYS uses stock photos from Pexels (valid URLs only). NEVER downloads images, only links to them.
@@ -164,6 +166,8 @@ The year is 2025.
   4. ALWAYS use latest file modifications, NEVER fake placeholder code
   5. Structure: <boltArtifact id="kebab-case" title="Title"><boltAction>...</boltAction></boltArtifact>
 
+  Project creation: When scaffolding or creating new web projects (e.g. npm create vite, create-react-app), ALWAYS use the React template/option. Do not use vanilla, Vue, Svelte, or other frameworks.
+
   Action Types:
     - shell: Running commands (use --yes for npx/npm create, && for sequences, NEVER re-run dev servers)
     - start: Starting project (use ONLY for project startup, LAST action)
@@ -233,7 +237,25 @@ The year is 2025.
   User Design Scheme:
   ${
     designScheme
-      ? `
+      ? designScheme.themeId
+        ? (() => {
+            const theme = themePresets.find((t) => t.id === designScheme.themeId);
+            const themeName = theme?.name ?? designScheme.themeId;
+            const palette = theme?.scheme?.palette
+              ? { ...defaultDesignScheme.palette, ...theme.scheme.palette }
+              : designScheme.palette;
+            const scheme = theme?.scheme ?? designScheme;
+            const paletteLines = Object.entries(palette)
+              .map(([key, hex]) => `  - ${key}: ${hex}`)
+              .join('\n');
+            return `
+  CRITICAL: The user selected the "${themeName}" theme. Use ONLY these exact colors (palette roles from the Colors tab). Apply them in your CSS/HTML:
+${paletteLines}
+
+  FONT: ${JSON.stringify(scheme.font)}
+  FEATURES: ${JSON.stringify(scheme.features)}`;
+          })()
+        : `
   FONT: ${JSON.stringify(designScheme.font)}
   PALETTE: ${JSON.stringify(designScheme.palette)}
   FEATURES: ${JSON.stringify(designScheme.features)}`
@@ -286,8 +308,8 @@ The year is 2025.
 
 <examples>
   <example>
-    <user_query>Start with a basic vanilla Vite template and do nothing. I will tell you in my next message what to do.</user_query>
-    <assistant_response>Understood. The basic Vanilla Vite template is already set up. I'll ensure the development server is running.
+    <user_query>Start with a basic React Vite template and do nothing. I will tell you in my next message what to do.</user_query>
+    <assistant_response>Understood. The basic React Vite template is already set up. I'll ensure the development server is running.
 
 <boltArtifact id="start-dev-server" title="Start Vite development server">
 <boltAction type="start">
