@@ -62,18 +62,18 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-programe-elements-background-depth-1 flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <Card className="p-8 rounded-2xl">
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-6">
               <span className="i-ph:rocket text-xl text-accent" />
-              <span className="text-xl font-semibold text-bolt-elements-textPrimary">Programe Studio</span>
+              <span className="text-xl font-semibold text-programe-elements-textPrimary">Programe Studio</span>
             </div>
-            <h1 className="text-2xl font-bold text-bolt-elements-textPrimary mb-2">
+            <h1 className="text-2xl font-bold text-programe-elements-textPrimary mb-2">
               Esqueceu a senha?
             </h1>
-            <p className="text-sm text-bolt-elements-textSecondary">
+            <p className="text-sm text-programe-elements-textSecondary">
               Informe o e-mail da sua conta. Enviaremos um link para você redefinir a senha.
             </p>
           </div>
@@ -99,18 +99,18 @@ export default function ForgotPassword() {
           {status !== 'success' && (
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="email" className="text-sm text-bolt-elements-textPrimary">
+                <Label htmlFor="email" className="text-sm text-programe-elements-textPrimary">
                   E-mail
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary pointer-events-none i-ph:envelope w-4 h-4" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary pointer-events-none i-ph:envelope w-4 h-4" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="seuemail@exemplo.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor"
+                    className="pl-10 rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor"
                     required
                     autoComplete="email"
                     disabled={status === 'loading'}
@@ -138,7 +138,7 @@ export default function ForgotPassword() {
             </form>
           )}
 
-          <div className="mt-6 pt-6 border-t border-bolt-elements-borderColor text-center">
+          <div className="mt-6 pt-6 border-t border-programe-elements-borderColor text-center">
             <Link
               to="/login"
               className="text-sm text-accent-500 hover:underline font-medium"

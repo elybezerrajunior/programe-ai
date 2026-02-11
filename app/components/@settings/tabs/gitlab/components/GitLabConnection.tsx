@@ -55,7 +55,7 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
 
   return (
     <motion.div
-      className="bg-bolt-elements-background border border-bolt-elements-borderColor rounded-lg"
+      className="bg-programe-elements-background border border-programe-elements-borderColor rounded-lg"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
@@ -71,7 +71,7 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                 />
               </svg>
             </div>
-            <h3 className="text-base font-medium text-bolt-elements-textPrimary">Conexão GitLab</h3>
+            <h3 className="text-base font-medium text-programe-elements-textPrimary">Conexão GitLab</h3>
           </div>
         </div>
 
@@ -80,7 +80,7 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
         <form onSubmit={handleConnect}>
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-sm text-bolt-elements-textSecondary mb-2">URL do GitLab</label>
+              <label className="block text-sm text-programe-elements-textSecondary mb-2">URL do GitLab</label>
               <input
                 type="text"
                 value={gitlabUrl}
@@ -89,17 +89,17 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                 placeholder="https://gitlab.com"
                 className={classNames(
                   'w-full px-3 py-2 rounded-lg text-sm',
-                  'bg-bolt-elements-background-depth-1',
-                  'border border-bolt-elements-borderColor',
-                  'text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary',
-                  'focus:outline-none focus:ring-1 focus:ring-bolt-elements-borderColorActive',
+                  'bg-programe-elements-background-depth-1',
+                  'border border-programe-elements-borderColor',
+                  'text-programe-elements-textPrimary placeholder-programe-elements-textTertiary',
+                  'focus:outline-none focus:ring-1 focus:ring-programe-elements-borderColorActive',
                   'disabled:opacity-50',
                 )}
               />
             </div>
 
             <div>
-              <label className="block text-sm text-bolt-elements-textSecondary mb-2">Token de Acesso</label>
+              <label className="block text-sm text-programe-elements-textSecondary mb-2">Token de Acesso</label>
               <input
                 type="password"
                 value={token}
@@ -108,19 +108,19 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                 placeholder="Digite seu token de acesso do GitLab"
                 className={classNames(
                   'w-full px-3 py-2 rounded-lg text-sm',
-                  'bg-bolt-elements-background-depth-1',
-                  'border border-bolt-elements-borderColor',
-                  'text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary',
-                  'focus:outline-none focus:ring-1 focus:ring-bolt-elements-borderColorActive',
+                  'bg-programe-elements-background-depth-1',
+                  'border border-programe-elements-borderColor',
+                  'text-programe-elements-textPrimary placeholder-programe-elements-textTertiary',
+                  'focus:outline-none focus:ring-1 focus:ring-programe-elements-borderColorActive',
                   'disabled:opacity-50',
                 )}
               />
-              <div className="mt-2 text-sm text-bolt-elements-textSecondary">
+              <div className="mt-2 text-sm text-programe-elements-textSecondary">
                 <a
                   href={`${gitlabUrl}/-/user_settings/personal_access_tokens`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-bolt-elements-borderColorActive hover:underline inline-flex items-center gap-1"
+                  className="text-programe-elements-borderColorActive hover:underline inline-flex items-center gap-1"
                 >
                   Obter seu token
                   <div className="i-ph:arrow-square-out w-4 h-4" />
@@ -188,7 +188,7 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                       <div className="i-ph:plug w-4 h-4" />
                       Desconectar
                     </button>
-                    <span className="text-sm text-bolt-elements-textSecondary flex items-center gap-1">
+                    <span className="text-sm text-programe-elements-textSecondary flex items-center gap-1">
                       <div className="i-ph:check-circle w-4 h-4 text-green-500" />
                       Conectado ao GitLab
                     </span>
@@ -203,7 +203,7 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                           'noopener,noreferrer',
                         )
                       }
-                      className="flex items-center gap-2 hover:bg-bolt-elements-item-backgroundActive/10 hover:text-bolt-elements-textPrimary dark:hover:text-bolt-elements-textPrimary transition-colors"
+                      className="flex items-center gap-2 hover:bg-programe-elements-item-backgroundActive/10 hover:text-programe-elements-textPrimary dark:hover:text-programe-elements-textPrimary transition-colors"
                     >
                       <div className="i-ph:layout w-4 h-4" />
                       Dashboard
@@ -212,7 +212,7 @@ export default function GitLabConnection({ connectionTest, onTestConnection }: G
                       onClick={onTestConnection}
                       disabled={connectionTest?.status === 'testing'}
                       variant="outline"
-                      className="flex items-center gap-2 hover:bg-bolt-elements-item-backgroundActive/10 hover:text-bolt-elements-textPrimary dark:hover:text-bolt-elements-textPrimary transition-colors"
+                      className="flex items-center gap-2 hover:bg-programe-elements-item-backgroundActive/10 hover:text-programe-elements-textPrimary dark:hover:text-programe-elements-textPrimary transition-colors"
                     >
                       {connectionTest?.status === 'testing' ? (
                         <>

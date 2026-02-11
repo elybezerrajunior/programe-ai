@@ -44,7 +44,7 @@ export function UserMenu() {
     return (
       <button
         type="button"
-        className="p-2 text-bolt-elements-textSecondary transition-colors bg-transparent rounded-md flex items-center justify-center"
+        className="p-2 text-programe-elements-textSecondary transition-colors bg-transparent rounded-md flex items-center justify-center"
         aria-label="Menu do usuário"
         disabled
       >
@@ -58,7 +58,7 @@ export function UserMenu() {
     return (
       <button
         type="button"
-        className="p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors bg-transparent rounded-md hover:bg-bolt-elements-background-depth-2 flex items-center justify-center"
+        className="p-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary transition-colors bg-transparent rounded-md hover:bg-programe-elements-background-depth-2 flex items-center justify-center"
         aria-label="Menu do usuário"
         disabled
       >
@@ -74,7 +74,7 @@ export function UserMenu() {
         trigger={
           <button
             type="button"
-            className="p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors bg-transparent rounded-md hover:bg-bolt-elements-background-depth-2 flex items-center justify-center"
+            className="p-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary transition-colors bg-transparent rounded-md hover:bg-programe-elements-background-depth-2 flex items-center justify-center"
             aria-label="Menu do usuário"
           >
             <div className="i-ph:user text-xl" />
@@ -83,23 +83,23 @@ export function UserMenu() {
         align="end"
       >
         {/* ===== CONTA ===== */}
-        <div className="px-3 py-2 border-b border-bolt-elements-borderColor">
-          <p className="text-sm font-medium text-bolt-elements-textPrimary truncate">
+        <div className="px-3 py-2 border-b border-programe-elements-borderColor">
+          <p className="text-sm font-medium text-programe-elements-textPrimary truncate">
             {user.name || 'Usuário'}
           </p>
-          <p className="text-xs text-bolt-elements-textSecondary truncate">{user.email}</p>
+          <p className="text-xs text-programe-elements-textSecondary truncate">{user.email}</p>
         </div>
 
         {/* ===== PERFIL ===== */}
         <div className="px-3 py-1.5 mt-1">
-          <p className="text-xs font-semibold text-bolt-elements-textTertiary uppercase tracking-wider">
+          <p className="text-xs font-semibold text-programe-elements-textTertiary uppercase tracking-wider">
             Perfil
           </p>
         </div>
 
         <DropdownItem
           onSelect={() => openSettingsTab('profile')}
-          className={classNames('text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive')}
+          className={classNames('text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive')}
         >
           <div className="i-ph:user-circle text-base" />
           <span>Editar Perfil</span>
@@ -107,22 +107,22 @@ export function UserMenu() {
 
         <DropdownItem
           onSelect={() => openSettingsTab('settings')}
-          className={classNames('text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive')}
+          className={classNames('text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive')}
         >
           <div className="i-ph:gear-six text-base" />
           <span>Configurações</span>
         </DropdownItem>
 
         {/* ===== CONFIGURAÇÕES ===== */}
-        <div className="px-3 py-1.5 mt-1 border-t border-bolt-elements-borderColor">
-          <p className="text-xs font-semibold text-bolt-elements-textTertiary uppercase tracking-wider">
+        <div className="px-3 py-1.5 mt-1 border-t border-programe-elements-borderColor">
+          <p className="text-xs font-semibold text-programe-elements-textTertiary uppercase tracking-wider">
             Painel
           </p>
         </div>
 
         <DropdownItem
           onSelect={() => openSettings('preferences')}
-          className={classNames('text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive')}
+          className={classNames('text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive')}
         >
           <div className="i-ph:gear text-base" />
           <span>Preferências Gerais</span>
@@ -130,15 +130,15 @@ export function UserMenu() {
 
         <DropdownItem
           onSelect={() => openSettings('integrations')}
-          className={classNames('text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive')}
+          className={classNames('text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive')}
         >
           <div className="i-ph:plugs-connected text-base" />
           <span>Conectar Plataformas</span>
         </DropdownItem>
 
         {/* ===== SESSÃO ===== */}
-        <div className="px-3 py-1.5 mt-1 border-t border-bolt-elements-borderColor">
-          <p className="text-xs font-semibold text-bolt-elements-textTertiary uppercase tracking-wider">
+        <div className="px-3 py-1.5 mt-1 border-t border-programe-elements-borderColor">
+          <p className="text-xs font-semibold text-programe-elements-textTertiary uppercase tracking-wider">
             Sessão
           </p>
         </div>

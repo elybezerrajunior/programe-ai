@@ -1,5 +1,5 @@
-import type { ActionType, BoltAction, BoltActionData, FileAction, ShellAction, SupabaseAction } from '~/types/actions';
-import type { BoltArtifactData } from '~/types/artifact';
+import type { ActionType, ProgrameAction, ProgrameActionData, FileAction, ShellAction, SupabaseAction } from '~/types/actions';
+import type { ProgrameArtifactData } from '~/types/artifact';
 import { createScopedLogger } from '~/utils/logger';
 import { unreachable } from '~/utils/unreachable';
 
@@ -12,7 +12,7 @@ const BOLT_QUICK_ACTIONS_CLOSE = '</bolt-quick-actions>';
 
 const logger = createScopedLogger('MessageParser');
 
-export interface ArtifactCallbackData extends BoltArtifactData {
+export interface ArtifactCallbackData extends ProgrameArtifactData {
   messageId: string;
   artifactId?: string;
 }
@@ -21,7 +21,7 @@ export interface ActionCallbackData {
   artifactId: string;
   messageId: string;
   actionId: string;
-  action: BoltAction;
+  action: ProgrameAction;
 }
 
 export type ArtifactCallback = (data: ArtifactCallbackData) => void;
@@ -52,8 +52,8 @@ interface MessageState {
   insideArtifact: boolean;
   insideAction: boolean;
   artifactCounter: number;
-  currentArtifact?: BoltArtifactData;
-  currentAction: BoltActionData;
+  currentArtifact?: ProgrameArtifactData;
+  currentAction: ProgrameActionData;
   actionId: number;
 }
 
@@ -171,7 +171,7 @@ export class StreamingMessageParser {
                */
               actionId: String(state.actionId - 1),
 
-              action: currentAction as BoltAction,
+              action: currentAction as ProgrameAction,
             });
 
             state.insideAction = false;
@@ -217,7 +217,7 @@ export class StreamingMessageParser {
                 artifactId: currentArtifact.id,
                 messageId,
                 actionId: String(state.actionId++),
-                action: state.currentAction as BoltAction,
+                action: state.currentAction as ProgrameAction,
               });
 
               i = actionEndIndex + 1;
@@ -280,7 +280,7 @@ export class StreamingMessageParser {
                 id: artifactId,
                 title: artifactTitle,
                 type,
-              } satisfies BoltArtifactData;
+              } satisfies ProgrameArtifactData;
 
               state.currentArtifact = currentArtifact;
 
@@ -403,7 +403,7 @@ function camelToDashCase(input: string) {
 
 function createQuickActionElement(props: Record<string, string>, label: string) {
   const elementProps = [
-    'class="__boltQuickAction__"',
+    'class="__programeQuickAction__"',
     'data-bolt-quick-action="true"',
     ...Object.entries(props).map(([key, value]) => `data-${camelToDashCase(key)}=${JSON.stringify(value)}`),
   ];
@@ -412,5 +412,5 @@ function createQuickActionElement(props: Record<string, string>, label: string) 
 }
 
 function createQuickActionGroup(buttons: string[]) {
-  return `<div class=\"__boltQuickAction__\" data-bolt-quick-action=\"true\">${buttons.join('')}</div>`;
+  return `<div class=\"__programeQuickAction__\" data-bolt-quick-action=\"true\">${buttons.join('')}</div>`;
 }

@@ -7,7 +7,7 @@ import { getAll, deleteById, openDatabase } from '~/lib/persistence/db';
 import type { ChatHistoryItem } from '~/lib/persistence/useChatHistory';
 
 // Hook to connect to the database
-function useBoltHistoryDB() {
+function useProgrameHistoryDB() {
   const [db, setDb] = useState<IDBDatabase | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -109,7 +109,7 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('recent');
   const [isOpen, setIsOpen] = useState(false);
-  const { db } = useBoltHistoryDB();
+  const { db } = useProgrameHistoryDB();
   const [loadedProjects, setLoadedProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   // Mesma fonte do sidebar: getAll(db) sem userId para exibir os mesmos projetos
@@ -222,7 +222,7 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <div className="i-ph:grid-four text-xl text-accent" />
-          <h2 className="text-2xl font-semibold text-bolt-elements-textPrimary">Seus projetos</h2>
+          <h2 className="text-2xl font-semibold text-programe-elements-textPrimary">Seus projetos</h2>
         </div>
         {projects.length > 0 && (
           <div className="flex items-center gap-3">
@@ -231,7 +231,7 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
                 placeholder="Buscar projetos..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="rounded-xl bg-bolt-elements-background-depth-1 border-bolt-elements-borderColor"
+                className="rounded-xl bg-programe-elements-background-depth-1 border-programe-elements-borderColor"
               />
             </div>
             <div className="relative">
@@ -239,8 +239,8 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
                 onClick={() => setIsOpen(!isOpen)}
                 className={classNames(
                   'px-3 py-2 rounded-xl text-sm font-medium',
-                  'border border-bolt-elements-borderColor bg-bolt-elements-background-depth-1',
-                  'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary',
+                  'border border-programe-elements-borderColor bg-programe-elements-background-depth-1',
+                  'text-programe-elements-textSecondary hover:text-programe-elements-textPrimary',
                   'flex items-center gap-2 transition-colors'
                 )}
               >
@@ -253,7 +253,7 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
                     className="fixed inset-0 z-10"
                     onClick={() => setIsOpen(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-48 bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor rounded-xl shadow-lg z-20 py-1">
+                  <div className="absolute right-0 mt-2 w-48 bg-programe-elements-background-depth-2 border border-programe-elements-borderColor rounded-xl shadow-lg z-20 py-1">
                     {sortOptions.map((option) => (
                       <button
                         key={option.value}
@@ -264,8 +264,8 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
                         className={classNames(
                           'w-full text-left px-4 py-2 text-sm transition-colors',
                           sortBy === option.value
-                            ? 'bg-bolt-elements-background-depth-3 text-bolt-elements-textPrimary'
-                            : 'text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-3'
+                            ? 'bg-programe-elements-background-depth-3 text-programe-elements-textPrimary'
+                            : 'text-programe-elements-textSecondary hover:text-programe-elements-textPrimary hover:bg-programe-elements-background-depth-3'
                         )}
                       >
                         {option.label}
@@ -282,11 +282,11 @@ export function ProjectsSection({ projects: providedProjects, onProjectClick, on
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {isLoading ? (
-          <div className="col-span-full text-center py-8 text-bolt-elements-textSecondary">
+          <div className="col-span-full text-center py-8 text-programe-elements-textSecondary">
             Carregando projetos...
           </div>
         ) : filteredAndSortedProjects.length === 0 ? (
-          <div className="col-span-full text-center py-8 text-bolt-elements-textSecondary">
+          <div className="col-span-full text-center py-8 text-programe-elements-textSecondary">
             {searchQuery ? 'Nenhum projeto encontrado' : 'Nenhum projeto ainda. Crie seu primeiro projeto!'}
           </div>
         ) : (

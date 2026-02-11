@@ -193,28 +193,28 @@ export default function AuthCallback() {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-bolt-elements-background-depth-1 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-programe-elements-background-depth-1 flex items-center justify-center p-6">
       <div className="text-center">
         {status === 'processing' ? (
           <>
             <div className="i-svg-spinners:90-ring-with-bg text-accent text-6xl mx-auto mb-6" />
-            <h1 className="text-2xl font-semibold text-bolt-elements-textPrimary mb-2">
+            <h1 className="text-2xl font-semibold text-programe-elements-textPrimary mb-2">
               Autenticando...
             </h1>
-            <p className="text-bolt-elements-textSecondary">
+            <p className="text-programe-elements-textSecondary">
               Aguarde enquanto processamos seu login
             </p>
           </>
         ) : (
           <>
             <div className="i-ph:warning-circle text-red-500 text-6xl mx-auto mb-6" />
-            <h1 className="text-2xl font-semibold text-bolt-elements-textPrimary mb-2">
+            <h1 className="text-2xl font-semibold text-programe-elements-textPrimary mb-2">
               Erro na autenticação
             </h1>
-            <p className="text-bolt-elements-textSecondary mb-4">
+            <p className="text-programe-elements-textSecondary mb-4">
               {errorMessage}
             </p>
-            <p className="text-sm text-bolt-elements-textTertiary">
+            <p className="text-sm text-programe-elements-textTertiary">
               Redirecionando para o login...
             </p>
           </>

@@ -40,7 +40,7 @@ export const DialogButton = memo(({ type, children, onClick, disabled }: DialogB
 export const DialogTitle = memo(({ className, children, ...props }: RadixDialog.DialogTitleProps) => {
   return (
     <RadixDialog.Title
-      className={classNames('text-lg font-medium text-bolt-elements-textPrimary flex items-center gap-2', className)}
+      className={classNames('text-lg font-medium text-programe-elements-textPrimary flex items-center gap-2', className)}
       {...props}
     >
       {children}
@@ -51,7 +51,7 @@ export const DialogTitle = memo(({ className, children, ...props }: RadixDialog.
 export const DialogDescription = memo(({ className, children, ...props }: RadixDialog.DialogDescriptionProps) => {
   return (
     <RadixDialog.Description
-      className={classNames('text-sm text-bolt-elements-textSecondary mt-1', className)}
+      className={classNames('text-sm text-programe-elements-textSecondary mt-1', className)}
       {...props}
     >
       {children}
@@ -116,7 +116,7 @@ export const Dialog = memo(({ children, className, showCloseButton = true, onClo
       <RadixDialog.Content asChild>
         <motion.div
           className={classNames(
-            'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-950 rounded-lg shadow-xl border border-bolt-elements-borderColor z-[9999] w-[520px] focus:outline-none',
+            'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-950 rounded-lg shadow-xl border border-programe-elements-borderColor z-[9999] w-[520px] focus:outline-none',
             className,
           )}
           initial="closed"
@@ -130,7 +130,7 @@ export const Dialog = memo(({ children, className, showCloseButton = true, onClo
               <RadixDialog.Close asChild onClick={onClose}>
                 <IconButton
                   icon="i-ph:x"
-                  className="absolute top-3 right-3 text-bolt-elements-textTertiary hover:text-bolt-elements-textSecondary"
+                  className="absolute top-3 right-3 text-programe-elements-textTertiary hover:text-programe-elements-textSecondary"
                 />
               </RadixDialog.Close>
             )}
@@ -222,7 +222,7 @@ export function ConfirmationDialog({
               className={
                 variant === 'destructive'
                   ? 'bg-red-500 text-white hover:bg-red-600'
-                  : 'bg-bolt-elements-item-backgroundAccent text-bolt-elements-item-contentAccent hover:bg-bolt-elements-button-primary-backgroundHover'
+                  : 'bg-programe-elements-item-backgroundAccent text-programe-elements-item-contentAccent hover:bg-programe-elements-button-primary-backgroundHover'
               }
             >
               {isLoading ? (
@@ -347,8 +347,8 @@ export function SelectionDialog({
         className={classNames(
           'flex items-start space-x-3 p-2 rounded-md transition-colors',
           selectedItems.includes(item.id)
-            ? 'bg-bolt-elements-item-backgroundAccent'
-            : 'bg-bolt-elements-bg-depth-2 hover:bg-bolt-elements-item-backgroundActive',
+            ? 'bg-programe-elements-item-backgroundAccent'
+            : 'bg-programe-elements-bg-depth-2 hover:bg-programe-elements-item-backgroundActive',
         )}
         style={{
           ...style,
@@ -367,13 +367,13 @@ export function SelectionDialog({
             className={classNames(
               'text-sm font-medium cursor-pointer',
               selectedItems.includes(item.id)
-                ? 'text-bolt-elements-item-contentAccent'
-                : 'text-bolt-elements-textPrimary',
+                ? 'text-programe-elements-item-contentAccent'
+                : 'text-programe-elements-textPrimary',
             )}
           >
             {item.label}
           </Label>
-          {item.description && <p className="text-xs text-bolt-elements-textSecondary">{item.description}</p>}
+          {item.description && <p className="text-xs text-programe-elements-textSecondary">{item.description}</p>}
         </div>
       </div>
     );
@@ -386,26 +386,26 @@ export function SelectionDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="mt-2 mb-4">
             Selecione os itens que deseja incluir e clique em{' '}
-            <span className="text-bolt-elements-item-contentAccent font-medium">{confirmLabel}</span>.
+            <span className="text-programe-elements-item-contentAccent font-medium">{confirmLabel}</span>.
           </DialogDescription>
 
           <div className="py-4">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-medium text-bolt-elements-textSecondary">
+              <span className="text-sm font-medium text-programe-elements-textSecondary">
                 {selectedItems.length} de {items.length} selecionado{selectedItems.length !== 1 ? 's' : ''}
               </span>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleSelectAll}
-                className="text-xs h-8 px-2 text-bolt-elements-textPrimary hover:text-bolt-elements-item-contentAccent hover:bg-bolt-elements-item-backgroundAccent bg-bolt-elements-bg-depth-2 dark:bg-transparent"
+                className="text-xs h-8 px-2 text-programe-elements-textPrimary hover:text-programe-elements-item-contentAccent hover:bg-programe-elements-item-backgroundAccent bg-programe-elements-bg-depth-2 dark:bg-transparent"
               >
                 {selectAll ? 'Desmarcar Todos' : 'Selecionar Todos'}
               </Button>
             </div>
 
             <div
-              className="pr-2 border rounded-md border-bolt-elements-borderColor bg-bolt-elements-bg-depth-2"
+              className="pr-2 border rounded-md border-programe-elements-borderColor bg-programe-elements-bg-depth-2"
               style={{
                 maxHeight,
               }}
@@ -416,12 +416,12 @@ export function SelectionDialog({
                   width="100%"
                   itemCount={items.length}
                   itemSize={60}
-                  className="scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-bolt-elements-bg-depth-3"
+                  className="scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-programe-elements-bg-depth-3"
                 >
                   {ItemRenderer}
                 </FixedSizeList>
               ) : (
-                <div className="text-center py-4 text-sm text-bolt-elements-textTertiary">Nenhum item para exibir</div>
+                <div className="text-center py-4 text-sm text-programe-elements-textTertiary">Nenhum item para exibir</div>
               )}
             </div>
           </div>
@@ -430,7 +430,7 @@ export function SelectionDialog({
             <Button
               variant="outline"
               onClick={onClose}
-              className="border-bolt-elements-borderColor text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive"
+              className="border-programe-elements-borderColor text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive"
             >
               Cancelar
             </Button>

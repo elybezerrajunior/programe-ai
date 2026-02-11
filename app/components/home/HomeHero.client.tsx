@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { classNames } from '~/utils/classNames';
 import { Card } from '~/components/ui/Card';
+import { Dropdown, DropdownItem } from '~/components/ui/Dropdown';
 import { Tooltip } from '~/components/ui/Tooltip';
 import { chatStore } from '~/lib/stores/chat';
 import Cookies from 'js-cookie';
@@ -129,7 +130,7 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    
+
     if (files.length === 0) return;
 
     // Validate file count (check current + new)
@@ -149,7 +150,7 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
     // Combine with existing files
     setUploadedFiles?.([...uploadedFiles, ...files]);
     toast.success(`${files.length} arquivo(s) anexado(s)`);
-    
+
     // Reset input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -227,11 +228,11 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
     <div className="w-full max-w-4xl mx-auto px-6 py-12">
       {/* Headline */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-bolt-elements-textPrimary mb-4">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-programe-elements-textPrimary mb-4">
           Construa seu aplicativo a partir de uma{' '}
           <span className="text-accent">ideia.</span>
         </h1>
-        <p className="text-lg md:text-xl text-bolt-elements-textSecondary max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-programe-elements-textSecondary max-w-2xl mx-auto">
           Transforme texto em software. A Programe Studio estrutura, codifica e guia você.
         </p>
       </div>
@@ -239,7 +240,7 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
       {/* Card with Project Description Input */}
       <div className="relative">
         {/* Glow effect behind card */}
-        <div 
+        <div
           className="absolute -inset-4 rounded-[2rem] opacity-30 blur-3xl pointer-events-none"
           style={{
             background: 'radial-gradient(circle, rgba(34, 244, 198, 0.4) 0%, rgba(34, 244, 198, 0) 70%)',
@@ -266,114 +267,121 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
             </defs>
             <rect className={classNames(styles.PromptEffectLine)} pathLength="100" strokeLinecap="round"></rect>
           </svg>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Hidden file input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            className="hidden"
-            onChange={handleFileChange}
-          />
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="i-ph:lightbulb text-xl text-accent-500" />
-                <label htmlFor="project-description" className="text-sm font-medium text-bolt-elements-textPrimary">
-                  Descreva seu projeto
-                </label>
-              </div>
-              <button
-                type="button"
-                onClick={handleEnhancePrompt}
-                disabled={!projectDescription.trim() || enhancingPrompt}
-                className={classNames(
-                  'flex items-center gap-1 text-sm text-accent-500 hover:text-accent-400 transition-colors bg-transparent',
-                  (!projectDescription.trim() || enhancingPrompt) && 'opacity-50 cursor-not-allowed'
-                )}
-              >
-                {enhancingPrompt ? (
-                  <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-base animate-spin" />
-                ) : (
-                  <div className="i-ph:question text-base text-accent-500" />
-                )}
-                <span>Melhore sua ideia</span>
-              </button>
-            </div>
-            <textarea
-              id="project-description"
-              value={projectDescription}
-              onChange={(e) => setProjectDescription(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onPaste={handlePaste}
-              placeholder="Ex: Um aplicativo de marketplace para fotógrafos freelances encontrarem clientes, com portfólio, sistema de agendamento e pagamentos via Stripe..."
-              className={classNames(
-                'w-full min-h-[120px] px-4 py-3 rounded-2xl',
-                'border border-accent-500 bg-bolt-elements-background-depth-1',
-                'text-bolt-elements-textPrimary placeholder:text-bolt-elements-textTertiary',
-                'focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent-500',
-                'resize-none transition-all',
-                '[&::-webkit-scrollbar]:hidden'
-              )}
-              style={{
-                scrollbarWidth: 'none',
-              }}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Hidden file input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              className="hidden"
+              onChange={handleFileChange}
             />
-          </div>
 
-          {/* Actions */}
-          <div className="flex items-center justify-between text-sm pt-2">
-            <div className="flex gap-1 items-center">
-              {/* <ColorSchemeDialog designScheme={designScheme || defaultDesignScheme} setDesignScheme={setDesignScheme} /> */}
-              {/* <McpTools /> */}
-              <Tooltip content="Enviar arquivo" side="top">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="i-ph:lightbulb text-xl text-accent-500" />
+                  <label htmlFor="project-description" className="text-sm font-medium text-programe-elements-textPrimary">
+                    Descreva seu projeto
+                  </label>
+                </div>
                 <button
                   type="button"
-                  onClick={handleFileUpload}
-                  className="flex items-center text-bolt-elements-item-contentDefault bg-transparent hover:text-bolt-elements-item-contentActive rounded-md p-1 hover:bg-bolt-elements-item-backgroundActive focus:outline-none transition-all"
-                >
-                  <div className="i-ph:folder-plus text-xl" />
-                </button>
-              </Tooltip>
-              <Tooltip content={isListening ? 'Parar reconhecimento de voz' : 'Reconhecimento de voz'} side="top">
-                <button
-                  type="button"
-                  onClick={handleToggleListening}
-                  disabled={!recognition}
+                  onClick={handleEnhancePrompt}
+                  disabled={!projectDescription.trim() || enhancingPrompt}
                   className={classNames(
-                    'flex items-center bg-transparent rounded-md p-1 focus:outline-none transition-all',
-                    isListening
-                      ? 'text-bolt-elements-item-contentAccent hover:bg-bolt-elements-item-backgroundActive'
-                      : 'text-bolt-elements-item-contentDefault hover:text-bolt-elements-item-contentActive hover:bg-bolt-elements-item-backgroundActive',
-                    !recognition && 'opacity-50 cursor-not-allowed'
+                    'flex items-center gap-1 text-sm text-accent-500 hover:text-accent-400 transition-colors bg-transparent',
+                    (!projectDescription.trim() || enhancingPrompt) && 'opacity-50 cursor-not-allowed'
                   )}
                 >
-                  {isListening ? (
-                    <div className="i-ph:microphone-slash text-xl" />
+                  {enhancingPrompt ? (
+                    <div className="i-svg-spinners:90-ring-with-bg text-programe-elements-loader-progress text-base animate-spin" />
                   ) : (
-                    <div className="i-ph:waveform text-xl" />
+                    <div className="i-ph:question text-base text-accent-500" />
                   )}
+                  <span>Melhore sua ideia</span>
                 </button>
-              </Tooltip>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="submit"
-                disabled={!projectDescription.trim()}
+              </div>
+              <textarea
+                id="project-description"
+                value={projectDescription}
+                onChange={(e) => setProjectDescription(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onPaste={handlePaste}
+                placeholder="Ex: Um aplicativo de marketplace para fotógrafos freelances encontrarem clientes, com portfólio, sistema de agendamento e pagamentos via Stripe..."
                 className={classNames(
-                  'px-6 py-2.5 flex items-center gap-2 rounded-2xl font-medium transition-colors',
-                  projectDescription.trim()
-                    ? 'bg-accent-500 hover:bg-accent-400 text-black'
-                    : 'bg-bolt-elements-background-depth-2 text-bolt-elements-textSecondary cursor-not-allowed'
+                  'w-full min-h-[120px] px-4 py-3 rounded-2xl',
+                  'border border-accent-500 bg-programe-elements-background-depth-1',
+                  'text-programe-elements-textPrimary placeholder:text-programe-elements-textTertiary',
+                  'focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent-500',
+                  'resize-none transition-all',
+                  '[&::-webkit-scrollbar]:hidden'
                 )}
-              >
-                <div className="i-bolt:stars text-lg" />
-                <span>Gerar projeto</span>
-              </button>
+                style={{
+                  scrollbarWidth: 'none',
+                }}
+              />
             </div>
-          </div>
-        </form>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between text-sm pt-2">
+              <div className="flex gap-1 items-center">
+                {/* <ColorSchemeDialog designScheme={designScheme || defaultDesignScheme} setDesignScheme={setDesignScheme} /> */}
+                {/* <McpTools /> */}
+                <Dropdown
+                  trigger={
+                    <button
+                      type="button"
+                      className="flex items-center text-programe-elements-item-contentDefault bg-transparent hover:text-programe-elements-item-contentActive rounded-md p-1 hover:bg-programe-elements-item-backgroundActive focus:outline-none transition-all"
+                    >
+                      <div className="i-ph:plus text-xl" />
+                    </button>
+                  }
+                >
+                  <DropdownItem onSelect={handleFileUpload}>
+                    <div className="i-ph:file-plus text-lg opacity-60" />
+                    Enviar Arquivo
+                  </DropdownItem>
+
+                </Dropdown>
+                <Tooltip content={isListening ? 'Parar reconhecimento de voz' : 'Reconhecimento de voz'} side="top">
+                  <button
+                    type="button"
+                    onClick={handleToggleListening}
+                    disabled={!recognition}
+                    className={classNames(
+                      'flex items-center bg-transparent rounded-md p-1 focus:outline-none transition-all',
+                      isListening
+                        ? 'text-programe-elements-item-contentAccent hover:bg-programe-elements-item-backgroundActive'
+                        : 'text-programe-elements-item-contentDefault hover:text-programe-elements-item-contentActive hover:bg-programe-elements-item-backgroundActive',
+                      !recognition && 'opacity-50 cursor-not-allowed'
+                    )}
+                  >
+                    {isListening ? (
+                      <div className="i-ph:microphone-slash text-xl" />
+                    ) : (
+                      <div className="i-ph:waveform text-xl" />
+                    )}
+                  </button>
+                </Tooltip>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="submit"
+                  disabled={!projectDescription.trim()}
+                  className={classNames(
+                    'px-6 py-2.5 flex items-center gap-2 rounded-2xl font-medium transition-colors',
+                    projectDescription.trim()
+                      ? 'bg-accent-500 hover:bg-accent-400 text-black'
+                      : 'bg-programe-elements-background-depth-2 text-programe-elements-textSecondary cursor-not-allowed'
+                  )}
+                >
+                  <div className="i-programe:stars text-lg" />
+                  <span>Gerar projeto</span>
+                </button>
+              </div>
+            </div>
+          </form>
         </Card>
       </div>
     </div>

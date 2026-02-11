@@ -112,7 +112,7 @@ const FileModifiedDropdown = memo(
         <Popover className="relative">
           {({ open }: { open: boolean }) => (
             <>
-              <Popover.Button className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-bolt-elements-background-depth-2 hover:bg-bolt-elements-background-depth-3 transition-colors text-bolt-elements-item-contentDefault">
+              <Popover.Button className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-programe-elements-background-depth-2 hover:bg-programe-elements-background-depth-3 transition-colors text-programe-elements-item-contentDefault">
                 <span>File Changes</span>
                 {hasChanges && (
                   <span className="w-5 h-5 rounded-full bg-accent-500/20 text-accent-500 text-xs flex items-center justify-center border border-accent-500/30">
@@ -129,7 +129,7 @@ const FileModifiedDropdown = memo(
                 leaveFrom="transform scale-100 opacity-100"
                 leaveTo="transform scale-95 opacity-0"
               >
-                <Popover.Panel className="absolute right-0 z-20 mt-2 w-80 origin-top-right rounded-xl bg-bolt-elements-background-depth-2 shadow-xl border border-bolt-elements-borderColor">
+                <Popover.Panel className="absolute right-0 z-20 mt-2 w-80 origin-top-right rounded-xl bg-programe-elements-background-depth-2 shadow-xl border border-programe-elements-borderColor">
                   <div className="p-2">
                     <div className="relative mx-2 mb-2">
                       <input
@@ -137,9 +137,9 @@ const FileModifiedDropdown = memo(
                         placeholder="Search files..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-8 pr-3 py-1.5 text-sm rounded-lg bg-bolt-elements-background-depth-1 border border-bolt-elements-borderColor focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                        className="w-full pl-8 pr-3 py-1.5 text-sm rounded-lg bg-programe-elements-background-depth-1 border border-programe-elements-borderColor focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                       />
-                      <div className="absolute left-2 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary">
+                      <div className="absolute left-2 top-1/2 -translate-y-1/2 text-programe-elements-textTertiary">
                         <div className="i-ph:magnifying-glass" />
                       </div>
                     </div>
@@ -154,10 +154,10 @@ const FileModifiedDropdown = memo(
                             <button
                               key={filePath}
                               onClick={() => onSelectFile(filePath)}
-                              className="w-full px-3 py-2 text-left rounded-md hover:bg-bolt-elements-background-depth-1 transition-colors group bg-transparent"
+                              className="w-full px-3 py-2 text-left rounded-md hover:bg-programe-elements-background-depth-1 transition-colors group bg-transparent"
                             >
                               <div className="flex items-center gap-2">
-                                <div className="shrink-0 w-5 h-5 text-bolt-elements-textTertiary">
+                                <div className="shrink-0 w-5 h-5 text-programe-elements-textTertiary">
                                   {['typescript', 'javascript', 'jsx', 'tsx'].includes(language) && (
                                     <div className="i-ph:file-js" />
                                   )}
@@ -192,10 +192,10 @@ const FileModifiedDropdown = memo(
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center justify-between gap-2">
                                     <div className="flex flex-col min-w-0">
-                                      <span className="truncate text-sm font-medium text-bolt-elements-textPrimary">
+                                      <span className="truncate text-sm font-medium text-programe-elements-textPrimary">
                                         {filePath.split('/').pop()}
                                       </span>
-                                      <span className="truncate text-xs text-bolt-elements-textTertiary">
+                                      <span className="truncate text-xs text-programe-elements-textTertiary">
                                         {filePath}
                                       </span>
                                     </div>
@@ -258,13 +258,13 @@ const FileModifiedDropdown = memo(
                         })
                       ) : (
                         <div className="flex flex-col items-center justify-center p-4 text-center">
-                          <div className="w-12 h-12 mb-2 text-bolt-elements-textTertiary">
+                          <div className="w-12 h-12 mb-2 text-programe-elements-textTertiary">
                             <div className="i-ph:file-dashed" />
                           </div>
-                          <p className="text-sm font-medium text-bolt-elements-textPrimary">
+                          <p className="text-sm font-medium text-programe-elements-textPrimary">
                             {searchQuery ? 'No matching files' : 'No modified files'}
                           </p>
-                          <p className="text-xs text-bolt-elements-textTertiary mt-1">
+                          <p className="text-xs text-programe-elements-textTertiary mt-1">
                             {searchQuery ? 'Try another search' : 'Changes will appear here as you edit'}
                           </p>
                         </div>
@@ -273,7 +273,7 @@ const FileModifiedDropdown = memo(
                   </div>
 
                   {hasChanges && (
-                    <div className="border-t border-bolt-elements-borderColor p-2">
+                    <div className="border-t border-programe-elements-borderColor p-2">
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(filteredFiles.map(([filePath]) => filePath).join('\n'));
@@ -281,7 +281,7 @@ const FileModifiedDropdown = memo(
                             icon: <div className="i-ph:check-circle text-accent-500" />,
                           });
                         }}
-                        className="w-full flex items-center justify-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-bolt-elements-background-depth-1 hover:bg-bolt-elements-background-depth-3 transition-colors text-bolt-elements-textTertiary hover:text-bolt-elements-textPrimary"
+                        className="w-full flex items-center justify-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-programe-elements-background-depth-1 hover:bg-programe-elements-background-depth-3 transition-colors text-programe-elements-textTertiary hover:text-programe-elements-textPrimary"
                       >
                         Copy File List
                       </button>
@@ -428,9 +428,9 @@ export const Workbench = memo(
           >
             <div className="absolute inset-0 px-2 lg:px-4">
               <div
-                className="h-full flex flex-col bg-bolt-elements-background-depth-2/95 backdrop-blur-sm border border-bolt-elements-borderColor rounded-xl shadow-xl ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
+                className="h-full flex flex-col bg-programe-elements-background-depth-2/95 backdrop-blur-sm border border-programe-elements-borderColor rounded-xl shadow-xl ring-1 ring-black/5 dark:ring-white/5 overflow-hidden"
               >
-                <div className="flex items-center px-4 py-2.5 border-b border-bolt-elements-borderColor/80 gap-2 bg-bolt-elements-background-depth-1/50 rounded-t-xl">
+                <div className="flex items-center px-4 py-2.5 border-b border-programe-elements-borderColor/80 gap-2 bg-programe-elements-background-depth-1/50 rounded-t-xl">
                   <Slider selected={selectedView} options={sliderOptions} setSelected={setSelectedView} />
                   <div className="ml-auto" />
                   {selectedView === 'code' && (
@@ -439,11 +439,11 @@ export const Workbench = memo(
                       <ExportChatButton exportChat={exportChat} />
 
                       {/* Sync Button */}
-                      <div className="flex border border-bolt-elements-borderColor rounded-md overflow-hidden ml-1">
+                      <div className="flex border border-programe-elements-borderColor rounded-md overflow-hidden ml-1">
                         <DropdownMenu.Root>
                           <DropdownMenu.Trigger
                             disabled={isSyncing || streaming}
-                            className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
+                            className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-programe-elements-button-primary-background text-programe-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-programe-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
                           >
                             {isSyncing ? 'Sincronizando...' : 'Sincronizar'}
                             <span className={classNames('i-ph:caret-down transition-transform')} />
@@ -462,7 +462,7 @@ export const Workbench = memo(
                           >
                             <DropdownMenu.Item
                               className={classNames(
-                                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
+                                'cursor-pointer flex items-center w-full px-4 py-2 text-sm text-programe-elements-textPrimary hover:bg-programe-elements-item-backgroundActive gap-2 rounded-md group relative',
                               )}
                               onClick={handleSyncFiles}
                               disabled={isSyncing}
@@ -481,12 +481,12 @@ export const Workbench = memo(
                       </div>
 
                       {/* Toggle Terminal Button */}
-                      <div className="flex border border-bolt-elements-borderColor rounded-md overflow-hidden ml-1">
+                      <div className="flex border border-programe-elements-borderColor rounded-md overflow-hidden ml-1">
                         <button
                           onClick={() => {
                             workbenchStore.toggleTerminal(!workbenchStore.showTerminal.get());
                           }}
-                          className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-bolt-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
+                          className="rounded-md items-center justify-center [&:is(:disabled,.disabled)]:cursor-not-allowed [&:is(:disabled,.disabled)]:opacity-60 px-3 py-1.5 text-xs bg-programe-elements-button-primary-background text-programe-elements-button-primary-text [&:not(:disabled,.disabled)]:hover:bg-programe-elements-button-primary-backgroundHover outline-accent-500 flex gap-1.7 transition-colors"
                         >
                           <div className="i-ph:terminal" />
                           Terminal
@@ -499,7 +499,7 @@ export const Workbench = memo(
                     <FileModifiedDropdown fileHistory={fileHistory} onSelectFile={handleSelectFile} />
                   )}
                   <button
-                    className={`${showChat ? 'i-ph:sidebar-simple-fill' : 'i-ph:sidebar-simple'} scale-x-[-1] text-lg text-bolt-elements-textSecondary ml-1`}
+                    className={`${showChat ? 'i-ph:sidebar-simple-fill' : 'i-ph:sidebar-simple'} scale-x-[-1] text-lg text-programe-elements-textSecondary ml-1`}
                     disabled={!canHideChat || isSmallViewport}
                     onClick={() => {
                       if (canHideChat) {

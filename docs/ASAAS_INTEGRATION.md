@@ -562,7 +562,7 @@ export function PlanSelector({ onSelectPlan }: { onSelectPlan: (plan: Plan) => v
           <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
           <div className="mb-4">
             <span className="text-3xl font-bold">R$ {plan.price.toFixed(2)}</span>
-            <span className="text-sm text-bolt-elements-textSecondary">/mês</span>
+            <span className="text-sm text-programe-elements-textSecondary">/mês</span>
           </div>
           <ul className="space-y-2 mb-6">
             {plan.features.map((feature, idx) => (

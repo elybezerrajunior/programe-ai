@@ -94,10 +94,10 @@ function NotificationItem({
     <div
       className={classNames(
         'relative w-full text-left px-4 py-3 flex items-start gap-3 transition-colors cursor-pointer',
-        'hover:bg-bolt-elements-background-depth-2',
+        'hover:bg-programe-elements-background-depth-2',
         {
-          'bg-bolt-elements-background-depth-1': !notification.read,
-          'bg-bolt-elements-background-depth-3/50': notification.read,
+          'bg-programe-elements-background-depth-1': !notification.read,
+          'bg-programe-elements-background-depth-3/50': notification.read,
         }
       )}
       onClick={handleClick}
@@ -113,27 +113,27 @@ function NotificationItem({
       <div className="flex-1 min-w-0">
         <p
           className={classNames('text-sm', {
-            'font-medium text-bolt-elements-textPrimary': !notification.read,
-            'text-bolt-elements-textSecondary': notification.read,
+            'font-medium text-programe-elements-textPrimary': !notification.read,
+            'text-programe-elements-textSecondary': notification.read,
           })}
         >
           {notification.title}
         </p>
-        <p className="text-xs text-bolt-elements-textTertiary line-clamp-2 mt-0.5">
+        <p className="text-xs text-programe-elements-textTertiary line-clamp-2 mt-0.5">
           {notification.message}
         </p>
         <div className="flex items-center gap-2 mt-1.5">
-          <span className="text-xs text-bolt-elements-textTertiary">
+          <span className="text-xs text-programe-elements-textTertiary">
             {formatRelativeTime(notification.created_at)}
           </span>
 
           {/* Botão marcar como lida - só aparece se não lida */}
           {!notification.read && (
             <>
-              <span className="text-bolt-elements-textTertiary">·</span>
+              <span className="text-programe-elements-textTertiary">·</span>
               <button
                 onClick={handleMarkAsRead}
-                className="bg-transparent border-none p-0 shadow-none text-xs text-bolt-elements-textTertiary hover:text-bolt-elements-textSecondary"
+                className="bg-transparent border-none p-0 shadow-none text-xs text-programe-elements-textTertiary hover:text-programe-elements-textSecondary"
                 title="Marcar como lida"
               >
                 Marcar como lida
@@ -153,7 +153,7 @@ function NotificationItem({
             disabled={isRemoving}
             className={classNames(
               'p-1 rounded transition-colors',
-              'text-bolt-elements-textTertiary hover:text-red-400 hover:bg-red-500/10',
+              'text-programe-elements-textTertiary hover:text-red-400 hover:bg-red-500/10',
               { 'opacity-50 cursor-not-allowed': isRemoving }
             )}
             title="Remover notificação"
@@ -300,7 +300,7 @@ export function NotificationsDropdown() {
       {/* Botão do sino */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary transition-colors bg-transparent"
+        className="relative p-2 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary transition-colors bg-transparent"
         aria-label="Notificações"
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -315,13 +315,13 @@ export function NotificationsDropdown() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-80 max-h-[70vh] bg-bolt-elements-background-depth-1 border border-bolt-elements-borderColor rounded-lg shadow-xl overflow-hidden z-50">
+        <div className="absolute right-0 top-full mt-2 w-80 max-h-[70vh] bg-programe-elements-background-depth-1 border border-programe-elements-borderColor rounded-lg shadow-xl overflow-hidden z-50">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-bolt-elements-borderColor bg-bolt-elements-background-depth-2">
-            <h3 className="font-semibold text-bolt-elements-textPrimary text-sm">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-programe-elements-borderColor bg-programe-elements-background-depth-2">
+            <h3 className="font-semibold text-programe-elements-textPrimary text-sm">
               Notificações
               {notifications.length > 0 && (
-                <span className="ml-2 text-xs font-normal text-bolt-elements-textTertiary">
+                <span className="ml-2 text-xs font-normal text-programe-elements-textTertiary">
                   ({notifications.length})
                 </span>
               )}
@@ -352,15 +352,15 @@ export function NotificationsDropdown() {
           <div className="overflow-y-auto max-h-[calc(70vh-60px)]">
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <div className="i-svg-spinners:90-ring-with-bg text-xl text-bolt-elements-textSecondary" />
+                <div className="i-svg-spinners:90-ring-with-bg text-xl text-programe-elements-textSecondary" />
               </div>
             ) : notifications.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-8 text-bolt-elements-textSecondary">
+              <div className="flex flex-col items-center justify-center py-8 text-programe-elements-textSecondary">
                 <div className="i-ph:bell-slash text-4xl mb-2 opacity-50" />
                 <p className="text-sm">Nenhuma notificação</p>
               </div>
             ) : (
-              <div className="divide-y divide-bolt-elements-borderColor">
+              <div className="divide-y divide-programe-elements-borderColor">
                 {notifications.slice(0, 20).map((notification) => (
                   <NotificationItem
                     key={notification.id}
@@ -376,7 +376,7 @@ export function NotificationsDropdown() {
 
           {/* Footer - ver todas */}
           {notifications.length > 20 && (
-            <div className="border-t border-bolt-elements-borderColor px-4 py-2 bg-bolt-elements-background-depth-2">
+            <div className="border-t border-programe-elements-borderColor px-4 py-2 bg-programe-elements-background-depth-2">
               <button
                 onClick={() => {
                   setIsOpen(false);

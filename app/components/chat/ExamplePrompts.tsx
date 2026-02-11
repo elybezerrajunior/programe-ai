@@ -61,8 +61,8 @@ export function ExamplePrompts({ onSelectPrompt }: ExamplePromptsProps) {
               }}
               className={classNames(
                 'px-4 py-2 rounded-full text-sm font-medium transition-all',
-                'border border-bolt-elements-borderColor',
-                'bg-bolt-elements-background-depth-1 text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary hover:border-bolt-elements-borderColorActive'
+                'border border-programe-elements-borderColor',
+                'bg-programe-elements-background-depth-1 text-programe-elements-textSecondary hover:text-programe-elements-textPrimary hover:border-programe-elements-borderColorActive'
               )}
             >
               {type.label}

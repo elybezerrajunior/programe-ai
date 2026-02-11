@@ -54,7 +54,7 @@ function CurrentDateTime() {
   }, []);
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 text-sm text-bolt-elements-textSecondary border-b border-bolt-elements-borderColor">
+    <div className="flex items-center gap-2 px-4 py-2 text-sm text-programe-elements-textSecondary border-b border-programe-elements-borderColor">
       <div className="h-4 w-4 i-ph:clock opacity-80" />
       <div className="flex gap-2">
         <span>{dateTime.toLocaleDateString()}</span>
@@ -355,13 +355,13 @@ export const Menu = () => {
         style={{ width: '340px' }}
         className={classNames(
           'flex selection-accent flex-col side-menu fixed top-0 h-full rounded-r-2xl',
-          'bg-bolt-elements-background-depth-1 border-r border-bolt-elements-borderColor',
+          'bg-programe-elements-background-depth-1 border-r border-programe-elements-borderColor',
           'shadow-sm text-sm',
           isSettingsOpen ? 'z-40' : 'z-[999]',
         )}
       >
-        <div className="h-12 flex items-center gap-3 px-4 border-b border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 rounded-tr-2xl">
-          <div className="flex items-center justify-center w-9 h-9 overflow-hidden bg-bolt-elements-background-depth-3 text-bolt-elements-textTertiary rounded-full shrink-0">
+        <div className="h-12 flex items-center gap-3 px-4 border-b border-programe-elements-borderColor bg-programe-elements-background-depth-2 rounded-tr-2xl">
+          <div className="flex items-center justify-center w-9 h-9 overflow-hidden bg-programe-elements-background-depth-3 text-programe-elements-textTertiary rounded-full shrink-0">
             {profile?.avatar && !avatarLoadError ? (
               <img
                 src={profile.avatar}
@@ -375,7 +375,7 @@ export const Menu = () => {
               <div className="i-ph:user-fill text-lg" aria-hidden />
             )}
           </div>
-          <span className="font-medium text-sm text-bolt-elements-textPrimary truncate flex-1 min-w-0">
+          <span className="font-medium text-sm text-programe-elements-textPrimary truncate flex-1 min-w-0">
             {profile?.username || 'Usuário convidado'}
           </span>
         </div>
@@ -385,7 +385,7 @@ export const Menu = () => {
             <div className="flex gap-2">
               <a
                 href="/"
-                className="flex-1 flex gap-2 items-center bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text hover:bg-bolt-elements-button-primary-backgroundHover rounded-lg px-4 py-2 transition-colors"
+                className="flex-1 flex gap-2 items-center bg-programe-elements-button-primary-background text-programe-elements-button-primary-text hover:bg-programe-elements-button-primary-backgroundHover rounded-lg px-4 py-2 transition-colors"
               >
                 <span className="inline-block i-ph:plus-circle h-4 w-4" />
                 <span className="text-sm font-medium">Iniciar novo chat</span>
@@ -393,10 +393,10 @@ export const Menu = () => {
               <button
                 onClick={toggleSelectionMode}
                 className={classNames(
-                  'flex gap-1 items-center rounded-lg px-3 py-2 transition-colors border border-bolt-elements-borderColor',
+                  'flex gap-1 items-center rounded-lg px-3 py-2 transition-colors border border-programe-elements-borderColor',
                   selectionMode
-                    ? 'bg-bolt-elements-button-primary-background text-bolt-elements-button-primary-text hover:bg-bolt-elements-button-primary-backgroundHover'
-                    : 'bg-bolt-elements-button-secondary-background text-bolt-elements-button-secondary-text hover:bg-bolt-elements-button-secondary-backgroundHover',
+                    ? 'bg-programe-elements-button-primary-background text-programe-elements-button-primary-text hover:bg-programe-elements-button-primary-backgroundHover'
+                    : 'bg-programe-elements-button-secondary-background text-programe-elements-button-secondary-text hover:bg-programe-elements-button-secondary-backgroundHover',
                 )}
                 aria-label={selectionMode ? 'Sair do modo de seleção' : 'Entrar no modo de seleção'}
               >
@@ -405,10 +405,10 @@ export const Menu = () => {
             </div>
             <div className="relative w-full">
               <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                <span className="i-ph:magnifying-glass h-4 w-4 text-bolt-elements-textTertiary" />
+                <span className="i-ph:magnifying-glass h-4 w-4 text-programe-elements-textTertiary" />
               </div>
               <input
-                className="w-full bg-bolt-elements-background-depth-2 relative pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent-500/50 text-sm text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary border border-bolt-elements-borderColor"
+                className="w-full bg-programe-elements-background-depth-2 relative pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-accent-500/50 text-sm text-programe-elements-textPrimary placeholder-programe-elements-textTertiary border border-programe-elements-borderColor"
                 type="search"
                 placeholder="Buscar chats..."
                 onChange={handleSearchChange}
@@ -417,7 +417,7 @@ export const Menu = () => {
             </div>
           </div>
           <div className="flex items-center justify-between text-sm px-4 py-2">
-            <div className="font-medium text-bolt-elements-textSecondary">Seus Chats</div>
+            <div className="font-medium text-programe-elements-textSecondary">Seus Chats</div>
             {selectionMode && (
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={selectAll}>
@@ -436,14 +436,14 @@ export const Menu = () => {
           </div>
           <div className="flex-1 overflow-auto px-3 pb-3">
             {filteredList.length === 0 && (
-              <div className="px-4 text-bolt-elements-textTertiary text-sm">
+              <div className="px-4 text-programe-elements-textTertiary text-sm">
                 {list.length === 0 ? 'Nenhuma conversa anterior' : 'Nenhum resultado encontrado'}
               </div>
             )}
             <DialogRoot open={dialogContent !== null}>
               {binDates(filteredList).map(({ category, items }) => (
                 <div key={category} className="mt-2 first:mt-0 space-y-1">
-                  <div className="text-xs font-medium text-bolt-elements-textTertiary sticky top-0 z-1 bg-bolt-elements-background-depth-1 px-4 py-1">
+                  <div className="text-xs font-medium text-programe-elements-textTertiary sticky top-0 z-1 bg-programe-elements-background-depth-1 px-4 py-1">
                     {category}
                   </div>
                   <div className="space-y-0.5 pr-1">
@@ -470,19 +470,19 @@ export const Menu = () => {
               <Dialog onBackdrop={closeDialog} onClose={closeDialog}>
                 {dialogContent?.type === 'delete' && (
                   <>
-                    <div className="p-6 bg-bolt-elements-background-depth-1">
-                      <DialogTitle className="text-bolt-elements-textPrimary">Excluir Chat?</DialogTitle>
-                      <DialogDescription className="mt-2 text-bolt-elements-textSecondary">
+                    <div className="p-6 bg-programe-elements-background-depth-1">
+                      <DialogTitle className="text-programe-elements-textPrimary">Excluir Chat?</DialogTitle>
+                      <DialogDescription className="mt-2 text-programe-elements-textSecondary">
                         <p>
                           Você está prestes a excluir{' '}
-                          <span className="font-medium text-bolt-elements-textPrimary">
+                          <span className="font-medium text-programe-elements-textPrimary">
                             {dialogContent.item.description}
                           </span>
                         </p>
                         <p className="mt-2">Tem certeza de que deseja excluir este chat?</p>
                       </DialogDescription>
                     </div>
-                    <div className="flex justify-end gap-3 px-6 py-4 bg-bolt-elements-background-depth-2 border-t border-bolt-elements-borderColor">
+                    <div className="flex justify-end gap-3 px-6 py-4 bg-programe-elements-background-depth-2 border-t border-programe-elements-borderColor">
                       <DialogButton type="secondary" onClick={closeDialog}>
                         Cancelar
                       </DialogButton>
@@ -501,18 +501,18 @@ export const Menu = () => {
                 )}
                 {dialogContent?.type === 'bulkDelete' && (
                   <>
-                    <div className="p-6 bg-bolt-elements-background-depth-1">
-                      <DialogTitle className="text-bolt-elements-textPrimary">Excluir Chats Selecionados?</DialogTitle>
-                      <DialogDescription className="mt-2 text-bolt-elements-textSecondary">
+                    <div className="p-6 bg-programe-elements-background-depth-1">
+                      <DialogTitle className="text-programe-elements-textPrimary">Excluir Chats Selecionados?</DialogTitle>
+                      <DialogDescription className="mt-2 text-programe-elements-textSecondary">
                         <p>
                           Você está prestes a excluir {dialogContent.items.length}{' '}
                           {dialogContent.items.length === 1 ? 'chat' : 'chats'}:
                         </p>
-                        <div className="mt-2 max-h-32 overflow-auto border border-bolt-elements-borderColor rounded-md bg-bolt-elements-background-depth-2 p-2">
+                        <div className="mt-2 max-h-32 overflow-auto border border-programe-elements-borderColor rounded-md bg-programe-elements-background-depth-2 p-2">
                           <ul className="list-disc pl-5 space-y-1">
                             {dialogContent.items.map((item) => (
                               <li key={item.id} className="text-sm">
-                                <span className="font-medium text-bolt-elements-textPrimary">{item.description}</span>
+                                <span className="font-medium text-programe-elements-textPrimary">{item.description}</span>
                               </li>
                             ))}
                           </ul>
@@ -520,7 +520,7 @@ export const Menu = () => {
                         <p className="mt-3">Tem certeza de que deseja excluir estes chats?</p>
                       </DialogDescription>
                     </div>
-                    <div className="flex justify-end gap-3 px-6 py-4 bg-bolt-elements-background-depth-2 border-t border-bolt-elements-borderColor">
+                    <div className="flex justify-end gap-3 px-6 py-4 bg-programe-elements-background-depth-2 border-t border-programe-elements-borderColor">
                       <DialogButton type="secondary" onClick={closeDialog}>
                         Cancelar
                       </DialogButton>
@@ -545,7 +545,7 @@ export const Menu = () => {
               </Dialog>
             </DialogRoot>
           </div>
-          <div className="flex items-center border-t border-bolt-elements-borderColor px-4 py-3 bg-bolt-elements-background-depth-2 rounded-br-2xl">
+          <div className="flex items-center border-t border-programe-elements-borderColor px-4 py-3 bg-programe-elements-background-depth-2 rounded-br-2xl">
             <SettingsButton onClick={handleSettingsClick} />
           </div>
         </div>

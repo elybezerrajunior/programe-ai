@@ -11,8 +11,8 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
   return (
     <Card
       className={classNames(
-        'p-4 transition-all hover:border-bolt-elements-borderColorActive rounded-xl',
-        'bg-bolt-elements-background-depth-2'
+        'p-4 transition-all hover:border-programe-elements-borderColorActive rounded-xl',
+        'bg-programe-elements-background-depth-2'
       )}
     >
       <div className="flex items-start gap-3 mb-3">
@@ -20,8 +20,8 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
           <span className={classNames(icon, 'text-xl text-accent')} />
         </div>
       </div>
-      <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-2">{title}</h3>
-      <p className="text-sm text-bolt-elements-textSecondary line-clamp-2">{description}</p>
+      <h3 className="text-lg font-semibold text-programe-elements-textPrimary mb-2">{title}</h3>
+      <p className="text-sm text-programe-elements-textSecondary line-clamp-2">{description}</p>
     </Card>
   );
 }
@@ -59,7 +59,7 @@ export function SignupFeatures() {
             BENEFÍCIOS
           </span>
         </div>
-        <h2 className="text-3xl font-bold text-bolt-elements-textPrimary">
+        <h2 className="text-3xl font-bold text-programe-elements-textPrimary">
           Comece a construir hoje
         </h2>
       </div>
@@ -76,14 +76,14 @@ export function SignupFeatures() {
       </div>
 
       <div className="mt-auto">
-        <h3 className="text-sm font-semibold text-bolt-elements-textSecondary uppercase tracking-wide mb-4">
+        <h3 className="text-sm font-semibold text-programe-elements-textSecondary uppercase tracking-wide mb-4">
           VOCÊ GANHA:
         </h3>
         <ul className="flex flex-col gap-3">
           {benefits.map((item, index) => (
             <li key={index} className="flex items-center gap-3">
               <span className="i-ph:check-circle w-5 h-5 text-accent-500 flex-shrink-0" />
-              <span className="text-sm text-bolt-elements-textSecondary">{item}</span>
+              <span className="text-sm text-programe-elements-textSecondary">{item}</span>
             </li>
           ))}
         </ul>

@@ -377,10 +377,10 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
           >
             {!chatStarted && (
               <div id="intro" className="mt-[14vh] max-w-2xl mx-auto text-center px-4 lg:px-0">
-                <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-bolt-elements-textPrimary mb-5 fade-in-up opacity-0" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+                <h1 className="text-3xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-programe-elements-textPrimary mb-5 fade-in-up opacity-0" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
                   Onde as ideias começam
                 </h1>
-                <p className="text-base lg:text-lg text-bolt-elements-textSecondary fade-in-up opacity-0 leading-relaxed" style={{ animationDelay: '0.25s', animationFillMode: 'forwards' }}>
+                <p className="text-base lg:text-lg text-programe-elements-textSecondary fade-in-up opacity-0 leading-relaxed" style={{ animationDelay: '0.25s', animationFillMode: 'forwards' }}>
                   Dê vida às suas ideias em segundos ou obtenha ajuda em projetos existentes.
                 </p>
               </div>
@@ -420,20 +420,20 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
               >
                 <div className="flex flex-col gap-2">
                   {envConfigError && (
-                    <div className="rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-background-depth-2 p-4 mb-2">
+                    <div className="rounded-lg border border-programe-elements-borderColor bg-programe-elements-background-depth-2 p-4 mb-2">
                       <div className="flex items-start">
                         <div className="flex-shrink-0">
-                          <div className="i-ph:warning-duotone text-xl text-bolt-elements-button-danger-text"></div>
+                          <div className="i-ph:warning-duotone text-xl text-programe-elements-button-danger-text"></div>
                         </div>
                         <div className="ml-3 flex-1">
-                          <h3 className="text-sm font-medium text-bolt-elements-textPrimary">
+                          <h3 className="text-sm font-medium text-programe-elements-textPrimary">
                             Configuração de LLM Inválida
                           </h3>
-                          <div className="mt-2 text-sm text-bolt-elements-textSecondary">
+                          <div className="mt-2 text-sm text-programe-elements-textSecondary">
                             <p>{envConfigError}</p>
                             <p className="mt-2 text-xs">
-                              Configure as variáveis de ambiente <code>BOLT_LLM_PROVIDER</code> e{' '}
-                              <code>BOLT_LLM_MODEL</code> para usar esta funcionalidade.
+                              Configure as variáveis de ambiente <code>PROGRAME_LLM_PROVIDER</code> e{' '}
+                              <code>PROGRAME_LLM_MODEL</code> para usar esta funcionalidade.
                             </p>
                           </div>
                         </div>
@@ -474,48 +474,48 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 </div>
                 {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
                 <ChatBox
-                    isModelSettingsCollapsed={isModelSettingsCollapsed}
-                    setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
-                    provider={provider}
-                    setProvider={setProvider}
-                    providerList={providerList || (PROVIDER_LIST as ProviderInfo[])}
-                    model={model}
-                    setModel={setModel}
-                    modelList={modelList}
-                    apiKeys={apiKeys}
-                    isModelLoading={isModelLoading}
-                    onApiKeysChange={onApiKeysChange}
-                    uploadedFiles={uploadedFiles}
-                    setUploadedFiles={setUploadedFiles}
-                    imageDataList={imageDataList}
-                    setImageDataList={setImageDataList}
-                    textareaRef={textareaRef}
-                    input={input}
-                    handleInputChange={handleInputChange}
-                    handlePaste={handlePaste}
-                    TEXTAREA_MIN_HEIGHT={TEXTAREA_MIN_HEIGHT}
-                    TEXTAREA_MAX_HEIGHT={TEXTAREA_MAX_HEIGHT}
-                    isStreaming={isStreaming}
-                    handleStop={handleStop}
-                    handleSendMessage={handleSendMessage}
-                    enhancingPrompt={enhancingPrompt}
-                    enhancePrompt={enhancePrompt}
-                    isListening={isListening}
-                    startListening={startListening}
-                    stopListening={stopListening}
-                    chatStarted={chatStarted}
-                    exportChat={exportChat}
-                    qrModalOpen={qrModalOpen}
-                    setQrModalOpen={setQrModalOpen}
-                    handleFileUpload={handleFileUpload}
-                    chatMode={chatMode}
-                    setChatMode={setChatMode}
-                    designScheme={designScheme}
-                    setDesignScheme={setDesignScheme}
-                    selectedElement={selectedElement}
-                    setSelectedElement={setSelectedElement}
-                    envConfigured={envConfigured}
-                  />
+                  isModelSettingsCollapsed={isModelSettingsCollapsed}
+                  setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
+                  provider={provider}
+                  setProvider={setProvider}
+                  providerList={providerList || (PROVIDER_LIST as ProviderInfo[])}
+                  model={model}
+                  setModel={setModel}
+                  modelList={modelList}
+                  apiKeys={apiKeys}
+                  isModelLoading={isModelLoading}
+                  onApiKeysChange={onApiKeysChange}
+                  uploadedFiles={uploadedFiles}
+                  setUploadedFiles={setUploadedFiles}
+                  imageDataList={imageDataList}
+                  setImageDataList={setImageDataList}
+                  textareaRef={textareaRef}
+                  input={input}
+                  handleInputChange={handleInputChange}
+                  handlePaste={handlePaste}
+                  TEXTAREA_MIN_HEIGHT={TEXTAREA_MIN_HEIGHT}
+                  TEXTAREA_MAX_HEIGHT={TEXTAREA_MAX_HEIGHT}
+                  isStreaming={isStreaming}
+                  handleStop={handleStop}
+                  handleSendMessage={handleSendMessage}
+                  enhancingPrompt={enhancingPrompt}
+                  enhancePrompt={enhancePrompt}
+                  isListening={isListening}
+                  startListening={startListening}
+                  stopListening={stopListening}
+                  chatStarted={chatStarted}
+                  exportChat={exportChat}
+                  qrModalOpen={qrModalOpen}
+                  setQrModalOpen={setQrModalOpen}
+                  handleFileUpload={handleFileUpload}
+                  chatMode={chatMode}
+                  setChatMode={setChatMode}
+                  designScheme={designScheme}
+                  setDesignScheme={setDesignScheme}
+                  selectedElement={selectedElement}
+                  setSelectedElement={setSelectedElement}
+                  envConfigured={envConfigured}
+                />
               </div>
             </StickToBottom>
             <div className="flex flex-col justify-center">
@@ -553,11 +553,11 @@ function ScrollToBottom() {
   const { isAtBottom, scrollToBottom } = useStickToBottomContext();
 
   return (
-        !isAtBottom && (
+    !isAtBottom && (
       <>
-        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-bolt-elements-background-depth-1 to-transparent h-20 z-10 pointer-events-none" />
+        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-programe-elements-background-depth-1 to-transparent h-20 z-10 pointer-events-none" />
         <button
-          className="sticky z-50 bottom-0 left-0 right-0 rounded-xl px-4 py-2.5 flex items-center justify-center mx-auto gap-2 bg-bolt-elements-background-depth-2/95 backdrop-blur-sm border border-bolt-elements-borderColor text-bolt-elements-textPrimary text-sm font-medium shadow-lg hover:bg-bolt-elements-background-depth-3 transition-colors"
+          className="sticky z-50 bottom-0 left-0 right-0 rounded-xl px-4 py-2.5 flex items-center justify-center mx-auto gap-2 bg-programe-elements-background-depth-2/95 backdrop-blur-sm border border-programe-elements-borderColor text-programe-elements-textPrimary text-sm font-medium shadow-lg hover:bg-programe-elements-background-depth-3 transition-colors"
           onClick={() => scrollToBottom()}
         >
           Ir para última mensagem

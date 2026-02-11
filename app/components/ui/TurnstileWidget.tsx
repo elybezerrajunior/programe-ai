@@ -93,8 +93,8 @@ export function TurnstileWidget({
       
       {/* Loading state */}
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-bolt-elements-background-depth-1/50">
-          <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-2xl" />
+        <div className="absolute inset-0 flex items-center justify-center bg-programe-elements-background-depth-1/50">
+          <div className="i-svg-spinners:90-ring-with-bg text-programe-elements-loader-progress text-2xl" />
         </div>
       )}
     </div>
@@ -116,8 +116,8 @@ export function TurnstilePlaceholder({ className }: { className?: string }) {
     <div 
       className={classNames(
         'min-h-[65px] flex items-center justify-center',
-        'border border-dashed border-bolt-elements-borderColor rounded-lg',
-        'text-xs text-bolt-elements-textSecondary',
+        'border border-dashed border-programe-elements-borderColor rounded-lg',
+        'text-xs text-programe-elements-textSecondary',
         className
       )}
     >
