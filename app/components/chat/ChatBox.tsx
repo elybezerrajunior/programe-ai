@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ClientOnly } from 'remix-utils/client-only';
 import { classNames } from '~/utils/classNames';
 import { PROVIDER_LIST } from '~/utils/constants';
@@ -16,6 +16,10 @@ import type { ProviderInfo } from '~/types/model';
 import type { DesignScheme } from '~/types/design-scheme';
 import type { ElementInfo } from '~/components/workbench/Inspector';
 import { Tooltip } from '~/components/ui/Tooltip';
+
+import { useStore } from '@nanostores/react';
+import { subscriptionStore } from '~/lib/stores/subscription';
+import { BlueprintModal } from './BlueprintModal';
 
 export interface ChatBoxProps {
   isModelSettingsCollapsed: boolean;
@@ -63,6 +67,9 @@ export interface ChatBoxProps {
 }
 
 export const ChatBox: React.FC<ChatBoxProps> = (props) => {
+  const [blueprintModalOpen, setBlueprintModalOpen] = useState(false);
+  const subscription = useStore(subscriptionStore);
+
   const handleToggleListening = () => {
     if (props.isListening) {
       props.stopListening();
@@ -74,10 +81,10 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
   return (
     <div
       className={classNames(
-        'relative backdrop-blur-sm p-4 rounded-xl border border-bolt-elements-borderColor w-full mx-auto z-prompt transition-shadow duration-300 ease-out scale-in opacity-0',
+        'relative backdrop-blur-sm p-4 rounded-xl border border-programe-elements-borderColor w-full mx-auto z-prompt transition-shadow duration-300 ease-out scale-in opacity-0',
         props.isPreviewMode
-          ? 'max-w-6xl shadow-xl ring-1 ring-bolt-elements-borderColor/50 bg-bolt-elements-background-depth-2/90 hover:shadow-2xl'
-          : 'max-w-chat shadow-lg bg-bolt-elements-background-depth-2 ring-1 ring-black/5 dark:ring-white/5',
+          ? 'max-w-6xl shadow-xl ring-1 ring-programe-elements-borderColor/50 bg-programe-elements-background-depth-2/90 hover:shadow-2xl'
+          : 'max-w-chat shadow-lg bg-programe-elements-background-depth-2 ring-1 ring-black/5 dark:ring-white/5',
       )}
       style={{ animationFillMode: 'forwards' }}
     >
@@ -184,7 +191,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           )}
         </ClientOnly>
         {props.selectedElement && (
-          <div className="flex mx-1.5 gap-2 items-center justify-between rounded-lg rounded-b-none border border-b-none border-bolt-elements-borderColor text-bolt-elements-textPrimary flex py-1 px-2.5 font-medium text-xs">
+          <div className="flex mx-1.5 gap-2 items-center justify-between rounded-lg rounded-b-none border border-b-none border-programe-elements-borderColor text-programe-elements-textPrimary flex py-1 px-2.5 font-medium text-xs">
             <div className="flex gap-2 items-center lowercase">
               <code className="bg-accent-500 rounded-4px px-1.5 py-1 mr-0.5 text-white">
                 {props?.selectedElement?.tagName}
@@ -200,14 +207,14 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           </div>
         )}
         <div
-          className={classNames('relative border border-bolt-elements-borderColor/80 rounded-xl overflow-hidden bg-bolt-elements-background-depth-1/30')}
+          className={classNames('relative border border-programe-elements-borderColor/80 rounded-xl overflow-hidden bg-programe-elements-background-depth-1/30')}
         >
           <textarea
             ref={props.textareaRef}
             className={classNames(
-              'w-full pl-4 pt-4 pr-16 outline-none resize-none text-bolt-elements-textPrimary placeholder-bolt-elements-textTertiary bg-transparent text-sm',
+              'w-full pl-4 pt-4 pr-16 outline-none resize-none text-programe-elements-textPrimary placeholder-programe-elements-textTertiary bg-transparent text-sm',
               'transition-all duration-200',
-              'hover:border-bolt-elements-focus',
+              'hover:border-programe-elements-focus',
               '[&::-webkit-scrollbar]:hidden',
             )}
             onDragEnter={(e) => {
@@ -220,11 +227,11 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             }}
             onDragLeave={(e) => {
               e.preventDefault();
-              e.currentTarget.style.border = '1px solid var(--bolt-elements-borderColor)';
+              e.currentTarget.style.border = '1px solid var(--programe-elements-borderColor)';
             }}
             onDrop={(e) => {
               e.preventDefault();
-              e.currentTarget.style.border = '1px solid var(--bolt-elements-borderColor)';
+              e.currentTarget.style.border = '1px solid var(--programe-elements-borderColor)';
 
               const files = Array.from(e.dataTransfer.files);
               files.forEach((file) => {
@@ -299,22 +306,31 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
           </ClientOnly>
           <div className="flex justify-between items-center text-sm px-4 pb-3 pt-2">
             <div className="flex gap-1 items-center">
-              <Dropdown
-                trigger={
-                  <button
-                    type="button"
-                    className="flex items-center text-bolt-elements-item-contentDefault bg-transparent hover:text-bolt-elements-item-contentActive rounded-md p-1 hover:bg-bolt-elements-item-backgroundActive focus:outline-none transition-all"
-                  >
-                    <div className="i-ph:folder-plus text-xl" />
-                  </button>
-                }
-              >
-                <DropdownItem onSelect={props.handleFileUpload}>
-                  <div className="i-ph:file-plus text-lg opacity-60" />
-                  Enviar Arquivo
-                </DropdownItem>
+              <Tooltip content="Enviar arquivo" side="top">
+                <button
+                  type="button"
+                  onClick={props.handleFileUpload}
+                  className="flex items-center text-programe-elements-item-contentDefault bg-transparent hover:text-programe-elements-item-contentActive rounded-md p-1 hover:bg-programe-elements-item-backgroundActive focus:outline-none transition-all"
+                >
+                  <div className="i-ph:folder-plus text-xl" />
+                </button>
+              </Tooltip>
 
-              </Dropdown>
+              <BlueprintModal
+                open={blueprintModalOpen}
+                onClose={() => setBlueprintModalOpen(false)}
+                userPlan={subscription.planType as any}
+                onSelect={async (business) => {
+                  setBlueprintModalOpen(false);
+                  if (props.chatStarted) {
+                    window.location.href = `/?blueprint=${encodeURIComponent(business.id)}&blueprintName=${encodeURIComponent(business.name)}`;
+                  } else {
+                    const { getBlueprintContent } = await import('~/lib/blueprints.client');
+                    const message = await getBlueprintContent(business.id, business.name);
+                    props.handleSendMessage?.({ preventDefault: () => { } } as React.UIEvent, message);
+                  }
+                }}
+              />
               <Tooltip content={props.isListening ? 'Parar reconhecimento de voz' : 'Reconhecimento de voz'} side="top">
                 <button
                   type="button"
@@ -323,8 +339,8 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
                   className={classNames(
                     'flex items-center bg-transparent rounded-md p-1 focus:outline-none transition-all',
                     props.isListening
-                      ? 'text-bolt-elements-item-contentAccent hover:bg-bolt-elements-item-backgroundActive'
-                      : 'text-bolt-elements-item-contentDefault hover:text-bolt-elements-item-contentActive hover:bg-bolt-elements-item-backgroundActive',
+                      ? 'text-programe-elements-item-contentAccent hover:bg-programe-elements-item-backgroundActive'
+                      : 'text-programe-elements-item-contentDefault hover:text-programe-elements-item-contentActive hover:bg-programe-elements-item-backgroundActive',
                     props.isStreaming && 'opacity-50 cursor-not-allowed'
                   )}
                 >

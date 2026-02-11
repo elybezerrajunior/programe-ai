@@ -169,6 +169,41 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     }, [transcript]);
 
     useEffect(() => {
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const blueprintId = urlParams.get('blueprint');
+        const blueprintName = urlParams.get('blueprintName') || blueprintId; // Fallback to ID if name missing
+
+        if (blueprintId) {
+          // Clean up URL
+          window.history.replaceState({}, '', '/');
+
+          (async () => {
+            try {
+              const { getBlueprintContent } = await import('~/lib/blueprints.client');
+              const message = await getBlueprintContent(blueprintId, blueprintName || 'Unknown');
+
+              // Send content
+              // We need to wait a tick to ensure everything is ready
+              setTimeout(() => {
+                const event = { preventDefault: () => { } } as React.UIEvent;
+                sendMessage?.(event, message);
+              }, 500);
+            } catch (error) {
+              console.error('Failed to load blueprint content:', error);
+              // Fallback if import fails
+              const message = `Quero construir um sistema completo para ${blueprintName}.\nGere o Blueprint detalhado e o plano de construção.`;
+              setTimeout(() => {
+                const event = { preventDefault: () => { } } as React.UIEvent;
+                sendMessage?.(event, message);
+              }, 500);
+            }
+          })();
+        }
+      }
+    }, [sendMessage]);
+
+    useEffect(() => {
       onStreamingChange?.(isStreaming);
     }, [isStreaming, onStreamingChange]);
 

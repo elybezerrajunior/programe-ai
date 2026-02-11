@@ -16,6 +16,11 @@ import { useSettings } from '~/lib/hooks/useSettings';
 import { useLLMConfig } from '~/lib/hooks/useLLMConfig';
 import { homeHeroFilesStore } from '~/lib/stores/homeFiles';
 import { ColorSchemeDialog } from '~/components/ui/ColorSchemeDialog';
+import { BlueprintModal } from '~/components/chat/BlueprintModal';
+import { useStore } from '@nanostores/react';
+import { subscriptionStore } from '~/lib/stores/subscription';
+import { SupabaseConnection } from '~/components/chat/SupabaseConnection';
+
 
 interface HomeHeroProps {
   onGenerateProject?: (description: string) => void;
@@ -26,6 +31,9 @@ interface HomeHeroProps {
 
 export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = [], initialDescription = '' }: HomeHeroProps) {
   const [projectDescription, setProjectDescription] = useState(initialDescription);
+  const [blueprintModalOpen, setBlueprintModalOpen] = useState(false);
+  const [colorDialogOpen, setColorDialogOpen] = useState(false);
+  const subscription = useStore(subscriptionStore);
 
   // Update description when initialDescription changes
   useEffect(() => {
@@ -97,6 +105,45 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
       setRecognition(recognitionInstance);
     }
   }, []);
+
+  // Typewriter effect state
+  const [placeholderText, setPlaceholderText] = useState('');
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(50);
+
+  const placeholderPhrases = [
+    "Um aplicativo de marketplace para fotógrafos freelances...",
+    "Uma plataforma de gestão de projetos com quadros Kanban...",
+    "Um site de e-commerce para venda de produtos artesanais...",
+    "Um sistema de agendamento para clínicas médicas...",
+    "Uma rede social para amantes de animais de estimação..."
+  ];
+
+  useEffect(() => {
+    const handleType = () => {
+      const currentFullText = placeholderPhrases[currentTextIndex];
+
+      if (isDeleting) {
+        setPlaceholderText(currentFullText.substring(0, placeholderText.length - 1));
+        setTypingSpeed(30); // Faster deleting
+      } else {
+        setPlaceholderText(currentFullText.substring(0, placeholderText.length + 1));
+        setTypingSpeed(50); // Normal typing
+      }
+
+      if (!isDeleting && placeholderText === currentFullText) {
+        setTimeout(() => setIsDeleting(true), 1500); // Wait before deleting
+      } else if (isDeleting && placeholderText === '') {
+        setIsDeleting(false);
+        setCurrentTextIndex((prev) => (prev + 1) % placeholderPhrases.length);
+        setTypingSpeed(500); // Wait before typing next
+      }
+    };
+
+    const timer = setTimeout(handleType, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [placeholderText, isDeleting, currentTextIndex, typingSpeed]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -312,7 +359,7 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
                 onChange={(e) => setProjectDescription(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onPaste={handlePaste}
-                placeholder="Ex: Um aplicativo de marketplace para fotógrafos freelances encontrarem clientes, com portfólio, sistema de agendamento e pagamentos via Stripe..."
+                placeholder={placeholderText}
                 className={classNames(
                   'w-full min-h-[120px] px-4 py-3 rounded-2xl',
                   'border border-accent-500 bg-programe-elements-background-depth-1',
@@ -330,10 +377,8 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
             {/* Actions */}
             <div className="flex items-center justify-between text-sm pt-2">
               <div className="flex gap-1 items-center">
-                <Tooltip content="Tema e paleta do projeto" side="top">
-                  <ColorSchemeDialog designScheme={designScheme || defaultDesignScheme} setDesignScheme={setDesignScheme} />
-                </Tooltip>
                 <Dropdown
+                  align="start"
                   trigger={
                     <button
                       type="button"
@@ -343,12 +388,45 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
                     </button>
                   }
                 >
-                  <DropdownItem onSelect={handleFileUpload}>
-                    <div className="i-ph:file-plus text-lg opacity-60" />
-                    Enviar Arquivo
+                  <DropdownItem onSelect={() => document.dispatchEvent(new CustomEvent('open-supabase-connection'))}>
+                    <div className="i-ph:database text-lg" />
+                    Banco de Dados
                   </DropdownItem>
-
+                  <DropdownItem onSelect={handleFileUpload}>
+                    <div className="i-ph:folder-plus text-lg" />
+                    Upload de Arquivo
+                  </DropdownItem>
+                  <DropdownItem onSelect={() => setBlueprintModalOpen(true)}>
+                    <div className="i-ph:rocket-launch text-lg" />
+                    Programe Blueprint
+                  </DropdownItem>
+                  <DropdownItem onSelect={() => setColorDialogOpen(true)}>
+                    <div className="i-ph:palette text-lg" />
+                    Tema e Paleta
+                  </DropdownItem>
                 </Dropdown>
+
+                <BlueprintModal
+                  open={blueprintModalOpen}
+                  onClose={() => setBlueprintModalOpen(false)}
+                  userPlan={subscription.planType as any}
+                  onSelect={async (business) => {
+                    setBlueprintModalOpen(false);
+                    const { getBlueprintContent } = await import('~/lib/blueprints.client');
+                    const message = await getBlueprintContent(business.id, business.name);
+                    setProjectDescription(message);
+                  }}
+                />
+
+                <SupabaseConnection hideTrigger={true} />
+
+                <ColorSchemeDialog
+                  designScheme={designScheme || defaultDesignScheme}
+                  setDesignScheme={setDesignScheme}
+                  open={colorDialogOpen}
+                  onOpenChange={setColorDialogOpen}
+                />
+
                 <Tooltip content={isListening ? 'Parar reconhecimento de voz' : 'Reconhecimento de voz'} side="top">
                   <button
                     type="button"
@@ -392,4 +470,3 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useStore } from '@nanostores/react';
-import { useNavigate } from '@remix-run/react';
+
 import { supabase } from '~/lib/auth/supabase-client';
 import {
   notificationsStore,
@@ -61,7 +61,7 @@ function NotificationItem({
   onMarkAsRead: (id: string) => Promise<void>;
   onRemove: (id: string) => Promise<void>;
 }) {
-  const navigate = useNavigate();
+
   const [isRemoving, setIsRemoving] = useState(false);
 
   const handleClick = async () => {
@@ -70,11 +70,7 @@ function NotificationItem({
       await onMarkAsRead(notification.id);
     }
 
-    // Navegar se houver link
-    if (notification.link) {
-      navigate(notification.link);
-      onClose();
-    }
+
   };
 
   const handleMarkAsRead = async (e: React.MouseEvent) => {

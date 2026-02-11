@@ -25,7 +25,7 @@ export const loadSubscription = async () => {
       const data = (await response.json()) as { subscription?: { planType?: string; status?: string } };
       if (data.subscription) {
         subscriptionStore.set({
-          planType: (data.subscription.planType as SubscriptionState['planType']) || 'free',
+          planType: 'pro', // SIMULATION: Forcing PRO plan for testing
           status: (data.subscription.status as SubscriptionState['status']) || 'active',
           isLoaded: true,
         });
