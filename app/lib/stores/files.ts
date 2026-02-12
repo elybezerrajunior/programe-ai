@@ -562,9 +562,11 @@ export class FilesStore {
     const webcontainer = await this.#webcontainer;
 
     try {
-      const relativePath = path.relative(webcontainer.workdir, filePath);
-
-      if (!relativePath) {
+      let relativePath = path.relative(webcontainer.workdir, filePath);
+      if (filePath.startsWith(WORK_DIR + '/') || filePath === WORK_DIR) {
+        relativePath = filePath.slice(WORK_DIR.length).replace(/^\//, '') || relativePath;
+      }
+      if (!relativePath || relativePath.startsWith('..')) {
         throw new Error(`EINVAL: invalid file path, write '${relativePath}'`);
       }
 
@@ -574,6 +576,10 @@ export class FilesStore {
         unreachable('Expected content to be defined');
       }
 
+      const dirPath = path.dirname(relativePath);
+      if (dirPath !== '.') {
+        await webcontainer.fs.mkdir(dirPath, { recursive: true });
+      }
       await webcontainer.fs.writeFile(relativePath, content);
 
       if (!this.#modifiedFiles.has(filePath)) {
