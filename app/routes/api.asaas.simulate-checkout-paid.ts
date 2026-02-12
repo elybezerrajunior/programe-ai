@@ -50,13 +50,14 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   }
 
   const userId = session.user.id;
-  const externalReference = JSON.stringify({
+  const externalReference = [
     userId,
     planType,
-    creditsPerMonth: creditsPerMonth ?? 200,
-    billingCycle: billingCycle ?? 'MONTHLY',
-    price: price ?? 0,
-  });
+    creditsPerMonth ?? 200,
+    billingCycle ?? 'MONTHLY',
+    price ?? 0,
+    Date.now(),
+  ].join('|');
 
   const checkout = {
     id: checkoutId || `sim-${Date.now()}`,

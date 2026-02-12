@@ -76,14 +76,17 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     }
 
     // Criar referência externa para rastrear o checkout
-    const externalReference = JSON.stringify({
-      userId: session.user.id,
+    // Criar referência externa para rastrear o checkout
+    // Usar formato simplificado user_id|plan_type para evitar limite de caracteres do ASAAS
+    // Formato: userId|planType|creditsPerMonth|billingCycle|price|timestamp
+    const externalReference = [
+      session.user.id,
       planType,
       creditsPerMonth,
       billingCycle,
       price,
-      timestamp: Date.now(),
-    });
+      Date.now()
+    ].join('|');
 
     // Calcular próxima data de vencimento (amanhã)
     const nextDueDate = new Date();

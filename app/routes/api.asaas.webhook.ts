@@ -101,8 +101,19 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
           try {
             checkoutData = JSON.parse(payload.payment.externalReference);
           } catch {
-            // Se não for JSON, pode ser um userId simples (fluxo antigo)
-            checkoutData = null;
+            // Tentar formato simplificado com pipe: userId|planType|credits|cycle|price|timestamp
+            const parts = payload.payment.externalReference.split('|');
+            if (parts.length >= 2) {
+              checkoutData = {
+                userId: parts[0],
+                planType: parts[1],
+                creditsPerMonth: parts[2] ? Number(parts[2]) : undefined,
+                billingCycle: parts[3],
+              };
+            } else {
+              // Se não for JSON nem pipe, pode ser um userId simples (fluxo antigo)
+              checkoutData = null;
+            }
           }
         }
 

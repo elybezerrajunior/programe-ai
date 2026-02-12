@@ -42,7 +42,19 @@ export async function processCheckoutPaid(supabase: any, checkout: CheckoutForPr
     try {
       checkoutData = JSON.parse(checkout.externalReference);
     } catch {
-      checkoutData = null;
+      // Tentar formato user_id|plan_type...
+      const parts = checkout.externalReference.split('|');
+      if (parts.length >= 2) {
+        checkoutData = {
+          userId: parts[0],
+          planType: parts[1],
+          creditsPerMonth: parts[2] ? Number(parts[2]) : undefined,
+          billingCycle: parts[3],
+          price: parts[4] ? Number(parts[4]) : undefined,
+        };
+      } else {
+        checkoutData = null;
+      }
     }
   }
 
