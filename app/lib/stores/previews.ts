@@ -12,6 +12,8 @@ export interface PreviewInfo {
   port: number;
   ready: boolean;
   baseUrl: string;
+  /** Incremented on refresh to force iframe remount and reload */
+  refreshKey: number;
 }
 
 // Create a broadcast channel for preview updates
@@ -169,9 +171,16 @@ export class PreviewsStore {
   async #init() {
     const webcontainer = await this.#webcontainer;
 
-    // Listen for server ready events
+    // Listen for server ready events - server is guaranteed ready at this point
     webcontainer.on('server-ready', (port, url) => {
       console.log('[Preview] Server ready on port:', port, url);
+      const previewId = this.getPreviewId(url);
+
+      if (previewId) {
+        // Refresh preview in this tab immediately (avoids race with port event)
+        this.refreshPreview(previewId);
+      }
+
       this.broadcastUpdate(url);
 
       // Initial storage sync when preview is ready
@@ -192,7 +201,7 @@ export class PreviewsStore {
       const previews = this.previews.get();
 
       if (!previewInfo) {
-        previewInfo = { port, ready: type === 'open', baseUrl: url };
+        previewInfo = { port, ready: type === 'open', baseUrl: url, refreshKey: 0 };
         this.#availablePreviews.set(port, previewInfo);
         previews.push(previewInfo);
       }
@@ -254,7 +263,7 @@ export class PreviewsStore {
     }
   }
 
-  // Method to refresh a specific preview
+  // Method to refresh a specific preview - increments refreshKey to force iframe remount/reload
   refreshPreview(previewId: string) {
     // Clear any pending refresh for this preview
     const existingTimeout = this.#refreshTimeouts.get(previewId);
@@ -263,19 +272,14 @@ export class PreviewsStore {
       clearTimeout(existingTimeout);
     }
 
-    // Set a new timeout for this refresh
+    // Set a new timeout for this refresh (debounce rapid updates)
     const timeout = setTimeout(() => {
       const previews = this.previews.get();
       const preview = previews.find((p) => this.getPreviewId(p.baseUrl) === previewId);
 
       if (preview) {
-        preview.ready = false;
+        preview.refreshKey = (preview.refreshKey ?? 0) + 1;
         this.previews.set([...previews]);
-
-        requestAnimationFrame(() => {
-          preview.ready = true;
-          this.previews.set([...previews]);
-        });
       }
 
       this.#refreshTimeouts.delete(previewId);

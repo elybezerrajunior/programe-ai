@@ -184,8 +184,8 @@ export default function DeployChatAlert({ alert, clearAlert, postMessage }: Depl
                     'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-programe-elements-button-secondary-background',
                     'text-programe-elements-button-secondary-text',
                   )}
-                >
-                  Dismiss
+                >                  
+                  Ignorar
                 </button>
               </div>
             </motion.div>

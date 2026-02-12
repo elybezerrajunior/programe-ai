@@ -992,6 +992,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                     />
 
                     <iframe
+                      key={activePreview?.refreshKey ?? 0}
                       ref={iframeRef}
                       title="preview"
                       style={{
@@ -1009,6 +1010,7 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                 </div>
               ) : (
                 <iframe
+                  key={activePreview?.refreshKey ?? 0}
                   ref={iframeRef}
                   title="preview"
                   className="border-none w-full h-full bg-programe-elements-background-depth-1"
