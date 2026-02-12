@@ -196,7 +196,7 @@ ${value.content}
                  */
                 ...filteredMessages,
               ] as Message[]).map(ensureNonEmptyMessageContent);
-              restoreSnapshot(mixedId);
+              restoreSnapshot(mixedId, snapshot);
             } else {
               filteredMessages = filteredMessages.map(ensureNonEmptyMessageContent);
             }
@@ -251,36 +251,39 @@ ${value.content}
   );
 
   const restoreSnapshot = useCallback(async (id: string, snapshot?: Snapshot) => {
-    // const snapshotStr = localStorage.getItem(`snapshot:${id}`); // Remove localStorage usage
     const container = await webcontainer;
 
     const validSnapshot = snapshot || { chatIndex: '', files: {} };
 
-    if (!validSnapshot?.files) {
+    if (!validSnapshot?.files || Object.keys(validSnapshot.files).length === 0) {
       return;
     }
 
-    Object.entries(validSnapshot.files).forEach(async ([key, value]) => {
-      if (key.startsWith(container.workdir)) {
-        key = key.replace(container.workdir, '');
-      }
+    const workdir = container.workdir;
+    const normalize = (key: string) =>
+      (key.startsWith(workdir + '/') ? key.slice(workdir.length).replace(/^\//, '') : key.replace(/^\//, '')) || '';
 
+    const entries = Object.entries(validSnapshot.files);
+    for (const [key, value] of entries) {
+      const path = normalize(key);
       if (value?.type === 'folder') {
-        await container.fs.mkdir(key, { recursive: true });
+        await container.fs.mkdir(path, { recursive: true });
       }
-    });
-    Object.entries(validSnapshot.files).forEach(async ([key, value]) => {
-      if (value?.type === 'file') {
-        if (key.startsWith(container.workdir)) {
-          key = key.replace(container.workdir, '');
-        }
+    }
+    await Promise.all(
+      entries
+        .filter(([, value]) => value?.type === 'file')
+        .map(([key, value]) => {
+          const path = normalize(key);
+          const file = value as { type: 'file'; content: string; isBinary?: boolean };
+          return container.fs.writeFile(path, file.content, {
+            encoding: file.isBinary ? undefined : 'utf8',
+          });
+        }),
+    );
 
-        await container.fs.writeFile(key, value.content, { encoding: value.isBinary ? undefined : 'utf8' });
-      } else {
-      }
-    });
-
-    // workbenchStore.files.setKey(snapshot?.files)
+    const { ensureProjectReady } = await import('~/lib/runtime/ensure-project-ready');
+    await ensureProjectReady(container);
   }, []);
 
   return {

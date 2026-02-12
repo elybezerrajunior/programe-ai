@@ -189,7 +189,7 @@ export function SupabaseChatAlert({ alert, clearAlert, postMessage }: Props) {
                 isExecuting ? 'opacity-70 cursor-not-allowed' : '',
               )}
             >
-              Dismiss
+              Ignorar
             </button>
           </div>
         </div>

@@ -114,7 +114,7 @@ export default function LlmErrorAlert({ alert, clearAlert }: Props) {
                     'text-programe-elements-button-secondary-text',
                   )}
                 >
-                  Dismiss
+                  Ignorar
                 </button>
               </div>
             </motion.div>

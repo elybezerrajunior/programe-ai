@@ -48,7 +48,7 @@ interface UserCreditsRow {
 
 // Créditos por plano
 const PLAN_CREDITS: Record<string, number> = {
-  free: 5,
+  free: 200,
   starter: 200,
   builder: 700,
   pro: 1600,
@@ -130,7 +130,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     }
 
     const planType = subscription?.plan_type || 'free';
-    const planCredits = PLAN_CREDITS[planType] || 5;
+    const planCredits = PLAN_CREDITS[planType] || 200;
     const dailyCreditsAllowed = DAILY_CREDITS[planType] || 0;
 
     // Pegar o nome do usuário de forma segura
@@ -165,7 +165,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     return json({
       user: null,
       subscription: { planType: 'free', status: 'active', asaasCustomerId: null, currentPeriodEnd: null, cancelAtPeriodEnd: false },
-      credits: { total: 5, used: 0, bonus: 0, dailyUsed: 0, dailyAllowed: 0, planCredits: 5, creditsRollover: false },
+      credits: { total: 200, used: 0, bonus: 0, dailyUsed: 0, dailyAllowed: 0, planCredits: 200, creditsRollover: false },
     });
   }
 };
@@ -573,12 +573,12 @@ export default function PlansPage() {
   };
 
   const credits = loaderData?.credits ?? {
-    total: 5,
+    total: 200,
     used: 0,
     bonus: 0,
     dailyUsed: 0,
     dailyAllowed: 0,
-    planCredits: 5,
+    planCredits: 200,
     creditsRollover: false,
   };
 

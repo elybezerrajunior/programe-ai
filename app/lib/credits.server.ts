@@ -11,7 +11,7 @@ export interface UserCredits {
 }
 
 const PLAN_CREDITS: Record<string, number> = {
-    free: 5,
+    free: 200,
     starter: 200,
     builder: 700,
     pro: 1600,
@@ -19,7 +19,7 @@ const PLAN_CREDITS: Record<string, number> = {
 };
 
 const DAILY_CREDITS: Record<string, number> = {
-    free: 0, // Free agora é 0 diários extras além dos 5 fixos se for o caso, mas seguindo a lógica do plans.tsx
+    free: 0, // Free agora é 0 diários extras além dos 200 fixos se for o caso, mas seguindo a lógica do plans.tsx
     starter: 0,
     builder: 5,
     pro: 10,
@@ -73,7 +73,7 @@ export async function getUserCredits(
     const dailyRemaining = Math.max(0, dailyAllowed - dailyUsed);
 
     // Total real disponível para gastar agora = (Base - Usados do Ciclo) + Diários Restantes
-    // Mas espera, se o plano free tem 5 créditos totais e 0 diários, ele gasta do total.
+    // Mas espera, se o plano free tem 200 créditos totais e 0 diários, ele gasta do total.
     // Se o plano Pro tem 1600 totais e 10 diários, ele gasta primeiro dos diários? 
     // Vamos assumir prioridade: Diários > Base.
 

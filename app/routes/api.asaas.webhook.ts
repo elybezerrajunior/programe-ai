@@ -20,7 +20,7 @@ interface AsaasWebhookPayload {
 
 // Créditos por plano
 const PLAN_CREDITS: Record<string, number> = {
-  free: 5,
+  free: 200,
   starter: 200,
   builder: 700,
   pro: 1600,

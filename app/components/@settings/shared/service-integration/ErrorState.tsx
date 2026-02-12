@@ -71,7 +71,7 @@ export function ErrorState({
                 size="sm"
                 className="text-red-700 border-red-300 hover:bg-red-100 dark:text-red-300 dark:border-red-600 dark:hover:bg-red-900/30"
               >
-                Dismiss
+                Ignorar
               </Button>
             )}
           </div>
