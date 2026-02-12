@@ -139,7 +139,7 @@ export interface RiskAnalysisResult {
 /**
  * Créditos fixos para novos usuários
  */
-export const INITIAL_CREDITS = 5;
+export const INITIAL_CREDITS = 200;
 
 // =============================================================================
 // RATE LIMITING

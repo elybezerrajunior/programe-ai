@@ -5,7 +5,7 @@
 import { sendSubscriptionNotification } from '~/lib/notifications/subscription-notifications';
 
 const PLAN_CREDITS: Record<string, number> = {
-  free: 5,
+  free: 200,
   starter: 200,
   builder: 700,
   pro: 1600,

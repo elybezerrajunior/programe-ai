@@ -17,7 +17,7 @@ export interface UserCredits {
 
 // Créditos por plano
 const PLAN_CREDITS: Record<string, number> = {
-  free: 5,
+  free: 200,
   pro: 100,
   business: 100,
   enterprise: 500,
@@ -58,7 +58,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
       .single();
 
     const planType = (subscription?.plan_type as string) || 'free';
-    const planCredits = PLAN_CREDITS[planType] || 5;
+    const planCredits = PLAN_CREDITS[planType] || 200;
     const dailyCreditsAllowed = DAILY_CREDITS[planType] || 0;
 
     // Se não tem registro de créditos, criar um

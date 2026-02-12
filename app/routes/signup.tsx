@@ -58,7 +58,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   const language = formData.get('language')?.toString() || '';
   const timezone = formData.get('timezone')?.toString() || '';
   const antifraudValidated = formData.get('antifraudValidated')?.toString() === 'true';
-  const initialCredits = parseInt(formData.get('initialCredits')?.toString() || '5', 10);
+  const initialCredits = parseInt(formData.get('initialCredits')?.toString() || '200', 10);
   const trustLevel = formData.get('trustLevel')?.toString() || 'new';
 
   // Validações básicas

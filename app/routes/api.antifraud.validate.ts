@@ -105,7 +105,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
       riskScore: 30,
       decision: 'review',
       reason: 'Erro na validação - permitido com revisão pendente',
-      initialCredits: 5,
+      initialCredits: 200,
     });
   }
 };
