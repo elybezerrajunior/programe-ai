@@ -19,7 +19,6 @@ import { description } from '~/lib/persistence';
 import Cookies from 'js-cookie';
 import { createSampler } from '~/utils/sampler';
 import type { ActionAlert, DeployAlert, SupabaseAlert } from '~/types/actions';
-
 const { saveAs } = fileSaver;
 
 export interface ArtifactState {

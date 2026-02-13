@@ -8,15 +8,15 @@ export interface DesignScheme {
 
 export const defaultDesignScheme: DesignScheme = {
   palette: {
-    primary: '#0D9488', // Teal elegante
-    secondary: '#0F766E', // Teal escuro
-    accent: '#2DD4BF', // Teal claro
+    primary: '#11584C', // Verde
+    secondary: '#0E473E', // Verde escuro
+    accent: '#1CF479', // Verde destaque
     background: '#F8FAFC',
     surface: '#FFFFFF',
     text: '#0F172A',
     textSecondary: '#64748B',
     border: '#E2E8F0',
-    success: '#059669',
+    success: '#1CF479',
     warning: '#D97706',
     error: '#DC2626',
   },
@@ -106,18 +106,18 @@ export const themePresets: ThemePreset[] = [
   {
     id: 'default',
     name: 'Padrão',
-    swatchColors: ['#F8FAFC', '#E2E8F0', '#475569'],
+    swatchColors: ['#050E0D', '#11584C', '#1CF479'],
     scheme: {
       palette: {
-        primary: '#0D9488',
-        secondary: '#0F766E',
-        accent: '#2DD4BF',
+        primary: '#11584C',
+        secondary: '#0E473E',
+        accent: '#1CF479',
         background: '#F8FAFC',
         surface: '#FFFFFF',
         text: '#0F172A',
         textSecondary: '#64748B',
         border: '#E2E8F0',
-        success: '#059669',
+        success: '#1CF479',
         warning: '#D97706',
         error: '#DC2626',
       },
@@ -414,12 +414,12 @@ export const themePresets: ThemePreset[] = [
   {
     id: 'mint',
     name: 'Menta',
-    swatchColors: ['#CCFBF1', '#2DD4BF', '#0D9488'],
+    swatchColors: ['#E8F9F0', '#11584C', '#1CF479'],
     scheme: {
       palette: {
-        primary: '#0D9488',
-        secondary: '#0F766E',
-        accent: '#5EEAD4',
+        primary: '#11584C',
+        secondary: '#0E473E',
+        accent: '#1CF479',
         background: '#F0FDFA',
         surface: '#FFFFFF',
         text: '#134E4A',

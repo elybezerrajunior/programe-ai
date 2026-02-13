@@ -12,6 +12,7 @@ import { Form, useActionData, useLoaderData, useNavigation, Link, useSubmit } fr
 import { Button } from '~/components/ui/Button';
 import { Input } from '~/components/ui/Input';
 import { Label } from '~/components/ui/Label';
+import { Logo } from '~/components/ui/Logo';
 import { TurnstileWidget, TurnstilePlaceholder } from '~/components/ui/TurnstileWidget';
 import { classNames } from '~/utils/classNames';
 import { validateEmail, validatePassword, validatePasswordConfirmation } from '~/lib/auth/session';
@@ -182,11 +183,8 @@ export function SignupFormWithAntifraud() {
   return (
     <>
       <div className="mb-8">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="i-ph:rocket text-xl text-accent" />
-          <span className="text-xl font-semibold text-programe-elements-textPrimary">
-            Programe Studio
-          </span>
+        <div className="flex items-center mb-6">
+          <Logo width={190} />
         </div>
         <h1 className="text-3xl font-bold text-programe-elements-textPrimary mb-2">
           Criar conta grátis

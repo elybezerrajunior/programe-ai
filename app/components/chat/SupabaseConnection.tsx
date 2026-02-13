@@ -129,10 +129,10 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                     placeholder="Digite seu token de acesso do Supabase"
                     className={classNames(
                       'w-full px-3 py-2 rounded-lg text-sm',
-                      'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
-                      'border border-[#E5E5E5] dark:border-[#333333]',
+                      'bg-[#F8F8F8] dark:bg-[#050E0D]',
+                      'border border-[#E5E5E5] dark:border-[#252625]',
                       'text-programe-elements-textPrimary placeholder-programe-elements-textTertiary',
-                      'focus:outline-none focus:ring-1 focus:ring-[#3ECF8E]',
+                      'focus:outline-none focus:ring-1 focus:ring-[#1CF479]',
                       'disabled:opacity-50',
                     )}
                   />
@@ -141,7 +141,7 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                       href="https://app.supabase.com/account/tokens"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#3ECF8E] hover:underline inline-flex items-center gap-1"
+                      className="text-[#1CF479] hover:underline inline-flex items-center gap-1"
                     >
                       Obter seu token
                       <div className="i-ph:arrow-square-out w-4 h-4" />
@@ -158,8 +158,8 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                     disabled={connecting || !supabaseConn.token}
                     className={classNames(
                       'px-4 py-2 rounded-lg text-sm flex items-center gap-2',
-                      'bg-[#3ECF8E] text-white',
-                      'hover:bg-[#3BBF84]',
+                      'bg-[#1CF479] text-white',
+                      'hover:bg-[#16c968]',
                       'disabled:opacity-50 disabled:cursor-not-allowed',
                     )}
                   >
@@ -192,7 +192,7 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                   </DialogTitle>
                 </div>
 
-                <div className="flex items-center gap-4 p-3 bg-[#F8F8F8] dark:bg-[#1A1A1A] rounded-lg">
+                <div className="flex items-center gap-4 p-3 bg-[#F8F8F8] dark:bg-[#252625] rounded-lg">
                   <div>
                     <h4 className="text-sm font-medium text-programe-elements-textPrimary">{supabaseConn.user?.email}</h4>
                     <p className="text-xs text-programe-elements-textSecondary">Função: {supabaseConn.user?.role}</p>
@@ -223,7 +223,7 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => fetchSupabaseStats(supabaseConn.token)}
-                          className="px-2 py-1 rounded-md text-xs bg-[#F0F0F0] dark:bg-[#252525] text-programe-elements-textSecondary hover:bg-[#E5E5E5] dark:hover:bg-[#333333] flex items-center gap-1"
+                          className="px-2 py-1 rounded-md text-xs bg-[#F0F0F0] dark:bg-[#252625] text-programe-elements-textSecondary hover:bg-[#E5E5E5] dark:hover:bg-[#333333] flex items-center gap-1"
                           title="Refresh projects list"
                         >
                           <div className="i-ph:arrows-clockwise w-3 h-3" />
@@ -231,7 +231,7 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                         </button>
                         <button
                           onClick={() => handleCreateProject()}
-                          className="px-2 py-1 rounded-md text-xs bg-[#3ECF8E] text-white hover:bg-[#3BBF84] flex items-center gap-1"
+                          className="px-2 py-1 rounded-md text-xs bg-[#1CF479] text-white hover:bg-[#16c968] flex items-center gap-1"
                         >
                           <div className="i-ph:plus w-3 h-3" />
                           Novo Projeto
@@ -242,7 +242,7 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                     {isProjectsExpanded && (
                       <>
                         {!supabaseConn.selectedProjectId && (
-                          <div className="mb-2 p-3 bg-[#F8F8F8] dark:bg-[#1A1A1A] rounded-lg text-sm text-programe-elements-textSecondary">
+                          <div className="mb-2 p-3 bg-[#F8F8F8] dark:bg-[#252625] rounded-lg text-sm text-programe-elements-textSecondary">
                             Selecione um projeto ou crie um novo para este chat
                           </div>
                         )}
@@ -252,12 +252,12 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                             {supabaseConn.stats.projects.map((project) => (
                               <div
                                 key={project.id}
-                                className="block p-3 rounded-lg border border-[#E5E5E5] dark:border-[#1A1A1A] hover:border-[#3ECF8E] dark:hover:border-[#3ECF8E] transition-colors"
+                                className="block p-3 rounded-lg border border-[#E5E5E5] dark:border-[#050E0D] hover:border-[#1CF479] dark:hover:border-[#1CF479] transition-colors"
                               >
                                 <div className="flex items-center justify-between">
                                   <div>
                                     <h5 className="text-sm font-medium text-programe-elements-textPrimary flex items-center gap-1">
-                                      <div className="i-ph:database w-3 h-3 text-[#3ECF8E]" />
+                                      <div className="i-ph:database w-3 h-3 text-[#1CF479]" />
                                       {project.name}
                                     </h5>
                                     <div className="text-xs text-programe-elements-textSecondary mt-1">
@@ -269,8 +269,8 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                                     className={classNames(
                                       'px-3 py-1 rounded-md text-xs',
                                       supabaseConn.selectedProjectId === project.id
-                                        ? 'bg-[#3ECF8E] text-white'
-                                        : 'bg-[#F0F0F0] dark:bg-[#252525] text-programe-elements-textSecondary hover:bg-[#3ECF8E] hover:text-white',
+                                        ? 'bg-[#1CF479] text-white'
+                                        : 'bg-[#F0F0F0] dark:bg-[#252625] text-programe-elements-textSecondary hover:bg-[#1CF479] hover:text-white',
                                     )}
                                   >
                                     {supabaseConn.selectedProjectId === project.id ? (

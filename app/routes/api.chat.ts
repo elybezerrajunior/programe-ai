@@ -192,7 +192,7 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
             label: 'summary',
             status: 'in-progress',
             order: progressCounter++,
-            message: 'Analysing Request',
+            message: 'Analisando Solicitação',
           } satisfies ProgressAnnotation);
 
           // Create a summary of the chat

@@ -97,7 +97,7 @@ export function GitHubConnection({ connectionTest, onTestConnection }: GitHubCon
                 placeholder={`Digite seu token ${tokenType === 'classic' ? 'de acesso pessoal' : 'refinado'} do GitHub`}
                 className={classNames(
                   'w-full px-3 py-2 rounded-lg text-sm',
-                  'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
+                  'bg-[#F8F8F8] dark:bg-[#252625]',
                   'border border-[#E5E5E5] dark:border-[#333333]',
                   'text-programe-elements-textPrimary placeholder-programe-elements-textTertiary',
                   'focus:outline-none focus:ring-1 focus:ring-programe-elements-borderColorActive',

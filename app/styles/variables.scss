@@ -110,23 +110,23 @@
 :root,
 :root[data-theme='dark'] {
   --programe-elements-borderColor: theme('colors.alpha.white.10');
-  --programe-elements-borderColorActive: theme('colors.accent.500');
+  --programe-elements-borderColorActive: theme('colors.accent.400');
 
-  --programe-elements-bg-depth-1: #050e0c; /* Preto esverdeado */
-  --programe-elements-bg-depth-2: #071f19; /* Verde petróleo escuro */
-  --programe-elements-bg-depth-3: #0b2a22; /* Verde profundo */
+  --programe-elements-bg-depth-1: #050E0D; /* Verde escuro */
+  --programe-elements-bg-depth-2: #071912; /* Verde petróleo escuro */
+  --programe-elements-bg-depth-3: #0D1F1B; /* Verde profundo */
   --programe-elements-bg-depth-4: theme('colors.alpha.white.5');
 
   --programe-elements-textPrimary: #c7d7d2; /* Cinza claro esverdeado */
   --programe-elements-textSecondary: #8fa6a0; /* Cinza médio */
   --programe-elements-textTertiary: theme('colors.gray.500');
 
-  --programe-elements-code-background: #0b2a22; /* Verde profundo */
+  --programe-elements-code-background: #0D1F1B; /* Verde profundo */
   --programe-elements-code-text: #c7d7d2; /* Cinza claro esverdeado */
 
   --programe-elements-button-primary-background: theme('colors.alpha.accent.10');
   --programe-elements-button-primary-backgroundHover: theme('colors.alpha.accent.20');
-  --programe-elements-button-primary-text: #22f4c6; /* Verde menta neon */
+  --programe-elements-button-primary-text: #1CF479; /* Verde destaque */
 
   --programe-elements-button-secondary-background: theme('colors.alpha.white.5');
   --programe-elements-button-secondary-backgroundHover: theme('colors.alpha.white.10');
@@ -138,7 +138,7 @@
 
   --programe-elements-item-contentDefault: theme('colors.alpha.white.50');
   --programe-elements-item-contentActive: #c7d7d2; /* Cinza claro esverdeado */
-  --programe-elements-item-contentAccent: #22f4c6; /* Verde menta neon */
+  --programe-elements-item-contentAccent: #1CF479; /* Verde destaque */
   --programe-elements-item-contentDanger: theme('colors.red.500');
   --programe-elements-item-backgroundDefault: rgba(255, 255, 255, 0);
   --programe-elements-item-backgroundActive: theme('colors.alpha.white.10');
@@ -146,24 +146,24 @@
   --programe-elements-item-backgroundDanger: theme('colors.alpha.red.10');
 
   --programe-elements-loader-background: theme('colors.alpha.gray.10');
-  --programe-elements-loader-progress: #22f4c6; /* Verde menta neon */
+  --programe-elements-loader-progress: #1CF479; /* Verde destaque */
 
-  --programe-elements-artifacts-background: #071f19; /* Verde petróleo escuro */
+  --programe-elements-artifacts-background: #0D1F1B; /* Verde petróleo escuro */
   --programe-elements-artifacts-backgroundHover: theme('colors.alpha.white.5');
   --programe-elements-artifacts-borderColor: var(--programe-elements-borderColor);
-  --programe-elements-artifacts-inlineCode-background: #0b2a22; /* Verde profundo */
+  --programe-elements-artifacts-inlineCode-background: #0D1F1B; /* Verde profundo */
   --programe-elements-artifacts-inlineCode-text: #c7d7d2; /* Cinza claro esverdeado */
 
-  --programe-elements-actions-background: #071f19; /* Verde petróleo escuro */
-  --programe-elements-actions-code-background: #0b2a22; /* Verde profundo */
+  --programe-elements-actions-background: #0D1F1B; /* Verde petróleo escuro */
+  --programe-elements-actions-code-background: #0D1F1B; /* Verde profundo */
 
-  --programe-elements-messages-background: #0b2a22; /* Verde profundo */
-  --programe-elements-messages-linkColor: #22f4c6; /* Verde menta neon */
-  --programe-elements-messages-code-background: #071f19; /* Verde petróleo escuro */
-  --programe-elements-messages-inlineCode-background: #0b2a22; /* Verde profundo */
+  --programe-elements-messages-background: #0D1F1B; /* Verde profundo */
+  --programe-elements-messages-linkColor: #1CF479; /* Verde destaque */
+  --programe-elements-messages-code-background: #0D1F1B; /* Verde petróleo escuro */
+  --programe-elements-messages-inlineCode-background: #0D1F1B; /* Verde profundo */
   --programe-elements-messages-inlineCode-text: var(--programe-elements-textPrimary);
 
-  --programe-elements-icon-success: #19d8ae; /* Verde turquesa */
+  --programe-elements-icon-success: #1CF479; /* Verde destaque */
   --programe-elements-icon-error: theme('colors.red.400');
   --programe-elements-icon-primary: #c7d7d2; /* Cinza claro esverdeado */
   --programe-elements-icon-secondary: #8fa6a0; /* Cinza médio */
@@ -176,7 +176,7 @@
   --programe-elements-sidebar-dropdownShadow: theme('colors.alpha.gray.30');
   --programe-elements-sidebar-buttonBackgroundDefault: theme('colors.alpha.accent.10');
   --programe-elements-sidebar-buttonBackgroundHover: theme('colors.alpha.accent.20');
-  --programe-elements-sidebar-buttonText: #22f4c6; /* Verde menta neon */
+  --programe-elements-sidebar-buttonText: #1CF479; /* Verde destaque */
 
   --programe-elements-preview-addressBar-background: var(--programe-elements-bg-depth-1);
   --programe-elements-preview-addressBar-backgroundHover: theme('colors.alpha.white.5');
@@ -193,10 +193,10 @@
   /* Terminal Colors */
   --programe-terminal-background: var(--programe-elements-terminals-background);
   --programe-terminal-foreground: #c7d7d2; /* Cinza claro esverdeado */
-  --programe-terminal-selection-background: rgba(34, 244, 198, 0.2); /* Verde menta neon com transparência */
+  --programe-terminal-selection-background: rgba(28, 244, 121, 0.2); /* Verde destaque com transparência */
   --programe-terminal-black: #000000;
   --programe-terminal-red: #ff5c57;
-  --programe-terminal-green: #22f4c6; /* Verde menta neon */
+  --programe-terminal-green: #1CF479; /* Verde destaque */
   --programe-terminal-yellow: #f3f99d;
   --programe-terminal-blue: #2ee6c8; /* Verde aqua */
   --programe-terminal-magenta: #ff6ac1;
@@ -204,14 +204,14 @@
   --programe-terminal-white: #c7d7d2; /* Cinza claro esverdeado */
   --programe-terminal-brightBlack: #8fa6a0; /* Cinza médio */
   --programe-terminal-brightRed: #ff5c57;
-  --programe-terminal-brightGreen: #22f4c6; /* Verde menta neon */
+  --programe-terminal-brightGreen: #1CF479; /* Verde destaque */
   --programe-terminal-brightYellow: #f3f99d;
   --programe-terminal-brightBlue: #2ee6c8; /* Verde aqua */
   --programe-terminal-brightMagenta: #ff6ac1;
   --programe-terminal-brightCyan: #4fffe1; /* Ciano claro */
   --programe-terminal-brightWhite: #c7d7d2; /* Cinza claro esverdeado */
-  --modern-scrollbar-thumb-background: rgba(34, 244, 198, 0.2); /* Verde menta neon com transparência */
-  --modern-scrollbar-thumb-backgroundHover: rgba(34, 244, 198, 0.4); /* Verde menta neon com mais opacidade */
+  --modern-scrollbar-thumb-background: rgba(28, 244, 121, 0.2); /* Verde destaque com transparência */
+  --modern-scrollbar-thumb-backgroundHover: rgba(28, 244, 121, 0.4); /* Verde destaque com mais opacidade */
 }
 
 /*

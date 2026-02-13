@@ -112,7 +112,7 @@ export default function VercelConnection() {
 
   return (
     <motion.div
-      className="bg-[#FFFFFF] dark:bg-[#0A0A0A] rounded-lg border border-[#E5E5E5] dark:border-[#1A1A1A]"
+      className="bg-[#FFFFFF] dark:bg-[#050E0D] rounded-lg border border-[#E5E5E5] dark:border-[#252625]"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
@@ -143,7 +143,7 @@ export default function VercelConnection() {
                 placeholder="Digite seu token de acesso pessoal da Vercel"
                 className={classNames(
                   'w-full px-3 py-2 rounded-lg text-sm',
-                  'bg-[#F8F8F8] dark:bg-[#1A1A1A]',
+                  'bg-[#F8F8F8] dark:bg-[#252625]',
                   'border border-[#E5E5E5] dark:border-[#333333]',
                   'text-programe-elements-textPrimary placeholder-programe-elements-textTertiary',
                   'focus:outline-none focus:ring-1 focus:ring-programe-elements-borderColorActive',
@@ -229,7 +229,7 @@ export default function VercelConnection() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 bg-[#F8F8F8] dark:bg-[#1A1A1A] rounded-lg">
+            <div className="flex items-center gap-4 p-4 bg-[#F8F8F8] dark:bg-[#252625] rounded-lg">
               {/* Debug output */}
               <pre className="hidden">{JSON.stringify(connection.user, null, 2)}</pre>
 

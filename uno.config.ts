@@ -30,22 +30,22 @@ const BASE_COLORS = {
     500: '#737373',
     600: '#525252',
     700: '#404040',
-    800: '#262626',
+    800: '#252625', // Grafite
     900: '#171717',
     950: '#0A0A0A',
   },
   accent: {
-    50: '#E6FDF9',
-    100: '#CCFBF3',
-    200: '#99F7E7',
-    300: '#66F3DB',
-    400: '#4FFFE1',
-    500: '#06241e',
-    600: '#19D8AE',
-    700: '#0FB98F',
-    800: '#0C9472',
-    900: '#096F55',
-    950: '#054A38',
+    50: '#E8F9F0',
+    100: '#C5F0D9',
+    200: '#8FE5B8',
+    300: '#5AD997',
+    400: '#1CF479', // Verde destaque
+    500: '#11584C', // Verde
+    600: '#0E473E',
+    700: '#0B3630',
+    800: '#082522',
+    900: '#051413',
+    950: '#050E0D', // Verde escuro
   },
   green: {
     50: '#F0FDF4',
@@ -96,16 +96,17 @@ const COLOR_PRIMITIVES = {
     200: '#5A7A72',
     300: '#3D5A52',
     400: '#2A423A',
-    500: '#0B2A22',
-    600: '#071F19',
-    700: '#050E0C',
-    800: '#040A08',
-    900: '#030705',
-    950: '#020403',
+    500: '#11584C', // Verde
+    600: '#0D1F1B',
+    700: '#0A1513',
+    800: '#070F0E',
+    900: '#050E0D', // Verde escuro
+    950: '#050E0D', // Verde escuro
   },
+  grafite: '#252625',
   alpha: {
     white: generateAlphaPalette(BASE_COLORS.white),
-    gray: generateAlphaPalette('#0B2A22'), // Use dark green for gray alpha in dark mode
+    gray: generateAlphaPalette('#252625'), // Grafite para alpha em dark mode
     red: generateAlphaPalette(BASE_COLORS.red[500]),
     accent: generateAlphaPalette(BASE_COLORS.accent[500]),
   },
