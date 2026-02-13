@@ -47,7 +47,7 @@ export function UpgradeButton({ size = 'md' }: UpgradeButtonProps) {
     <Link
       to="/plans"
       className={`flex items-center gap-2 ${sizeClasses} font-medium text-white 
-        bg-[#0a352b] hover:bg-[#06241e] 
+        bg-[#11584C] hover:bg-[#0E473E] 
         rounded-lg transition-colors`}
     >
       <div className={size === 'sm' ? 'i-ph:rocket-launch text-base' : 'i-ph:rocket-launch text-lg'} />

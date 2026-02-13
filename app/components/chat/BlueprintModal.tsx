@@ -109,7 +109,7 @@ export const BlueprintModal: React.FC<BlueprintModalProps> = ({ open, onClose, o
                     </span>
                     <Button
                         size="sm"
-                        className="mt-2 w-full !bg-[#06241e]"
+                        className="mt-2 w-full !bg-[#11584C]"
                         onClick={() => {
                             window.location.href = '/plans';
                         }}
@@ -133,9 +133,9 @@ export const BlueprintModal: React.FC<BlueprintModalProps> = ({ open, onClose, o
 
     return (
         <DialogRoot open={open} onOpenChange={onClose}>
-            <Dialog showCloseButton={true} className="w-[800px] max-w-[95vw] h-[80vh] max-h-[800px] flex flex-col p-0 overflow-hidden !bg-[#071f19]">
+            <Dialog showCloseButton={true} className="w-[800px] max-w-[95vw] h-[80vh] max-h-[800px] flex flex-col p-0 overflow-hidden !bg-[#050E0D]">
                 {/* Header */}
-                <div className="p-6 border-b border-programe-elements-borderColor !bg-[#071f19] flex-shrink-0">
+                <div className="p-6 border-b border-programe-elements-borderColor !bg-[#050E0D] flex-shrink-0">
                     <DialogTitle className="text-2xl font-bold mb-2">Programe Blueprint</DialogTitle>
                     <DialogDescription className="text-base text-programe-elements-textSecondary">
                         Escolha um negócio e receba o plano completo para construir seu sistema.
@@ -165,7 +165,7 @@ export const BlueprintModal: React.FC<BlueprintModalProps> = ({ open, onClose, o
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6 bg-[#071f19] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-programe-elements-borderColor [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
+                <div className="flex-1 overflow-y-auto p-6 bg-[#050E0D] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-programe-elements-borderColor [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {filteredBusinesses.map((business) => {
                             const isLocked = getIsLocked(business.minPlan);

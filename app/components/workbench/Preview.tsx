@@ -1039,9 +1039,9 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                 }}
               />
               {/* Glow */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-accent-500/10 blur-3xl pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-accent-400/10 blur-3xl pointer-events-none" />
               <div className="relative flex flex-col items-center gap-10 max-w-sm">
-                <div className="flex items-center gap-2 text-accent-500">
+                <div className="flex items-center gap-2 text-accent-400">
                   <div className="i-ph:robot size-6" />
                   <span className="text-sm font-semibold tracking-wide uppercase">Programe Studio em ação</span>
                 </div>
@@ -1055,16 +1055,16 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                     aria-hidden
                   />
                   <div
-                    className="w-16 h-16 rounded-full border-2 border-transparent border-t-accent-500 border-r-accent-500/60 animate-spin"
+                    className="w-16 h-16 rounded-full border-2 border-transparent border-t-accent-400 border-r-accent-400/60 animate-spin"
                     aria-hidden
                   />
-                  <div className="absolute w-8 h-8 rounded-full bg-accent-500/20 animate-pulse" />
-                  <div className="absolute w-3 h-3 rounded-full bg-accent-500 ring-4 ring-accent-500/30" />
+                  <div className="absolute w-8 h-8 rounded-full bg-accent-400/20 animate-pulse" />
+                  <div className="absolute w-3 h-3 rounded-full bg-accent-400 ring-4 ring-accent-400/30" />
                 </div>
                 {/* Step message with fade */}
                 <p
                   key={loadingMessageIndex}
-                  className="text-sm font-medium text-programe-elements-textSecondary text-center px-4 min-h-[1.5rem] flex items-center justify-center transition-opacity duration-300"
+                  className="text-sm font-medium text-programe-elements-textPrimary text-center px-4 min-h-[1.5rem] flex items-center justify-center transition-opacity duration-300"
                 >
                   {PREVIEW_LOADING_MESSAGES[loadingMessageIndex]}
                 </p>
@@ -1076,9 +1076,9 @@ export const Preview = memo(({ setSelectedElement }: PreviewProps) => {
                       className={classNames(
                         'w-1.5 h-1.5 rounded-full transition-all duration-300',
                         i === loadingMessageIndex
-                          ? 'bg-accent-500 w-4'
+                          ? 'bg-accent-400 w-4'
                           : i < loadingMessageIndex
-                            ? 'bg-accent-500/50'
+                            ? 'bg-accent-400/50'
                             : 'bg-programe-elements-borderColor',
                       )}
                       aria-hidden

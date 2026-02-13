@@ -313,10 +313,10 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
                 gradientUnits="userSpaceOnUse"
                 gradientTransform="rotate(-45)"
               >
-                <stop offset="0%" stopColor="#22F4C6" stopOpacity="0%"></stop>
-                <stop offset="40%" stopColor="#22F4C6" stopOpacity="80%"></stop>
-                <stop offset="50%" stopColor="#22F4C6" stopOpacity="80%"></stop>
-                <stop offset="100%" stopColor="#22F4C6" stopOpacity="0%"></stop>
+                <stop offset="0%" stopColor="#1CF479" stopOpacity="0%"></stop>
+                <stop offset="40%" stopColor="#1CF479" stopOpacity="80%"></stop>
+                <stop offset="50%" stopColor="#1CF479" stopOpacity="80%"></stop>
+                <stop offset="100%" stopColor="#1CF479" stopOpacity="0%"></stop>
               </linearGradient>
             </defs>
             <rect className={classNames(styles.PromptEffectLine)} pathLength="100" strokeLinecap="round"></rect>
@@ -344,14 +344,14 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
                   onClick={handleEnhancePrompt}
                   disabled={!projectDescription.trim() || enhancingPrompt}
                   className={classNames(
-                    'flex items-center gap-1 text-sm text-accent-500 hover:text-accent-400 transition-colors bg-transparent',
+                    'flex items-center gap-1 text-sm text-accent-400 hover:text-accent-300 transition-colors bg-transparent',
                     (!projectDescription.trim() || enhancingPrompt) && 'opacity-50 cursor-not-allowed'
                   )}
                 >
                   {enhancingPrompt ? (
                     <div className="i-svg-spinners:90-ring-with-bg text-programe-elements-loader-progress text-base animate-spin" />
                   ) : (
-                    <div className="i-ph:question text-base text-accent-500" />
+                    <div className="i-ph:question text-base text-accent-400" />
                   )}
                   <span>Melhore sua ideia</span>
                 </button>

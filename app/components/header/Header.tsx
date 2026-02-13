@@ -4,6 +4,7 @@ import { Link, useLocation } from '@remix-run/react';
 import { chatStore } from '~/lib/stores/chat';
 import { profileStore } from '~/lib/stores/profile';
 import { classNames } from '~/utils/classNames';
+import { Logo } from '~/components/ui/Logo';
 import { HeaderActionButtons } from './HeaderActionButtons.client';
 import { ChatDescription } from '~/lib/persistence/ChatDescription.client';
 import { UserMenu } from './UserMenu.client';
@@ -21,12 +22,9 @@ export function Header() {
     return (
       <header className="flex items-center justify-between px-6 border-b border-programe-elements-borderColor h-[var(--header-height)] bg-programe-elements-background-depth-1">
         {/* Logo */}
-        <div className="flex items-center gap-2 text-programe-elements-textPrimary">
-          <div className="i-ph:rocket text-xl text-accent" />
-          <a href="/" className="text-xl font-semibold text-programe-elements-textPrimary flex items-center">
-            Programe Studio
-          </a>
-        </div>
+        <a href="/" className="flex items-center">
+          <Logo src="/logo-light.png" width={190} />
+        </a>
 
         {/* Navigation */}
         <nav className="flex items-center gap-8 absolute left-1/2 -translate-x-1/2 z-max">
@@ -93,9 +91,8 @@ export function Header() {
     >
       <div className="flex items-center gap-2 z-logo text-programe-elements-textPrimary cursor-pointer">
         <div className="i-ph:sidebar-simple-duotone text-xl" />
-        <a href="/" className="text-2xl font-semibold text-accent flex items-center">
-          <img src="/logo-light-styled.png" alt="logo" className="w-[90px] inline-block dark:hidden" />
-          <img src="/logo-dark-styled.png" alt="logo" className="w-[90px] inline-block hidden dark:block" />
+        <a href="/" className="flex items-center">
+          <Logo src="/logo-light.png" width={190} />
         </a>
       </div>
       {chat.started && (
