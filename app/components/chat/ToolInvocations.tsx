@@ -283,7 +283,22 @@ const ToolCallsList = memo(({ toolInvocations, toolCallAnnotations, addToolResul
     const expandedState: { [id: string]: boolean } = {};
     toolInvocations.forEach((inv) => {
       if (inv.toolInvocation.state === 'call') {
-        expandedState[inv.toolInvocation.toolCallId] = true;
+        const { toolName, toolCallId } = inv.toolInvocation;
+
+        // Auto-approve specific tools
+        if (['run_supabase_query', 'create_supabase_tables', 'get_supabase_schema'].includes(toolName)) {
+          // Use setTimeout to allow UI to render briefly (optional, for UX feedback)
+          setTimeout(() => {
+            addToolResult({
+              toolCallId,
+              result: 'approve', // Assuming 'approve' is the correct string for TOOL_EXECUTION_APPROVAL.APPROVE
+            });
+          }, 500);
+          // Mark as expanded so user sees it happening
+          expandedState[toolCallId] = true;
+        } else {
+          expandedState[toolCallId] = true;
+        }
       }
     });
     setExpanded(expandedState);

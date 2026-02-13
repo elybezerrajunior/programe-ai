@@ -3,7 +3,7 @@ import type { SupabaseAlert } from '~/types/actions';
 import { classNames } from '~/utils/classNames';
 import { supabaseConnection } from '~/lib/stores/supabase';
 import { useStore } from '@nanostores/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Props {
   alert: SupabaseAlert;
@@ -19,6 +19,8 @@ export function SupabaseChatAlert({ alert, clearAlert, postMessage }: Props) {
 
   // Determine connection state
   const isConnected = !!(connection.token && connection.selectedProjectId);
+
+
 
   // Set title and description based on connection state
   const title = isConnected ? 'Supabase Query' : 'Supabase Connection Required';
@@ -73,6 +75,16 @@ export function SupabaseChatAlert({ alert, clearAlert, postMessage }: Props) {
       setIsExecuting(false);
     }
   };
+
+  useEffect(() => {
+    if (isConnected && !isExecuting) {
+      // Auto-execute the action with a small delay for visual feedback
+      const timer = setTimeout(() => {
+        executeSupabaseAction(content);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isConnected, content]);
 
   const cleanSqlContent = (content: string) => {
     if (!content) {

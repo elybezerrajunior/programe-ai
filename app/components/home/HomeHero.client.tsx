@@ -458,7 +458,7 @@ export function HomeHero({ onGenerateProject, setUploadedFiles, uploadedFiles = 
                   className={classNames(
                     'px-6 py-2.5 flex items-center gap-2 rounded-2xl font-medium transition-colors',
                     projectDescription.trim()
-                      ? 'bg-accent-500 hover:bg-accent-400 text-black'
+                      ? 'bg-accent-400 hover:bg-accent-300 text-black'
                       : 'bg-programe-elements-background-depth-2 text-programe-elements-textSecondary cursor-not-allowed'
                   )}
                 >
