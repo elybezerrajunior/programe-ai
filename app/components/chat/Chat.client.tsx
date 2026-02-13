@@ -73,6 +73,7 @@ const processSampledMessages = createSampler(
     // must have non-empty content" when the chat is reloaded and sent to the API.
     if (messages.length > initialMessages.length && !isLoading) {
       storeMessageHistory(messages).catch((error) => toast.error(error.message));
+      workbenchStore.ensureDevServerRunning();
     }
   },
   50,

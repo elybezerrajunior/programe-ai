@@ -143,7 +143,7 @@ export function NetlifyDeploymentDialog({ isOpen, onClose, onDeploy }: NetlifyDe
                                     <button
                                         type="submit"
                                         disabled={isDeploying}
-                                        className="px-4 py-2 rounded-lg bg-[#00C7B7] hover:bg-[#00B5A6] text-white text-sm font-medium transition-colors disabled:opacity-50 flex items-center gap-2"
+                                        className="px-4 py-2 rounded-lg bg-[#00C7B7] hover:bg-[#00B5A6] text-black text-sm font-medium transition-colors disabled:opacity-50 flex items-center gap-2"
                                     >
                                         {isDeploying ? (
                                             <>

@@ -2,7 +2,7 @@ import { atom, map, type MapStore, type ReadableAtom, type WritableAtom } from '
 import type { EditorDocument, ScrollPosition } from '~/components/editor/codemirror/CodeMirrorEditor';
 import { ActionRunner } from '~/lib/runtime/action-runner';
 import type { ActionCallbackData, ArtifactCallbackData } from '~/lib/runtime/message-parser';
-import { webcontainer } from '~/lib/webcontainer';
+import { webcontainer, webcontainerContext } from '~/lib/webcontainer';
 import type { ITerminal } from '~/types/terminal';
 import { unreachable } from '~/utils/unreachable';
 import { EditorStore } from './editor';
@@ -19,6 +19,8 @@ import { description } from '~/lib/persistence';
 import Cookies from 'js-cookie';
 import { createSampler } from '~/utils/sampler';
 import type { ActionAlert, DeployAlert, SupabaseAlert } from '~/types/actions';
+import { detectProjectCommands } from '~/utils/projectCommands';
+
 const { saveAs } = fileSaver;
 
 export interface ArtifactState {
@@ -606,12 +608,44 @@ export class WorkbenchStore {
       }
     } else {
       await artifact.runner.runAction(data);
+      if (data.action.type === 'shell') {
+        this.ensureDevServerRunning();
+      }
     }
   }
 
   actionStreamSampler = createSampler(async (data: ActionCallbackData, isStreaming: boolean = false) => {
     return await this._runAction(data, isStreaming);
-  }, 100); // TODO: remove this magic number to have it configurable
+  }, 100);
+
+  async ensureDevServerRunning() {
+    try {
+      if (!webcontainerContext.loaded) return;
+      if (this.previews.get().length > 0) return;
+
+      const firstArtifactId = this.artifactIdList[0];
+      const artifact = firstArtifactId ? this.#getArtifact(firstArtifactId) : undefined;
+      if (!artifact) return;
+
+      const filesMap = this.files.get();
+      const fileContents = Object.entries(filesMap)
+        .filter(([, d]): d is [string, { type: 'file'; content: string }] => d?.type === 'file' && typeof d.content === 'string')
+        .map(([path, file]) => ({ path, content: file.content }));
+
+      const commands = await detectProjectCommands(fileContents);
+      const startCommand = commands.startCommand ?? 'npm run dev';
+
+      const data: ActionCallbackData = {
+        artifactId: firstArtifactId,
+        messageId: 'ensure-dev-server',
+        actionId: `ensure-dev-${Date.now()}`,
+        action: { type: 'start', content: startCommand },
+      };
+
+      artifact.runner.addAction(data);
+      this.runAction(data);
+    } catch {}
+  }
 
   #getArtifact(id: string) {
     const artifacts = this.artifacts.get();

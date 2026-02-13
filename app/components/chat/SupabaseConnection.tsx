@@ -158,7 +158,7 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                     disabled={connecting || !supabaseConn.token}
                     className={classNames(
                       'px-4 py-2 rounded-lg text-sm flex items-center gap-2',
-                      'bg-[#1CF479] text-white',
+                      'bg-[#1CF479] text-black',
                       'hover:bg-[#16c968]',
                       'disabled:opacity-50 disabled:cursor-not-allowed',
                     )}
@@ -231,7 +231,7 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                         </button>
                         <button
                           onClick={() => handleCreateProject()}
-                          className="px-2 py-1 rounded-md text-xs bg-[#1CF479] text-white hover:bg-[#16c968] flex items-center gap-1"
+                          className="px-2 py-1 rounded-md text-xs bg-[#1CF479] text-black hover:bg-[#16c968] flex items-center gap-1"
                         >
                           <div className="i-ph:plus w-3 h-3" />
                           Novo Projeto
@@ -269,8 +269,8 @@ export function SupabaseConnection({ hideTrigger = false }: SupabaseConnectionPr
                                     className={classNames(
                                       'px-3 py-1 rounded-md text-xs',
                                       supabaseConn.selectedProjectId === project.id
-                                        ? 'bg-[#1CF479] text-white'
-                                        : 'bg-[#F0F0F0] dark:bg-[#252625] text-programe-elements-textSecondary hover:bg-[#1CF479] hover:text-white',
+                                        ? 'bg-[#1CF479] text-black'
+                                        : 'bg-[#F0F0F0] dark:bg-[#252625] text-programe-elements-textSecondary hover:bg-[#1CF479] hover:text-black',
                                     )}
                                   >
                                     {supabaseConn.selectedProjectId === project.id ? (
